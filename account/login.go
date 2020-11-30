@@ -1,5 +1,7 @@
 package account
 
+import "se/database"
+
 const (
 	AccountNotExist = iota
 	PassWordError
@@ -11,19 +13,11 @@ type manager struct {
 }
 
 func (m manager) Login() int {
-	if sqlName(m.UserName) {
+	if database.SqlName(m.UserName) {
 		return AccountNotExist
-	} else if sql(m.UserName) != m.Password {
+	} else if database.Sql(m.UserName) != m.Password {
 		return PassWordError
 	}
 
 	return EntryValid
-}
-
-func sql(name string) string {
-	return ""
-}
-
-func sqlName(name string) bool {
-	return false
 }
