@@ -1,5 +1,5 @@
 package account
 
-func regist() {
-
+func regist() bool {
+	return false
 }
