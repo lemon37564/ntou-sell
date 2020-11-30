@@ -1,0 +1,5 @@
+package bid
+
+func Bid() {
+
+}
