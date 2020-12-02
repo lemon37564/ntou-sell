@@ -2,12 +2,19 @@ package database
 
 import (
 	"database/sql"
-	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type cartData struct {
+// CREATE TABLE cart(
+// 	id varchar(16) NOT NULL,
+// 	products varchar(2048),
+// 	amount int,
+// 	PRIMARY KEY(id),
+// 	FOREIGN KEY(id) REFERENCES user
+// );
+
+type CartData struct {
 	db *sql.DB
 
 	insert     *sql.Stmt
@@ -17,32 +24,8 @@ type cartData struct {
 	_select    *sql.Stmt
 }
 
-func CreateCartTable() error {
-	db, err := sql.Open("sqlite3", "./sqlite.db")
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	cartTable := `
-		CREATE TABLE cart(
-		id varchar(16) NOT NULL,
-		products varchar(2048),
-		amount int,
-		PRIMARY KEY(id)
-	);
-	`
-	_, err = db.Exec(cartTable)
-	if err != nil {
-		return err
-	}
-	log.Println("Successfully Created Table<Cart>.")
-
-	return nil
-}
-
-func CartDataInit() (*cartData, error) {
-	cart := new(cartData)
+func CartDataInit() (*CartData, error) {
+	cart := new(CartData)
 
 	db, err := sql.Open("sqlite3", "./sqlite.db")
 	if err != nil {
@@ -84,27 +67,27 @@ func CartDataInit() (*cartData, error) {
 	return cart, nil
 }
 
-func (c *cartData) Insert(id string, products string, amount int) error {
+func (c *CartData) Insert(id string, products string, amount int) error {
 	_, err := c.insert.Exec(id, products, amount)
 	return err
 }
 
-func (c *cartData) Delete(id string) error {
+func (c *CartData) Delete(id string) error {
 	_, err := c._delete.Exec(id)
 	return err
 }
 
-func (c *cartData) UpdateProducts(products string) error {
+func (c *CartData) UpdateProducts(products string) error {
 	_, err := c.updatePds.Exec(products)
 	return err
 }
 
-func (c *cartData) UpdateAmount(amount int) error {
+func (c *CartData) UpdateAmount(amount int) error {
 	_, err := c.updateAmnt.Exec(amount)
 	return err
 }
 
 // wait for implementation
-func (c *cartData) Select() (string, error) {
+func (c *CartData) Select() (string, error) {
 	return "", nil
 }

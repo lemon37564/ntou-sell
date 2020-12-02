@@ -1,35 +1,41 @@
 package product
 
+import (
+	"se/database"
+)
+
 type Product struct {
-	price       int
-	amount      int
-	description string
+	db database.ProductData
 }
 
-func NewProduct(price, amount int, description string) Product {
-	return Product{price: price, amount: amount, description: description}
+func (p *Product) AddProduct(price, amount int, pdname, desciption string, bid bool) error {
+	err := p.db.Insert("", pdname, price, desciption, amount, 0, "", bid, "")
+	return err
 }
 
-func (p Product) Price() int {
-	return p.price
+func (p Product) Price(pdname string) int {
+	p.db.Select()
+	return 0
 }
 
 func (p Product) Amount() int {
-	return p.amount
+	p.db.Select()
+	return 0
 }
 
 func (p Product) Description() string {
-	return p.description
+	p.db.Select()
+	return ""
 }
 
-func (p *Product) ChangePrice(price int) {
-	p.price = price
+func (p *Product) ChangePrice(pdname string, price int) {
+	p.db.Update(pdname)
 }
 
-func (p *Product) ChangeAmount(amount int) {
-	p.amount = amount
+func (p *Product) ChangeAmount(pdname string, amount int) {
+	p.db.Update(pdname)
 }
 
-func (p *Product) ChangeDescription(description string) {
-	p.description = description
+func (p *Product) ChangeDescription(pdname, description string) {
+	p.db.Update(pdname)
 }

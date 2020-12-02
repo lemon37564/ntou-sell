@@ -1,8 +1,10 @@
 package main
 
-import "se/database"
+import (
+	"se/database"
+)
 
 func main() {
-	database.TestCreate()
-	database.TestSearch()
+	database.CheckDB()
+	// database.RemoveAll()
 }

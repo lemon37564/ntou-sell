@@ -1,1 +1,1 @@
-# SE-SSB prototype 1
+# SE-SSB v0.0.1
