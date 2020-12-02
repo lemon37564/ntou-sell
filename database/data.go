@@ -7,3 +7,7 @@ func Sql(name string) string {
 func SqlName(name string) bool {
 	return false
 }
+func ProductName(id int) string {
+	return ""
+} 
+func 
