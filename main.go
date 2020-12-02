@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import "se/database"
 
 func main() {
-	fmt.Println("test")
+	database.TestCreate()
+	database.TestSearch()
 }
