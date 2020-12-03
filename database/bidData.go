@@ -9,9 +9,9 @@ import (
 
 const bidTable = `CREATE TABLE bid(
 					pd_id int NOT NULL,
-					deadline varchar(16),
+					deadline varchar(16) NOT NULL,
 					now_bidder_uid int NOT NULL,
-					now_money int,
+					now_money int NOT NULL,
 					uid int NOT NULL,
 					PRIMARY KEY(pd_id),
 					FOREIGN KEY(uid) REFERENCES user

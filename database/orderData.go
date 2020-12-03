@@ -2,80 +2,90 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 // rename order as orders (order is a keword in SQL)
 const ordersTable = `CREATE TABLE orders(
 						uid int NOT NULL,
 						pd_id int NOT NULL,
-						name varchar(256),
-						price int,
 						amount int,
-						sum int,
-						seller_uid int NOT NULL,
 						state varchar(8),
 						PRIMARY KEY(uid, pd_id),
 						FOREIGN KEY(uid) REFERENCES user,
-						FOREIGN KEY(seller_uid) REFERENCES user,
 						FOREIGN KEY(pd_id) REFERENCES product
 					);`
 
 type OrderData struct {
 	db *sql.DB
 
-	insert  *sql.Stmt
-	_delete *sql.Stmt
-	update  *sql.Stmt
+	insert       *sql.Stmt
+	_delete      *sql.Stmt
+	updateAmount *sql.Stmt
 }
 
 func OrderDataInit() *OrderData {
 	order := new(OrderData)
 
-	db, err := sql.Open("sqlite3", "./sqlite.db")
+	db, err := sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}
 	order.db = db
 
-	order.insert, err = db.Prepare("INSERT INTO order values(?,?,?,?,?,?,?,?);")
+	order.insert, err = db.Prepare("INSERT INTO order values(?,?,?,?,?);")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	order._delete, err = db.Prepare("DELETE FROM order where pd_id=? and uid=?;")
+	order._delete, err = db.Prepare("DELETE FROM order where uid=? and pd_id=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// order.update, err = db.Prepare("UPDATE order SET ?=?;")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	order.updateAmount, err = db.Prepare("UPDATE order SET amount=? WHERE uid=? AND pd_id=?")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	return order
 }
 
-// wait for implementation
-func (o *OrderData) Insert() error {
-	_, err := o.insert.Exec()
+func (o *OrderData) AddOrder(uid, pdid, amount int, state string) error {
+	_, err := o.insert.Exec(uid, pdid, amount, state)
 	return err
 }
 
-// wait for implementation
-func (o *OrderData) Delete(pdid string) error {
-	_, err := o._delete.Exec(pdid)
+func (o *OrderData) Delete(uid, pdid int) error {
+	_, err := o._delete.Exec(uid, pdid)
 	return err
 }
 
-// wait for implementation
-func (o *OrderData) Update(products string) error {
-	return nil
+func (o *OrderData) UpdateAmount(uid, pdid, amount int) error {
+	_, err := o.updateAmount.Exec(amount, uid, pdid)
+	return err
 }
 
-// wait for implementation
-func (o *OrderData) Select() (string, error) {
-	return "", nil
+func (o *OrderData) GetAllOrder(uid int) (pdid []int) {
+	rows, err := o.db.Query("SELECT pd_id FROM order WHERE uid=" + fmt.Sprintf("%d", uid) + ";")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		var p int
+		err = rows.Scan(&p)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		pdid = append(pdid, p)
+	}
+
+	return
 }
 
 // always use this function at the end

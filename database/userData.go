@@ -4,13 +4,15 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const userTable = `CREATE TABLE user(
 	uid int NOT NULL,
 	account varchar(256) NOT NULL UNIQUE,
 	password_hash varchar(64) NOT NULL,
-	name varchar(256),
+	name varchar(256) NOT NULL,
 	eval float,
 	PRIMARY KEY(uid)
 );`
@@ -63,15 +65,12 @@ func UserDataInit() *UserData {
 }
 
 func (u *UserData) AddNewUser(account, passwordHash, name string) error {
-	// if len(passwordHash) != 16 {
-	// 	return HashValError{length: len(passwordHash)}
-	// }
-
 	var uid int
 	rows, err := u.db.Query("SELECT MAX(uid) FROM user")
 	if err != nil {
 		panic(err)
 	}
+
 	for rows.Next() {
 		err = rows.Scan(&uid)
 		if err != nil { // no user yet
@@ -81,7 +80,7 @@ func (u *UserData) AddNewUser(account, passwordHash, name string) error {
 
 	uid++ // for the new user
 
-	_, err = u.insert.Exec(uid, account, name, passwordHash, 0.0)
+	_, err = u.insert.Exec(uid, account, passwordHash, name, 0.0)
 	return err
 }
 
@@ -172,7 +171,7 @@ func (u *UserData) GetAllUser() (all []User) {
 
 	for rows.Next() {
 		user := *new(User)
-		err = rows.Scan(&user.uid, &user.account, &user.name, &user.passwordHash, &user.eval)
+		err = rows.Scan(&user.uid, &user.account, &user.passwordHash, &user.name, &user.eval)
 		if err != nil {
 			log.Fatal(err)
 		}

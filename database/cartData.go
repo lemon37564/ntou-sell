@@ -9,10 +9,11 @@ import (
 
 const cartTable = `CREATE TABLE cart(
 	uid int NOT NULL,
-	products varchar(2048),
-	amount int,
-	PRIMARY KEY(uid),
+	pd_id int NOT NULL,
+	amount int NOT NULL,
+	PRIMARY KEY(uid, pd_id),
 	FOREIGN KEY(uid) REFERENCES user
+	FOREIGN KEY(pd_id) REFERENCES product
 );`
 
 type CartData struct {

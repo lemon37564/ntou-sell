@@ -2,13 +2,16 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const historyTable = `CREATE TABLE history(
 						uid int NOT NULL,
-						products varchar(2048),
-						PRIMARY KEY(uid),
+						pd_id int NOT NULL,
+						PRIMARY KEY(uid, pd_id),
 						FOREIGN KEY(uid) REFERENCES user
 					);`
 
@@ -17,8 +20,6 @@ type HistoryData struct {
 
 	insert  *sql.Stmt
 	_delete *sql.Stmt
-	update  *sql.Stmt
-	_select *sql.Stmt
 }
 
 func HistoryDataInit() *HistoryData {
@@ -30,17 +31,12 @@ func HistoryDataInit() *HistoryData {
 	}
 	history.db = db
 
-	history.insert, err = db.Prepare("INSERT INTO history values(?,?);")
+	history.insert, err = db.Prepare("INSERT INTO history VALUES(?,?);")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	history._delete, err = db.Prepare("DELETE FROM history where pd_id=?;")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	history.update, err = db.Prepare("UPDATE history SET ?=?;")
+	history._delete, err = db.Prepare("DELETE FROM history where uid=? AND pd_id=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,26 +44,36 @@ func HistoryDataInit() *HistoryData {
 	return history
 }
 
-// wait for implementation
-func (h *HistoryData) Insert() error {
-	_, err := h.insert.Exec()
+// AddHistory add a single record into database
+// return's an error
+func (h *HistoryData) AddHistory(uid, pdid int) error {
+	_, err := h.insert.Exec(uid, pdid)
 	return err
 }
 
-// wait for implementation
-func (h *HistoryData) Delete(pdid string) error {
-	_, err := h._delete.Exec(pdid)
+func (h *HistoryData) Delete(uid, pdid int) error {
+	_, err := h._delete.Exec(uid, pdid)
 	return err
 }
 
-// wait for implementation
-func (h *HistoryData) Update(products string) error {
-	return nil
-}
+// WARNING: SQL injection
+func (h *HistoryData) GetHistory(uid int) (pdid []int) {
+	rows, err := h.db.Query("SELECT pd_id FROM history WHERE uid=" + fmt.Sprintf("%d", uid) + ";")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-// wait for implementation
-func (h *HistoryData) Select() (string, error) {
-	return "", nil
+	for rows.Next() {
+		var d int
+		err = rows.Scan(&d)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		pdid = append(pdid, d)
+	}
+
+	return
 }
 
 // always use this function at the end

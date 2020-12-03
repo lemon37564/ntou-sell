@@ -24,12 +24,13 @@ const productTable = `CREATE TABLE product(
 type ProductData struct {
 	db *sql.DB
 
-	insert  *sql.Stmt
-	_delete *sql.Stmt
-	update  *sql.Stmt
+	insert       *sql.Stmt
+	_delete      *sql.Stmt
+	updatePrice  *sql.Stmt
+	updateAmount *sql.Stmt
 }
 
-func productDataInit() *ProductData {
+func ProductDataInit() *ProductData {
 	product := new(ProductData)
 
 	db, err := sql.Open("sqlite3", file)
@@ -48,11 +49,15 @@ func productDataInit() *ProductData {
 		log.Fatal(err)
 	}
 
-	// update, err := db.Prepare("UPDATE product SET ?=?;")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// product.update = update
+	product.updatePrice, err = db.Prepare("UPDATE product SET price=? WHERE pd_id=?;")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	product.updateAmount, err = db.Prepare("UPDATE product SET amount=? WHERE pd_id=?;")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	return product
 }
@@ -82,9 +87,14 @@ func (p *ProductData) Delete(pdid int) error {
 	return err
 }
 
-// wait for implementation
-func (p *ProductData) Update(products string) error {
-	return nil
+func (p *ProductData) UpdatePrice(pdid, price int) error {
+	_, err := p.updatePrice.Exec(price, pdid)
+	return err
+}
+
+func (p *ProductData) UpdateAmount(pdid, amount int) error {
+	_, err := p.updateAmount.Exec(amount, pdid)
+	return err
 }
 
 func (p *ProductData) DBClose() error {
