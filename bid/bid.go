@@ -5,7 +5,11 @@ import (
 	//"encoding/json"
 )
 
-func Product_name(id int) string { //回傳商品名稱
+type bid struct {
+	db database.BidData
+}
+
+func (b *bid) Product_name(id int) string { //回傳商品名稱
 	return database.ProductName(id)
 }
 func Product_Description(id int) string { //回傳商品描述
