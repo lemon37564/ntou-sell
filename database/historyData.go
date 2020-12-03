@@ -6,10 +6,10 @@ import (
 )
 
 const historyTable = `CREATE TABLE history(
-						id varchar(16) NOT NULL,
+						uid int NOT NULL,
 						products varchar(2048),
-						PRIMARY KEY(id),
-						FOREIGN KEY(id) REFERENCES user
+						PRIMARY KEY(uid),
+						FOREIGN KEY(uid) REFERENCES user
 					);`
 
 type HistoryData struct {
@@ -24,7 +24,7 @@ type HistoryData struct {
 func HistoryDataInit() *HistoryData {
 	history := new(HistoryData)
 
-	db, err := sql.Open("sqlite3", "./sqlite.db")
+	db, err := sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -7,17 +7,17 @@ import (
 
 // rename order as orders (order is a keword in SQL)
 const ordersTable = `CREATE TABLE orders(
-						id varchar(16) NOT NULL,
-						pd_id varchar(16) NOT NULL,
+						uid int NOT NULL,
+						pd_id int NOT NULL,
 						name varchar(256),
 						price int,
 						amount int,
 						sum int,
-						seller_id varchar(16) NOT NULL,
+						seller_uid int NOT NULL,
 						state varchar(8),
-						PRIMARY KEY(id, pd_id),
-						FOREIGN KEY(id) REFERENCES user,
-						FOREIGN KEY(seller_id) REFERENCES user,
+						PRIMARY KEY(uid, pd_id),
+						FOREIGN KEY(uid) REFERENCES user,
+						FOREIGN KEY(seller_uid) REFERENCES user,
 						FOREIGN KEY(pd_id) REFERENCES product
 					);`
 

@@ -8,11 +8,11 @@ import (
 )
 
 const cartTable = `CREATE TABLE cart(
-	id varchar(16) NOT NULL,
+	uid int NOT NULL,
 	products varchar(2048),
 	amount int,
-	PRIMARY KEY(id),
-	FOREIGN KEY(id) REFERENCES user
+	PRIMARY KEY(uid),
+	FOREIGN KEY(uid) REFERENCES user
 );`
 
 type CartData struct {
@@ -28,35 +28,31 @@ type CartData struct {
 func CartDataInit() *CartData {
 	cart := new(CartData)
 
-	db, err := sql.Open("sqlite3", "./sqlite.db")
+	db, err := sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}
 	cart.db = db
 
-	insert, err := db.Prepare("INSERT INTO cart values(?,?,?);")
+	cart.insert, err = db.Prepare("INSERT INTO cart VALUES(?,?,?);")
 	if err != nil {
 		log.Fatal(err)
 	}
-	cart.insert = insert
 
-	_delete, err := db.Prepare("DELETE FROM cart where id=?;")
+	cart._delete, err = db.Prepare("DELETE FROM cart WHERE uid=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
-	cart._delete = _delete
 
-	updatePds, err := db.Prepare("UPDATE cart SET products=?;")
+	cart.updatePds, err = db.Prepare("UPDATE cart SET products=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
-	cart.updatePds = updatePds
 
-	updateAmnt, err := db.Prepare("UPDATE cart SET amount=?;")
+	cart.updateAmnt, err = db.Prepare("UPDATE cart SET amount=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
-	cart.updateAmnt = updateAmnt
 
 	_select, err := db.Prepare("SELECT ? FROM cart WHERE ?=?;")
 	if err != nil {

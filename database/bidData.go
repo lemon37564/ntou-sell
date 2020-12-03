@@ -8,14 +8,14 @@ import (
 )
 
 const bidTable = `CREATE TABLE bid(
-					pd_id varchar(16) NOT NULL,
+					pd_id int NOT NULL,
 					deadline varchar(16),
-					now_bidder_id varchar(16) NOT NULL,
+					now_bidder_uid int NOT NULL,
 					now_money int,
-					seller_id varchar(16) NOT NULL,
+					uid int NOT NULL,
 					PRIMARY KEY(pd_id),
-					FOREIGN KEY(seller_id) REFERENCES user
-					FOREIGN KEY(now_bidder_id) REFERENCES user
+					FOREIGN KEY(uid) REFERENCES user
+					FOREIGN KEY(now_bidder_uid) REFERENCES user
 				);`
 
 type BidData struct {
@@ -30,7 +30,7 @@ type BidData struct {
 func BidDataInit() *BidData {
 	bid := new(BidData)
 
-	db, err := sql.Open("sqlite3", "./sqlite.db")
+	db, err := sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}

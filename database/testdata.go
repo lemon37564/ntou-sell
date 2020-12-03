@@ -17,6 +17,26 @@ func TestInsert() {
 		panic(err)
 	}
 
+	err = u.AddNewUser("lll2@gmail.com", "1234567891012131", "哈哈哈")
+	if err != nil {
+		panic(err)
+	}
+
+	err = u.AddNewUser("lll3@gmail.com", "1234567891012131", "哈哈哈")
+	if err != nil {
+		panic(err)
+	}
+
+	err = u.AddNewUser("lll4@gmail.com", "1234567891012131", "哈哈哈")
+	if err != nil {
+		panic(err)
+	}
+
+	err = u.AddNewUser("lll5@gmail.com", "1234567891012131", "哈哈哈")
+	if err != nil {
+		panic(err)
+	}
+
 	log.Println("insert complete")
 }
 
@@ -36,7 +56,7 @@ func TestSearch() {
 	defer rows.Close()
 
 	var (
-		id       string
+		uid      string
 		account  string
 		password string
 		name     string
@@ -44,13 +64,13 @@ func TestSearch() {
 	)
 
 	for rows.Next() {
-		err = rows.Scan(&id, &account, &password, &name, &eval)
+		err = rows.Scan(&uid, &account, &password, &name, &eval)
 		if err != nil {
 			panic(err)
 		}
 
 		fmt.Println("results:")
-		fmt.Println("    id:", id)
+		fmt.Println("    uid:", uid)
 		fmt.Println("    account:", account)
 		fmt.Println("    password hash:", password)
 		fmt.Println("    name:", name)
