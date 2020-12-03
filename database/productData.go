@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -14,57 +13,83 @@ const productTable = `CREATE TABLE product(
 						description varchar(2048),
 						amount int NOT NULL,
 						eval float,
-						uid int NOT NULL,
+						seller_id int NOT NULL,
 						bid bool,
-						date varchar(16),
+						date sting
 						PRIMARY KEY(pd_id),
-						FOREIGN KEY(uid) REFERENCES user
+						FOREIGN KEY(seller_id) REFERENCES user
 					);`
 
-type ProductData struct {
-	db *sql.DB
+// Product type store data of a single product
+type Product struct {
+	Pdid        int
+	PdName      string
+	Price       int
+	Description string
+	Amount      int
+	Eval        float64
+	SellerID    int
+	Bid         bool
+	Date        string
+}
 
+// ProductDB contain funcions to use
+type ProductDB struct {
 	insert       *sql.Stmt
 	_delete      *sql.Stmt
 	updatePrice  *sql.Stmt
 	updateAmount *sql.Stmt
+	maxpdID      *sql.Stmt
+	search       *sql.Stmt
+	getPdInfo    *sql.Stmt
 }
 
-func ProductDataInit() *ProductData {
-	product := new(ProductData)
-
-	db, err := sql.Open("sqlite3", file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	product.db = db
+// ProductDBInit prepare function for database using
+func ProductDBInit(db *sql.DB) (product *ProductDB) {
+	var err error
 
 	product.insert, err = db.Prepare("INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	product._delete, err = db.Prepare("DELETE FROM product WHERE pdid=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	product.updatePrice, err = db.Prepare("UPDATE product SET price=? WHERE pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	product.updateAmount, err = db.Prepare("UPDATE product SET amount=? WHERE pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
+	}
+
+	product.maxpdID, err = db.Prepare("SELECT MAX(pd_id) FROM product;")
+	if err != nil {
+		panic(err)
+	}
+
+	product.search, err = db.Prepare("SELECT pd_id FROM product WHERE product_name LIKE%?%;")
+	if err != nil {
+		panic(err)
+	}
+
+	product.getPdInfo, err = db.Prepare("SELECT * FROM product WHERE pd_id=?;")
+	if err != nil {
+		panic(err)
 	}
 
 	return product
 }
 
-func (p *ProductData) AddNewProduct(pdname string, price int, description string, amount int, uid int, bid bool, date string) error {
+// AddNewProduct add single product with product name, price, description, amount, seller id, bid and date into database
+func (p *ProductDB) AddNewProduct(pdname string, price int, description string, amount int, sellerID int, bid bool, date string) error {
 	var pdid int
-	rows, err := p.db.Query("SELECT MAX(pd_id) FROM product")
+	rows, err := p.maxpdID.Query()
 	if err != nil {
 		panic(err)
 	}
@@ -72,31 +97,66 @@ func (p *ProductData) AddNewProduct(pdname string, price int, description string
 	for rows.Next() {
 		err = rows.Scan(&pdid)
 		if err != nil {
-			pdid = 0 // no products
+			panic(err)
+			// panic if there's no product yet
 		}
 	}
 
-	pdid++
-
-	_, err = p.insert.Exec(pdid, pdname, price, description, amount, 0.0, uid, bid, date)
+	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, 0.0, sellerID, bid, date)
 	return err
 }
 
-func (p *ProductData) Delete(pdid int) error {
+// Delete product with product id
+func (p *ProductDB) Delete(pdid int) error {
 	_, err := p._delete.Exec(pdid)
 	return err
 }
 
-func (p *ProductData) UpdatePrice(pdid, price int) error {
+// UpdatePrice with prouct id and new price
+func (p *ProductDB) UpdatePrice(pdid, price int) error {
 	_, err := p.updatePrice.Exec(price, pdid)
 	return err
 }
 
-func (p *ProductData) UpdateAmount(pdid, amount int) error {
+// UpdateAmount with prdouct id and new amount
+func (p *ProductDB) UpdateAmount(pdid, amount int) error {
 	_, err := p.updateAmount.Exec(amount, pdid)
 	return err
 }
 
-func (p *ProductData) DBClose() error {
-	return p.db.Close()
+// GetInfoFromPdID return info of specific product with product id
+func (p *ProductDB) GetInfoFromPdID(pdid int) (pd Product) {
+	rows, err := p.getPdInfo.Query(pdid)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return
+}
+
+// Search return product ids with searching keyword
+func (p *ProductDB) Search(keyword string) (pdid []int) {
+	rows, err := p.search.Query(keyword)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		var np int
+		err = rows.Scan(&np)
+		if err != nil {
+			panic(err)
+		}
+
+		pdid = append(pdid, np)
+	}
+
+	return
 }

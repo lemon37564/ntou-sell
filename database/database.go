@@ -1,6 +1,10 @@
 package database
 
-import "os"
+import (
+	"database/sql"
+	"log"
+	"os"
+)
 
 const (
 	root = "C:/software-engineering"
@@ -8,9 +12,21 @@ const (
 	file = root + "/" + name
 )
 
+// Open database and return *sql.DB
+func Open() *sql.DB {
+	check()
+
+	db, err := sql.Open("sqlite3", file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return db
+}
+
 // check if there's database exists
 // if no, init.
-func Check() {
+func check() {
 	_, err := os.Stat(root)
 	if err != nil {
 		createFile()
@@ -29,7 +45,7 @@ func createFile() {
 	}
 }
 
-// FATAL: this command will remove whole database
+// RemoveAll : *FATAL* this command will remove whole database
 func RemoveAll() {
 	err := os.RemoveAll(root)
 	if err != nil {

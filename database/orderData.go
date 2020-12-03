@@ -2,8 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -19,76 +17,76 @@ const ordersTable = `CREATE TABLE orders(
 						FOREIGN KEY(pd_id) REFERENCES product
 					);`
 
-type OrderData struct {
-	db *sql.DB
+// Order type store data of a single order
+type Order struct {
+	Pdid   int
+	Amount int
+	State  string
+}
 
+// OrderDB contain funcions to use
+type OrderDB struct {
 	insert       *sql.Stmt
 	_delete      *sql.Stmt
 	updateAmount *sql.Stmt
+	getall       *sql.Stmt
 }
 
-func OrderDataInit() *OrderData {
-	order := new(OrderData)
+// OrderDBInit prepare function for database using
+func OrderDBInit(db *sql.DB) (order *OrderDB) {
+	var err error
 
-	db, err := sql.Open("sqlite3", file)
+	order.insert, err = db.Prepare("INSERT INTO order VALUES(?,?,?,?);")
 	if err != nil {
-		log.Fatal(err)
-	}
-	order.db = db
-
-	order.insert, err = db.Prepare("INSERT INTO order values(?,?,?,?,?);")
-	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	order._delete, err = db.Prepare("DELETE FROM order where uid=? and pd_id=?;")
+	order._delete, err = db.Prepare("DELETE FROM order WHERE uid=? AND pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	order.updateAmount, err = db.Prepare("UPDATE order SET amount=? WHERE uid=? AND pd_id=?")
+	order.updateAmount, err = db.Prepare("UPDATE order SET amount=? WHERE uid=? AND pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	return order
-}
-
-func (o *OrderData) AddOrder(uid, pdid, amount int, state string) error {
-	_, err := o.insert.Exec(uid, pdid, amount, state)
-	return err
-}
-
-func (o *OrderData) Delete(uid, pdid int) error {
-	_, err := o._delete.Exec(uid, pdid)
-	return err
-}
-
-func (o *OrderData) UpdateAmount(uid, pdid, amount int) error {
-	_, err := o.updateAmount.Exec(amount, uid, pdid)
-	return err
-}
-
-func (o *OrderData) GetAllOrder(uid int) (pdid []int) {
-	rows, err := o.db.Query("SELECT pd_id FROM order WHERE uid=" + fmt.Sprintf("%d", uid) + ";")
+	order.updateAmount, err = db.Prepare("SELECT pd_id, amount, state FROM order WHERE uid=?;")
 	if err != nil {
-		log.Fatal(err)
-	}
-
-	for rows.Next() {
-		var p int
-		err = rows.Scan(&p)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		pdid = append(pdid, p)
+		panic(err)
 	}
 
 	return
 }
 
-// always use this function at the end
-func (o *OrderData) DBClose() error {
-	return o.db.Close()
+// AddOrder add order into order of specific user by user id
+func (o *OrderDB) AddOrder(uid, pdid, amount int) error {
+	_, err := o.insert.Exec(uid, pdid, amount, "unknown")
+	return err
+}
+
+// Delete order by user id and product id
+func (o *OrderDB) Delete(uid, pdid int) error {
+	_, err := o._delete.Exec(uid, pdid)
+	return err
+}
+
+// GetAllOrder return all order with type Order, need argument user id
+func (o *OrderDB) GetAllOrder(uid int) (ods []Order) {
+	rows, err := o.getall.Query(uid)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		var tmp Order
+		err = rows.Scan(&tmp.Pdid, &tmp.Amount, &tmp.State)
+		if err != nil {
+			panic(err)
+		}
+
+		ods = append(ods, tmp)
+	}
+
+	return
 }

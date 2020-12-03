@@ -2,88 +2,96 @@ package database
 
 import (
 	"database/sql"
-	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 const cartTable = `CREATE TABLE cart(
-	uid int NOT NULL,
-	pd_id int NOT NULL,
-	amount int NOT NULL,
-	PRIMARY KEY(uid, pd_id),
-	FOREIGN KEY(uid) REFERENCES user
-	FOREIGN KEY(pd_id) REFERENCES product
-);`
+						uid int NOT NULL,
+						pd_id int NOT NULL,
+						amount int NOT NULL,
+						PRIMARY KEY(uid, pd_id),
+						FOREIGN KEY(uid) REFERENCES user
+						FOREIGN KEY(pd_id) REFERENCES product
+					);`
 
-type CartData struct {
-	db *sql.DB
-
-	insert     *sql.Stmt
-	_delete    *sql.Stmt
-	updatePds  *sql.Stmt
-	updateAmnt *sql.Stmt
-	_select    *sql.Stmt
+// Cart store data of single product in user's cart
+type Cart struct {
+	UID    int
+	PdID   int
+	Amount int
 }
 
-func CartDataInit() *CartData {
-	cart := new(CartData)
+// CartDB contain functions to use
+type CartDB struct {
+	insert     *sql.Stmt
+	_delete    *sql.Stmt
+	updateAmnt *sql.Stmt
+	getAll     *sql.Stmt
+}
 
-	db, err := sql.Open("sqlite3", file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	cart.db = db
+// CartDBInit prepare functions for database using
+func CartDBInit(db *sql.DB) (cart *CartDB) {
+	var err error
 
 	cart.insert, err = db.Prepare("INSERT INTO cart VALUES(?,?,?);")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	cart._delete, err = db.Prepare("DELETE FROM cart WHERE uid=?;")
+	cart._delete, err = db.Prepare("DELETE FROM cart WHERE uid=? AND pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	cart.updatePds, err = db.Prepare("UPDATE cart SET products=?;")
+	cart.updateAmnt, err = db.Prepare("UPDATE cart SET amount=? WHERE id=? AND pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	cart.updateAmnt, err = db.Prepare("UPDATE cart SET amount=?;")
+	cart.getAll, err = db.Prepare("SELECT * FROM cart WHERE uid=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	return cart
 }
 
-func (c *CartData) AddCart(id string, products string, amount int) error {
-	_, err := c.insert.Exec(id, products, amount)
+// AddProductIntoCart add product into cart with pdid and amount
+func (c *CartDB) AddProductIntoCart(id, pdid, amount int) error {
+	_, err := c.insert.Exec(id, pdid, amount)
 	return err
 }
 
-func (c *CartData) DeleteCart(id string) error {
-	_, err := c._delete.Exec(id)
+// DeleteProductFromCart delete product from cart with product id
+func (c *CartDB) DeleteProductFromCart(id, pdid int) error {
+	_, err := c._delete.Exec(id, pdid)
 	return err
 }
 
-func (c *CartData) UpdateProducts(products string) error {
-	_, err := c.updatePds.Exec(products)
-	return err
-}
-
-func (c *CartData) UpdateAmount(amount int) error {
+// UpdateAmount changes amount of product in cart of a user
+// need to pass user id, product id and new amount
+func (c *CartDB) UpdateAmount(uid, pdid, amount int) error {
 	_, err := c.updateAmnt.Exec(amount)
 	return err
 }
 
-// wait for implementation
-func (c *CartData) Select() (string, error) {
-	return "", nil
-}
+// GetAllProductOfUser return all product id and amount by user id
+func (c *CartDB) GetAllProductOfUser(uid int) (ca []Cart) {
+	rows, err := c.getAll.Query(uid)
+	if err != nil {
+		panic(err)
+	}
 
-// always use this function at the end
-func (c *CartData) DBClose() error {
-	return c.db.Close()
+	for rows.Next() {
+		var tmp Cart
+		err = rows.Scan(&tmp.UID, &tmp.PdID, &tmp.Amount)
+		if err != nil {
+			panic(err)
+		}
+
+		ca = append(ca, tmp)
+	}
+
+	return
 }

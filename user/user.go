@@ -1,40 +1,40 @@
 package user
 
 import (
+	"database/sql"
 	"se/database"
-	"time"
 )
 
+///// implement json in this file /////
+
 type User struct {
-	userdb *database.UserData
+	fn *database.UserDB
 }
 
-func UserInit() User {
-	userdb := database.UserDataInit()
-	return User{userdb: userdb}
-}
-
-func (u *User) UserListen() {
-	defer u.userdb.DBClose()
-	for ; ; time.Sleep(time.Second / 30) {
-	}
-
+func NewUser(db *sql.DB) (u *User) {
+	u.fn = database.UserDBInit(db)
+	return
 }
 
 func (u *User) Login(account, password string) bool {
-	return u.userdb.Login(account, password)
+	return u.fn.Login(account, password)
 }
 
-func (u *User) Regist(account, password, name string) error {
-	return u.userdb.AddNewUser(account, password, name)
+func (u *User) Regist(account, password, name string) bool {
+	err := u.fn.AddNewUser(account, password, name)
+	if err != nil {
+		return false // may return string here, like "account have been used"
+	}
+
+	return true
 }
 
 func (u *User) GetUserData(account string) (res string) {
-	return u.userdb.GetDatasFromAccount(account).String()
+	return u.fn.GetDatasFromAccount(account).String()
 }
 
 func (u *User) GetAllUserData() (res string) {
-	for _, v := range u.userdb.GetAllUser() {
+	for _, v := range u.fn.GetAllUser() {
 		res += v.String()
 	}
 

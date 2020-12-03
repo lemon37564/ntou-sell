@@ -31,11 +31,17 @@ func createTables() {
 func createUserTable(db *sql.DB) {
 	_, err := db.Exec(userTable)
 	tableLogger("user", err)
+
+	// insert one value into user in order to prevent max(uid) = null
+	db.Exec("INSERT INTO user VALUES(0, \"N/A\", \"N/A\", \"superuser\", 0.0);")
 }
 
 func createProductTable(db *sql.DB) {
 	_, err := db.Exec(productTable)
 	tableLogger("product", err)
+
+	// insert one value into product in order to prevent max(pd_id) = null
+	db.Exec("INSERT INTO product VALUES(0, \"N/A\", 0, \"N/A\", 0, 0.0, 0, false, \"N/A\");")
 }
 
 func createBidTable(db *sql.DB) {
