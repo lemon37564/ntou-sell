@@ -28,3 +28,15 @@ func (u *User) Login(account, password string) bool {
 func (u *User) Regist(account, password, name string) error {
 	return u.userdb.AddNewUser(account, password, name)
 }
+
+func (u *User) GetUserData(account string) (res string) {
+	return u.userdb.GetDatasFromAccount(account).String()
+}
+
+func (u *User) GetAllUserData() (res string) {
+	for _, v := range u.userdb.GetAllUser() {
+		res += v.String()
+	}
+
+	return
+}

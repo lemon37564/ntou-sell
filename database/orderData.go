@@ -27,7 +27,6 @@ type OrderData struct {
 	insert  *sql.Stmt
 	_delete *sql.Stmt
 	update  *sql.Stmt
-	_select *sql.Stmt
 }
 
 func OrderDataInit() *OrderData {
@@ -39,29 +38,20 @@ func OrderDataInit() *OrderData {
 	}
 	order.db = db
 
-	insert, err := db.Prepare("INSERT INTO order values(?,?,?,?,?,?,?,?,?);")
+	order.insert, err = db.Prepare("INSERT INTO order values(?,?,?,?,?,?,?,?);")
 	if err != nil {
 		log.Fatal(err)
 	}
-	order.insert = insert
 
-	_delete, err := db.Prepare("DELETE FROM order where pd_id=?;")
+	order._delete, err = db.Prepare("DELETE FROM order where pd_id=? and uid=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
-	order._delete = _delete
 
-	update, err := db.Prepare("UPDATE order SET ?=?;")
-	if err != nil {
-		log.Fatal(err)
-	}
-	order.update = update
-
-	_select, err := db.Prepare("SELECT * FROM order WHERE ?=?;")
-	if err != nil {
-		log.Fatal(err)
-	}
-	order._select = _select
+	// order.update, err = db.Prepare("UPDATE order SET ?=?;")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 	return order
 }
@@ -88,6 +78,7 @@ func (o *OrderData) Select() (string, error) {
 	return "", nil
 }
 
+// always use this function at the end
 func (o *OrderData) DBClose() error {
 	return o.db.Close()
 }

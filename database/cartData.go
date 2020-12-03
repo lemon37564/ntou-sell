@@ -54,21 +54,15 @@ func CartDataInit() *CartData {
 		log.Fatal(err)
 	}
 
-	_select, err := db.Prepare("SELECT ? FROM cart WHERE ?=?;")
-	if err != nil {
-		log.Fatal(err)
-	}
-	cart._select = _select
-
 	return cart
 }
 
-func (c *CartData) Insert(id string, products string, amount int) error {
+func (c *CartData) AddCart(id string, products string, amount int) error {
 	_, err := c.insert.Exec(id, products, amount)
 	return err
 }
 
-func (c *CartData) Delete(id string) error {
+func (c *CartData) DeleteCart(id string) error {
 	_, err := c._delete.Exec(id)
 	return err
 }
@@ -88,6 +82,7 @@ func (c *CartData) Select() (string, error) {
 	return "", nil
 }
 
+// always use this function at the end
 func (c *CartData) DBClose() error {
 	return c.db.Close()
 }

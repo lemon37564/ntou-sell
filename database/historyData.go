@@ -30,29 +30,20 @@ func HistoryDataInit() *HistoryData {
 	}
 	history.db = db
 
-	insert, err := db.Prepare("INSERT INTO history values(?,?,?,?,?,?,?,?,?);")
+	history.insert, err = db.Prepare("INSERT INTO history values(?,?);")
 	if err != nil {
 		log.Fatal(err)
 	}
-	history.insert = insert
 
-	_delete, err := db.Prepare("DELETE FROM history where pd_id=?;")
+	history._delete, err = db.Prepare("DELETE FROM history where pd_id=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
-	history._delete = _delete
 
-	update, err := db.Prepare("UPDATE history SET ?=?;")
+	history.update, err = db.Prepare("UPDATE history SET ?=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
-	history.update = update
-
-	_select, err := db.Prepare("SELECT * FROM history WHERE ?=?;")
-	if err != nil {
-		log.Fatal(err)
-	}
-	history._select = _select
 
 	return history
 }
@@ -79,6 +70,7 @@ func (h *HistoryData) Select() (string, error) {
 	return "", nil
 }
 
+// always use this function at the end
 func (h *HistoryData) DBClose() error {
 	return h.db.Close()
 }
