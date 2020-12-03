@@ -5,6 +5,9 @@ import (
 )
 
 func main() {
-	database.CheckDB()
-	// database.RemoveAll()
+	database.RemoveAll() // clear all the data in database
+	database.Check()
+
+	database.TestInsert()
+	database.TestSearch()
 }

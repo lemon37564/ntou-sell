@@ -2,23 +2,24 @@ package database
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// CREATE TABLE product(
-// 	pd_id varchar(16) NOT NULL,
-// 	product_name varchar(256) NOT NULL,
-// 	price int NOT NULL,
-// 	description varchar(2048),
-// 	amount int NOT NULL,
-// 	eval float,
-// 	id varchar(16) NOT NULL,
-// 	bid bool,
-// 	date varchar(16),
-// 	PRIMARY KEY(pd_id),
-// 	FOREIGN KEY(id) REFERENCES user
-// );
+const productTable = `CREATE TABLE product(
+						pd_id varchar(16) NOT NULL,
+						product_name varchar(256) NOT NULL,
+						price int NOT NULL,
+						description varchar(2048),
+						amount int NOT NULL,
+						eval float,
+						id varchar(16) NOT NULL,
+						bid bool,
+						date varchar(16),
+						PRIMARY KEY(pd_id),
+						FOREIGN KEY(id) REFERENCES user
+					);`
 
 type ProductData struct {
 	db *sql.DB
@@ -29,41 +30,40 @@ type ProductData struct {
 	_select *sql.Stmt
 }
 
-func productDataInit() (*ProductData, error) {
+func productDataInit() *ProductData {
 	product := new(ProductData)
 
 	db, err := sql.Open("sqlite3", "./sqlite.db")
 	if err != nil {
-		return product, err
+		log.Fatal(err)
 	}
-	defer db.Close()
 	product.db = db
 
 	insert, err := db.Prepare("INSERT INTO product values(?,?,?,?,?,?,?,?,?);")
 	if err != nil {
-		return product, err
+		log.Fatal(err)
 	}
 	product.insert = insert
 
 	_delete, err := db.Prepare("DELETE FROM product where pd_id=?;")
 	if err != nil {
-		return product, err
+		log.Fatal(err)
 	}
 	product._delete = _delete
 
 	update, err := db.Prepare("UPDATE product SET ?=?;")
 	if err != nil {
-		return product, err
+		log.Fatal(err)
 	}
 	product.update = update
 
 	_select, err := db.Prepare("SELECT * FROM product WHERE ?=?;")
 	if err != nil {
-		return product, err
+		log.Fatal(err)
 	}
 	product._select = _select
 
-	return product, nil
+	return product
 }
 
 func (p *ProductData) Insert(pdid string, pdname string, price int, description string, amount int, eval float64, name string, bid bool, date string) error {
@@ -84,4 +84,8 @@ func (p *ProductData) Update(products string) error {
 // wait for implementation
 func (p *ProductData) Select() (string, error) {
 	return "", nil
+}
+
+func (p *ProductData) DBClose() error {
+	return p.db.Close()
 }

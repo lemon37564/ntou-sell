@@ -2,14 +2,15 @@ package database
 
 import (
 	"database/sql"
+	"log"
 )
 
-// CREATE TABLE history(
-// 	id varchar(16) NOT NULL,
-// 	products varchar(2048),
-// 	PRIMARY KEY(id),
-// 	FOREIGN KEY(id) REFERENCES user
-// );
+const historyTable = `CREATE TABLE history(
+						id varchar(16) NOT NULL,
+						products varchar(2048),
+						PRIMARY KEY(id),
+						FOREIGN KEY(id) REFERENCES user
+					);`
 
 type HistoryData struct {
 	db *sql.DB
@@ -20,41 +21,40 @@ type HistoryData struct {
 	_select *sql.Stmt
 }
 
-func HistoryDataInit() (*HistoryData, error) {
+func HistoryDataInit() *HistoryData {
 	history := new(HistoryData)
 
 	db, err := sql.Open("sqlite3", "./sqlite.db")
 	if err != nil {
-		return history, err
+		log.Fatal(err)
 	}
-	defer db.Close()
 	history.db = db
 
 	insert, err := db.Prepare("INSERT INTO history values(?,?,?,?,?,?,?,?,?);")
 	if err != nil {
-		return history, err
+		log.Fatal(err)
 	}
 	history.insert = insert
 
 	_delete, err := db.Prepare("DELETE FROM history where pd_id=?;")
 	if err != nil {
-		return history, err
+		log.Fatal(err)
 	}
 	history._delete = _delete
 
 	update, err := db.Prepare("UPDATE history SET ?=?;")
 	if err != nil {
-		return history, err
+		log.Fatal(err)
 	}
 	history.update = update
 
 	_select, err := db.Prepare("SELECT * FROM history WHERE ?=?;")
 	if err != nil {
-		return history, err
+		log.Fatal(err)
 	}
 	history._select = _select
 
-	return history, nil
+	return history
 }
 
 // wait for implementation
@@ -77,4 +77,8 @@ func (h *HistoryData) Update(products string) error {
 // wait for implementation
 func (h *HistoryData) Select() (string, error) {
 	return "", nil
+}
+
+func (h *HistoryData) DBClose() error {
+	return h.db.Close()
 }

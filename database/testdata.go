@@ -3,9 +3,22 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
+
+func TestInsert() {
+	u := UserDataInit()
+	defer u.DBClose()
+
+	err := u.AddNewUser("lll@gmail.com", "1234567891012131", "哈哈哈")
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("insert complete")
+}
 
 // example usage
 func TestSearch() {
@@ -27,7 +40,7 @@ func TestSearch() {
 		account  string
 		password string
 		name     string
-		eval     int
+		eval     float64
 	)
 
 	for rows.Next() {
@@ -42,5 +55,6 @@ func TestSearch() {
 		fmt.Println("    password hash:", password)
 		fmt.Println("    name:", name)
 		fmt.Println("    eval:", eval)
+		fmt.Println()
 	}
 }

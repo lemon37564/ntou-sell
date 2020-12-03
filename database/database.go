@@ -10,7 +10,7 @@ const (
 
 // check if there's database exists
 // if no, init.
-func CheckDB() {
+func Check() {
 	_, err := os.Stat(root)
 	if err != nil {
 		createFile()

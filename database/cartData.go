@@ -2,17 +2,18 @@ package database
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-// CREATE TABLE cart(
-// 	id varchar(16) NOT NULL,
-// 	products varchar(2048),
-// 	amount int,
-// 	PRIMARY KEY(id),
-// 	FOREIGN KEY(id) REFERENCES user
-// );
+const cartTable = `CREATE TABLE cart(
+	id varchar(16) NOT NULL,
+	products varchar(2048),
+	amount int,
+	PRIMARY KEY(id),
+	FOREIGN KEY(id) REFERENCES user
+);`
 
 type CartData struct {
 	db *sql.DB
@@ -24,47 +25,46 @@ type CartData struct {
 	_select    *sql.Stmt
 }
 
-func CartDataInit() (*CartData, error) {
+func CartDataInit() *CartData {
 	cart := new(CartData)
 
 	db, err := sql.Open("sqlite3", "./sqlite.db")
 	if err != nil {
-		return cart, err
+		log.Fatal(err)
 	}
-	defer db.Close()
 	cart.db = db
 
 	insert, err := db.Prepare("INSERT INTO cart values(?,?,?);")
 	if err != nil {
-		return cart, err
+		log.Fatal(err)
 	}
 	cart.insert = insert
 
 	_delete, err := db.Prepare("DELETE FROM cart where id=?;")
 	if err != nil {
-		return cart, err
+		log.Fatal(err)
 	}
 	cart._delete = _delete
 
 	updatePds, err := db.Prepare("UPDATE cart SET products=?;")
 	if err != nil {
-		return cart, err
+		log.Fatal(err)
 	}
 	cart.updatePds = updatePds
 
 	updateAmnt, err := db.Prepare("UPDATE cart SET amount=?;")
 	if err != nil {
-		return cart, err
+		log.Fatal(err)
 	}
 	cart.updateAmnt = updateAmnt
 
 	_select, err := db.Prepare("SELECT ? FROM cart WHERE ?=?;")
 	if err != nil {
-		return cart, err
+		log.Fatal(err)
 	}
 	cart._select = _select
 
-	return cart, nil
+	return cart
 }
 
 func (c *CartData) Insert(id string, products string, amount int) error {
@@ -90,4 +90,8 @@ func (c *CartData) UpdateAmount(amount int) error {
 // wait for implementation
 func (c *CartData) Select() (string, error) {
 	return "", nil
+}
+
+func (c *CartData) DBClose() error {
+	return c.db.Close()
 }
