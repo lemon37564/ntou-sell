@@ -1,31 +1,34 @@
 package product
 
 import (
+	"database/sql"
 	"se/database"
 )
 
 type Product struct {
-	db *database.ProductData
+	fn *database.ProductDB
 }
 
-func ProductInit() *Product {
+// implemet json and logic at here
+
+func ProductInit(db *sql.DB) *Product {
 	p := new(Product)
-	p.db = database.ProductDataInit()
+	p.fn = database.ProductDBInit(db)
 	return p
 }
 
 func (p Product) AddProduct(pdname string, price int, description string, amount int, uid int, bid bool, date string) error {
-	return p.db.AddNewProduct(pdname, price, description, amount, uid, bid, date)
+	return p.fn.AddNewProduct(pdname, price, description, amount, uid, bid, date)
 }
 
-func (p *Product) ChangePrice(pdname string, price int) {
-	p.db.Update(pdname)
+func (p *Product) ChangePrice(pdid, price int) {
+	p.fn.UpdatePrice(pdid, price)
 }
 
-func (p *Product) ChangeAmount(pdname string, amount int) {
-	p.db.Update(pdname)
+func (p *Product) ChangeAmount(pdid, amount int) {
+	p.fn.UpdateAmount(pdid, amount)
 }
 
-func (p *Product) ChangeDescription(pdname, description string) {
-	p.db.Update(pdname)
+func (p *Product) ChangeDescription(pdid int, description string) {
+	p.fn.UpdateDescription(pdid, description)
 }

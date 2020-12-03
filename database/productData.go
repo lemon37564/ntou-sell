@@ -15,7 +15,7 @@ const productTable = `CREATE TABLE product(
 						eval float,
 						seller_id int NOT NULL,
 						bid bool,
-						date sting
+						date sting,
 						PRIMARY KEY(pd_id),
 						FOREIGN KEY(seller_id) REFERENCES user
 					);`
@@ -37,8 +37,11 @@ type Product struct {
 type ProductDB struct {
 	insert       *sql.Stmt
 	_delete      *sql.Stmt
+	updatepdName *sql.Stmt
 	updatePrice  *sql.Stmt
 	updateAmount *sql.Stmt
+	updateDecp   *sql.Stmt
+	updateEval   *sql.Stmt
 	maxpdID      *sql.Stmt
 	search       *sql.Stmt
 	getPdInfo    *sql.Stmt
@@ -58,12 +61,27 @@ func ProductDBInit(db *sql.DB) (product *ProductDB) {
 		panic(err)
 	}
 
+	product.updatepdName, err = db.Prepare("UPDATE product SET product_name=? WHERE pd_id=?;")
+	if err != nil {
+		panic(err)
+	}
+
 	product.updatePrice, err = db.Prepare("UPDATE product SET price=? WHERE pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
 
 	product.updateAmount, err = db.Prepare("UPDATE product SET amount=? WHERE pd_id=?;")
+	if err != nil {
+		panic(err)
+	}
+
+	product.updateDecp, err = db.Prepare("UPDATE product SET decription=? WHERE pd_id=?;")
+	if err != nil {
+		panic(err)
+	}
+
+	product.updateEval, err = db.Prepare("UPDARE product SET eval=? WHERE pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -112,6 +130,12 @@ func (p *ProductDB) Delete(pdid int) error {
 	return err
 }
 
+// UpdateName with product id and new name
+func (p *ProductDB) UpdateName(pdid int, name string) error {
+	_, err := p.updatepdName.Exec(name, pdid)
+	return err
+}
+
 // UpdatePrice with prouct id and new price
 func (p *ProductDB) UpdatePrice(pdid, price int) error {
 	_, err := p.updatePrice.Exec(price, pdid)
@@ -121,6 +145,18 @@ func (p *ProductDB) UpdatePrice(pdid, price int) error {
 // UpdateAmount with prdouct id and new amount
 func (p *ProductDB) UpdateAmount(pdid, amount int) error {
 	_, err := p.updateAmount.Exec(amount, pdid)
+	return err
+}
+
+// UpdateDescription with product id and new description
+func (p *ProductDB) UpdateDescription(pdid int, description string) error {
+	_, err := p.updateDecp.Exec(description, pdid)
+	return err
+}
+
+// UpdateEval with product id and new eval
+func (p *ProductDB) UpdateEval(pdid int, eval float64) error {
+	_, err := p.updateEval.Exec(eval, pdid)
 	return err
 }
 
