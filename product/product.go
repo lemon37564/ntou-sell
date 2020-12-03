@@ -5,27 +5,17 @@ import (
 )
 
 type Product struct {
-	db database.ProductData
+	db *database.ProductData
 }
 
-func (p *Product) AddProduct(price, amount int, pdname, desciption string, bid bool) error {
-	err := p.db.Insert("", pdname, price, desciption, amount, 0, "", bid, "")
-	return err
+func ProductInit() *Product {
+	p := new(Product)
+	p.db = database.ProductDataInit()
+	return p
 }
 
-func (p Product) Price(pdname string) int {
-	p.db.Select()
-	return 0
-}
-
-func (p Product) Amount() int {
-	p.db.Select()
-	return 0
-}
-
-func (p Product) Description() string {
-	p.db.Select()
-	return ""
+func (p Product) AddProduct(pdname string, price int, description string, amount int, uid int, bid bool, date string) error {
+	return p.db.AddNewProduct(pdname, price, description, amount, uid, bid, date)
 }
 
 func (p *Product) ChangePrice(pdname string, price int) {

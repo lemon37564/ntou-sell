@@ -2,14 +2,17 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const historyTable = `CREATE TABLE history(
-						id varchar(16) NOT NULL,
-						products varchar(2048),
-						PRIMARY KEY(id),
-						FOREIGN KEY(id) REFERENCES user
+						uid int NOT NULL,
+						pd_id int NOT NULL,
+						PRIMARY KEY(uid, pd_id),
+						FOREIGN KEY(uid) REFERENCES user
 					);`
 
 type HistoryData struct {
@@ -17,68 +20,63 @@ type HistoryData struct {
 
 	insert  *sql.Stmt
 	_delete *sql.Stmt
-	update  *sql.Stmt
-	_select *sql.Stmt
 }
 
 func HistoryDataInit() *HistoryData {
 	history := new(HistoryData)
 
-	db, err := sql.Open("sqlite3", "./sqlite.db")
+	db, err := sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}
 	history.db = db
 
-	insert, err := db.Prepare("INSERT INTO history values(?,?,?,?,?,?,?,?,?);")
+	history.insert, err = db.Prepare("INSERT INTO history VALUES(?,?);")
 	if err != nil {
 		log.Fatal(err)
 	}
-	history.insert = insert
 
-	_delete, err := db.Prepare("DELETE FROM history where pd_id=?;")
+	history._delete, err = db.Prepare("DELETE FROM history where uid=? AND pd_id=?;")
 	if err != nil {
 		log.Fatal(err)
 	}
-	history._delete = _delete
-
-	update, err := db.Prepare("UPDATE history SET ?=?;")
-	if err != nil {
-		log.Fatal(err)
-	}
-	history.update = update
-
-	_select, err := db.Prepare("SELECT * FROM history WHERE ?=?;")
-	if err != nil {
-		log.Fatal(err)
-	}
-	history._select = _select
 
 	return history
 }
 
-// wait for implementation
-func (h *HistoryData) Insert() error {
-	_, err := h.insert.Exec()
+// AddHistory add a single record into database
+// return's an error
+func (h *HistoryData) AddHistory(uid, pdid int) error {
+	_, err := h.insert.Exec(uid, pdid)
 	return err
 }
 
-// wait for implementation
-func (h *HistoryData) Delete(pdid string) error {
-	_, err := h._delete.Exec(pdid)
+func (h *HistoryData) Delete(uid, pdid int) error {
+	_, err := h._delete.Exec(uid, pdid)
 	return err
 }
 
-// wait for implementation
-func (h *HistoryData) Update(products string) error {
-	return nil
+// WARNING: SQL injection
+func (h *HistoryData) GetHistory(uid int) (pdid []int) {
+	rows, err := h.db.Query("SELECT pd_id FROM history WHERE uid=" + fmt.Sprintf("%d", uid) + ";")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for rows.Next() {
+		var d int
+		err = rows.Scan(&d)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		pdid = append(pdid, d)
+	}
+
+	return
 }
 
-// wait for implementation
-func (h *HistoryData) Select() (string, error) {
-	return "", nil
-}
-
+// always use this function at the end
 func (h *HistoryData) DBClose() error {
 	return h.db.Close()
 }
