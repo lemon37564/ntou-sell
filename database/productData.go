@@ -48,8 +48,9 @@ type ProductDB struct {
 }
 
 // ProductDBInit prepare function for database using
-func ProductDBInit(db *sql.DB) (product *ProductDB) {
+func ProductDBInit(db *sql.DB) *ProductDB {
 	var err error
+	product := new(ProductDB)
 
 	product.insert, err = db.Prepare("INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);")
 	if err != nil {
@@ -105,7 +106,7 @@ func ProductDBInit(db *sql.DB) (product *ProductDB) {
 }
 
 // AddNewProduct add single product with product name, price, description, amount, seller id, bid and date into database
-func (p *ProductDB) AddNewProduct(pdname string, price int, description string, amount int, sellerID int, bid bool, date string) error {
+func (p *ProductDB) AddNewProduct(pdname string, price int, description string, amount int, sellerID int, bid bool, date string) (int, error) {
 	var pdid int
 	rows, err := p.maxpdID.Query()
 	if err != nil {
@@ -121,7 +122,7 @@ func (p *ProductDB) AddNewProduct(pdname string, price int, description string, 
 	}
 
 	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, 0.0, sellerID, bid, date)
-	return err
+	return pdid, err
 }
 
 // Delete product with product id
