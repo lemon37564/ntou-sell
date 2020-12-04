@@ -6,8 +6,8 @@ import (
 )
 
 type Bid struct {
-	bidDb     *database.BidData
-	productDb *database.ProductData
+	bidDb     *database.BidDB
+	productDb *database.ProductDB
 }
 
 func BidDataInit() Bid {
@@ -17,27 +17,28 @@ func BidDataInit() Bid {
 }
 
 func (b Bid) Product_name(id int) string { //回傳商品名稱
-	return b.productDb.GetProductName(id)
+	return b.productDb.GetInfoFromPdID(id).PdName
 }
 func (b Bid) Product_Description(id int) string { //回傳商品描述
 
-	return b.productDb.GetProductDescript(id)
+	return b.productDb.GetInfoFromPdID(id).Description
 }
 func (b Bid) Product_bid_time(id int) string {
-	return b.productDb.GetBidTime(id)
+	return b.productDb.GetInfoFromPdID(id).Date
 }
-func Product_bid_minimum(id int) int { //拿到
-	return b.productDb.GetProductMinium(id)
-}
-func Product_Bid_Current_Price() int {
-	return b.productDb.GetBidCurrentTime(id)
+
+/*func Product_bid_minimum(id int) int { //拿到
+	return b.productDb.GetInfoFromPdID(id).
+}*/
+func (b Bid) Product_Bid_Current_Price(id int) int {
+	return b.productDb.GetInfoFromPdID(id).Price
 }
 
 /*func Product_bid_amount() int {
 	return database.Product_bid_amount()
 }*/
-func Product_Bid_Evaluate() {
-	return database.Product_Bid_Evaluate()
+func (b Bid) Product_Bid_Evaluate(id int) float64 {
+	return b.productDb.GetInfoFromPdID(id).Eval
 }
 func Product_Bid_User_Price() { //還沒改_
 

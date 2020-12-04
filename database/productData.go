@@ -148,12 +148,6 @@ func (p *ProductDB) UpdateAmount(pdid, amount int) error {
 	return err
 }
 
-<<<<<<< HEAD
-//func (p *ProductData) GetProductName()
-
-func (p *ProductData) DBClose() error {
-	return p.db.Close()
-=======
 // UpdateDescription with product id and new description
 func (p *ProductDB) UpdateDescription(pdid int, description string) error {
 	_, err := p.updateDecp.Exec(description, pdid)
@@ -201,5 +195,4 @@ func (p *ProductDB) Search(keyword string) (pdid []int) {
 	}
 
 	return
->>>>>>> main
 }
