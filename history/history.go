@@ -1,18 +1,20 @@
 package history
 
-import "se/database"
+import (
+	"database/sql"
+	"se/database"
+)
 
 type History struct {
-	data      []byte
 	historydb *database.HistoryDB
 }
 
-func HistoryDataInit() {
-	historydb := database.HistoryDataInit()
+func NewHistory(db *sql.DB) (u *History) {
+	u.historydb = database.HistoryDBInit(db)
 	return
 }
 
-func (h History) GetAll(uid int) (pdid []int) { //get all history
+func (h History) GetAllHistory(uid int) (pdid []int) { //get all history
 	pdid = h.historydb.GetAll(uid)
 	return pdid
 }
