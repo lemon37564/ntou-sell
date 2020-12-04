@@ -12,6 +12,9 @@ import (
 func main() {
 	database.RemoveAll() // clear all the data in database
 
+	//database.TestInsert()
+	// database.TestSearch()
+	//web()
 	db := database.Open()
 	defer db.Close()
 
