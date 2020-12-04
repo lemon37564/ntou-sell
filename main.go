@@ -14,7 +14,7 @@ func main() {
 
 	database.TestInsert()
 	// database.TestSearch()
-	// web()
+	web()
 }
 
 func web() {

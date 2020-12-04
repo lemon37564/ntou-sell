@@ -97,6 +97,8 @@ func (p *ProductData) UpdateAmount(pdid, amount int) error {
 	return err
 }
 
+//func (p *ProductData) GetProductName()
+
 func (p *ProductData) DBClose() error {
 	return p.db.Close()
 }

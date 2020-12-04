@@ -5,31 +5,40 @@ import (
 	//"encoding/json"
 )
 
-type bid struct {
-	db database.BidData
+type Bid struct {
+	bidDb     *database.BidData
+	productDb *database.ProductData
 }
 
-func (b *bid) Product_name(id int) string { //回傳商品名稱
-	return database.ProductName(id)
+func BidDataInit() Bid {
+	bidDb := database.BidDataInit()
+	return Bid{bidDb: bidDb}
+
 }
-func Product_Description(id int) string { //回傳商品描述
-	return database.Product_Description()
+
+func (b Bid) Product_name(id int) string { //回傳商品名稱
+	return b.productDb.GetProductName(id)
 }
-func Product_bid_time(id int) string {
-	return database.Product_bid_time()
+func (b Bid) Product_Description(id int) string { //回傳商品描述
+
+	return b.productDb.GetProductDescript(id)
 }
-func Product_bid_minimum(id int) int {
-	return database.Product_Bid_Minimum()
+func (b Bid) Product_bid_time(id int) string {
+	return b.productDb.GetBidTime(id)
+}
+func Product_bid_minimum(id int) int { //拿到
+	return b.productDb.GetProductMinium(id)
 }
 func Product_Bid_Current_Price() int {
-	return database.Product_Bid_Current_Price()
+	return b.productDb.GetBidCurrentTime(id)
 }
-func Product_bid_amount() int {
+
+/*func Product_bid_amount() int {
 	return database.Product_bid_amount()
-}
+}*/
 func Product_Bid_Evaluate() {
 	return database.Product_Bid_Evaluate()
 }
-func Product_Bid_User_Price() {
-	return database.Product_Bid_User_Price()
+func Product_Bid_User_Price() { //還沒改_
+
 }
