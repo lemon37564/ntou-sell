@@ -93,7 +93,7 @@ func UserDBInit(db *sql.DB) *UserDB {
 		panic(err)
 	}
 
-	user.allUser, err = db.Prepare("SELECT * FROM USER;")
+	user.allUser, err = db.Prepare("SELECT * FROM USER WHERE uid>0;")
 	if err != nil {
 		panic(err)
 	}

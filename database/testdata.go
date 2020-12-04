@@ -12,27 +12,27 @@ import (
 func TestInsert(db *sql.DB) {
 	u := UserDBInit(db)
 
-	err := u.AddNewUser("test0001@gmail.com", "9279fa6a314fb0728f7cfd93669cf7f35cc01b6389fd220664919f455b307203", "測試人員A")
+	err := u.AddNewUser("test0001@gmail.com", "password_hash", "測試人員A")
 	if err != nil {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test0002@gmail.com", "dbc44100467a607e4653432e984eeb676302d8e070dbd3d1f66342ac0f1e7aa7", "開發人員A")
+	err = u.AddNewUser("test0002@ntou.mail.com.tw", "ab1112c2c2", "開發人員A")
 	if err != nil {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test0003@gmail.com", "75f84bcb4c96aa1f62b86ef5b2815cbc7e6cd19632c74d0a0fdf0e30a6cef297", "路人甲")
+	err = u.AddNewUser("test0003@yahoo.com.tw", "ef297", "路人甲")
 	if err != nil {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test0004@gmail.com", "dfc54fd9554e389382a8cfd4a6e69d3c4042152341422cc27c074ce1c9a313ab", "路人丁")
+	err = u.AddNewUser("test0004@gmail.com", "e04e04e04", "路人丁")
 	if err != nil {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test0005@gmail.com", "c89d6fffc1e91b8aecce220e6fadfd49e8041f75edc5f4a7fb5e871fecca9e85", "駭客A")
+	err = u.AddNewUser("test0005@what.com", "jjj09090", "駭客A")
 	if err != nil {
 		panic(err)
 	}
