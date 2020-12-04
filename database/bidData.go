@@ -36,8 +36,9 @@ type BidDB struct {
 }
 
 // BidDataInit prepare functions for database using. require arg *sql.DB
-func BidDataInit(db *sql.DB) (bid *BidDB) {
+func BidDataInit(db *sql.DB) *BidDB {
 	var err error
+	bid := new(BidDB)
 
 	bid.insert, err = db.Prepare("INSERT INTO bid VALUES(?,?,?,?,?);")
 	if err != nil {

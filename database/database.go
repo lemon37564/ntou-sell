@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"log"
 	"os"
 )
 
@@ -18,7 +17,7 @@ func Open() *sql.DB {
 
 	db, err := sql.Open("sqlite3", file)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	return db
@@ -29,7 +28,7 @@ func Open() *sql.DB {
 func check() {
 	_, err := os.Stat(root)
 	if err != nil {
-		createFile()
+		createFolder()
 	}
 
 	_, err = os.Stat(file)
@@ -38,7 +37,7 @@ func check() {
 	}
 }
 
-func createFile() {
+func createFolder() {
 	err := os.Mkdir(root, 0666)
 	if err != nil {
 		panic(err)

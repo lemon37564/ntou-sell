@@ -27,7 +27,6 @@ type HistoryDB struct {
 // HistoryDBInit prepare function for database using
 func HistoryDBInit(db *sql.DB) *HistoryDB {
 	var err error
-
 	history := new(HistoryDB)
 
 	history.insert, err = db.Prepare("INSERT INTO history VALUES(?,?,?);")

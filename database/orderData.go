@@ -33,8 +33,9 @@ type OrderDB struct {
 }
 
 // OrderDBInit prepare function for database using
-func OrderDBInit(db *sql.DB) (order *OrderDB) {
+func OrderDBInit(db *sql.DB) *OrderDB {
 	var err error
+	order := new(OrderDB)
 
 	order.insert, err = db.Prepare("INSERT INTO order VALUES(?,?,?,?);")
 	if err != nil {
@@ -56,7 +57,7 @@ func OrderDBInit(db *sql.DB) (order *OrderDB) {
 		panic(err)
 	}
 
-	return
+	return order
 }
 
 // AddOrder add order into order of specific user by user id

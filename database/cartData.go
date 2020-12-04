@@ -31,8 +31,9 @@ type CartDB struct {
 }
 
 // CartDBInit prepare functions for database using
-func CartDBInit(db *sql.DB) (cart *CartDB) {
+func CartDBInit(db *sql.DB) *CartDB {
 	var err error
+	cart := new(CartDB)
 
 	cart.insert, err = db.Prepare("INSERT INTO cart VALUES(?,?,?);")
 	if err != nil {

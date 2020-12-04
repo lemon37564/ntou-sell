@@ -48,8 +48,9 @@ type ProductDB struct {
 }
 
 // ProductDBInit prepare function for database using
-func ProductDBInit(db *sql.DB) (product *ProductDB) {
+func ProductDBInit(db *sql.DB) *ProductDB {
 	var err error
+	product := new(ProductDB)
 
 	product.insert, err = db.Prepare("INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);")
 	if err != nil {

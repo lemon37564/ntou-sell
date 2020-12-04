@@ -11,9 +11,11 @@ type User struct {
 	fn *database.UserDB
 }
 
-func NewUser(db *sql.DB) (u *User) {
+func NewUser(db *sql.DB) *User {
+	u := new(User)
 	u.fn = database.UserDBInit(db)
-	return
+
+	return u
 }
 
 func (u *User) Login(account, password string) bool {
