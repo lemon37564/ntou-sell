@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -18,73 +17,76 @@ const bidTable = `CREATE TABLE bid(
 					FOREIGN KEY(now_bidder_uid) REFERENCES user
 				);`
 
-type BidData struct {
-	db *sql.DB
-
-	insert         *sql.Stmt
-	_delete        *sql.Stmt
-	updateUid      *sql.Stmt
-	updateMoney    *sql.Stmt
-	updateDeadLine *sql.Stmt
-}
-
+// Bid struct store data of a single bid
 type Bid struct {
 	Deadline    string
-	NowBidderId int
+	NowBidderID int
 	NowMoney    int
-	Uid         int
+	UID         int
 }
 
-func BidDataInit() *BidData {
-	bid := new(BidData)
+// BidDB contain functions to use
+type BidDB struct {
+	insert         *sql.Stmt
+	_delete        *sql.Stmt
+	updateUID      *sql.Stmt
+	updateMoney    *sql.Stmt
+	updateDeadLine *sql.Stmt
+	getAllBid      *sql.Stmt
+}
 
-	db, err := sql.Open("sqlite3", file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	bid.db = db
+// BidDataInit prepare functions for database using. require arg *sql.DB
+func BidDataInit(db *sql.DB) (bid *BidDB) {
+	var err error
 
 	bid.insert, err = db.Prepare("INSERT INTO bid VALUES(?,?,?,?,?);")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	bid._delete, err = db.Prepare("DELETE FROM bid WHERE pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	bid.updateUid, err = db.Prepare("UPDATE bid SET uid=? WHERE pd_id=?;")
+	bid.updateUID, err = db.Prepare("UPDATE bid SET uid=? WHERE pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	bid.updateMoney, err = db.Prepare("UPDATE bid SET now_money=? WHERE pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	bid.updateDeadLine, err = db.Prepare("UPDATE bid SET deadline=? WHERE pd_id=?;")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
+	}
+
+	bid.getAllBid, err = db.Prepare("SELECT deadline, now_bidder_id, now_money, uid FROM bid")
+	if err != nil {
+		panic(err)
 	}
 
 	return bid
 }
 
-func (b *BidData) AddNewBid(pdid int, deadline string, lowest_money int, uid int) error {
-	_, err := b.insert.Exec(pdid, deadline, nil, lowest_money, uid)
+// AddNewBid insert new bid information into database
+func (b *BidDB) AddNewBid(pdid int, deadline string, lowestMoney int, uid int) error {
+	_, err := b.insert.Exec(pdid, deadline, nil, lowestMoney, uid)
 	return err
 }
 
-func (b *BidData) DeleteBid(pdid int) error {
+// DeleteBid delete specific bid with pd_id
+func (b *BidDB) DeleteBid(pdid int) error {
 	_, err := b._delete.Exec(pdid)
 	return err
 }
 
-// NewBidder update bidder_id and money if anyone won the price
-func (b *BidData) NewBidderGet(pdid, bidderId, money int) error {
-	_, err := b.updateUid.Exec(bidderId, pdid)
+// NewBidderGet update bidder_id and money if anyone won the bid at a time
+func (b *BidDB) NewBidderGet(pdid, bidderID, money int) error {
+	_, err := b.updateUID.Exec(bidderID, pdid)
 	if err != nil {
 		return err
 	}
@@ -93,27 +95,22 @@ func (b *BidData) NewBidderGet(pdid, bidderId, money int) error {
 	return err
 }
 
-// wait for implementation
-func (b *BidData) GetAllBid() (all []Bid) {
-	rows, err := b.db.Query("SELECT deadline, now_bidder_id, now_money, uid FROM bid")
+// GetAllBid return all bid product informations
+func (b *BidDB) GetAllBid() (all []Bid) {
+	rows, err := b.getAllBid.Query()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	for rows.Next() {
 		bid := *new(Bid)
-		err = rows.Scan(&bid.Deadline, &bid.NowBidderId, &bid.NowMoney, &bid.Uid)
+		err = rows.Scan(&bid.Deadline, &bid.NowBidderID, &bid.NowMoney, &bid.UID)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 
 		all = append(all, bid)
 	}
 
 	return
-}
-
-// always use this function at the end
-func (b *BidData) DBClose() error {
-	return b.db.Close()
 }

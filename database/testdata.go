@@ -8,9 +8,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func TestInsert() {
-	u := UserDataInit()
-	defer u.DBClose()
+// TestInsert tests AddNewUser with five new user
+func TestInsert(db *sql.DB) {
+	u := UserDBInit(db)
 
 	err := u.AddNewUser("test0001@gmail.com", "9279fa6a314fb0728f7cfd93669cf7f35cc01b6389fd220664919f455b307203", "測試人員A")
 	if err != nil {
@@ -40,14 +40,9 @@ func TestInsert() {
 	log.Println("insert complete")
 }
 
-// example usage
-func TestSearch() {
+// TestSearch shows all the users
+func TestSearch(db *sql.DB) {
 	fmt.Println("start searching...")
-	db, err := sql.Open("sqlite3", file)
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
 
 	rows, err := db.Query("select * from user;")
 	if err != nil {

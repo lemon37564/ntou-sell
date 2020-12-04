@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,25 +11,42 @@ import (
 
 func main() {
 	database.RemoveAll() // clear all the data in database
-	database.Check()
 
-	database.TestInsert()
+	//database.TestInsert()
 	// database.TestSearch()
-	web()
+	//web()
+	db := database.Open()
+	defer db.Close()
+
+	database.TestInsert(db)
+	database.TestSearch(db)
+
+	newWeb := web{db: db}
+	newWeb.weber()
 }
 
-func web() {
-	http.HandleFunc("/", service)
+//////////////////////////////////
+//////////////////////////////////
+///// snychorization problem /////
+//////////////////////////////////
+//////////////////////////////////
+
+type web struct {
+	db *sql.DB
+}
+
+func (we *web) weber() {
+	http.HandleFunc("/", we.service)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
 
-func service(w http.ResponseWriter, r *http.Request) {
+func (we *web) service(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	log.Printf("connection<host: %v, remote: %v>\n", r.Host, r.RemoteAddr)
 
-	u := user.UserInit()
+	u := user.NewUser(we.db)
 	fmt.Fprintf(w, u.GetAllUserData())
 }
