@@ -34,44 +34,73 @@ func (ser *server) service(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cmd := arg[0]
+	class := arg[0]
+	length := len(arg)
 
-	if len(arg) == 1 && cmd == "all" {
-		fmt.Fprintf(w, ser.u.GetAllUserData())
-	} else if len(arg) == 2 && cmd == "login" {
-		// format: /login/account=?&password=?
-		acntpass := strings.Split(arg[1], "&")
-
-		if len(acntpass) != 2 {
-			fmt.Fprint(w, false)
+	switch class {
+	case "help":
+		if length == 1 {
+			fmt.Fprintln(w, `<html>
+			<p>
+			/user/all<br>
+			列出所有帳號(僅限開發期間)<br>
+			e.g. 192.168.0.1:8080/all<br><br>
+			</p>
+			<p>/user/login/account=?&password=?<br>
+			登入是否成功(bool)<br>
+			e.g. 192.168.0.1:8080/login/account=test@gmail.com&password=000000<br><br>
+			</p>
+			<p>/user/regist/account=?&password=?&name=?<br>
+			註冊新帳號<br>
+			e.g. 192.168.0.1:8080/regist/account=test2@gmail.com&password=1234&name=Wilson<br><br>
+			</html>
+			`)
 		} else {
-			acnt := strings.Split(acntpass[0], "=")
-			pass := strings.Split(acntpass[1], "=")
-
-			if acnt[0] == "account" && pass[0] == "password" && ser.u.Login(acnt[1], pass[1]) {
-				fmt.Fprint(w, true)
-			} else {
-				fmt.Fprint(w, false)
-			}
+			http.NotFound(w, r)
 		}
-	} else if len(arg) == 2 && cmd == "regist" {
-		// format: /regist/account=?&password=?&name=?
-		acntpass := strings.Split(arg[1], "&")
+	case "user":
+		if length == 2 && arg[1] == "all" {
+			fmt.Fprintf(w, ser.u.GetAllUserData())
+		} else if length == 3 {
+			if arg[1] == "login" {
+				acntpass := strings.Split(arg[2], "&")
 
-		if len(acntpass) != 3 {
-			fmt.Fprint(w, "error")
+				if len(acntpass) != 2 {
+					fmt.Fprint(w, false)
+				} else {
+					acnt := strings.Split(acntpass[0], "=")
+					pass := strings.Split(acntpass[1], "=")
+
+					if acnt[0] == "account" && pass[0] == "password" && ser.u.Login(acnt[1], pass[1]) {
+						fmt.Fprint(w, true)
+					} else {
+						fmt.Fprint(w, false)
+					}
+				}
+			} else if arg[1] == "regist" {
+				acntpass := strings.Split(arg[2], "&")
+
+				if len(acntpass) != 3 {
+					fmt.Fprint(w, "error")
+				} else {
+					acnt := strings.Split(acntpass[0], "=")
+					pass := strings.Split(acntpass[1], "=")
+					name := strings.Split(acntpass[2], "=")
+
+					if acnt[0] == "account" && pass[0] == "password" && name[0] == "name" {
+						fmt.Fprint(w, ser.u.Regist(acnt[1], pass[1], name[1]))
+					} else {
+						fmt.Fprint(w, "error")
+					}
+				}
+			} else {
+				http.NotFound(w, r)
+			}
 		} else {
-			acnt := strings.Split(acntpass[0], "=")
-			pass := strings.Split(acntpass[1], "=")
-			name := strings.Split(acntpass[2], "=")
-
-			if acnt[0] == "account" && pass[0] == "password" && name[0] == "name" {
-				fmt.Fprint(w, ser.u.Regist(acnt[1], pass[1], name[1]))
-			} else {
-				fmt.Fprint(w, "error")
-			}
+			http.NotFound(w, r)
 		}
-	} else {
+	default:
 		http.NotFound(w, r)
 	}
+
 }

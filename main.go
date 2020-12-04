@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	database.RemoveAll() // clear all the data in database
+	// database.RemoveAll() // clear all the data in database
 
 	db := database.Open()
 	defer db.Close()
