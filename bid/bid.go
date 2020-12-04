@@ -30,16 +30,28 @@ func (b Bid) Product_bid_time(id int) string {
 /*func Product_bid_minimum(id int) int { //拿到
 	return b.productDb.GetInfoFromPdID(id).
 }*/
-func (b Bid) Product_Bid_Current_Price(id int) int {
+func (b Bid) Product_Bid_Current_Price(id int) int {//等等改
 	return b.productDb.GetInfoFromPdID(id).Price
 }
 
-/*func Product_bid_amount() int {
-	return database.Product_bid_amount()
-}*/
+func (b Bid) GetInfoFromProductBid(pdid int) (bd database.Bid) {//等等改
+
+	temp := b.bidDb.GetAllBid()
+	return temp[pdid]
+}
+
+func (b *Bid)SetBidForBuyer(pdid,uid,money int) bool {
+	if(money>b.bid)//等等改 取得競標價格
+	b.bidDb.NewBidderGet(pdid,uid,money)
+}
+
 func (b Bid) Product_Bid_Evaluate(id int) float64 {
 	return b.productDb.GetInfoFromPdID(id).Eval
 }
 func Product_Bid_User_Price() { //還沒改_
 
+}
+
+func (b *Bid) DeleteBid(pdid int) bool {
+	
 }
