@@ -3,7 +3,6 @@ package bid
 import (
 	"fmt"
 	"se/database"
-	//"encoding/json"
 )
 
 type Bid struct {
@@ -17,18 +16,18 @@ func BidDataInit() Bid {
 
 }
 
-func (b Bid) Product_name(id int) string { //回傳商品名稱
+func (b Bid) ProductBidName(id int) string { //回傳商品名稱
 	return b.productDb.GetInfoFromPdID(id).PdName
 }
-func (b Bid) Product_Description(id int) string { //回傳商品描述
+func (b Bid) ProductBidDescription(id int) string { //回傳商品描述
 
 	return b.productDb.GetInfoFromPdID(id).Description
 }
-func (b Bid) Product_bid_time(id int) string { //回傳商品更新日期(非競標日期)
+func (b Bid) ProductBidTime(id int) string { //回傳商品更新日期(非競標日期)
 	return b.productDb.GetInfoFromPdID(id).Date
 }
 
-func (b Bid) Product_Bid_Current_Price(id int) int { //回傳商品目前競標價格
+func (b Bid) ProductBidCurrentPrice(id int) int { //回傳商品目前競標價格
 	return b.bidDb.GetBidByID(id).NowMoney
 }
 
