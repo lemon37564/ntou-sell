@@ -11,9 +11,9 @@ const bidTable = `CREATE TABLE bid(
 					deadline varchar(16) NOT NULL,
 					now_bidder_uid int NOT NULL,
 					now_money int NOT NULL,
-					uid int NOT NULL,
+					seller_uid int NOT NULL,
 					PRIMARY KEY(pd_id),
-					FOREIGN KEY(uid) REFERENCES user
+					FOREIGN KEY(seller_uid) REFERENCES user
 					FOREIGN KEY(now_bidder_uid) REFERENCES user
 				);`
 
@@ -33,6 +33,7 @@ type BidDB struct {
 	updateMoney    *sql.Stmt
 	updateDeadLine *sql.Stmt
 	getAllBid      *sql.Stmt
+	getBid         *sql.Stmt
 }
 
 // BidDataInit prepare functions for database using. require arg *sql.DB
@@ -50,7 +51,7 @@ func BidDataInit(db *sql.DB) *BidDB {
 		panic(err)
 	}
 
-	bid.updateUID, err = db.Prepare("UPDATE bid SET uid=? WHERE pd_id=?;")
+	bid.updateUID, err = db.Prepare("UPDATE bid SET seller_uid=? WHERE pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -65,7 +66,12 @@ func BidDataInit(db *sql.DB) *BidDB {
 		panic(err)
 	}
 
-	bid.getAllBid, err = db.Prepare("SELECT deadline, now_bidder_id, now_money, uid FROM bid")
+	bid.getAllBid, err = db.Prepare("SELECT deadline, now_bidder_uid, now_money, seller_uid FROM bid")
+	if err != nil {
+		panic(err)
+	}
+
+	bid.getBid, err = db.Prepare("SELECT deadline, now_bidder_uid, now_money, seller_uid FROM bid WHERE pd_id=?")
 	if err != nil {
 		panic(err)
 	}
@@ -94,6 +100,24 @@ func (b *BidDB) NewBidderGet(pdid, bidderID, money int) error {
 
 	_, err = b.updateMoney.Exec(money, pdid)
 	return err
+}
+
+// GetBidByID return informations by product id
+func (b *BidDB) GetBidByID(pdid int) (bid Bid) {
+	rows, err := b.getBid.Query(pdid)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		bid = *new(Bid)
+		err = rows.Scan(&bid.Deadline, &bid.NowBidderID, &bid.NowMoney, &bid.UID)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return
 }
 
 // GetAllBid return all bid product informations
