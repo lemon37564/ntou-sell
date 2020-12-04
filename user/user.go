@@ -32,6 +32,15 @@ func (u *User) Regist(account, password, name string) string {
 	return "ok"
 }
 
+func (u *User) DeleteUser(account, password string) string {
+	err := u.fn.DeleteUser(account, password)
+	if err != nil {
+		return fmt.Sprintf("%v", err)
+	}
+
+	return "ok"
+}
+
 func (u *User) GetUserData(account string) (res string) {
 	return u.fn.GetDatasFromAccount(account).String()
 }

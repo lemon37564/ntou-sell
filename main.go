@@ -11,7 +11,7 @@ func main() {
 	db := database.Open()
 	defer db.Close()
 
-	database.TestInsert(db)
+	// database.TestInsert(db)
 	//database.TestSearch(db)
 
 	newWeb := server{db: db, u: user.NewUser(db)}

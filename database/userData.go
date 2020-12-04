@@ -58,7 +58,7 @@ func UserDBInit(db *sql.DB) *UserDB {
 		panic(err)
 	}
 
-	user._delete, err = db.Prepare("DELETE FROM user WHERE account=?;")
+	user._delete, err = db.Prepare("DELETE FROM user WHERE account=? AND password_hash=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -125,8 +125,8 @@ func (u *UserDB) AddNewUser(account, passwordHash, name string) error {
 }
 
 // DeleteUser delete data of specific user by account
-func (u *UserDB) DeleteUser(account string) error {
-	_, err := u._delete.Exec(account)
+func (u *UserDB) DeleteUser(account, password string) error {
+	_, err := u._delete.Exec(account, password)
 	return err
 }
 
