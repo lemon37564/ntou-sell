@@ -30,6 +30,7 @@ type OrderDB struct {
 	_delete      *sql.Stmt
 	updateAmount *sql.Stmt
 	getall       *sql.Stmt
+	getOrder     *sql.Stmt
 }
 
 // OrderDBInit prepare function for database using
@@ -52,7 +53,12 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 		panic(err)
 	}
 
-	order.updateAmount, err = db.Prepare("SELECT pd_id, amount, state FROM order WHERE uid=?;")
+	order.getall, err = db.Prepare("SELECT pd_id, amount, state FROM order WHERE uid=?;")
+	if err != nil {
+		panic(err)
+	}
+
+	order.getOrder, err = db.Prepare("SELECT pd_id, amount, state FROM order WHERE uid=? AND pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -70,6 +76,24 @@ func (o *OrderDB) AddOrder(uid, pdid, amount int) error {
 func (o *OrderDB) Delete(uid, pdid int) error {
 	_, err := o._delete.Exec(uid, pdid)
 	return err
+}
+
+// GetOrderByUIDAndPdid return order by user id and product id
+func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
+	rows, err := o.getOrder.Query(uid, pdid)
+	if err != nil {
+		panic(err)
+	}
+
+	var od Order
+	for rows.Next() {
+		err = rows.Scan(&od.Pdid, &od.Amount, &od.State)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return od
 }
 
 // GetAllOrder return all order with type Order, need argument user id
