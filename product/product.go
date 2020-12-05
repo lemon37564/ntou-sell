@@ -17,8 +17,12 @@ func ProductInit(db *sql.DB) *Product {
 	return p
 }
 
-func (p Product) AddProduct(pdname string, price int, description string, amount int, uid int, bid bool, date string) error {
-	return p.fn.AddNewProduct(pdname, price, description, amount, uid, bid, date)
+func (p Product) AddProduct(pdname string, price int, description string, amount int, uid int, bid bool, date string) bool {
+	_, err := p.fn.AddNewProduct(pdname, price, description, amount, uid, bid, date)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 func (p *Product) DeleteProduct(pdid int) bool {
@@ -83,6 +87,6 @@ func (p *Product) GetProdName(pdid int) string { //拿商品名稱
 	return p.fn.GetInfoFromPdID(pdid).PdName
 }
 
-func (p *Product) GetProdEval(pdid int) string { //拿評價
+func (p *Product) GetProdEval(pdid int) float64 { //拿評價
 	return p.fn.GetInfoFromPdID(pdid).Eval
 }

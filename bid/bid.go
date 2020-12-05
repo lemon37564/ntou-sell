@@ -1,6 +1,7 @@
 package bid
 
 import (
+	"database/sql"
 	"fmt"
 	"se/database"
 )
@@ -10,9 +11,10 @@ type Bid struct {
 	productDb *database.ProductDB
 }
 
-func BidDataInit() Bid {
-	bidDb := database.BidDataInit()
-	return Bid{bidDb: bidDb}
+func NewBid(db *sql.DB) *Bid {
+	b := new(Bid)
+	b.bidDb = database.BidDataInit(db)
+	return b
 
 }
 
@@ -35,7 +37,7 @@ func (b Bid) GetProductBidDeadLine(pdid int) string { //回傳商品競標日期
 	return b.bidDb.GetBidByID(pdid).Deadline
 }
 func (b *Bid) SetBidForBuyer(pdid, uid, money int) bool { //更新商品價格，目前競標者
-	if money > b.bidDb.GetBidByID(pdid).NowMoney { //等等改 取得競標價格
+	if money > b.bidDb.GetBidByID(pdid).NowMoney { // 取得競標價格
 		b.bidDb.NewBidderGet(pdid, uid, money)
 		return true
 	}

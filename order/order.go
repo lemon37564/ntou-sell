@@ -11,15 +11,23 @@ type Order struct {
 
 func NewOrder(db *sql.DB) *Order {
 	o := new(Order)
-	o.fn = database.OrderDBInit()
-}
-func (o *Order) GetOrders(uid int) (ods []database.Order) (orders string) {
-	
-	return o.fn.GetAllOrder(uid)
+	o.fn = database.OrderDBInit(db)
+
+	return o
 }
 
-func (o *Order) AddOrder(uid,pdid,amount int) bool {
-	err := o.fn.AddOrder(uid,pdid,amount)
+func (o *Order) GetOrders(uid int) (orders string) {
+	//var orders string = ""
+
+	for _, v := range o.fn.GetAllOrder(uid) {
+		orders += v.String()
+	}
+
+	return
+}
+
+func (o *Order) AddOrder(uid, pdid, amount int) bool {
+	err := o.fn.AddOrder(uid, pdid, amount)
 	if err != nil {
 		return false
 	}
@@ -27,8 +35,8 @@ func (o *Order) AddOrder(uid,pdid,amount int) bool {
 	return true
 }
 
-func (o *Order) Delete (uid,pdid int) bool {
-	err := o.fn.Delete(uid,pdid) 
+func (o *Order) Delete(uid, pdid int) bool {
+	err := o.fn.Delete(uid, pdid)
 	if err != nil {
 		return false
 	}

@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -22,6 +23,13 @@ type Order struct {
 	Pdid   int
 	Amount int
 	State  string
+}
+
+func (o Order) String() (res string) {
+	res += " product ID:       " + fmt.Sprintf("%d\n", o.Pdid) + "\n"
+	res += " product Amount:   " + fmt.Sprintf("%d\n", o.Amount) + "\n"
+	res += "product State:     " + fmt.Sprintf("%s\n", o.State) + "\n"
+	return
 }
 
 // OrderDB contain funcions to use

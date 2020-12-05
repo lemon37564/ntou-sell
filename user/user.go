@@ -48,6 +48,7 @@ func (u *User) GetUserData(account string) (res string) {
 func (u *User) GetAllUserData() (res string) {
 	for _, v := range u.fn.GetAllUser() {
 		res += v.String()
+
 	}
 
 	return
