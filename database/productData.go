@@ -35,16 +35,17 @@ type Product struct {
 
 // ProductDB contain funcions to use
 type ProductDB struct {
-	insert       *sql.Stmt
-	_delete      *sql.Stmt
-	updatepdName *sql.Stmt
-	updatePrice  *sql.Stmt
-	updateAmount *sql.Stmt
-	updateDecp   *sql.Stmt
-	updateEval   *sql.Stmt
-	maxpdID      *sql.Stmt
-	search       *sql.Stmt
-	getPdInfo    *sql.Stmt
+	insert        *sql.Stmt
+	_delete       *sql.Stmt
+	updatepdName  *sql.Stmt
+	updatePrice   *sql.Stmt
+	updateAmount  *sql.Stmt
+	updateDecp    *sql.Stmt
+	updateEval    *sql.Stmt
+	maxpdID       *sql.Stmt
+	search        *sql.Stmt
+	enhancesearch *sql.Stmt
+	getPdInfo     *sql.Stmt
 }
 
 // ProductDBInit prepare function for database using
@@ -92,7 +93,12 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 		panic(err)
 	}
 
-	product.search, err = db.Prepare("SELECT pd_id FROM product WHERE product_name LIKE%?%;")
+	product.search, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE%?%;")
+	if err != nil {
+		panic(err)
+	}
+
+	product.enhancesearch, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE %?% AND price>? AND price<? AND eval>?")
 	if err != nil {
 		panic(err)
 	}
@@ -178,21 +184,41 @@ func (p *ProductDB) GetInfoFromPdID(pdid int) (pd Product) {
 	return
 }
 
-// Search return product ids with searching keyword
-func (p *ProductDB) Search(keyword string) (pdid []int) {
+// Search return product infos with searching keyword
+func (p *ProductDB) Search(keyword string) (all []Product) {
 	rows, err := p.search.Query(keyword)
 	if err != nil {
 		panic(err)
 	}
 
 	for rows.Next() {
-		var np int
-		err = rows.Scan(&np)
+		var pd Product
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
 			panic(err)
 		}
 
-		pdid = append(pdid, np)
+		all = append(all, pd)
+	}
+
+	return
+}
+
+// SearchWithFilter is an enhance search function with filter
+func (p *ProductDB) SearchWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
+	rows, err := p.enhancesearch.Query(keyword, priceMin, priceMax, eval)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		var pd Product
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
+		if err != nil {
+			panic(err)
+		}
+
+		all = append(all, pd)
 	}
 
 	return

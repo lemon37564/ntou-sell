@@ -28,7 +28,7 @@ func (ser *server) service(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	query := r.URL.Query()
 
-	log.Printf("<host: %v, remote: %v>, path: %v, args: %v\n", r.Host, r.RemoteAddr, path, query)
+	log.Printf("<host: %v, remote: %v> path: %v, args: %v\n", r.Host, r.RemoteAddr, path, query)
 
 	arg := strings.Split(path, "/")
 	arg = arg[1:] // eliminate " "
@@ -41,21 +41,28 @@ func (ser *server) service(w http.ResponseWriter, r *http.Request) {
 	switch arg[0] {
 	case "help":
 		if len(arg) == 1 {
-			fmt.Fprintln(w, `<html>
-			<p> /user/all<br>
-			列出所有帳號(僅限開發期間)<br>
-			e.g.<br><a href=/user/all> 36.229.107.41/user/all </a><br><br>
-			</p>
-			<p> /user/login?account=...&password=...<br>
-			登入是否成功(bool)<br>
-			e.g.<br>36.229.107.41/login?account=test@gmail.com&password=000000<br><br>
-			</p>
-			<p> /user/regist?account=...&password=...&name=...<br>
-			註冊新帳號<br>
-			e.g.<br>36.229.107.41/regist?account=test2@gmail.com&password=1234&name=Wilson<br><br>
-			<p> /user/delete?account=...&password=...<br>
-			刪除帳號<br>
-			e.g.<br>36.229.107.41/delete?account=test2@gmail.com&password=1234<br><br>
+			fmt.Fprintln(w, `
+			<html>
+				<p> 
+					/user/all<br>
+					列出所有帳號(僅限開發期間)<br>
+					e.g.<br><a href=/user/all> 36.229.107.41/user/all </a><br><br>
+				</p>
+				<p> 
+					/user/login?account=...&password=...<br>
+					登入是否成功(bool)<br>
+					e.g.<br>36.229.107.41/login?account=test@gmail.com&password=000000<br><br>
+				</p>
+				<p>
+					/user/regist?account=...&password=...&name=...<br>
+					註冊新帳號<br>
+					e.g.<br>36.229.107.41/regist?account=test2@gmail.com&password=1234&name=Wilson<br><br>
+				</p>
+				<p>
+					/user/delete?account=...&password=...<br>
+					刪除帳號<br>
+					e.g.<br>36.229.107.41/delete?account=test2@gmail.com&password=1234<br><br>
+				</p>
 			</html>
 			`)
 		} else {

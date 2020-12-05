@@ -1,0 +1,33 @@
+﻿html,body{
+  height: 100%;
+  /* background-color: azure; */
+}
+div.fixed {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 0;
+}
+*
+{
+  margin: 0;
+  padding: 0;
+}
+   
+.Wrapper
+{
+  min-height: 100%;
+}
+   
+  .Wrapper .FooterPush
+  {
+    height: 120px; /* Footer 的高度 */
+  }
+   
+.Footer
+{
+  clear: both; /* 清除浮動元素格式 */
+  position: relative;
+  margin-top: -120px; /* Footer 高度的負值 */
+  height: 120px;
+}
