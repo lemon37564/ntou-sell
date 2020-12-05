@@ -1,46 +1,79 @@
 package cart
 
 import (
+	"database/sql"
 	"se/database"
+	"se/product"
 )
 
-type cart struct {
-	db database.CartData
+type Cart struct {
+	db *database.CartDB
+	db2 *database.ProductDB
 }
 
-// // AddProduct return true if add success
-// func (c *cart) AddProduct(p product.Product, amount int) bool {
-// 	c.db.Insert()
-// 	return true
-// }
+func NewCart(db *sql.DB) *Cart {
+	c := new(Cart)
+	c.db = database.CartDBInit(db)
 
-// // RemoveProduct remove product in the cart if exists. if there's no such product in the cart, return false
-// func (c *cart) RemoveProduct(p product.Product) bool {
-// 	c.db.Delete()
-// 	return true
-// }
+	return c
 
-// // ModifyAmount changes the amount of specific product. returns ture if success
-// func (c *cart) ModifyAmount(p product.Product, newAmount int) bool {
-// 	c.db.UpdateAmount()
-// 	return true
-// }
+}
 
-// // GetProducts returns all the product in cart
-// func (c cart) GetProducts() map[product.Product]int {
-// 	c.db.Select()
-// }
+// AddProduct return true if add success
+func (c *Cart) AddProductToCart(id, pdid, amount int) bool {
+	err := c.db.AddProductIntoCart(id,pdid,amount)
+	if err != nil {
+		return false
+	}
+	return true
+}
 
-// // TotalCount returns how many different products in the cart
-// func (c cart) TotalCount() int {
-// 	c.db.Select()
-// }
+// RemoveProduct remove product in the cart if exists. if there's no such product in the cart, return false
+func (c *Cart) RemoveProduct(id,pdid int) string {
+	err := c.db.DeleteProductFromCart(id,pdid)
+	if err != nil {
+		return "fail to remove from cart"
+	}
+	return "Success"
+}
 
-// // Sum returns the total price of products in the cart
-// func (c cart) Sum() (sum int) {
-// 	for i, v := range c.products {
-// 		sum += i.Price() * v
-// 	}
+// ModifyAmount changes the amount of specific product. returns ture if success
+func (c *Cart) ModifyAmount(uid,pdid,amount int) bool {
+	err := c.db.UpdateAmount(uid,pdid,amount)
+	if err := nil {
+		return false
+	}
+	return true
+}
 
-// 	return
-// }
+// GetProducts returns all the product in cart
+func (c Cart) GetProducts(uid int) map[product.Product]int {
+	prods := c.db.GetAllProductOfUser(uid)
+	prod := map[product.Product]int
+
+	for _,v := range len(prods) {
+		prod[c.db2.GetInfoFromPdID(prods[v].PdID)] = prods[v].PdID
+	}
+	
+
+	return prod
+	
+}
+
+// TotalCount returns how many different products in the cart
+func (c Cart) TotalCount(id int) (total int) {
+	prods = c.db.GetAllProductOfUser(id)
+	
+	for _,v : range len(prods) {
+		total += prods[v]
+	} 
+}
+
+// Sum returns the total price of products in the cart
+func (c Cart) Sum() (sum int) {
+	for i, v := range c.products {
+		sum += i.Price() * v
+	}
+
+	return
+}
