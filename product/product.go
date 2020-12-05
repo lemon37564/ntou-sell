@@ -67,6 +67,11 @@ func (p *Product) SetEvaluation(pdid int, eval float64) string {
 	return "Evaluation change success"
 }
 
+func (p *Product) GetProductInfo(uid int) (products string) {
+	//var orders string = ""
+	return p.fn.GetInfoFromPdID(uid).StringForProduct()
+}
+
 func (p *Product) GetProdPrice(pdid int) int { //拿價格
 	return p.fn.GetInfoFromPdID(pdid).Price
 }
