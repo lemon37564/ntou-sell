@@ -34,7 +34,7 @@ func (ser *server) service(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	query := r.URL.Query()
 
-	log.Printf("<host: %v, remote: %v> path: %v, args: %v\n", r.Host, r.RemoteAddr, path, query)
+	log.Printf("< host: %v, remote: %v> path: %v, args: %v\n", r.Host, r.RemoteAddr, path, query)
 
 	arg := path[1:] // eliminate " "
 

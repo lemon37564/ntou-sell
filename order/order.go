@@ -2,6 +2,7 @@ package order
 
 import (
 	"database/sql"
+	"encoding/json"
 	"se/database"
 )
 
@@ -16,14 +17,16 @@ func NewOrder(db *sql.DB) *Order {
 	return o
 }
 
-func (o *Order) GetOrders(uid int) (orders string) {
+func (o *Order) GetOrders(uid int) string {
 	//var orders string = ""
-
-	for _, v := range o.fn.GetAllOrder(uid) {
-		orders += v.String()
+	pds := o.fn.GetAllOrder(uid)
+	res, err := json.Marshal(pds)
+	if err != nil {
+		panic(err)
 	}
 
-	return
+	return string(res)
+
 }
 
 func (o *Order) AddOrder(uid, pdid, amount int) bool {

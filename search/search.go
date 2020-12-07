@@ -1,6 +1,7 @@
 package search
 
 import (
+	"encoding/json"
 	"se/database"
 )
 
@@ -10,8 +11,9 @@ type Search struct {
 
 func (s *Search) Search(keyword string) (str string) {
 
-	for _, v := range s.fn.Search(keyword) {
-		str += v.StringForSearch()
+	res, err := json.Marshal(s.fn.Search(keyword))
+	if err != nil {
+		panic(err)
 	}
-	return
+	return string(res)
 }

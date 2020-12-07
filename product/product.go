@@ -90,9 +90,14 @@ func (p *Product) GetAll() string {
 	return string(res)
 }
 
-func (p *Product) GetProductInfo(uid int) (products string) {
+func (p *Product) GetProductInfo(uid int) string {
 	//var orders string = ""
-	return p.fn.GetInfoFromPdID(uid).StringForProduct()
+	temp, err := json.Marshal(p.fn.GetInfoFromPdID(uid))
+	if err != nil {
+		panic(err)
+	}
+	return string(temp)
+
 }
 
 func (p *Product) GetProdPrice(pdid int) int { //拿價格
