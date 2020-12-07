@@ -38,13 +38,13 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 
 	switch path[1] {
 	case "all":
-		fmt.Fprintf(w, ser.u.GetAllUserData())
+		fmt.Fprintf(w, ser.us.GetAllUserData())
 	case "login":
 		val, exi := args["account"]
 		val2, exi2 := args["password"]
 
 		if exi && exi2 {
-			fmt.Fprint(w, ser.u.Login(val[0], val2[0]))
+			fmt.Fprint(w, ser.us.Login(val[0], val2[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -53,7 +53,7 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 		val2, exi2 := args["password"]
 
 		if exi && exi2 {
-			fmt.Fprint(w, ser.u.DeleteUser(val[0], val2[0]))
+			fmt.Fprint(w, ser.us.DeleteUser(val[0], val2[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -63,7 +63,7 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 		val3, exi3 := args["name"]
 
 		if exi && exi2 && exi3 {
-			fmt.Fprint(w, ser.u.Regist(val[0], val2[0], val3[0]))
+			fmt.Fprint(w, ser.us.Regist(val[0], val2[0], val3[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -80,12 +80,10 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 
 	switch path[1] {
 	case "all":
-		fmt.Fprint(w, ser.p.GetAll())
+		fmt.Fprint(w, ser.pr.GetAll())
 	case "add":
 		exist := make([]bool, 7)
 		var name, price, des, amount, account, bid, date []string
-		var _p, _a int
-		var _b bool
 
 		name, exist[0] = args["name"]
 		price, exist[1] = args["price"]
@@ -96,10 +94,15 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 		date, exist[6] = args["date"]
 
 		if all(exist) {
-			_p, _ = strconv.Atoi(price[0])
-			_a, _ = strconv.Atoi(amount[0])
-			_b = (bid[0] == "true")
-			fmt.Fprint(w, ser.p.AddProduct(name[0], _p, des[0], _a, account[0], _b, date[0]))
+			p, err1 := strconv.Atoi(price[0])
+			a, err2 := strconv.Atoi(amount[0])
+			b := (bid[0] == "true")
+
+			if err1 != nil && err2 != nil {
+				fmt.Fprint(w, ser.pr.AddProduct(name[0], p, des[0], a, account[0], b, date[0]))
+			} else {
+				fmt.Fprint(w, "price or amount was not an integer.")
+			}
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -108,11 +111,32 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 		val, exi := args["name"]
 
 		if exi {
-			fmt.Fprint(w, ser.p.SearchProductsByName(val[0]))
+			fmt.Fprint(w, ser.pr.SearchProductsByName(val[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
 	case "search-filter":
+		exist := make([]bool, 4)
+		var name, min, max, eval []string
+
+		name, exist[0] = args["name"]
+		min, exist[1] = args["minprice"]
+		max, exist[2] = args["maxprice"]
+		eval, exist[3] = args["eval"]
+
+		if all(exist) {
+			mi, err1 := strconv.Atoi(min[0])
+			ma, err2 := strconv.Atoi(max[0])
+			ev, err3 := strconv.Atoi(eval[0])
+
+			if err1 != nil && err2 != nil && err3 != nil {
+				fmt.Fprint(w, ser.pr.EnhanceSearchProductsByName(name[0], mi, ma, ev))
+			} else {
+				fmt.Fprint(w, "min price, max price or evaluation was not as interger")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	default:
 		http.NotFound(w, r)
 	}
@@ -124,27 +148,27 @@ func help(w http.ResponseWriter) {
 			<p> 
 				/user/all<br>
 				列出所有帳號(僅限開發期間)<br>
-				e.g.<br><a href=/user/all> /user/all </a><br><br>
+				<a href=/user/all> /user/all </a><br><br>
 			</p>
 			<p> 
 				/user/login?account=...&password=...<br>
 				登入是否成功(bool)<br>
-				e.g.<br>36.229.107.41/login?account=test@gmail.com&password=000000<br><br>
+				e.g.<br>http://36.229.107.41/login?account=test@gmail.com&password=000000<br><br>
 			</p>
 			<p>
 				/user/regist?account=...&password=...&name=...<br>
 				註冊新帳號<br>
-				e.g.<br>36.229.107.41/regist?account=test2@gmail.com&password=1234&name=Wilson<br><br>
+				e.g.<br>http://36.229.107.41/regist?account=test2@gmail.com&password=1234&name=Wilson<br><br>
 			</p>
 			<p>
 				/user/delete?account=...&password=...<br>
 				刪除帳號<br>
-				e.g.<br>36.229.107.41/delete?account=test2@gmail.com&password=1234<br><br>
+				e.g.<br>http://36.229.107.41/delete?account=test2@gmail.com&password=1234<br><br>
 			</p>
 			<p> 
 				/product/all<br>
 				列出所有商品(僅限開發期間)<br>
-				e.g.<br><a href=/product/all> /product/all </a><br><br>
+				<a href=/product/all> /product/all </a><br><br>
 			</p>
 			<p> 
 				/product/add?name=...&price=...&description=...&amount=...&account=...&bid=...&date=...<br>

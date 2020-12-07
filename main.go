@@ -18,12 +18,12 @@ func main() {
 	//database.TestInsert(db)
 	// database.TestSearch(db)
 
-	newWeb := server{
+	newserver := server{
 		db: db,
-		u:  user.NewUser(db),
-		p:  product.ProductInit(db),
-		o:  order.NewOrder(db),
-		h:  history.NewHistory(db),
-		b:  bid.NewBid(db)}
-	newWeb.weber()
+		us: user.NewUser(db),
+		pr: product.ProductInit(db),
+		or: order.NewOrder(db),
+		hi: history.NewHistory(db),
+		bi: bid.NewBid(db)}
+	newserver.server()
 }

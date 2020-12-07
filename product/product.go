@@ -78,6 +78,17 @@ func (p *Product) SearchProductsByName(name string) string {
 	return string(res)
 }
 
+func (p *Product) EnhanceSearchProductsByName(name string, minPrice, maxPrice, eval int) string {
+	pds := p.fn.SearchWithFilter(name, minPrice, maxPrice, eval)
+
+	res, err := json.Marshal(pds)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(res)
+}
+
 // debugging only
 func (p *Product) GetAll() string {
 	pds := p.fn.All()
