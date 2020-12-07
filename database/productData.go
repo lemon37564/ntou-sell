@@ -47,6 +47,7 @@ type ProductDB struct {
 	search        *sql.Stmt
 	enhancesearch *sql.Stmt
 	getPdInfo     *sql.Stmt
+	allpd         *sql.Stmt
 }
 
 func (p Product) StringForSearch() (res string) {
@@ -124,6 +125,11 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 	}
 
 	product.getPdInfo, err = db.Prepare("SELECT * FROM product WHERE pd_id=?;")
+	if err != nil {
+		panic(err)
+	}
+
+	product.allpd, err = db.Prepare("SELECT * FROM product;")
 	if err != nil {
 		panic(err)
 	}
@@ -227,6 +233,25 @@ func (p *ProductDB) Search(keyword string) (all []Product) {
 // SearchWithFilter is an enhance search function with filter
 func (p *ProductDB) SearchWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
 	rows, err := p.enhancesearch.Query(keyword, priceMin, priceMax, eval)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		var pd Product
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
+		if err != nil {
+			panic(err)
+		}
+
+		all = append(all, pd)
+	}
+
+	return
+}
+
+func (p *ProductDB) All() (all []Product) {
+	rows, err := p.allpd.Query()
 	if err != nil {
 		panic(err)
 	}
