@@ -45,11 +45,7 @@ func (u *User) GetUserData(account string) string {
 	return string(res)
 }
 
-func (u *User) GetAllUserData() (res string) {
-	for _, v := range u.fn.GetAllUser() {
-		res += v.String()
-
-	}
-
-	return
+func (u *User) GetAllUserData() string {
+	res, _ := json.Marshal(u.fn.GetAllUser())
+	return string(res)
 }
