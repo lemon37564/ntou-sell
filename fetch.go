@@ -95,11 +95,10 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 		bid, exist[5] = args["bid"]
 		date, exist[6] = args["date"]
 
-		_p, _ = strconv.Atoi(price[0])
-		_a, _ = strconv.Atoi(amount[0])
-		_b = (bid[0] == "true")
-
 		if all(exist) {
+			_p, _ = strconv.Atoi(price[0])
+			_a, _ = strconv.Atoi(amount[0])
+			_b = (bid[0] == "true")
 			fmt.Fprint(w, ser.p.AddProduct(name[0], _p, des[0], _a, account[0], _b, date[0]))
 		} else {
 			fmt.Fprint(w, "argument error")

@@ -2,11 +2,10 @@ package user
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"se/database"
 )
-
-///// implement json in this file /////
 
 type User struct {
 	fn *database.UserDB
@@ -41,8 +40,9 @@ func (u *User) DeleteUser(account, password string) string {
 	return "ok"
 }
 
-func (u *User) GetUserData(account string) (res string) {
-	return u.fn.GetDatasFromAccount(account).String()
+func (u *User) GetUserData(account string) string {
+	res, _ := json.Marshal(u.fn.GetDatasFromAccount(account))
+	return string(res)
 }
 
 func (u *User) GetAllUserData() (res string) {

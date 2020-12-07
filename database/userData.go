@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -23,16 +22,6 @@ type User struct {
 	PasswordHash string
 	Name         string
 	Eval         float64
-}
-
-func (u User) String() (res string) {
-	res += "user id:       " + fmt.Sprintf("%d\n", u.UID)
-	res += "account:       " + u.Account + "\n"
-	res += "password hash: " + u.PasswordHash + "\n"
-	res += "user name:     " + u.Name + "\n"
-	res += "evaluation:    " + fmt.Sprintf("%f\n\n", u.Eval)
-
-	return
 }
 
 // UserDB contain functions to use
