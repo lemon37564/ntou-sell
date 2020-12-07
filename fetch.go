@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -79,14 +80,36 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 
 	switch path[1] {
 	case "all":
+		fmt.Fprint(w, ser.p.GetAll())
 	case "add":
+		exist := make([]bool, 7)
+		var name, price, des, amount, account, bid, date []string
+		var _p, _a int
+		var _b bool
+
+		name, exist[0] = args["name"]
+		price, exist[1] = args["price"]
+		des, exist[2] = args["description"]
+		amount, exist[3] = args["amount"]
+		account, exist[4] = args["account"]
+		bid, exist[5] = args["bid"]
+		date, exist[6] = args["date"]
+
+		_p, _ = strconv.Atoi(price[0])
+		_a, _ = strconv.Atoi(amount[0])
+		_b = (bid[0] == "true")
+
+		if all(exist) {
+			fmt.Fprint(w, ser.p.AddProduct(name[0], _p, des[0], _a, account[0], _b, date[0]))
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	case "delete":
 	case "search":
 		val, exi := args["name"]
 
 		if exi {
-			_ = val
-			// fmt.Fprint(w, ser.p.)
+			fmt.Fprint(w, ser.p.SearchProductsByName(val[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -102,7 +125,7 @@ func help(w http.ResponseWriter) {
 			<p> 
 				/user/all<br>
 				列出所有帳號(僅限開發期間)<br>
-				e.g.<br><a href=/user/all> 36.229.107.41/user/all </a><br><br>
+				e.g.<br><a href=/user/all> /user/all </a><br><br>
 			</p>
 			<p> 
 				/user/login?account=...&password=...<br>
@@ -119,6 +142,29 @@ func help(w http.ResponseWriter) {
 				刪除帳號<br>
 				e.g.<br>36.229.107.41/delete?account=test2@gmail.com&password=1234<br><br>
 			</p>
+			<p> 
+				/product/all<br>
+				列出所有商品(僅限開發期間)<br>
+				e.g.<br><a href=/product/all> /product/all </a><br><br>
+			</p>
+			<p> 
+				/product/add?name=...&price=...&description=...&amount=...&account=...&bid=...&date=...<br>
+				新增商品(bool)<br>
+			</p>
+			<p>
+				/product/search?name=...<br>
+				查詢商品<br>
+			</p>
 		</html>
 		`)
+}
+
+func all(bs []bool) bool {
+	for _, v := range bs {
+		if !v {
+			return false
+		}
+	}
+
+	return true
 }

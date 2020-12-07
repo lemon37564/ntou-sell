@@ -49,7 +49,7 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 		panic(err)
 	}
 
-	history.get, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY DESC seq;")
+	history.get, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC;")
 	if err != nil {
 		panic(err)
 	}

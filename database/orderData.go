@@ -46,27 +46,27 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 	var err error
 	order := new(OrderDB)
 
-	order.insert, err = db.Prepare("INSERT INTO order VALUES(?,?,?,?);")
+	order.insert, err = db.Prepare("INSERT INTO orders VALUES(?,?,?,?);")
 	if err != nil {
 		panic(err)
 	}
 
-	order._delete, err = db.Prepare("DELETE FROM order WHERE uid=? AND pd_id=?;")
+	order._delete, err = db.Prepare("DELETE FROM orders WHERE uid=? AND pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
 
-	order.updateAmount, err = db.Prepare("UPDATE order SET amount=? WHERE uid=? AND pd_id=?;")
+	order.updateAmount, err = db.Prepare("UPDATE orders SET amount=? WHERE uid=? AND pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
 
-	order.getall, err = db.Prepare("SELECT pd_id, amount, state FROM order WHERE uid=?;")
+	order.getall, err = db.Prepare("SELECT pd_id, amount, state FROM orders WHERE uid=?;")
 	if err != nil {
 		panic(err)
 	}
 
-	order.getOrder, err = db.Prepare("SELECT pd_id, amount, state FROM order WHERE uid=? AND pd_id=?;")
+	order.getOrder, err = db.Prepare("SELECT pd_id, amount, state FROM orders WHERE uid=? AND pd_id=?;")
 	if err != nil {
 		panic(err)
 	}

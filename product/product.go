@@ -2,6 +2,7 @@ package product
 
 import (
 	"database/sql"
+	"encoding/json"
 	"se/database"
 )
 
@@ -9,16 +10,14 @@ type Product struct {
 	fn *database.ProductDB
 }
 
-// implemet json and logic at here
-
 func ProductInit(db *sql.DB) *Product {
 	p := new(Product)
 	p.fn = database.ProductDBInit(db)
 	return p
 }
 
-func (p Product) AddProduct(pdname string, price int, description string, amount int, uid int, bid bool, date string) bool {
-	_, err := p.fn.AddNewProduct(pdname, price, description, amount, uid, bid, date)
+func (p Product) AddProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) bool {
+	_, err := p.fn.AddNewProduct(pdname, price, description, amount, account, bid, date)
 	if err != nil {
 		return false
 	}
@@ -65,6 +64,30 @@ func (p *Product) SetEvaluation(pdid int, eval float64) string {
 		return "Evaluation cannot change"
 	}
 	return "Evaluation change success"
+}
+
+// SearchProductsByName return products info in json
+func (p *Product) SearchProductsByName(name string) string {
+	pds := p.fn.Search(name)
+
+	res, err := json.Marshal(pds)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(res)
+}
+
+// debugging only
+func (p *Product) GetAll() string {
+	pds := p.fn.All()
+
+	res, err := json.Marshal(pds)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(res)
 }
 
 func (p *Product) GetProductInfo(uid int) (products string) {

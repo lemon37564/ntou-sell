@@ -74,12 +74,15 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 	var err error
 	product := new(ProductDB)
 
-	product.insert, err = db.Prepare("INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);")
+	q := "INSERT INTO product VALUES(?,?,?,?,?,?,(SELECT uid FROM user WHERE account=?),?,?);"
+	//"WITH uID AS (SELECT uid FROM user WHERE account=?) INSERT INTO product VALUES(?,?,?,?,?,?,uID,?,?);"
+
+	product.insert, err = db.Prepare(q)
 	if err != nil {
 		panic(err)
 	}
 
-	product._delete, err = db.Prepare("DELETE FROM product WHERE pdid=?;")
+	product._delete, err = db.Prepare("DELETE FROM product WHERE pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -99,12 +102,12 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 		panic(err)
 	}
 
-	product.updateDecp, err = db.Prepare("UPDATE product SET decription=? WHERE pd_id=?;")
+	product.updateDecp, err = db.Prepare("UPDATE product SET description=? WHERE pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
 
-	product.updateEval, err = db.Prepare("UPDARE product SET eval=? WHERE pd_id=?;")
+	product.updateEval, err = db.Prepare("UPDATE product SET eval=? WHERE pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -114,12 +117,12 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 		panic(err)
 	}
 
-	product.search, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE%?%;")
+	product.search, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE ?;")
 	if err != nil {
 		panic(err)
 	}
 
-	product.enhancesearch, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE %?% AND price>? AND price<? AND eval>?")
+	product.enhancesearch, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE ? AND price>? AND price<? AND eval>?;")
 	if err != nil {
 		panic(err)
 	}
@@ -138,7 +141,7 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 }
 
 // AddNewProduct add single product with product name, price, description, amount, seller id, bid and date into database
-func (p *ProductDB) AddNewProduct(pdname string, price int, description string, amount int, sellerID int, bid bool, date string) (int, error) {
+func (p *ProductDB) AddNewProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) (int, error) {
 	var pdid int
 	rows, err := p.maxpdID.Query()
 	if err != nil {
@@ -153,7 +156,7 @@ func (p *ProductDB) AddNewProduct(pdname string, price int, description string, 
 		}
 	}
 
-	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, 0.0, sellerID, bid, date)
+	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, 0.0, account, bid, date)
 	return pdid, err
 }
 
@@ -212,6 +215,9 @@ func (p *ProductDB) GetInfoFromPdID(pdid int) (pd Product) {
 
 // Search return product infos with searching keyword
 func (p *ProductDB) Search(keyword string) (all []Product) {
+
+	keyword = "%" + keyword + "%"
+
 	rows, err := p.search.Query(keyword)
 	if err != nil {
 		panic(err)
@@ -232,6 +238,9 @@ func (p *ProductDB) Search(keyword string) (all []Product) {
 
 // SearchWithFilter is an enhance search function with filter
 func (p *ProductDB) SearchWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
+
+	keyword = "%" + keyword + "%"
+
 	rows, err := p.enhancesearch.Query(keyword, priceMin, priceMax, eval)
 	if err != nil {
 		panic(err)

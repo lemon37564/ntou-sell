@@ -10,6 +10,7 @@ type History struct {
 }
 
 func NewHistory(db *sql.DB) (u *History) {
+	u = new(History)
 	u.historydb = database.HistoryDBInit(db)
 	return
 }
