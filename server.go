@@ -13,14 +13,14 @@ import (
 
 type server struct {
 	db *sql.DB
-	u  *user.User
-	p  *product.Product
-	o  *order.Order
-	h  *history.History
-	b  *bid.Bid
+	us *user.User
+	pr *product.Product
+	or *order.Order
+	hi *history.History
+	bi *bid.Bid
 }
 
-func (ser *server) weber() {
+func (ser *server) server() {
 	http.HandleFunc("/", ser.service)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
@@ -36,7 +36,7 @@ func (ser *server) service(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("< host: %v, remote: %v> path: %v, args: %v\n", r.Host, r.RemoteAddr, path, query)
 
-	arg := path[1:] // eliminate " "
+	arg := path[1:] // eliminate first "/"
 
 	ser.fetch(w, r, arg, query)
 }
