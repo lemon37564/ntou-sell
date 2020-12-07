@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	root = "software-engineering"
+	root = "C:/software-engineering"
 	name = "database.db"
 	file = root + "/" + name
 )
