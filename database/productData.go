@@ -75,7 +75,6 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 	product := new(ProductDB)
 
 	q := "INSERT INTO product VALUES(?,?,?,?,?,?,(SELECT uid FROM user WHERE account=?),?,?);"
-	//"WITH uID AS (SELECT uid FROM user WHERE account=?) INSERT INTO product VALUES(?,?,?,?,?,?,uID,?,?);"
 
 	product.insert, err = db.Prepare(q)
 	if err != nil {
