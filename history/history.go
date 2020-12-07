@@ -2,11 +2,13 @@ package history
 
 import (
 	"database/sql"
+	"encoding/json"
 	"se/database"
 )
 
 type History struct {
 	historydb *database.HistoryDB
+	productdb *database.ProductDB
 }
 
 func NewHistory(db *sql.DB) (u *History) {
@@ -15,9 +17,20 @@ func NewHistory(db *sql.DB) (u *History) {
 	return
 }
 
-func (h History) GetAllHistory(uid int) (pdid []int) { //get all history
-	pdid = h.historydb.GetAll(uid)
-	return pdid
+func (h History) GetAllHistory(uid int) string { //get all history
+	var temp []database.Product
+
+	pdid := h.historydb.GetAll(uid)
+
+	for _, v := range pdid {
+
+		temp = append(temp, h.productdb.GetInfoFromPdID(v))
+	}
+	str, err := json.Marshal(temp)
+	if err != nil {
+		panic(err)
+	}
+	return string(str)
 }
 
 func (h History) Delete(uid, pid int) {

@@ -2,8 +2,8 @@ package cart
 
 import (
 	"database/sql"
+	"encoding/json"
 	"se/database"
-	"se/product"
 )
 
 type Cart struct {
@@ -47,15 +47,18 @@ func (c *Cart) ModifyAmount(uid, pdid, amount int) bool {
 }
 
 // GetProducts returns all the product in cart
-func (c Cart) GetProducts(uid int) map[product.Product]int {
-	prods := c.db.GetAllProductOfUser(uid)
-	prod := map[product.Product]int{}
+func (c Cart) GetProducts(uid int) string {
+	prodids := c.db.GetAllProductOfUser(uid)
+	var prods []database.Product
 
-	for k := range c.db.GetAllProductOfUser(uid) {
-		prod[c.db2.GetInfoFromPdID(prods[k].PdID)] = prods[k].PdID
+	for _, v := range prodids {
+		prods = append(prods, c.db2.GetInfoFromPdID(v))
 	}
-
-	return prod
+	res, err := json.Marshal(prods)
+	if err != nil {
+		panic(err)
+	}
+	return string(res)
 
 }
 
