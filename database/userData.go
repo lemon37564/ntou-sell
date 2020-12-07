@@ -72,12 +72,12 @@ func UserDBInit(db *sql.DB) *UserDB {
 		panic(err)
 	}
 
-	user.login, err = db.Prepare("SELECT COUNT(*) FROM user WHERE account=? AND password_hash=?;")
+	user.login, err = db.Prepare("SELECT COUNT(*) FROM user WHERE account=? AND password_hash=? AND uid>0;")
 	if err != nil {
 		panic(err)
 	}
 
-	user.getData, err = db.Prepare("SELECT * FROM USER WHERE account=?;")
+	user.getData, err = db.Prepare("SELECT * FROM USER WHERE account=? AND uid>0;")
 	if err != nil {
 		panic(err)
 	}

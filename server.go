@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
 	"se/bid"
 	"se/history"
 	"se/order"
@@ -22,7 +23,7 @@ type server struct {
 
 func (ser *server) server() {
 	http.HandleFunc("/", ser.service)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":"+os.Getenv("PORT"), nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

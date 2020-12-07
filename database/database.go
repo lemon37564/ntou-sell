@@ -8,14 +8,12 @@ import (
 )
 
 const (
-	root = "C:/software-engineering"
-	name = "database.db"
-	file = root + "/" + name
+	file = "database.db"
 )
 
 // Open database and return *sql.DB
 func Open() *sql.DB {
-	check()
+	createTables()
 
 	db, err := sql.Open("sqlite3", file)
 	if err != nil {
@@ -25,30 +23,9 @@ func Open() *sql.DB {
 	return db
 }
 
-// check if there's database exists
-// if no, init.
-func check() {
-	_, err := os.Stat(root)
-	if err != nil {
-		createFolder()
-	}
-
-	_, err = os.Stat(file)
-	if err != nil {
-		createTables()
-	}
-}
-
-func createFolder() {
-	err := os.Mkdir(root, 0666)
-	if err != nil {
-		panic(err)
-	}
-}
-
 // RemoveAll : *FATAL* this command will remove whole database
 func RemoveAll() {
-	err := os.RemoveAll(root)
+	err := os.RemoveAll(file)
 	if err != nil {
 		panic(err)
 	}
