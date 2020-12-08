@@ -25,6 +25,8 @@ func (ser *server) fetch(cmd string, args map[string][]string) {
 		ser.fetchUser(path, args)
 	case "product":
 		ser.fetchProduct(path, args)
+	case "history":
+		ser.fetchHistory(path, args)
 	default:
 		http.NotFound(ser.w, ser.r)
 	}
@@ -103,7 +105,8 @@ func (ser *server) fetchUser(path []string, args map[string][]string) {
 		val2, exi2 := args["password"]
 
 		if exi && exi2 {
-			fmt.Fprint(ser.w, ser.us.Login(val[0], val2[0]))
+			fmt.Fprint(ser.w, `<head><meta http-equiv="refresh" content="0;URL=http://google.com"></head>`)
+			fmt.Fprint(ser.w, "<p>", ser.us.Login(val[0], val2[0]), "</p>")
 		} else {
 			fmt.Fprint(ser.w, "argument error")
 		}
