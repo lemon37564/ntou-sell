@@ -155,7 +155,7 @@ func (p *ProductDB) AddNewProduct(pdname string, price int, description string, 
 		}
 	}
 
-	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, account, bid, date)
+	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, nil, account, bid, date)
 	return pdid, err
 }
 

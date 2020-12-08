@@ -25,7 +25,10 @@ func (u *User) Login(account, password string) bool {
 func (u *User) Regist(account, password, name string) string {
 	err := u.fn.AddNewUser(account, password, name)
 	if err != nil {
-		return fmt.Sprintf("%v", err)
+		if fmt.Sprint(err) == "UNIQUE constraint failed: user.account" {
+			return "此帳號已有被註冊過!"
+		}
+		return fmt.Sprint(err)
 	}
 
 	return "ok"

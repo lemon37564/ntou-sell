@@ -3,6 +3,7 @@ package product
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"se/database"
 )
 
@@ -16,21 +17,24 @@ func ProductInit(db *sql.DB) *Product {
 	return p
 }
 
-func (p Product) AddProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) bool {
+func (p Product) AddProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) string {
 	_, err := p.fn.AddNewProduct(pdname, price, description, amount, account, bid, date)
 	if err != nil {
-		return false
+		if fmt.Sprint(err) == "NOT NULL constraint failed: product.seller_id" {
+			return "沒有此使用者帳號!"
+		}
+		return fmt.Sprint(err)
 	}
-	return true
+	return "ok"
 }
 
-func (p *Product) DeleteProduct(pdid int) bool {
+func (p *Product) DeleteProduct(pdid int) string {
 	err := p.fn.Delete(pdid)
 	if err != nil {
-		return false
+		return fmt.Sprint(err)
 	}
 
-	return true
+	return "ok"
 }
 func (p *Product) ChangePrice(pdid, price int) string {
 	err := p.fn.UpdatePrice(pdid, price)
