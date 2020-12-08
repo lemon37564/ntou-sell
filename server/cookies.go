@@ -13,9 +13,9 @@ func (ser *Server) setCookies(w http.ResponseWriter, r *http.Request, account, p
 	http.SetCookie(w, &cookie)
 }
 
-func (ser *Server) getCookies(w http.ResponseWriter, r *http.Request) (string, string) {
+func (ser *Server) getCookies(w http.ResponseWriter, r *http.Request) (*http.Cookie, bool) {
 	if cookie, err := r.Cookie("account"); err == nil {
-		return cookie.Name, cookie.Value
+		return cookie, true
 	}
-	return "none", "none"
+	return &http.Cookie{}, false
 }
