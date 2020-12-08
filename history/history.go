@@ -3,6 +3,7 @@ package history
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"se/database"
 )
 
@@ -17,10 +18,19 @@ func NewHistory(db *sql.DB) (u *History) {
 	return
 }
 
-func (h History) GetAllHistory(uid int) string { //get all history
+func (h History) AddHistory(uid, pdid int) string {
+	err := h.historydb.AddHistory(uid, pdid)
+	if err != nil {
+		return fmt.Sprint(err)
+	}
+
+	return "ok"
+}
+
+func (h History) GetHistory(uid int, amount int) string { //get all history
 	var temp []database.Product
 
-	pdid := h.historydb.GetAll(uid)
+	pdid := h.historydb.Get(uid, amount)
 
 	for _, v := range pdid {
 

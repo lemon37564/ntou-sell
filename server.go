@@ -19,6 +19,9 @@ type server struct {
 	or *order.Order
 	hi *history.History
 	bi *bid.Bid
+
+	w http.ResponseWriter
+	r *http.Request
 }
 
 func (ser *server) server() {
@@ -39,5 +42,8 @@ func (ser *server) service(w http.ResponseWriter, r *http.Request) {
 
 	arg := path[1:] // eliminate first "/"
 
-	ser.fetch(w, r, arg, query)
+	ser.w = w
+	ser.r = r
+
+	ser.fetch(arg, query)
 }

@@ -49,7 +49,7 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 		panic(err)
 	}
 
-	history.get, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC;")
+	history.get, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
@@ -91,8 +91,8 @@ func (h *HistoryDB) DeleteAll(uid int) error {
 }
 
 // GetAll return all history of a user by id (descend order by time)
-func (h *HistoryDB) GetAll(uid int) (pdid []int) {
-	rows, err := h.get.Query(uid)
+func (h *HistoryDB) Get(uid int, amount int) (pdid []int) {
+	rows, err := h.get.Query(uid, amount)
 	if err != nil {
 		panic(err)
 	}

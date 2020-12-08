@@ -7,55 +7,112 @@ import (
 	"strings"
 )
 
-func (ser *server) fetch(w http.ResponseWriter, r *http.Request, cmd string, args map[string][]string) {
+func (ser *server) fetch(cmd string, args map[string][]string) {
 	path := strings.Split(cmd, "/")
 
 	if len(path) == 0 {
-		http.NotFound(w, r)
+		http.NotFound(ser.w, ser.r)
 	}
 
 	switch path[0] {
 	case "help":
 		if len(path) == 1 {
-			help(w)
+			ser.help()
 		} else {
-			http.NotFound(w, r)
+			http.NotFound(ser.w, ser.r)
 		}
 	case "user":
-		ser.fetchUser(w, r, path, args)
+		ser.fetchUser(path, args)
 	case "product":
-		ser.fetchProduct(w, r, path, args)
+		ser.fetchProduct(path, args)
 	default:
-		http.NotFound(w, r)
+		http.NotFound(ser.w, ser.r)
 	}
 }
 
-func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+func (ser *server) fetchHistory(path []string, args map[string][]string) {
 	if len(path) != 2 {
-		http.NotFound(w, r)
+		http.NotFound(ser.w, ser.r)
+		return
+	}
+
+	switch path[1] {
+	case "get":
+		ac, exi := args["account"]
+		val, exist := args["amount"]
+
+		if exist && exi {
+			amnt, err := strconv.Atoi(val[0])
+			if err == nil {
+				uid := ser.us.GetUIDFromAccount(ac[0])
+				fmt.Fprint(ser.w, ser.hi.GetHistory(uid, amnt))
+			} else {
+				fmt.Fprint(ser.w, "amount was not an integer")
+			}
+		} else {
+			fmt.Fprint(ser.w, "argument error")
+		}
+	case "delete":
+		ac, exi := args["account"]
+		pdid, exi2 := args["pd_id"]
+
+		if exi && exi2 {
+			pd, err := strconv.Atoi(pdid[0])
+			if err == nil {
+				uid := ser.us.GetUIDFromAccount(ac[0])
+				fmt.Fprint(ser.w, ser.hi.GetHistory(uid, pd))
+			} else {
+				fmt.Fprint(ser.w, "pd_id was not an integer")
+			}
+		} else {
+			fmt.Fprint(ser.w, "argument error")
+		}
+	case "add":
+		ac, exi := args["account"]
+		pdid, exi2 := args["pd_id"]
+
+		if exi && exi2 {
+			pd, err := strconv.Atoi(pdid[0])
+			if err == nil {
+				uid := ser.us.GetUIDFromAccount(ac[0])
+				fmt.Fprint(ser.w, ser.hi.AddHistory(uid, pd))
+			} else {
+				fmt.Fprint(ser.w, "pd_id was not an integer")
+			}
+		} else {
+			fmt.Fprint(ser.w, "argument error")
+		}
+	default:
+		http.NotFound(ser.w, ser.r)
+	}
+}
+
+func (ser *server) fetchUser(path []string, args map[string][]string) {
+	if len(path) != 2 {
+		http.NotFound(ser.w, ser.r)
 		return
 	}
 
 	switch path[1] {
 	case "all":
-		fmt.Fprintf(w, ser.us.GetAllUserData())
+		fmt.Fprintf(ser.w, ser.us.GetAllUserData())
 	case "login":
 		val, exi := args["account"]
 		val2, exi2 := args["password"]
 
 		if exi && exi2 {
-			fmt.Fprint(w, ser.us.Login(val[0], val2[0]))
+			fmt.Fprint(ser.w, ser.us.Login(val[0], val2[0]))
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(ser.w, "argument error")
 		}
 	case "delete":
 		val, exi := args["account"]
 		val2, exi2 := args["password"]
 
 		if exi && exi2 {
-			fmt.Fprint(w, ser.us.DeleteUser(val[0], val2[0]))
+			fmt.Fprint(ser.w, ser.us.DeleteUser(val[0], val2[0]))
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(ser.w, "argument error")
 		}
 	case "regist":
 		val, exi := args["account"]
@@ -63,24 +120,24 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 		val3, exi3 := args["name"]
 
 		if exi && exi2 && exi3 {
-			fmt.Fprint(w, ser.us.Regist(val[0], val2[0], val3[0]))
+			fmt.Fprint(ser.w, ser.us.Regist(val[0], val2[0], val3[0]))
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(ser.w, "argument error")
 		}
 	default:
-		http.NotFound(w, r)
+		http.NotFound(ser.w, ser.r)
 	}
 }
 
-func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+func (ser *server) fetchProduct(path []string, args map[string][]string) {
 	if len(path) != 2 {
-		http.NotFound(w, r)
+		http.NotFound(ser.w, ser.r)
 		return
 	}
 
 	switch path[1] {
 	case "all":
-		fmt.Fprint(w, ser.pr.GetAll())
+		fmt.Fprint(ser.w, ser.pr.GetAll())
 	case "add":
 		exist := make([]bool, 7)
 		var name, price, des, amount, account, bid, date []string
@@ -99,12 +156,12 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			b := (bid[0] == "true")
 
 			if err1 == nil && err2 == nil {
-				fmt.Fprint(w, ser.pr.AddProduct(name[0], p, des[0], a, account[0], b, date[0]))
+				fmt.Fprint(ser.w, ser.pr.AddProduct(name[0], p, des[0], a, account[0], b, date[0]))
 			} else {
-				fmt.Fprint(w, "price or amount was not an integer.")
+				fmt.Fprint(ser.w, "price or amount was not an integer.")
 			}
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(ser.w, "argument error")
 		}
 	case "delete":
 	case "newproduct":
@@ -114,21 +171,21 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			v, err := strconv.Atoi(val[0])
 
 			if err == nil {
-				fmt.Fprint(w, ser.pr.GetNewest(v))
+				fmt.Fprint(ser.w, ser.pr.GetNewest(v))
 			} else {
-				fmt.Fprint(w, "price or amount was not an integer.")
+				fmt.Fprint(ser.w, "amount was not an integer.")
 			}
 
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(ser.w, "argument error")
 		}
 	case "search":
 		val, exi := args["name"]
 
 		if exi {
-			fmt.Fprint(w, ser.pr.SearchProductsByName(val[0]))
+			fmt.Fprint(ser.w, ser.pr.SearchProductsByName(val[0]))
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(ser.w, "argument error")
 		}
 	case "filter_search":
 		exist := make([]bool, 4)
@@ -145,20 +202,20 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			ev, err3 := strconv.Atoi(eval[0])
 
 			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.pr.EnhanceSearchProductsByName(name[0], mi, ma, ev))
+				fmt.Fprint(ser.w, ser.pr.EnhanceSearchProductsByName(name[0], mi, ma, ev))
 			} else {
-				fmt.Fprint(w, "min price, max price or evaluation was not as interger")
+				fmt.Fprint(ser.w, "min price, max price or evaluation was not as interger")
 			}
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(ser.w, "argument error")
 		}
 	default:
-		http.NotFound(w, r)
+		http.NotFound(ser.w, ser.r)
 	}
 }
 
-func help(w http.ResponseWriter) {
-	fmt.Fprintln(w, `
+func (ser *server) help() {
+	fmt.Fprintln(ser.w, `
 		<html>
 			<p> 
 				/user/all<br>
