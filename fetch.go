@@ -299,11 +299,11 @@ func (ser *server) help() {
 				<br><br>
 			</p>
 			<p>
-				/history/search?account=...&amount=...<br>
+				/history/get?account=...&amount=...<br>
 				查詢歷史紀錄<br>
 				e.g.查詢帳號為test2@gmail.com的10歷史紀錄<br>
-				<a href=https://se-ssb.herokuapp.com/history/search?account=test2@gmail.com&amount=10>
-				https://se-ssb.herokuapp.com/history/search?account=test2@gmail.com&amount=10</a>
+				<a href=https://se-ssb.herokuapp.com/history/get?account=test2@gmail.com&amount=10>
+				https://se-ssb.herokuapp.com/history/get?account=test2@gmail.com&amount=10</a>
 				<br><br>
 			</p>
 			<p>
