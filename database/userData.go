@@ -2,15 +2,13 @@ package database
 
 import (
 	"database/sql"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 const userTable = `CREATE TABLE user(
 						uid int NOT NULL,
-						account varchar(256) NOT NULL UNIQUE,
+						account varchar(64) NOT NULL UNIQUE,
 						password_hash varchar(64) NOT NULL,
-						name varchar(256) NOT NULL,
+						name varchar(64) NOT NULL,
 						eval float,
 						PRIMARY KEY(uid)
 					);`
@@ -163,6 +161,7 @@ func (u *UserDB) ChangeEval(account string, eval float64) error {
 	return err
 }
 
+// GetUIDFromAccount return user id by account
 func (u *UserDB) GetUIDFromAccount(account string) int {
 	var id int
 	rows, err := u.getUID.Query(account)

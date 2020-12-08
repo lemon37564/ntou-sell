@@ -2,8 +2,6 @@ package database
 
 import (
 	"database/sql"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 // seq is for ordering
@@ -102,7 +100,7 @@ func (h *HistoryDB) DeleteAll(uid int) error {
 	return err
 }
 
-// GetAll return all history of a user by id (descend order by time)
+// Get return all history of a user by id (descend order by time)
 func (h *HistoryDB) Get(uid int, amount int) (pdid []int) {
 	rows, err := h.get.Query(uid, amount)
 	if err != nil {

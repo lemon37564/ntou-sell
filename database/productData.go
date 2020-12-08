@@ -3,15 +3,13 @@ package database
 import (
 	"database/sql"
 	"fmt"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 const productTable = `CREATE TABLE product(
 						pd_id int NOT NULL,
-						product_name varchar(256) NOT NULL,
+						product_name varchar(64) NOT NULL,
 						price int NOT NULL,
-						description varchar(2048),
+						description varchar(256),
 						amount int NOT NULL,
 						eval float,
 						seller_id int NOT NULL,
@@ -75,9 +73,7 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 	var err error
 	product := new(ProductDB)
 
-	q := "INSERT INTO product VALUES(?,?,?,?,?,?,(SELECT uid FROM user WHERE account=?),?,?);"
-
-	product.insert, err = db.Prepare(q)
+	product.insert, err = db.Prepare("INSERT INTO product VALUES(?,?,?,?,?,?,(SELECT uid FROM user WHERE account=?),?,?);")
 	if err != nil {
 		panic(err)
 	}
@@ -284,6 +280,7 @@ func (p *ProductDB) SearchWithFilter(keyword string, priceMin, priceMax, eval in
 	return
 }
 
+// All return all products(debugging only)
 func (p *ProductDB) All() (all []Product) {
 	rows, err := p.allpd.Query()
 	if err != nil {

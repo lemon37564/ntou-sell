@@ -3,8 +3,6 @@ package database
 import (
 	"database/sql"
 	"fmt"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 // rename order as orders (order is a keword in SQL)
