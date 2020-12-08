@@ -153,21 +153,24 @@ func help(w http.ResponseWriter) {
 			<p> 
 				/user/login?account=...&password=...<br>
 				登入是否成功(bool)<br>
-				e.g.<br><a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
+				e.g.登入帳號為test@gmail.com以及密碼為0000的使用者<br>
+				<a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
 				https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000</a>
 				<br><br>
 			</p>
 			<p>
 				/user/regist?account=...&password=...&name=...<br>
 				註冊新帳號<br>
-				e.g.<br><a href=https://se-ssb.herokuapp.com/user/regist?account=test2@gmail.com&password=1234&name=Wilson>
+				e.g.註冊一帳號為test2@gmail.com，密碼為1234，使用者姓名為Wilson的帳號<br>
+				<a href=https://se-ssb.herokuapp.com/user/regist?account=test2@gmail.com&password=1234&name=Wilson>
 				https://se-ssb.herokuapp.com/user/regist?account=test2@gmail.com&password=1234&name=Wilson</a>
 				<br><br>
 			</p>
 			<p>
 				/user/delete?account=...&password=...<br>
 				刪除帳號<br>
-				e.g.<br><a href=https://se-ssb.herokuapp.com/user/delete?account=test3@gmail.com&password=1234>
+				e.g.刪除帳號為test3@gmail.com的帳號(需要輸入密碼驗證:密碼為1234)<br>
+				<a href=https://se-ssb.herokuapp.com/user/delete?account=test3@gmail.com&password=1234>
 				https://se-ssb.herokuapp.com/user/delete?account=test3@gmail.com&password=1234</a>
 				<br><br>
 			</p>
@@ -179,21 +182,24 @@ func help(w http.ResponseWriter) {
 			<p> 
 				/product/add?name=...&price=...&description=...&amount=...&account=...&bid=...&date=...<br>
 				新增商品<br>
-				e.g.<br><a href=https://se-ssb.herokuapp.com/product/add?name=ifone12&price=5000&description=盜版商品&amount=10&account=test@gmail.com&bid=true&date=2020-12-31>
+				e.g.新增一商品->商品名:ifone12價格:5000，商品說明:盜版商品，帳號:test@gmail.com，競標:是，競標期限:2020-12-31<br>
+				<a href=https://se-ssb.herokuapp.com/product/add?name=ifone12&price=5000&description=盜版商品&amount=10&account=test@gmail.com&bid=true&date=2020-12-31>
 				https://se-ssb.herokuapp.com/product/add?name=ifone12&price=5000&description=盜版商品&amount=10&account=test@gmail.com&bid=true&date=2020-12-31</a>
 				<br><br>
 			</p>
 			<p>
 				/product/search?name=...<br>
 				查詢商品<br>
-				e.g.<br><a href=https://se-ssb.herokuapp.com/product/search?name=ifone>
+				e.g.查詢商品名中含有"ifone"的商品<br>
+				<a href=https://se-ssb.herokuapp.com/product/search?name=ifone>
 				https://se-ssb.herokuapp.com/product/search?name=ifone</a>
 				<br><br>
 			</p>
 			<p>
 				/product/search?name=...&minprice=...&maxprice=...&eval=...<br>
 				查詢商品(過濾)<br>
-				e.g.<br><a href=https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2>
+				e.g.查詢商品名中含有"ifone"的商品，最低價格為10，最高價格為5000，最低評價為2<br>
+				<a href=https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2>
 				https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2</a>
 				<br><br>
 			</p>
