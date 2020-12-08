@@ -109,7 +109,7 @@ func (u *UserDB) AddNewUser(account, passwordHash, name string) error {
 
 	UID++
 
-	_, err = u.insert.Exec(UID, account, passwordHash, name, nil)
+	_, err = u.insert.Exec(UID, account, passwordHash, name, 0.0)
 	return err
 }
 
