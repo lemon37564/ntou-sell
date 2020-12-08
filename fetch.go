@@ -107,6 +107,21 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			fmt.Fprint(w, "argument error")
 		}
 	case "delete":
+	case "newproduct":
+		val, exi := args["amount"]
+
+		if exi {
+			v, err := strconv.Atoi(val[0])
+
+			if err == nil {
+				fmt.Fprint(w, ser.pr.GetNewest(v))
+			} else {
+				fmt.Fprint(w, "price or amount was not an integer.")
+			}
+
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	case "search":
 		val, exi := args["name"]
 
@@ -179,6 +194,12 @@ func help(w http.ResponseWriter) {
 				列出所有商品(僅限開發期間)<br>
 				<a href=/product/all> /product/all </a><br><br>
 			</p>
+			<p>
+				/product/newest?amount=...<br>
+				e.g.顯示最新商品(3筆資料)<br>
+				<a href=https://se-ssb.herokuapp.com/product?amount=3>
+				https://se-ssb.herokuapp.com/product?amount=3</a>
+				<br><br>
 			<p> 
 				/product/add?name=...&price=...&description=...&amount=...&account=...&bid=...&date=...<br>
 				新增商品<br>

@@ -44,6 +44,7 @@ type ProductDB struct {
 	updateDecp    *sql.Stmt
 	updateEval    *sql.Stmt
 	maxpdID       *sql.Stmt
+	newest        *sql.Stmt
 	search        *sql.Stmt
 	enhancesearch *sql.Stmt
 	getPdInfo     *sql.Stmt
@@ -112,6 +113,11 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 	}
 
 	product.maxpdID, err = db.Prepare("SELECT MAX(pd_id) FROM product;")
+	if err != nil {
+		panic(err)
+	}
+
+	product.newest, err = db.Prepare("SELECT pd_id FROM product ORDER BY pd_id DESC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
@@ -207,6 +213,26 @@ func (p *ProductDB) GetInfoFromPdID(pdid int) (pd Product) {
 		if err != nil {
 			panic(err)
 		}
+	}
+
+	return
+}
+
+// NewestProduct return newest number of products
+func (p *ProductDB) NewestProduct(number int) (all []Product) {
+	rows, err := p.newest.Query(number)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		var pd Product
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
+		if err != nil {
+			panic(err)
+		}
+
+		all = append(all, pd)
 	}
 
 	return

@@ -105,6 +105,14 @@ func (p *Product) GetAll() string {
 	return string(res)
 }
 
+func (p *Product) GetNewest(number int) string {
+	temp, err := json.Marshal(p.fn.NewestProduct(number))
+	if err != nil {
+		panic(err)
+	}
+	return string(temp)
+}
+
 func (p *Product) GetProductInfo(uid int) string {
 	//var orders string = ""
 	temp, err := json.Marshal(p.fn.GetInfoFromPdID(uid))
