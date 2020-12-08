@@ -58,7 +58,7 @@ func (ser *server) fetchHistory(path []string, args map[string][]string) {
 		}
 	case "delete":
 		ac, exi := args["account"]
-		pdid, exi2 := args["pd_id"]
+		pdid, exi2 := args["pdid"]
 
 		if exi && exi2 {
 			pd, err := strconv.Atoi(pdid[0])
@@ -66,7 +66,7 @@ func (ser *server) fetchHistory(path []string, args map[string][]string) {
 				uid := ser.us.GetUIDFromAccount(ac[0])
 				fmt.Fprint(ser.w, ser.hi.GetHistory(uid, pd))
 			} else {
-				fmt.Fprint(ser.w, "pd_id was not an integer")
+				fmt.Fprint(ser.w, "pdid was not an integer")
 			}
 		} else {
 			fmt.Fprint(ser.w, "argument error")
@@ -302,8 +302,8 @@ func (ser *server) help() {
 				/history/search?account=...&amount=...<br>
 				查詢歷史紀錄<br>
 				e.g.查詢帳號為test2@gmail.com的10歷史紀錄<br>
-				<a href=https://se-ssb.herokuapp.com/history/search?amount=10>
-				https://se-ssb.herokuapp.com/history/search?amount=10</a>
+				<a href=https://se-ssb.herokuapp.com/history/search?account=test2@gmail.com&amount=10>
+				https://se-ssb.herokuapp.com/history/search?account=test2@gmail.com&amount=10</a>
 				<br><br>
 			</p>
 			<p>
