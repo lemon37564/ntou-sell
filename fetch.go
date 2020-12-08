@@ -38,7 +38,7 @@ func (ser *server) fetchHistory(path []string, args map[string][]string) {
 
 	switch path[1] {
 	case "all":
-		fmt.Fprint(ser.hi.GetAll())
+		fmt.Fprint(w, ser.hi.GetAll())
 	case "get":
 		ac, exi := args["account"]
 		val, exist := args["amount"]
