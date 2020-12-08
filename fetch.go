@@ -169,7 +169,7 @@ func (ser *server) fetchProduct(path []string, args map[string][]string) {
 			fmt.Fprint(ser.w, "argument error")
 		}
 	case "delete":
-	case "newproduct":
+	case "newest":
 		val, exi := args["amount"]
 
 		if exi {
@@ -258,8 +258,8 @@ func (ser *server) help() {
 			<p>
 				/product/newest?amount=...<br>
 				e.g.顯示最新商品(3筆資料)<br>
-				<a href=https://se-ssb.herokuapp.com/product?amount=3>
-				https://se-ssb.herokuapp.com/product?amount=3</a>
+				<a href=https://se-ssb.herokuapp.com/product/newest?amount=3>
+				https://se-ssb.herokuapp.com/product/newest?amount=3</a>
 				<br><br>
 			<p> 
 				/product/add?name=...&price=...&description=...&amount=...&account=...&bid=...&date=...<br>
@@ -288,7 +288,7 @@ func (ser *server) help() {
 			<p> 
 				/history/all<br>
 				列出歷史紀錄(僅限開發期間)<br>
-				<a href=/user/all> /user/all </a><br><br>
+				<a href=/history/all> /history/all </a><br><br>
 			</p>
 			<p> 
 				/history/add?account=...&pdid=...<br>
