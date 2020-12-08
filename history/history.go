@@ -33,14 +33,24 @@ func (h History) GetHistory(uid int, amount int) string { //get all history
 	pdid := h.historydb.Get(uid, amount)
 
 	for _, v := range pdid {
-
 		temp = append(temp, h.productdb.GetInfoFromPdID(v))
 	}
+
 	str, err := json.Marshal(temp)
 	if err != nil {
 		panic(err)
 	}
 	return string(str)
+}
+
+func (h History) GetAll() string {
+	all := h.historydb.GetAll()
+	res, err := json.Marshal(all)
+	if err != nil {
+		panic(err)
+	}
+
+	return string(res)
 }
 
 func (h History) Delete(uid, pid int) {

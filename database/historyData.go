@@ -22,6 +22,13 @@ type HistoryDB struct {
 	delAll  *sql.Stmt
 	maxSeq  *sql.Stmt
 	get     *sql.Stmt
+	getall  *sql.Stmt
+}
+
+type History struct {
+	UID  int
+	Pdid int
+	Seq  int
 }
 
 // HistoryDBInit prepare function for database using
@@ -50,6 +57,11 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 	}
 
 	history.get, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;")
+	if err != nil {
+		panic(err)
+	}
+
+	history.getall, err = db.Prepare("SELECT * FROM history ORDER BY seq DESC;")
 	if err != nil {
 		panic(err)
 	}
@@ -105,6 +117,26 @@ func (h *HistoryDB) Get(uid int, amount int) (pdid []int) {
 		}
 
 		pdid = append(pdid, d)
+	}
+
+	return
+}
+
+// GetAll return all historys(debugging only)
+func (h *HistoryDB) GetAll() (all []History) {
+	rows, err := h.getall.Query()
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		var hi History
+		err = rows.Scan(&hi.UID, &hi.Pdid, &hi.Seq)
+		if err != nil {
+			panic(err)
+		}
+
+		all = append(all, hi)
 	}
 
 	return

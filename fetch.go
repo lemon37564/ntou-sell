@@ -37,6 +37,8 @@ func (ser *server) fetchHistory(path []string, args map[string][]string) {
 	}
 
 	switch path[1] {
+	case "all":
+		fmt.Fprint(ser.hi.GetAll())
 	case "get":
 		ac, exi := args["account"]
 		val, exist := args["amount"]
@@ -223,11 +225,10 @@ func (ser *server) help() {
 				<a href=/user/all> /user/all </a><br><br>
 			</p>
 			<p> 
-				/user/login?account=...&password=...<br>
-				登入是否成功(bool)<br>
+				/history/add?account=...&password=..pdidb1			登入是否成功(bool)<br>
 				e.g.登入帳號為test@gmail.com以及密碼為0000的使用者<br>
-				<a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
-				https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000</a>
+				<a href=https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1>
+				https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1</a>
 				<br><br>
 			</p>
 			<p>
@@ -279,6 +280,35 @@ func (ser *server) help() {
 				e.g.查詢商品名中含有"ifone"的商品，最低價格為10，最高價格為5000，最低評價為2<br>
 				<a href=https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2>
 				https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2</a>
+				<br><br>
+			</p>
+			<p> 
+				/history/all<br>
+				列出歷史紀錄(僅限開發期間)<br>
+				<a href=/user/all> /user/all </a><br><br>
+			</p>
+			<p> 
+				/history/add?account=...&pdid=...<br>
+				增加一筆新的歷史紀錄<br>
+				e.g.新增帳號為test@gmail.com以及商品id為1的歷史紀錄<br>
+				<a href=https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1>
+				https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1</a>
+				<br><br>
+			</p>
+			<p>
+				/history/search?account=...&amount=...<br>
+				查詢歷史紀錄<br>
+				e.g.查詢帳號為test2@gmail.com的10歷史紀錄<br>
+				<a href=https://se-ssb.herokuapp.com/history/search?amount=10>
+				https://se-ssb.herokuapp.com/history/search?amount=10</a>
+				<br><br>
+			</p>
+			<p>
+				/history/delete?account=...&pdid=...<br>
+				刪除歷史紀錄<br>
+				e.g.刪除帳號test3@gmail.com以及商品編號為2的歷史紀錄<br>
+				<a href=https://se-ssb.herokuapp.com/history/delete?account=test3@gmail.com&pdid=2>
+				https://se-ssb.herokuapp.com/history/delete?account=test3@gmail.com&pdid=2</a>
 				<br><br>
 			</p>
 		</html>
