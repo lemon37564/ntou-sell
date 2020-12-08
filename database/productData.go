@@ -117,7 +117,7 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 		panic(err)
 	}
 
-	product.newest, err = db.Prepare("SELECT pd_id FROM product ORDER BY pd_id DESC LIMIT ?;")
+	product.newest, err = db.Prepare("SELECT * FROM product ORDER BY pd_id DESC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
