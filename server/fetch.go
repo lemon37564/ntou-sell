@@ -115,11 +115,12 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 
 		if exi && exi2 {
 			valid := ser.Ur.Login(account[0], pass[0])
-			fmt.Fprint(w, valid)
+			// fmt.Fprint(w, valid)
 
 			// set cookies to maintain login condition
 			if valid {
 				ser.setCookies(w, r, account[0], pass[0])
+				http.Redirect(w, r, `/`, 301)
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
