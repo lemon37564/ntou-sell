@@ -3,6 +3,7 @@ package server
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -52,5 +53,6 @@ func (se *Session) genSessID() string {
 		panic(err)
 	}
 
+	log.Println(base64.URLEncoding.EncodeToString(id))
 	return base64.URLEncoding.EncodeToString(id)
 }
