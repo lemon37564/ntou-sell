@@ -14,6 +14,9 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 		http.NotFound(w, r)
 	} else if len(path) == 1 && path[0] == "help" {
 		ser.help(w, r)
+	} else if path[0] == "user" {
+		// user functions need to be in front of verification, or no one can log in anymore
+		ser.fetchUser(w, r, path, args)
 	}
 
 	if !ser.verify(w, r) {
@@ -22,8 +25,6 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 	}
 
 	switch path[0] {
-	case "user":
-		ser.fetchUser(w, r, path, args)
 	case "product":
 		ser.fetchProduct(w, r, path, args)
 	case "history":
