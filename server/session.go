@@ -23,6 +23,13 @@ type Session struct {
 	list map[string]time.Time
 }
 
+func NewSession() *Session {
+	s := new(Session)
+	s.list = make(map[string]time.Time)
+
+	return s
+}
+
 func (se *Session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
 	se.lock.Lock()
 	defer se.lock.Unlock()

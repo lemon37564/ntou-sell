@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, args map[string][]string) {
@@ -120,6 +121,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 
 			// set cookies to maintain login condition
 			if valid {
+				time.Sleep(time.Millisecond * 10)
 				ser.Sess.setSessionID(w, r)
 				http.Redirect(w, r, `/success`, 301)
 			}
