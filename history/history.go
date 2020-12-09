@@ -28,15 +28,9 @@ func (h History) AddHistory(uid, pdid int) string {
 }
 
 func (h History) GetHistory(uid int, amount int) string { //get all history
-	var temp []database.Product
+	pd := h.historydb.Get(uid, amount)
 
-	pdid := h.historydb.Get(uid, amount)
-
-	for _, v := range pdid {
-		temp = append(temp, h.productdb.GetInfoFromPdID(v))
-	}
-
-	str, err := json.Marshal(temp)
+	str, err := json.Marshal(pd)
 	if err != nil {
 		panic(err)
 	}

@@ -12,15 +12,16 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 
 	if len(path) == 0 {
 		http.NotFound(w, r)
+	} else if len(path) == 1 && path[0] == "help" {
+		ser.help(w, r)
+	}
+
+	if !ser.verify(w, r) {
+		fmt.Fprint(w, "請先登入!!")
+		return
 	}
 
 	switch path[0] {
-	case "help":
-		if len(path) == 1 {
-			ser.help(w, r)
-		} else {
-			http.NotFound(w, r)
-		}
 	case "user":
 		ser.fetchUser(w, r, path, args)
 	case "product":
@@ -101,12 +102,17 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 	case "all":
 		fmt.Fprintf(w, ser.Ur.GetAllUserData())
 	case "login":
-		val, exi := args["account"]
-		val2, exi2 := args["password"]
+		account, exi := args["account"]
+		pass, exi2 := args["password"]
 
 		if exi && exi2 {
-			fmt.Fprint(w, `<head><meta http-equiv="refresh" content="0;URL=http://google.com"></head>`)
-			fmt.Fprint(w, "<p>", ser.Ur.Login(val[0], val2[0]), "</p>")
+			valid := ser.Ur.Login(account[0], pass[0])
+			fmt.Fprint(w, valid)
+
+			// set cookies to maintain login condition
+			if valid {
+				ser.setCookies(w, r, account[0], pass[0])
+			}
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -222,7 +228,9 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, `
 		<html>
-			<p> 
+			<H1>後端API</H1>
+			<H6>測試用帳密:account=1234&password=1234</H6>
+			<p>
 				/user/all<br>
 				列出所有帳號(僅限開發期間)<br>
 				<a href=/user/all> /user/all </a><br><br>

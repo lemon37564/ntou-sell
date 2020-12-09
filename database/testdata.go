@@ -11,7 +11,12 @@ func TestInsert(db *sql.DB) {
 	u := UserDBInit(db)
 	p := ProductDBInit(db)
 
-	err := u.AddNewUser("test@gmail.com", "0000", "測試人員A")
+	err := u.AddNewUser("1234", "1234", "測試用帳號")
+	if err != nil {
+		panic(err)
+	}
+
+	err = u.AddNewUser("test@gmail.com", "0000", "測試人員A")
 	if err != nil {
 		panic(err)
 	}
