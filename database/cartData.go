@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -81,14 +82,14 @@ func (c *CartDB) UpdateAmount(uid, pdid, amount int) error {
 func (c *CartDB) GetAllProductOfUser(uid int) (ca []Cart) {
 	rows, err := c.getAll.Query(uid)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		var tmp Cart
 		err = rows.Scan(&tmp.UID, &tmp.PdID, &tmp.Amount)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		ca = append(ca, tmp)

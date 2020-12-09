@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -106,14 +107,14 @@ func (b *BidDB) NewBidderGet(pdid, bidderID, money int) error {
 func (b *BidDB) GetBidByID(pdid int) (bid Bid) {
 	rows, err := b.getBid.Query(pdid)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		bid = *new(Bid)
 		err = rows.Scan(&bid.Deadline, &bid.NowBidderID, &bid.NowMoney, &bid.UID)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}
 
@@ -124,14 +125,14 @@ func (b *BidDB) GetBidByID(pdid int) (bid Bid) {
 func (b *BidDB) GetAllBid() (all []Bid) {
 	rows, err := b.getAllBid.Query()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		bid := *new(Bid)
 		err = rows.Scan(&bid.Deadline, &bid.NowBidderID, &bid.NowMoney, &bid.UID)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		all = append(all, bid)

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"se/database"
 )
 
@@ -25,6 +26,7 @@ func (u *User) Login(account, password string) bool {
 func (u *User) Regist(account, password, name string) string {
 	err := u.fn.AddNewUser(account, password, name)
 	if err != nil {
+		log.Println(err)
 		if fmt.Sprint(err) == "UNIQUE constraint failed: user.account" {
 			return "此帳號已有被註冊過!"
 		}
@@ -37,6 +39,7 @@ func (u *User) Regist(account, password, name string) string {
 func (u *User) DeleteUser(account, password string) string {
 	err := u.fn.DeleteUser(account, password)
 	if err != nil {
+		log.Println(err)
 		return fmt.Sprintf("%v", err)
 	}
 

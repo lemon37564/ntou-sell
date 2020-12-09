@@ -3,7 +3,9 @@ package cart
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"se/database"
+	"strconv"
 )
 
 type Cart struct {
@@ -23,6 +25,7 @@ func NewCart(db *sql.DB) *Cart {
 func (c *Cart) AddProductToCart(id, pdid, amount int) bool {
 	err := c.db.AddProductIntoCart(id, pdid, amount)
 	if err != nil {
+		log.Println(err)
 		return false
 	}
 	return true
@@ -32,6 +35,7 @@ func (c *Cart) AddProductToCart(id, pdid, amount int) bool {
 func (c *Cart) RemoveProduct(id, pdid int) string {
 	err := c.db.DeleteProductFromCart(id, pdid)
 	if err != nil {
+		log.Println(err)
 		return "fail to remove from cart"
 	}
 	return "Success"
@@ -41,6 +45,7 @@ func (c *Cart) RemoveProduct(id, pdid int) string {
 func (c *Cart) ModifyAmount(uid, pdid, amount int) bool {
 	err := c.db.UpdateAmount(uid, pdid, amount)
 	if err != nil {
+		log.Println(err)
 		return false
 	}
 	return true
@@ -56,21 +61,24 @@ func (c Cart) GetProducts(uid int) string {
 	}
 	res, err := json.Marshal(prods)
 	if err != nil {
-		panic(err)
+
+		return "Something Wrong in Getting Data"
 	}
 	return string(res)
 
 }
 
 // TotalCount returns how many different products in the cart
-func (c *Cart) TotalCount(id int) (total int) {
+func (c *Cart) TotalCount(id int) string {
+	total := 0
 
 	prods := c.db.GetAllProductOfUser(id)
 
 	for k := range c.db.GetAllProductOfUser(id) {
 		total += c.db2.GetInfoFromPdID(prods[k].PdID).Price
 	}
-	return
+
+	return strconv.Itoa(total)
 }
 
 // Sum returns the total price of products in the cart

@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -63,14 +64,14 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 func (h *HistoryDB) AddHistory(uid, pdid int) error {
 	rows, err := h.maxSeq.Query(uid)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	var seq int
 	for rows.Next() {
 		err = rows.Scan(&seq)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}
 
@@ -94,14 +95,14 @@ func (h *HistoryDB) DeleteAll(uid int) error {
 func (h *HistoryDB) GetAll(uid int) (pdid []int) {
 	rows, err := h.get.Query(uid)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		var d int
 		err = rows.Scan(&d)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		pdid = append(pdid, d)

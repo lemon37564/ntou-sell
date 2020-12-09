@@ -3,6 +3,7 @@ package order
 import (
 	"database/sql"
 	"encoding/json"
+	"log"
 	"se/database"
 )
 
@@ -22,7 +23,7 @@ func (o *Order) GetOrders(uid int) string {
 	pds := o.fn.GetAllOrder(uid)
 	res, err := json.Marshal(pds)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return string(res)

@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"se/database"
+	"strconv"
 )
 
 type Product struct {
@@ -17,6 +19,7 @@ func ProductInit(db *sql.DB) *Product {
 	return p
 }
 
+//新增產品 使用: sell mod
 func (p Product) AddProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) string {
 	_, err := p.fn.AddNewProduct(pdname, price, description, amount, account, bid, date)
 	if err != nil {
@@ -28,6 +31,7 @@ func (p Product) AddProduct(pdname string, price int, description string, amount
 	return "ok"
 }
 
+//刪除產品 使用:  mod
 func (p *Product) DeleteProduct(pdid int) string {
 	err := p.fn.Delete(pdid)
 	if err != nil {
@@ -36,6 +40,8 @@ func (p *Product) DeleteProduct(pdid int) string {
 
 	return "ok"
 }
+
+//
 func (p *Product) ChangePrice(pdid, price int) string {
 	err := p.fn.UpdatePrice(pdid, price)
 	if err != nil {
@@ -76,7 +82,7 @@ func (p *Product) SearchProductsByName(name string) string {
 
 	res, err := json.Marshal(pds)
 	if err != nil {
-		panic(err)
+		return "Search Not Found"
 	}
 
 	return string(res)
@@ -87,7 +93,7 @@ func (p *Product) EnhanceSearchProductsByName(name string, minPrice, maxPrice, e
 
 	res, err := json.Marshal(pds)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return string(res)
@@ -99,7 +105,7 @@ func (p *Product) GetAll() string {
 
 	res, err := json.Marshal(pds)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	return string(res)
@@ -108,7 +114,8 @@ func (p *Product) GetAll() string {
 func (p *Product) GetNewest(number int) string {
 	temp, err := json.Marshal(p.fn.NewestProduct(number))
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return "Fail"
 	}
 	return string(temp)
 }
@@ -117,18 +124,19 @@ func (p *Product) GetProductInfo(uid int) string {
 	//var orders string = ""
 	temp, err := json.Marshal(p.fn.GetInfoFromPdID(uid))
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return "Null"
 	}
 	return string(temp)
 
 }
 
-func (p *Product) GetProdPrice(pdid int) int { //拿價格
-	return p.fn.GetInfoFromPdID(pdid).Price
+func (p *Product) GetProdPrice(pdid int) string { //拿價格
+	return strconv.Itoa(p.fn.GetInfoFromPdID(pdid).Price)
 }
 
-func (p *Product) GetProAmount(pdid int) int { //拿數量
-	return p.fn.GetInfoFromPdID(pdid).Amount
+func (p *Product) GetProAmount(pdid int) string { //拿數量
+	return strconv.Itoa(p.fn.GetInfoFromPdID(pdid).Amount)
 }
 
 func (p *Product) GetProdDescription(pdid int) string { //拿說明
@@ -143,6 +151,6 @@ func (p *Product) GetProdName(pdid int) string { //拿商品名稱
 	return p.fn.GetInfoFromPdID(pdid).PdName
 }
 
-func (p *Product) GetProdEval(pdid int) float64 { //拿評價
-	return p.fn.GetInfoFromPdID(pdid).Eval
+func (p *Product) GetProdEval(pdid int) string { //拿評價
+	return strconv.FormatFloat(p.fn.GetInfoFromPdID(pdid).Eval, 'E', -1, 64)
 }

@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -162,13 +163,13 @@ func (u *UserDB) ChangeEval(account string, eval float64) error {
 func (u *UserDB) GetDatasFromAccount(account string) (us User) {
 	rows, err := u.getData.Query(account)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		err = rows.Scan(&us.UID, &us.Account, &us.PasswordHash, &us.Name, &us.Eval)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}
 
@@ -179,14 +180,14 @@ func (u *UserDB) GetDatasFromAccount(account string) (us User) {
 func (u *UserDB) GetAllUser() (all []User) {
 	rows, err := u.allUser.Query()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		user := *new(User)
 		err = rows.Scan(&user.UID, &user.Account, &user.PasswordHash, &user.Name, &user.Eval)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		all = append(all, user)

@@ -33,6 +33,10 @@ func (h History) GetAllHistory(uid int) string { //get all history
 	return string(str)
 }
 
-func (h History) Delete(uid, pid int) {
-	h.historydb.Delete(uid, pid)
+func (h History) Delete(uid, pid int) string {
+	err := h.historydb.Delete(uid, pid)
+	if err != nil {
+		return "fail to delete"
+	}
+	return "success to delete"
 }

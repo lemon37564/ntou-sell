@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -150,13 +151,13 @@ func (p *ProductDB) AddNewProduct(pdname string, price int, description string, 
 	var pdid int
 	rows, err := p.maxpdID.Query()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		err = rows.Scan(&pdid)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 			// panic if there's no product yet
 		}
 	}
@@ -168,12 +169,14 @@ func (p *ProductDB) AddNewProduct(pdname string, price int, description string, 
 // Delete product with product id
 func (p *ProductDB) Delete(pdid int) error {
 	_, err := p._delete.Exec(pdid)
+
 	return err
 }
 
 // UpdateName with product id and new name
 func (p *ProductDB) UpdateName(pdid int, name string) error {
 	_, err := p.updatepdName.Exec(name, pdid)
+
 	return err
 }
 
@@ -192,6 +195,10 @@ func (p *ProductDB) UpdateAmount(pdid, amount int) error {
 // UpdateDescription with product id and new description
 func (p *ProductDB) UpdateDescription(pdid int, description string) error {
 	_, err := p.updateDecp.Exec(description, pdid)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 	return err
 }
 
@@ -205,13 +212,14 @@ func (p *ProductDB) UpdateEval(pdid int, eval float64) error {
 func (p *ProductDB) GetInfoFromPdID(pdid int) (pd Product) {
 	rows, err := p.getPdInfo.Query(pdid)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return
 	}
 
 	for rows.Next() {
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}
 
@@ -222,14 +230,14 @@ func (p *ProductDB) GetInfoFromPdID(pdid int) (pd Product) {
 func (p *ProductDB) NewestProduct(number int) (all []Product) {
 	rows, err := p.newest.Query(number)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		all = append(all, pd)
@@ -245,14 +253,14 @@ func (p *ProductDB) Search(keyword string) (all []Product) {
 
 	rows, err := p.search.Query(keyword)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		all = append(all, pd)
@@ -268,14 +276,14 @@ func (p *ProductDB) SearchWithFilter(keyword string, priceMin, priceMax, eval in
 
 	rows, err := p.enhancesearch.Query(keyword, priceMin, priceMax, eval)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		all = append(all, pd)
@@ -287,14 +295,14 @@ func (p *ProductDB) SearchWithFilter(keyword string, priceMin, priceMax, eval in
 func (p *ProductDB) All() (all []Product) {
 	rows, err := p.allpd.Query()
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		all = append(all, pd)

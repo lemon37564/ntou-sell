@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -90,14 +91,14 @@ func (o *OrderDB) Delete(uid, pdid int) error {
 func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
 	rows, err := o.getOrder.Query(uid, pdid)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	var od Order
 	for rows.Next() {
 		err = rows.Scan(&od.Pdid, &od.Amount, &od.State)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 	}
 
@@ -108,14 +109,14 @@ func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
 func (o *OrderDB) GetAllOrder(uid int) (ods []Order) {
 	rows, err := o.getall.Query(uid)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
 	for rows.Next() {
 		var tmp Order
 		err = rows.Scan(&tmp.Pdid, &tmp.Amount, &tmp.State)
 		if err != nil {
-			panic(err)
+			log.Println(err)
 		}
 
 		ods = append(ods, tmp)
