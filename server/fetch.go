@@ -113,6 +113,11 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 	case "all":
 		fmt.Fprintf(w, ser.Ur.GetAllUserData())
 	case "login":
+		if ser.Sess.sessionValid(w, r) {
+			fmt.Fprint(w, "已經登入過!")
+			return
+		}
+
 		account, exi := args["account"]
 		pass, exi2 := args["password"]
 
@@ -183,7 +188,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			if err1 == nil && err2 == nil {
 				fmt.Fprint(w, ser.Pd.AddProduct(name[0], p, des[0], a, account[0], b, date[0]))
 			} else {
-				fmt.Fprint(w, "price Od amount was not an integer.")
+				fmt.Fprint(w, "price or amount was not an integer.")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
@@ -229,7 +234,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			if err1 == nil && err2 == nil && err3 == nil {
 				fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name[0], mi, ma, ev))
 			} else {
-				fmt.Fprint(w, "min price, max price Od evaluation was not as interger")
+				fmt.Fprint(w, "min price, max price or evaluation was not as interger")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
