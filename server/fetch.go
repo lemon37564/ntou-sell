@@ -34,6 +34,8 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 			ser.fetchBid(w, r, path, args)
 		case "cart":
 			ser.fetchCart(w, r, path, args)
+		case "success":
+			fmt.Fprint(w, "登入成功!")
 
 		default:
 			http.NotFound(w, r)
@@ -115,12 +117,11 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 
 		if exi && exi2 {
 			valid := ser.Ur.Login(account[0], pass[0])
-			// fmt.Fprint(w, valid)
 
 			// set cookies to maintain login condition
 			if valid {
 				ser.setCookies(w, r, account[0], pass[0])
-				http.Redirect(w, r, `/`, 301)
+				http.Redirect(w, r, `/success`, 301)
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
