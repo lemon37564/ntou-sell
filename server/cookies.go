@@ -10,8 +10,8 @@ func (ser *Server) setCookies(w http.ResponseWriter, r *http.Request, account, p
 	expire := time.Now()
 	expire = expire.AddDate(1, 0, 0)
 
-	cookie := &http.Cookie{Name: "seAccount", Value: account, Expires: expire, Secure: false, Path: "/"}
-	cookie2 := &http.Cookie{Name: "sePassword", Value: password, Expires: expire, Secure: false, Path: "/"}
+	cookie := &http.Cookie{Name: "seAccount", Value: account, Expires: expire, Secure: false, Path: "/", Domain: "se-ssb.herokuapp.com"}
+	cookie2 := &http.Cookie{Name: "sePassword", Value: password, Expires: expire, Secure: false, Path: "/", Domain: "se-ssb.herokuapp.com"}
 
 	http.SetCookie(w, cookie)
 	r.AddCookie(cookie)
