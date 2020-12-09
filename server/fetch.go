@@ -28,6 +28,9 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 			ser.fetchProduct(w, r, path, args)
 		case "history":
 			ser.fetchHistory(w, r, path, args)
+		case "order":
+			ser.fetchOrder(w, r, path, args)
+
 		default:
 			http.NotFound(w, r)
 		}
@@ -225,7 +228,69 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 		http.NotFound(w, r)
 	}
 }
+func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+	if len(path) != 2 {
+		http.NotFound(w, r)
+		return
+	}
 
+	switch path[1] {
+	case "get":
+		id, exi := args["id"]
+
+		if exi {
+			i, err1 := strconv.Atoi(id)
+		}
+	case "delete":
+	case "newest":
+		val, exi := args["amount"]
+
+		if exi {
+			v, err := strconv.Atoi(val[0])
+
+			if err == nil {
+				fmt.Fprint(w, ser.Pd.GetNewest(v))
+			} else {
+				fmt.Fprint(w, "amount was not an integer.")
+			}
+
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "search":
+		val, exi := args["name"]
+
+		if exi {
+			fmt.Fprint(w, ser.Pd.SearchProductsByName(val[0]))
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "filter_search":
+		exist := make([]bool, 4)
+		var name, min, max, eval []string
+
+		name, exist[0] = args["name"]
+		min, exist[1] = args["minprice"]
+		max, exist[2] = args["maxprice"]
+		eval, exist[3] = args["eval"]
+
+		if all(exist) {
+			mi, err1 := strconv.Atoi(min[0])
+			ma, err2 := strconv.Atoi(max[0])
+			ev, err3 := strconv.Atoi(eval[0])
+
+			if err1 == nil && err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name[0], mi, ma, ev))
+			} else {
+				fmt.Fprint(w, "min price, max price Od evaluation was not as interger")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	default:
+		http.NotFound(w, r)
+	}
+}
 func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, `
 		<html>
