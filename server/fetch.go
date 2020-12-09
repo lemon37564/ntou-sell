@@ -32,6 +32,8 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 			ser.fetchOrder(w, r, path, args)
 		case "bid":
 			ser.fetchBid(w, r, path, args)
+		case "cart":
+			ser.fetchCart(w, r, path, args)
 
 		default:
 			http.NotFound(w, r)
@@ -346,6 +348,99 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request, path []strin
 			fmt.Fprint(w, "argument error")
 		}
 
+	default:
+		http.NotFound(w, r)
+	}
+}
+func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+	if len(path) != 2 {
+		http.NotFound(w, r)
+		return
+	}
+
+	switch path[1] {
+	case "add": //For single bid product
+		uid, ex1 := args["id"]
+		pdid, ex2 := args["pdid"]
+		amount, ex3 := args["amount"]
+
+		if ex1 && ex2 && ex3 {
+			u, err1 := strconv.Atoi(uid[0])
+			p, err2 := strconv.Atoi(pdid[0])
+			amo, err3 := strconv.Atoi(amount[0])
+			if err1 == nil && err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Ct.AddProductToCart(u, p, amo))
+
+			} else {
+				fmt.Fprint(w, "User id ,product id or amount was not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "remo":
+		uid, ex1 := args["id"]
+		pdid, ex2 := args["pdid"]
+
+		if ex1 && ex2 {
+			u, err1 := strconv.Atoi(uid[0])
+			p, err2 := strconv.Atoi(pdid[0])
+
+			if err1 == nil && err2 == nil {
+				fmt.Fprint(w, ser.Ct.RemoveProduct(u, p))
+
+			} else {
+				fmt.Fprint(w, "User id ,product id was not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "modf":
+		uid, ex1 := args["id"]
+		pdid, ex2 := args["pdid"]
+		amount, ex3 := args["amount"]
+
+		if ex1 && ex2 && ex3 {
+			u, err1 := strconv.Atoi(uid[0])
+			p, err2 := strconv.Atoi(pdid[0])
+			amo, err3 := strconv.Atoi(amount[0])
+			if err1 == nil && err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Ct.ModifyAmount(u, p, amo))
+
+			} else {
+				fmt.Fprint(w, "User id ,product id or amount was not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "tal":
+		uid, ex1 := args["id"]
+
+		if ex1 {
+			u, err1 := strconv.Atoi(uid[0])
+
+			if err1 == nil {
+				fmt.Fprint(w, ser.Ct.TotalCount(u))
+
+			} else {
+				fmt.Fprint(w, "User id was not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "geps": //拿商品
+		uid, ex1 := args["id"]
+
+		if ex1 {
+			u, err1 := strconv.Atoi(uid[0])
+			if err1 == nil {
+				fmt.Fprint(w, ser.Ct.GetProducts(u))
+
+			} else {
+				fmt.Fprint(w, "User id was not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	default:
 		http.NotFound(w, r)
 	}

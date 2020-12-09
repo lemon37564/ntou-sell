@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"se/bid"
+	"se/cart"
 	"se/history"
 	"se/order"
 	"se/product"
@@ -19,6 +20,7 @@ type Server struct {
 	Od *order.Order
 	Ht *history.History
 	Bd *bid.Bid
+	Ct *cart.Cart
 }
 
 // Serve start all functions provided for user
