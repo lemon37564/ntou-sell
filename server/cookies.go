@@ -13,8 +13,11 @@ func (ser *Server) setCookies(w http.ResponseWriter, r *http.Request, account, p
 	cookie := http.Cookie{Name: "se-ss-account", Value: account, Expires: expire}
 	cookie2 := http.Cookie{Name: "se-ss-password", Value: password, Expires: expire}
 
-	http.SetCookie(w, &cookie)
-	http.SetCookie(w, &cookie2)
+	// http.SetCookie(w, &cookie)
+	// http.SetCookie(w, &cookie2)
+
+	r.AddCookie(&cookie)
+	r.AddCookie(&cookie2)
 
 	log.Println("cookies set")
 }
