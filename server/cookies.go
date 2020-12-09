@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"net/http"
 	"time"
 )
@@ -14,11 +15,15 @@ func (ser *Server) setCookies(w http.ResponseWriter, r *http.Request, account, p
 
 	http.SetCookie(w, &cookie)
 	http.SetCookie(w, &cookie2)
+
+	log.Println("cookies set")
 }
 
 func (ser *Server) getCookies(w http.ResponseWriter, r *http.Request) (*http.Cookie, *http.Cookie, bool) {
 	cookie, err := r.Cookie("se-ss-account")
 	cookie2, err2 := r.Cookie("se-ss-password")
+
+	log.Println(cookie, cookie2, err, err2)
 
 	if err == nil && err2 == nil {
 		return cookie, cookie2, true
