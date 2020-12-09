@@ -22,7 +22,7 @@ type Server struct {
 	Bd *bid.Bid
 	Ct *cart.Cart
 
-	sess Session
+	sess *Session
 }
 
 // Serve start all functions provided for user
