@@ -230,7 +230,9 @@ func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, `
 		<html>
 			<H1>後端API</H1>
-			<H6>測試用帳密:account=1234&password=1234</H6>
+			<H4>測試用帳密:account=1234&password=1234<br>
+			<a href=https://se-ssb.herokuapp.com/user/login?account=1234&password=1234>登入</a><br>
+			</H4>
 			<p>
 				/user/all<br>
 				列出所有帳號(僅限開發期間)<br>
@@ -239,8 +241,8 @@ func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 			<p> 
 				/history/add?account=...&password=..pdidb1			登入是否成功(bool)<br>
 				e.g.登入帳號為test@gmail.com以及密碼為0000的使用者<br>
-				<a href=https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1>
-				https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1</a>
+				<a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
+				https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000</a>
 				<br><br>
 			</p>
 			<p>
