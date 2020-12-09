@@ -63,5 +63,7 @@ func (ser *Server) verify(w http.ResponseWriter, r *http.Request) bool {
 		password = cookie2.Value
 	}
 
+	log.Println(account, password)
+
 	return ser.Ur.Login(account, password)
 }
