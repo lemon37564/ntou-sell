@@ -54,14 +54,8 @@ func (ser *Server) verify(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 
-	var account, password string
-
-	if cookie.Name == "se-ss-account" {
-		account = cookie.Value
-	}
-	if cookie2.Name == "se-ss-password" {
-		password = cookie2.Value
-	}
+	account := cookie.Value
+	password := cookie2.Value
 
 	return ser.Ur.Login(account, password)
 }
