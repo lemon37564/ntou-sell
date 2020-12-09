@@ -23,6 +23,6 @@ func main() {
 		Od:   order.NewOrder(db),
 		Ht:   history.NewHistory(db),
 		Bd:   bid.NewBid(db),
-		sess: server.Session{}}
+		Sess: new(server.Session)}
 	service.Serve()
 }

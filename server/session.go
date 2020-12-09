@@ -9,9 +9,10 @@ import (
 )
 
 const (
-	idLen      = 32
-	cookieName = "sessID"
-	lifeTime   = time.Hour * 24
+	idLen       = 32
+	cookieName  = "sessID"
+	lifeTime    = time.Hour * 24
+	refreshTime = time.Hour
 )
 
 type Session struct {

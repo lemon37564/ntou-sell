@@ -11,6 +11,7 @@ import (
 	"se/order"
 	"se/product"
 	"se/user"
+	"time"
 )
 
 type Server struct {
@@ -22,7 +23,8 @@ type Server struct {
 	Bd *bid.Bid
 	Ct *cart.Cart
 
-	sess *Session
+	Sess        *Session
+	lastRefresh time.Time
 }
 
 // Serve start all functions provided for user
@@ -52,5 +54,18 @@ func (ser *Server) service(w http.ResponseWriter, r *http.Request) {
 
 // verify if user is legel by using cookies
 func (ser *Server) verify(w http.ResponseWriter, r *http.Request) bool {
-	return ser.sess.sessionValid(w, r)
+
+	// check sessions is valid(delete it if not)
+	if time.Since(ser.lastRefresh) > refreshTime {
+		now := time.Now()
+		ser.lastRefresh = now
+
+		for i, v := range ser.Sess.list {
+			if now.After(v) {
+				delete(ser.Sess.list, i)
+			}
+		}
+	}
+
+	return ser.Sess.sessionValid(w, r)
 }

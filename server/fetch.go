@@ -120,7 +120,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 
 			// set cookies to maintain login condition
 			if valid {
-				ser.sess.setSessionID(w, r)
+				ser.Sess.setSessionID(w, r)
 				http.Redirect(w, r, `/success`, 301)
 			}
 		} else {
