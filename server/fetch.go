@@ -30,6 +30,8 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 			ser.fetchHistory(w, r, path, args)
 		case "order":
 			ser.fetchOrder(w, r, path, args)
+		case "bid":
+			ser.fetchBid(w, r, path, args)
 
 		default:
 			http.NotFound(w, r)
@@ -236,57 +238,114 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request, path []str
 
 	switch path[1] {
 	case "get":
-		id, exi := args["id"]
+		uid, ex1 := args["id"]
 
-		if exi {
-			i, err1 := strconv.Atoi(id)
-		}
-	case "delete":
-	case "newest":
-		val, exi := args["amount"]
-
-		if exi {
-			v, err := strconv.Atoi(val[0])
-
-			if err == nil {
-				fmt.Fprint(w, ser.Pd.GetNewest(v))
+		if ex1 {
+			i, err1 := strconv.Atoi(uid[0])
+			if err1 == nil {
+				fmt.Fprint(w, ser.Od.GetOrders(i))
 			} else {
-				fmt.Fprint(w, "amount was not an integer.")
+				fmt.Fprint(w, "User id not integer")
 			}
-
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "search":
-		val, exi := args["name"]
+	case "add":
+		exist := make([]bool, 3)
+		var uid, pdid, amount []string
 
-		if exi {
-			fmt.Fprint(w, ser.Pd.SearchProductsByName(val[0]))
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
-	case "filter_search":
-		exist := make([]bool, 4)
-		var name, min, max, eval []string
-
-		name, exist[0] = args["name"]
-		min, exist[1] = args["minprice"]
-		max, exist[2] = args["maxprice"]
-		eval, exist[3] = args["eval"]
-
+		uid, exist[0] = args["uid"]
+		pdid, exist[1] = args["pdid"]
+		amount, exist[2] = args["amount"]
 		if all(exist) {
-			mi, err1 := strconv.Atoi(min[0])
-			ma, err2 := strconv.Atoi(max[0])
-			ev, err3 := strconv.Atoi(eval[0])
+			ui, err1 := strconv.Atoi(uid[0])
+			pi, err2 := strconv.Atoi(pdid[0])
+			amo, err3 := strconv.Atoi(amount[0])
 
 			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name[0], mi, ma, ev))
+				fmt.Fprint(w, ser.Od.AddOrder(ui, pi, amo))
 			} else {
-				fmt.Fprint(w, "min price, max price Od evaluation was not as interger")
+				fmt.Fprint(w, "Userid,Productid or amount was not as interger")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+	case "del":
+		uid, exi := args["uid"]
+		pdid, exi2 := args["pdid"]
+		if exi && exi2 {
+			ui, err := strconv.Atoi(uid[0])
+			pi, err1 := strconv.Atoi(pdid[0])
+			if err == nil && err1 == nil {
+				fmt.Fprint(w, ser.Od.Delete(ui, pi))
+			} else {
+				fmt.Fprint(w, "User id or Product id was not an integer.")
+			}
+
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	default:
+		http.NotFound(w, r)
+	}
+
+}
+func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+	if len(path) != 2 {
+		http.NotFound(w, r)
+		return
+	}
+
+	switch path[1] {
+	case "get": //For single bid product
+		uid, ex1 := args["id"]
+
+		if ex1 {
+			i, err1 := strconv.Atoi(uid[0])
+			if err1 == nil {
+				fmt.Fprint(w, ser.Bd.GetProductInfo(i))
+				fmt.Fprint(w, ser.Bd.GetProductBidInfo(i))
+			} else {
+				fmt.Fprint(w, "User id not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "set":
+		exist := make([]bool, 3)
+		var pdid, uid, money []string
+
+		pdid, exist[0] = args["pdid"]
+		uid, exist[1] = args["uid"]
+		money, exist[2] = args["money"]
+
+		if all(exist) {
+			p, err1 := strconv.Atoi(pdid[0])
+			u, err2 := strconv.Atoi(uid[0])
+			m, err3 := strconv.Atoi(money[0])
+
+			if err1 == nil && err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Bd.SetBidForBuyer(p, u, m))
+			} else {
+				fmt.Fprint(w, "User, Product id or money was not an integer.")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "delete":
+		pdid, ex1 := args["pdid"]
+
+		if ex1 {
+			p, err1 := strconv.Atoi(pdid[0])
+			if err1 == nil {
+				fmt.Fprint(w, ser.Bd.DeleteBid(p))
+			} else {
+				fmt.Fprint(w, "Product id not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+
 	default:
 		http.NotFound(w, r)
 	}
