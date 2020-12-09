@@ -29,6 +29,8 @@ type CartDB struct {
 	_delete    *sql.Stmt
 	updateAmnt *sql.Stmt
 	getAll     *sql.Stmt
+
+	Total int
 }
 
 // CartDBInit prepare functions for database using
@@ -51,10 +53,12 @@ func CartDBInit(db *sql.DB) *CartDB {
 		panic(err)
 	}
 
-	cart.getAll, err = db.Prepare("SELECT * FROM cart WHERE uid=?;")
+	cart.getAll, err = db.Prepare("SELECT * FROM product WHERE pd_id IN (SELECT pd_id FROM cart WHERE uid=?);")
 	if err != nil {
 		panic(err)
 	}
+
+	cart.Total = 0
 
 	return cart
 }
@@ -79,20 +83,26 @@ func (c *CartDB) UpdateAmount(uid, pdid, amount int) error {
 }
 
 // GetAllProductOfUser return all product id and amount by user id
-func (c *CartDB) GetAllProductOfUser(uid int) (ca []Cart) {
+func (c *CartDB) GetAllProductOfUser(uid int) (all []Product) {
 	rows, err := c.getAll.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}
 
 	for rows.Next() {
-		var tmp Cart
-		err = rows.Scan(&tmp.UID, &tmp.PdID, &tmp.Amount)
+		var pd Product
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
 			log.Println(err)
 		}
 
-		ca = append(ca, tmp)
+		all = append(all, pd)
+	}
+
+	// this is a value that counts total price
+	c.Total = 0
+	for i := range all {
+		c.Total += all[i].Price
 	}
 
 	return

@@ -53,32 +53,24 @@ func (c *Cart) ModifyAmount(uid, pdid, amount int) bool {
 
 // GetProducts returns all the product in cart
 func (c Cart) GetProducts(uid int) string {
-	prodids := c.db.GetAllProductOfUser(uid)
-	var prods []database.Product
+	pds := c.db.GetAllProductOfUser(uid)
 
-	for _, v := range prodids {
-		prods = append(prods, c.db2.GetInfoFromPdID(v))
-	}
-	res, err := json.Marshal(prods)
+	res, err := json.Marshal(pds)
 	if err != nil {
 
 		return "Something Wrong in Getting Data"
 	}
-	return string(res)
 
+	return string(res)
 }
 
 // TotalCount returns how many different products in the cart
-func (c *Cart) TotalCount(id int) string {
-	total := 0
-
-	prods := c.db.GetAllProductOfUser(id)
-
-	for k := range c.db.GetAllProductOfUser(id) {
-		total += c.db2.GetInfoFromPdID(prods[k].PdID).Price
+func (c *Cart) TotalCount(uid int) string {
+	if c.db.Total == 0 {
+		c.GetProducts(uid)
 	}
 
-	return strconv.Itoa(total)
+	return strconv.Itoa(c.db.Total)
 }
 
 // Sum returns the total price of products in the cart
