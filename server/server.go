@@ -21,9 +21,10 @@ type Server struct {
 	Bd *bid.Bid
 }
 
+// Serve start all functions provided for user
 func (ser *Server) Serve() {
 	port := os.Getenv("PORT")
-	log.Println("Service running on port ", port)
+	log.Println("Service running on port:", port)
 
 	http.HandleFunc("/", ser.service)
 	err := http.ListenAndServe(":"+port, nil)
@@ -55,10 +56,10 @@ func (ser *Server) verify(w http.ResponseWriter, r *http.Request) bool {
 
 	var account, password string
 
-	if cookie.Name == "account" {
+	if cookie.Name == "se-ss-account" {
 		account = cookie.Value
 	}
-	if cookie2.Name == "password" {
+	if cookie2.Name == "se-ss-password" {
 		password = cookie2.Value
 	}
 

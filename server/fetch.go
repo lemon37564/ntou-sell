@@ -17,20 +17,20 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 	} else if path[0] == "user" {
 		// user functions need to be in front of verification, or no one can log in anymore
 		ser.fetchUser(w, r, path, args)
-	}
+	} else {
+		if !ser.verify(w, r) {
+			fmt.Fprint(w, "請先登入!!")
+			return
+		}
 
-	if !ser.verify(w, r) {
-		fmt.Fprint(w, "請先登入!!")
-		return
-	}
-
-	switch path[0] {
-	case "product":
-		ser.fetchProduct(w, r, path, args)
-	case "history":
-		ser.fetchHistory(w, r, path, args)
-	default:
-		http.NotFound(w, r)
+		switch path[0] {
+		case "product":
+			ser.fetchProduct(w, r, path, args)
+		case "history":
+			ser.fetchHistory(w, r, path, args)
+		default:
+			http.NotFound(w, r)
+		}
 	}
 }
 
