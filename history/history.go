@@ -3,6 +3,7 @@ package history
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"se/database"
 )
 
@@ -17,26 +18,35 @@ func NewHistory(db *sql.DB) (u *History) {
 	return
 }
 
-func (h History) GetAllHistory(uid int) string { //get all history
-	var temp []database.Product
-
-	pdid := h.historydb.GetAll(uid)
-
-	for _, v := range pdid {
-
-		temp = append(temp, h.productdb.GetInfoFromPdID(v))
+func (h History) AddHistory(uid, pdid int) string {
+	err := h.historydb.AddHistory(uid, pdid)
+	if err != nil {
+		return fmt.Sprint(err)
 	}
-	str, err := json.Marshal(temp)
+
+	return "ok"
+}
+
+func (h History) GetHistory(uid int, amount int) string { //get all history
+	pd := h.historydb.Get(uid, amount)
+
+	str, err := json.Marshal(pd)
 	if err != nil {
 		panic(err)
 	}
 	return string(str)
 }
 
-func (h History) Delete(uid, pid int) string {
-	err := h.historydb.Delete(uid, pid)
+func (h History) GetAll() string {
+	all := h.historydb.GetAll()
+	res, err := json.Marshal(all)
 	if err != nil {
-		return "fail to delete"
+		panic(err)
 	}
-	return "success to delete"
+
+	return string(res)
+}
+
+func (h History) Delete(uid, pid int) {
+	h.historydb.Delete(uid, pid)
 }

@@ -51,6 +51,10 @@ func (u *User) GetUserData(account string) string {
 	return string(res)
 }
 
+func (u *User) GetUIDFromAccount(account string) int {
+	return u.fn.GetUIDFromAccount(account)
+}
+
 func (u *User) GetAllUserData() string {
 	res, _ := json.Marshal(u.fn.GetAllUser())
 	return string(res)

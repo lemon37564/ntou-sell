@@ -3,15 +3,13 @@ package database
 import (
 	"database/sql"
 	"log"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 const userTable = `CREATE TABLE user(
 						uid int NOT NULL,
-						account varchar(256) NOT NULL UNIQUE,
+						account varchar(64) NOT NULL UNIQUE,
 						password_hash varchar(64) NOT NULL,
-						name varchar(256) NOT NULL,
+						name varchar(64) NOT NULL,
 						eval float,
 						PRIMARY KEY(uid)
 					);`
@@ -35,6 +33,7 @@ type UserDB struct {
 	maxID      *sql.Stmt
 	login      *sql.Stmt
 	getData    *sql.Stmt
+	getUID     *sql.Stmt
 	allUser    *sql.Stmt
 }
 
@@ -79,6 +78,11 @@ func UserDBInit(db *sql.DB) *UserDB {
 	}
 
 	user.getData, err = db.Prepare("SELECT * FROM USER WHERE account=? AND uid>0;")
+	if err != nil {
+		panic(err)
+	}
+
+	user.getUID, err = db.Prepare("SELECT uid FROM USER WHERE account=? AND uid>0;")
 	if err != nil {
 		panic(err)
 	}
@@ -156,6 +160,24 @@ func (u *UserDB) ChangeName(account, newname string) error {
 func (u *UserDB) ChangeEval(account string, eval float64) error {
 	_, err := u.updateEval.Exec(account, eval)
 	return err
+}
+
+// GetUIDFromAccount return user id by account
+func (u *UserDB) GetUIDFromAccount(account string) int {
+	var id int
+	rows, err := u.getUID.Query(account)
+	if err != nil {
+		panic(err)
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&id)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return id
 }
 
 // GetDatasFromAccount return data of user, matching by account

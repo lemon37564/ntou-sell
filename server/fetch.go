@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"fmt"
@@ -7,30 +7,34 @@ import (
 	"strings"
 )
 
-func (ser *server) fetch(w http.ResponseWriter, r *http.Request, cmd string, args map[string][]string) {
+func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, args map[string][]string) {
 	path := strings.Split(cmd, "/")
 
 	if len(path) == 0 {
 		http.NotFound(w, r)
-	}
+	} else if len(path) == 1 && path[0] == "help" {
+		ser.help(w, r)
+	} else if path[0] == "user" {
+		// user functions need to be in front of verification, or no one can log in anymore
+		ser.fetchUser(w, r, path, args)
+	} else {
+		if !ser.verify(w, r) {
+			fmt.Fprint(w, "請先登入!!")
+			return
+		}
 
-	switch path[0] {
-	case "help":
-		if len(path) == 1 {
-			help(w)
-		} else {
+		switch path[0] {
+		case "product":
+			ser.fetchProduct(w, r, path, args)
+		case "history":
+			ser.fetchHistory(w, r, path, args)
+		default:
 			http.NotFound(w, r)
 		}
-	case "user":
-		ser.fetchUser(w, r, path, args)
-	case "product":
-		ser.fetchProduct(w, r, path, args)
-	default:
-		http.NotFound(w, r)
 	}
 }
 
-func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
 	if len(path) != 2 {
 		http.NotFound(w, r)
 		return
@@ -38,13 +42,78 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 
 	switch path[1] {
 	case "all":
-		fmt.Fprintf(w, ser.us.GetAllUserData())
-	case "login":
-		val, exi := args["account"]
-		val2, exi2 := args["password"]
+		fmt.Fprint(w, ser.Ht.GetAll())
+	case "get":
+		ac, exi := args["account"]
+		val, exist := args["amount"]
+
+		if exist && exi {
+			amnt, err := strconv.Atoi(val[0])
+			if err == nil {
+				uid := ser.Ur.GetUIDFromAccount(ac[0])
+				fmt.Fprint(w, ser.Ht.GetHistory(uid, amnt))
+			} else {
+				fmt.Fprint(w, "amount was not an integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "delete":
+		ac, exi := args["account"]
+		pdid, exi2 := args["pdid"]
 
 		if exi && exi2 {
-			fmt.Fprint(w, ser.us.Login(val[0], val2[0]))
+			pd, err := strconv.Atoi(pdid[0])
+			if err == nil {
+				uid := ser.Ur.GetUIDFromAccount(ac[0])
+				fmt.Fprint(w, ser.Ht.GetHistory(uid, pd))
+			} else {
+				fmt.Fprint(w, "pdid was not an integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "add":
+		ac, exi := args["account"]
+		pdid, exi2 := args["pd_id"]
+
+		if exi && exi2 {
+			pd, err := strconv.Atoi(pdid[0])
+			if err == nil {
+				uid := ser.Ur.GetUIDFromAccount(ac[0])
+				fmt.Fprint(w, ser.Ht.AddHistory(uid, pd))
+			} else {
+				fmt.Fprint(w, "pd_id was not an integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	default:
+		http.NotFound(w, r)
+	}
+}
+
+func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+	if len(path) != 2 {
+		http.NotFound(w, r)
+		return
+	}
+
+	switch path[1] {
+	case "all":
+		fmt.Fprintf(w, ser.Ur.GetAllUserData())
+	case "login":
+		account, exi := args["account"]
+		pass, exi2 := args["password"]
+
+		if exi && exi2 {
+			valid := ser.Ur.Login(account[0], pass[0])
+			fmt.Fprint(w, valid)
+
+			// set cookies to maintain login condition
+			if valid {
+				ser.setCookies(w, r, account[0], pass[0])
+			}
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -53,7 +122,7 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 		val2, exi2 := args["password"]
 
 		if exi && exi2 {
-			fmt.Fprint(w, ser.us.DeleteUser(val[0], val2[0]))
+			fmt.Fprint(w, ser.Ur.DeleteUser(val[0], val2[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -63,7 +132,7 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 		val3, exi3 := args["name"]
 
 		if exi && exi2 && exi3 {
-			fmt.Fprint(w, ser.us.Regist(val[0], val2[0], val3[0]))
+			fmt.Fprint(w, ser.Ur.Regist(val[0], val2[0], val3[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -72,7 +141,7 @@ func (ser *server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 	}
 }
 
-func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
 	if len(path) != 2 {
 		http.NotFound(w, r)
 		return
@@ -80,7 +149,7 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 
 	switch path[1] {
 	case "all":
-		fmt.Fprint(w, ser.pr.GetAll())
+		fmt.Fprint(w, ser.Pd.GetAll())
 	case "add":
 		exist := make([]bool, 7)
 		var name, price, des, amount, account, bid, date []string
@@ -99,24 +168,24 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			b := (bid[0] == "true")
 
 			if err1 == nil && err2 == nil {
-				fmt.Fprint(w, ser.pr.AddProduct(name[0], p, des[0], a, account[0], b, date[0]))
+				fmt.Fprint(w, ser.Pd.AddProduct(name[0], p, des[0], a, account[0], b, date[0]))
 			} else {
-				fmt.Fprint(w, "price or amount was not an integer.")
+				fmt.Fprint(w, "price Od amount was not an integer.")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
 	case "delete":
-	case "newproduct":
+	case "newest":
 		val, exi := args["amount"]
 
 		if exi {
 			v, err := strconv.Atoi(val[0])
 
 			if err == nil {
-				fmt.Fprint(w, ser.pr.GetNewest(v))
+				fmt.Fprint(w, ser.Pd.GetNewest(v))
 			} else {
-				fmt.Fprint(w, "price or amount was not an integer.")
+				fmt.Fprint(w, "amount was not an integer.")
 			}
 
 		} else {
@@ -126,7 +195,7 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 		val, exi := args["name"]
 
 		if exi {
-			fmt.Fprint(w, ser.pr.SearchProductsByName(val[0]))
+			fmt.Fprint(w, ser.Pd.SearchProductsByName(val[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
@@ -145,9 +214,9 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 			ev, err3 := strconv.Atoi(eval[0])
 
 			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.pr.EnhanceSearchProductsByName(name[0], mi, ma, ev))
+				fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name[0], mi, ma, ev))
 			} else {
-				fmt.Fprint(w, "min price, max price or evaluation was not as interger")
+				fmt.Fprint(w, "min price, max price Od evaluation was not as interger")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
@@ -157,17 +226,20 @@ func (ser *server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 	}
 }
 
-func help(w http.ResponseWriter) {
+func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, `
 		<html>
-			<p> 
+			<H1>後端API</H1>
+			<H4>測試用帳密:account=1234&password=1234<br>
+			<a href=https://se-ssb.herokuapp.com/user/login?account=1234&password=1234>登入</a><br>
+			</H4>
+			<p>
 				/user/all<br>
 				列出所有帳號(僅限開發期間)<br>
 				<a href=/user/all> /user/all </a><br><br>
 			</p>
 			<p> 
-				/user/login?account=...&password=...<br>
-				登入是否成功(bool)<br>
+				/history/add?account=...&password=..pdidb1			登入是否成功(bool)<br>
 				e.g.登入帳號為test@gmail.com以及密碼為0000的使用者<br>
 				<a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
 				https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000</a>
@@ -197,8 +269,8 @@ func help(w http.ResponseWriter) {
 			<p>
 				/product/newest?amount=...<br>
 				e.g.顯示最新商品(3筆資料)<br>
-				<a href=https://se-ssb.herokuapp.com/product?amount=3>
-				https://se-ssb.herokuapp.com/product?amount=3</a>
+				<a href=https://se-ssb.herokuapp.com/product/newest?amount=3>
+				https://se-ssb.herokuapp.com/product/newest?amount=3</a>
 				<br><br>
 			<p> 
 				/product/add?name=...&price=...&description=...&amount=...&account=...&bid=...&date=...<br>
@@ -222,6 +294,35 @@ func help(w http.ResponseWriter) {
 				e.g.查詢商品名中含有"ifone"的商品，最低價格為10，最高價格為5000，最低評價為2<br>
 				<a href=https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2>
 				https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2</a>
+				<br><br>
+			</p>
+			<p> 
+				/history/all<br>
+				列出歷史紀錄(僅限開發期間)<br>
+				<a href=/history/all> /history/all </a><br><br>
+			</p>
+			<p> 
+				/history/add?account=...&pdid=...<br>
+				增加一筆新的歷史紀錄<br>
+				e.g.新增帳號為test@gmail.com以及商品id為1的歷史紀錄<br>
+				<a href=https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1>
+				https://se-ssb.herokuapp.com/history/add?account=test@gmail.com&pdid=1</a>
+				<br><br>
+			</p>
+			<p>
+				/history/get?account=...&amount=...<br>
+				查詢歷史紀錄<br>
+				e.g.查詢帳號為test2@gmail.com的10歷史紀錄<br>
+				<a href=https://se-ssb.herokuapp.com/history/get?account=test2@gmail.com&amount=10>
+				https://se-ssb.herokuapp.com/history/get?account=test2@gmail.com&amount=10</a>
+				<br><br>
+			</p>
+			<p>
+				/history/delete?account=...&pdid=...<br>
+				刪除歷史紀錄<br>
+				e.g.刪除帳號test3@gmail.com以及商品編號為2的歷史紀錄<br>
+				<a href=https://se-ssb.herokuapp.com/history/delete?account=test3@gmail.com&pdid=2>
+				https://se-ssb.herokuapp.com/history/delete?account=test3@gmail.com&pdid=2</a>
 				<br><br>
 			</p>
 		</html>

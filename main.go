@@ -6,6 +6,7 @@ import (
 	"se/history"
 	"se/order"
 	"se/product"
+	"se/server"
 	"se/user"
 )
 
@@ -15,12 +16,12 @@ func main() {
 
 	database.TestInsert(db)
 
-	service := server{
-		db: db,
-		us: user.NewUser(db),
-		pr: product.ProductInit(db),
-		or: order.NewOrder(db),
-		hi: history.NewHistory(db),
-		bi: bid.NewBid(db)}
-	service.server()
+	service := server.Server{
+		DB: db,
+		Ur: user.NewUser(db),
+		Pd: product.ProductInit(db),
+		Od: order.NewOrder(db),
+		Ht: history.NewHistory(db),
+		Bd: bid.NewBid(db)}
+	service.Serve()
 }

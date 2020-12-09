@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"os"
 
+	// import go-sqlit3 for the sql driver
 	_ "github.com/mattn/go-sqlite3"
 )
 

@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"time"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func createTables() {
