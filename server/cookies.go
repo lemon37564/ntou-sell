@@ -13,10 +13,10 @@ func (ser *Server) setCookies(w http.ResponseWriter, r *http.Request, account, p
 	cookie := &http.Cookie{Name: "seAccount", Value: account, Expires: expire, Secure: false, Path: "/"}
 	cookie2 := &http.Cookie{Name: "sePassword", Value: password, Expires: expire, Secure: false, Path: "/"}
 
-	http.SetCookie(w, cookie)
+	//http.SetCookie(w, cookie)
 	r.AddCookie(cookie)
 
-	http.SetCookie(w, cookie2)
+	//http.SetCookie(w, cookie2)
 	r.AddCookie(cookie2)
 
 	redirectURL := "/"
