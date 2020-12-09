@@ -17,6 +17,8 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 	} else if path[0] == "user" {
 		// user functions need to be in front of verification, or no one can log in anymore
 		ser.fetchUser(w, r, path, args)
+	} else if path[0] == "success" {
+		fmt.Fprint(w, "登入成功!")
 	} else {
 		if !ser.verify(w, r) {
 			fmt.Fprint(w, "請先登入!!")
@@ -34,8 +36,6 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 			ser.fetchBid(w, r, path, args)
 		case "cart":
 			ser.fetchCart(w, r, path, args)
-		case "success":
-			fmt.Fprint(w, "登入成功!")
 
 		default:
 			http.NotFound(w, r)
@@ -120,7 +120,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 
 			// set cookies to maintain login condition
 			if valid {
-				ser.setCookies(w, r, account[0], pass[0])
+				ser.sess.setSessionID(w, r)
 				http.Redirect(w, r, `/success`, 301)
 			}
 		} else {

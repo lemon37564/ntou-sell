@@ -21,6 +21,8 @@ type Server struct {
 	Ht *history.History
 	Bd *bid.Bid
 	Ct *cart.Cart
+
+	sess Session
 }
 
 // Serve start all functions provided for user
@@ -50,14 +52,5 @@ func (ser *Server) service(w http.ResponseWriter, r *http.Request) {
 
 // verify if user is legel by using cookies
 func (ser *Server) verify(w http.ResponseWriter, r *http.Request) bool {
-	cookie, cookie2, exist := ser.getCookies(w, r)
-
-	if !exist {
-		return false
-	}
-
-	account := cookie.Value
-	password := cookie2.Value
-
-	return ser.Ur.Login(account, password)
+	return ser.sess.sessionValid(w, r)
 }

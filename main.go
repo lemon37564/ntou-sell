@@ -17,11 +17,12 @@ func main() {
 	database.TestInsert(db)
 
 	service := server.Server{
-		DB: db,
-		Ur: user.NewUser(db),
-		Pd: product.ProductInit(db),
-		Od: order.NewOrder(db),
-		Ht: history.NewHistory(db),
-		Bd: bid.NewBid(db)}
+		DB:   db,
+		Ur:   user.NewUser(db),
+		Pd:   product.ProductInit(db),
+		Od:   order.NewOrder(db),
+		Ht:   history.NewHistory(db),
+		Bd:   bid.NewBid(db),
+		sess: server.Session{}}
 	service.Serve()
 }
