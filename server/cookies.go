@@ -19,9 +19,8 @@ func (ser *Server) setCookies(w http.ResponseWriter, r *http.Request, account, p
 	http.SetCookie(w, cookie2)
 	r.AddCookie(cookie2)
 
-	log.Println("cookies set")
-
-	http.Redirect(w, r, "/", 200)
+	redirectURL := "/"
+	http.Redirect(w, r, redirectURL, 200)
 }
 
 func (ser *Server) getCookies(w http.ResponseWriter, r *http.Request) (*http.Cookie, *http.Cookie, bool) {
