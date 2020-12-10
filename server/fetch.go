@@ -126,6 +126,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 			if valid {
 				time.Sleep(time.Millisecond * 10)
 				ser.Sess.setSessionID(w, r)
+				http.Redirect(w, r, `/success`, 301)
 			} else {
 				fmt.Fprint(w, "登入失敗")
 			}
