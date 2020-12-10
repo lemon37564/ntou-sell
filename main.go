@@ -2,10 +2,12 @@ package main
 
 import (
 	"se/bid"
+	"se/cart"
 	"se/database"
 	"se/history"
 	"se/order"
 	"se/product"
+	"se/sell"
 	"se/server"
 	"se/user"
 )
@@ -23,6 +25,8 @@ func main() {
 		Od:   order.NewOrder(db),
 		Ht:   history.NewHistory(db),
 		Bd:   bid.NewBid(db),
+		Ct:   cart.NewCart(db),
+		Se:   sell.NewSell(db),
 		Sess: server.NewSession()}
 	service.Serve()
 }

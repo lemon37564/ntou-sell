@@ -246,7 +246,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request, path []str
 
 	switch path[1] {
 	case "get":
-		uid, ex1 := args["id"]
+		uid, ex1 := args["uid"]
 
 		if ex1 {
 			i, err1 := strconv.Atoi(uid[0])
@@ -307,15 +307,15 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request, path []strin
 
 	switch path[1] {
 	case "get": //For single bid product
-		uid, ex1 := args["id"]
+		pdid, ex1 := args["pdid"]
 
 		if ex1 {
-			i, err1 := strconv.Atoi(uid[0])
+			i, err1 := strconv.Atoi(pdid[0])
 			if err1 == nil {
-				fmt.Fprint(w, ser.Bd.GetProductInfo(i))
+
 				fmt.Fprint(w, ser.Bd.GetProductBidInfo(i))
 			} else {
-				fmt.Fprint(w, "User id not integer")
+				fmt.Fprint(w, "product id not integer")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
@@ -367,8 +367,8 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []stri
 	}
 
 	switch path[1] {
-	case "add": //For single bid product
-		uid, ex1 := args["id"]
+	case "add": //For single product
+		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
 
@@ -403,7 +403,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []stri
 			fmt.Fprint(w, "argument error")
 		}
 	case "modf":
-		uid, ex1 := args["id"]
+		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
 
@@ -421,7 +421,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []stri
 			fmt.Fprint(w, "argument error")
 		}
 	case "tal":
-		uid, ex1 := args["id"]
+		uid, ex1 := args["uid"]
 
 		if ex1 {
 			u, err1 := strconv.Atoi(uid[0])
@@ -436,7 +436,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []stri
 			fmt.Fprint(w, "argument error")
 		}
 	case "geps": //拿商品
-		uid, ex1 := args["id"]
+		uid, ex1 := args["uid"]
 
 		if ex1 {
 			u, err1 := strconv.Atoi(uid[0])
@@ -595,6 +595,102 @@ func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 				e.g.刪除帳號test3@gmail.com以及商品編號為2的歷史紀錄<br>
 				<a href=https://se-ssb.herokuapp.com/history/delete?account=test3@gmail.com&pdid=2>
 				https://se-ssb.herokuapp.com/history/delete?account=test3@gmail.com&pdid=2</a>
+				<br><br>
+			</p>
+			<p>
+				/order/get?uid=...<br>
+				取得使用者訂單資訊<br>
+				e.g.使用者進入訂單時顯示他購買東西 (使用前要先買喔)<br>
+				<a href=https://se-ssb.herokuapp.com/order/get?uid=1>
+				https://se-ssb.herokuapp.com/history/order/get?uid=1</a>
+				<br><br>
+			</p>
+			<p>
+				/order/add?uid=...&pdid=...&amount=...<br>
+				把商品加入訂單<br>
+				e.g.使用者在cart點選購買時可以加入訂單<br>
+				<a href=https://se-ssb.herokuapp.com/order/add?uid=1&pdid=2&amount=2>
+				https://se-ssb.herokuapp.com/order/add?uid=1&pdid=2&amount=2</a>
+				<br><br>
+			</p>
+			<p>
+				/order/delete?uid=...&pdid=...<br>
+				把商品從訂單中刪除<br>
+				e.g.使用者可以把order裡的東西刪掉(這個需要改，應該要買賣家溝通才能刪)<br>
+				<a href=https://se-ssb.herokuapp.com/order/delete?uid=1&pdid=2>
+				https://se-ssb.herokuapp.com/order/delete?uid=1&pdid=2</a>
+				<br><br>
+			</p>
+			<p>
+				/bid/get?pdid=...<br>
+				在商品頁面取得競標商品資訊<br>
+				e.g.商品頁面選取競標資訊<br>
+				<a href=https://se-ssb.herokuapp.com/bid/get?pdid=6>
+				https://se-ssb.herokuapp.com/bid/get?pdid=6</a>
+				<br><br>
+			</p>
+			<p>
+				/bid/set?pdid=...&uid=...&money=...<br>
+				更新競標資訊<br>
+				e.g.買家競標了商品<br>
+				<a href=https://se-ssb.herokuapp.com/bid/set?pdid=6&uid=1&money=1000>
+				https://se-ssb.herokuapp.com/bid/set?pdid=6&uid=1&money=1000</a>
+				<br><br>
+			</p>
+			<p>
+				/bid/delete?pdid=...<br>
+				刪除競標商品<br>
+				e.g.在競標商品已被購買情況下，前端呼叫此功能<br>
+				<a href=https://se-ssb.herokuapp.com/bid/delete?pdid=6>
+				https://se-ssb.herokuapp.com/bid/delete?pdid=6</a>
+				<br><br>
+			</p>
+			<p>
+				/cart/add?uid=...&pdid=...&amount=...<br>
+				加入購物車<br>
+				e.g.商品頁面確定購買時須用到此功能<br>
+				<a href=https://se-ssb.herokuapp.com/cart/add?uid=1&pdid=2&amount=3>
+				https://se-ssb.herokuapp.com/cart/add?uid=1&pdid=2&amount=3</a>
+				<br><br>
+			</p>
+			<p>
+				/cart/remo?uid=...&pdid=...<br>
+				刪除在購物車的商品<br>
+				e.g.<br>
+				<a href=https://se-ssb.herokuapp.com/cart/add?uid=1&pdid=2>
+				https://se-ssb.herokuapp.com/cart/add?uid=1&pdid=2</a>
+				<br><br>
+			</p>
+			<p>
+				/cart/modf?uid=...&pdid=...&amount=...<br>
+				在購物車更改數量<br>
+				e.g.<br>
+				<a href=https://se-ssb.herokuapp.com/cart/modf?uid=1&pdid=2&amount=4>
+				https://se-ssb.herokuapp.com/cart/modf?uid=1&pdid=2&amount=4</a>
+				<br><br>
+			</p>
+			<p>
+				/cart/tal?uid=...<br>
+				回傳目前在購物車選取物品的總金額<br>
+				e.g.<br>
+				<a href=https://se-ssb.herokuapp.com/cart/tal?uid=1>
+				https://se-ssb.herokuapp.com/cart/tal?uid=1</a>
+				<br><br>
+			</p>
+			<p>
+				/cart/geps?uid=...<br>
+				回傳放在購物車的商品們<br>
+				e.g.<br>
+				<a href=https://se-ssb.herokuapp.com/cart/geps?uid=1>
+				https://se-ssb.herokuapp.com/cart/geps?uid=1</a>
+				<br><br>
+			</p>
+			<p>
+				/sell/set?pdname=...&description=...&amount=...&account=...&sellerID=...&bid=...&date=...&dateLine=...<br>
+				販賣商品<br>
+				e.g.在販賣網頁販賣商品<br>
+				<a href=https://se-ssb.herokuapp.com/sell/set?pdname="火箭"&description="這是火箭"&amount="3"&account="test@gmail.com"&sellerID="2"&bid="true"&date="1229"&dateLine="1231">
+				https://se-ssb.herokuapp.com/sell/set?pdname="火箭"&description="這是火箭"&amount="3"&account="test@gmail.com"&sellerID="2"&bid="true"&date="1229"&dateLine="1231"</a>
 				<br><br>
 			</p>
 		</html>

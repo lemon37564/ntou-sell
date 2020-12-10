@@ -11,7 +11,7 @@ type Sell struct {
 	fn2 *database.BidDB
 }
 
-func NewProduct(db *sql.DB) (s *Sell) {
+func NewSell(db *sql.DB) (s *Sell) {
 	s.fn = database.ProductDBInit(db)
 	return
 }
