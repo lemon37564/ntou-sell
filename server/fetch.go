@@ -509,7 +509,8 @@ func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 				<a href=/user/all> /user/all </a><br><br>
 			</p>
 			<p> 
-				/history/add?account=...&password=..pdidb1			登入是否成功(bool)<br>
+				/history/add?account=...&password=...<br>
+				登入是否成功(bool)<br>
 				e.g.登入帳號為test@gmail.com以及密碼為0000的使用者<br>
 				<a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
 				https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000</a>
