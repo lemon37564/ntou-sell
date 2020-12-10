@@ -38,7 +38,7 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 		case "cart":
 			ser.fetchCart(w, r, path, args)
 		case "search":
-			ser.fetchSearch(w, r, path, args)
+			ser.fetchSell(w, r, path, args)
 
 		default:
 			http.NotFound(w, r)
@@ -480,11 +480,17 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request, path []stri
 
 		if all(exist) {
 			pr, err1 := strconv.Atoi(price[0])
-			pr, err1 := strconv.Atoi(price[0])
-			pr, err1 := strconv.Atoi(price[0])
-			pr, err1 := strconv.Atoi(price[0])
-			pr, err1 := strconv.Atoi(price[0])
-			fmt.Fprint(w, ser.Se.Search(u))
+			amo, err2 := strconv.Atoi(amount[0])
+			sel, err3 := strconv.Atoi(sellerID[0])
+			var bi bool
+			if bid[0] == "true" {
+				bi = true
+			}
+			if err1 == nil && err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Se.SetProductpdid(pdname[0], pr, description[0], amo, account[0], sel, bi, date[0], dateLine[0]))
+			} else {
+				fmt.Fprint(w, "data has something")
+			}
 
 		} else {
 			fmt.Fprint(w, "argument error")
