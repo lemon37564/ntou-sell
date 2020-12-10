@@ -15,6 +15,7 @@ import (
 	"time"
 )
 
+// Server handle all services
 type Server struct {
 	DB *sql.DB
 	Ur *user.User
@@ -25,7 +26,7 @@ type Server struct {
 	Ct *cart.Cart
 	Se *search.Search
 
-	Sess        *Session
+	Sess        *session
 	lastRefresh time.Time
 }
 
@@ -57,7 +58,7 @@ func (ser *Server) service(w http.ResponseWriter, r *http.Request) {
 // verify if user is legel by using cookies
 func (ser *Server) verify(w http.ResponseWriter, r *http.Request) bool {
 
-	// check sessions is valid(delete it if not)
+	// check sessions is valid (delete it if not)
 	if time.Since(ser.lastRefresh) > refreshTime {
 		now := time.Now()
 		ser.lastRefresh = now

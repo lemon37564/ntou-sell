@@ -3,7 +3,6 @@ package server
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -16,21 +15,22 @@ const (
 	refreshTime = time.Hour
 )
 
-type Session struct {
+type session struct {
 	lock sync.Mutex
 
 	// use to record valid sessions
 	list map[string]time.Time
 }
 
-func NewSession() *Session {
-	s := new(Session)
+// NewSession return a session handler
+func NewSession() *session {
+	s := new(session)
 	s.list = make(map[string]time.Time)
 
 	return s
 }
 
-func (se *Session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
+func (se *session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
 	se.lock.Lock()
 	defer se.lock.Unlock()
 
@@ -43,7 +43,7 @@ func (se *Session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
 	return false
 }
 
-func (se *Session) setSessionID(w http.ResponseWriter, r *http.Request) {
+func (se *session) setSessionID(w http.ResponseWriter, r *http.Request) {
 	se.lock.Lock()
 	defer se.lock.Unlock()
 
@@ -53,13 +53,12 @@ func (se *Session) setSessionID(w http.ResponseWriter, r *http.Request) {
 	se.list[id] = time.Now().Add(lifeTime)
 }
 
-func (se *Session) genSessID() string {
+func (se *session) genSessID() string {
 	id := make([]byte, idLen)
 
 	if _, err := rand.Read(id); err != nil {
 		panic(err)
 	}
 
-	log.Println(base64.URLEncoding.EncodeToString(id))
 	return base64.URLEncoding.EncodeToString(id)
 }
