@@ -113,10 +113,6 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 	case "all":
 		fmt.Fprintf(w, ser.Ur.GetAllUserData())
 	case "login":
-		if ser.Sess.sessionValid(w, r) {
-			fmt.Fprint(w, "已經登入過!")
-			return
-		}
 
 		account, exi := args["account"]
 		pass, exi2 := args["password"]
@@ -128,7 +124,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request, path []stri
 			if valid {
 				time.Sleep(time.Millisecond * 10)
 				ser.Sess.setSessionID(w, r)
-				http.Redirect(w, r, `/success`, 300)
+				http.Redirect(w, r, `/success`, 301)
 			} else {
 				fmt.Fprint(w, "登入失敗")
 			}
