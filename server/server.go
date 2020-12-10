@@ -10,6 +10,7 @@ import (
 	"se/history"
 	"se/order"
 	"se/product"
+	"se/search"
 	"se/user"
 	"time"
 )
@@ -23,6 +24,7 @@ type Server struct {
 	Ht *history.History
 	Bd *bid.Bid
 	Ct *cart.Cart
+	Se *search.Search
 
 	Sess        *session
 	lastRefresh time.Time
