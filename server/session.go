@@ -20,6 +20,8 @@ type session struct {
 
 	// use to record valid sessions
 	list map[string]time.Time
+
+	lastRefresh time.Time
 }
 
 // NewSession return a session handler
@@ -58,6 +60,20 @@ func (se *session) setSessionID(w http.ResponseWriter, r *http.Request) {
 	setCookies(w, r, id)
 
 	se.list[id] = time.Now().Add(lifeTime)
+}
+
+func (se *session) sessionRefresh() {
+	// check sessions is valid (delete it if not)
+	if time.Since(se.lastRefresh) > refreshTime {
+		now := time.Now()
+		se.lastRefresh = now
+
+		for i, v := range se.list {
+			if now.After(v) {
+				delete(se.list, i)
+			}
+		}
+	}
 }
 
 func (se *session) genSessID() string {

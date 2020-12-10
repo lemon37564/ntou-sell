@@ -21,10 +21,6 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 	} else if path[0] == "success" {
 		fmt.Fprint(w, "登入成功!")
 	} else {
-		if !ser.verify(w, r) {
-			fmt.Fprint(w, "請先登入!!")
-			return
-		}
 
 		switch path[0] {
 		case "product":
@@ -87,7 +83,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request, path []s
 		}
 	case "add":
 		ac, exi := args["account"]
-		pdid, exi2 := args["pd_id"]
+		pdid, exi2 := args["pdid"]
 
 		if exi && exi2 {
 			pd, err := strconv.Atoi(pdid[0])
@@ -95,7 +91,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request, path []s
 				uid := ser.Ur.GetUIDFromAccount(ac[0])
 				fmt.Fprint(w, ser.Ht.AddHistory(uid, pd))
 			} else {
-				fmt.Fprint(w, "pd_id was not an integer")
+				fmt.Fprint(w, "pdid was not an integer")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
@@ -241,6 +237,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request, path []s
 		http.NotFound(w, r)
 	}
 }
+
 func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
 	if len(path) != 2 {
 		http.NotFound(w, r)
@@ -301,6 +298,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request, path []str
 	}
 
 }
+
 func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
 	if len(path) != 2 {
 		http.NotFound(w, r)
@@ -361,6 +359,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request, path []strin
 		http.NotFound(w, r)
 	}
 }
+
 func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
 	if len(path) != 2 {
 		http.NotFound(w, r)
@@ -454,6 +453,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []stri
 		http.NotFound(w, r)
 	}
 }
+
 func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
 	if len(path) != 2 {
 		http.NotFound(w, r)
@@ -496,6 +496,7 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request, path []stri
 		http.NotFound(w, r)
 	}
 }
+
 func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, `
 		<html>
