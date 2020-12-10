@@ -37,6 +37,8 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 			ser.fetchBid(w, r, path, args)
 		case "cart":
 			ser.fetchCart(w, r, path, args)
+		case "search":
+			ser.fetchSearch(w, r, path, args)
 
 		default:
 			http.NotFound(w, r)
@@ -452,6 +454,42 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request, path []stri
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+	default:
+		http.NotFound(w, r)
+	}
+}
+func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request, path []string, args map[string][]string) {
+	if len(path) != 2 {
+		http.NotFound(w, r)
+		return
+	}
+
+	switch path[1] {
+	case "set": //For single bid product
+		exist := make([]bool, 9)
+		var pdname, price, description, amount, account, sellerID, bid, date, dateLine []string
+		pdname, exist[0] = args["pdname"]
+		price, exist[1] = args["price"]
+		description, exist[2] = args["description"]
+		amount, exist[3] = args["amount"]
+		account, exist[4] = args["account"]
+		sellerID, exist[5] = args["sellerID"]
+		bid, exist[6] = args["bid"]
+		date, exist[7] = args["date"]
+		dateLine, exist[8] = args["dateLine"]
+
+		if all(exist) {
+			pr, err1 := strconv.Atoi(price[0])
+			pr, err1 := strconv.Atoi(price[0])
+			pr, err1 := strconv.Atoi(price[0])
+			pr, err1 := strconv.Atoi(price[0])
+			pr, err1 := strconv.Atoi(price[0])
+			fmt.Fprint(w, ser.Se.Search(u))
+
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+
 	default:
 		http.NotFound(w, r)
 	}
