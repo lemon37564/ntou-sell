@@ -36,8 +36,8 @@ func (se *session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
 
 	cookie, exist := getCookies(w, r)
 	if exist {
-		val, exi := se.list[cookie.Value]
-		return exi && val.After(time.Now())
+		_, exi := se.list[cookie.Value]
+		return exi
 	}
 
 	return false
