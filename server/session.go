@@ -37,7 +37,10 @@ func (se *session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
 	cookie, exist := getCookies(w, r)
 	if exist {
 		_, exi := se.list[cookie.Value]
-		return exi
+		if !exi {
+			se.setSessionID(w, r)
+		}
+		return true
 	}
 
 	return false
@@ -51,6 +54,7 @@ func (se *session) setSessionID(w http.ResponseWriter, r *http.Request) {
 	setCookies(w, r, id)
 
 	se.list[id] = time.Now().Add(lifeTime)
+	http.Redirect(w, r, `/success`, 301)
 }
 
 func (se *session) genSessID() string {
