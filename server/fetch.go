@@ -5,16 +5,18 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+	path := mux.Vars(r)
 	args := r.URL.Query()
 
-	switch path {
-	case "/history/all":
+	switch path["key"] {
+	case "all":
 		fmt.Fprint(w, ser.Ht.GetAll())
-	case "/history/get":
+	case "get":
 		ac, exi := args["account"]
 		val, exist := args["amount"]
 
@@ -29,7 +31,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/history/delete":
+	case "delete":
 		ac, exi := args["account"]
 		pdid, exi2 := args["pdid"]
 
@@ -44,7 +46,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/history/add":
+	case "add":
 		ac, exi := args["account"]
 		pdid, exi2 := args["pdid"]
 
@@ -65,13 +67,13 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+	path := mux.Vars(r)
 	args := r.URL.Query()
 
-	switch path {
-	case "/user/all":
+	switch path["key"] {
+	case "all":
 		fmt.Fprintf(w, ser.Ur.GetAllUserData())
-	case "/user/login":
+	case "login":
 
 		account, exi := args["account"]
 		pass, exi2 := args["password"]
@@ -90,7 +92,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/user/delete":
+	case "delete":
 		val, exi := args["account"]
 		val2, exi2 := args["password"]
 
@@ -99,7 +101,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/user/regist":
+	case "regist":
 		val, exi := args["account"]
 		val2, exi2 := args["password"]
 		val3, exi3 := args["name"]
@@ -115,13 +117,13 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+	path := mux.Vars(r)
 	args := r.URL.Query()
 
-	switch path {
-	case "/product/all":
+	switch path["key"] {
+	case "all":
 		fmt.Fprint(w, ser.Pd.GetAll())
-	case "/product/add":
+	case "add":
 		exist := make([]bool, 7)
 		var name, price, des, amount, account, bid, date []string
 
@@ -146,8 +148,8 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/product/delete":
-	case "/product/newest":
+	case "delete":
+	case "newest":
 		val, exi := args["amount"]
 
 		if exi {
@@ -162,7 +164,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/product/search":
+	case "search":
 		val, exi := args["name"]
 
 		if exi {
@@ -170,7 +172,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/product/filterSearch":
+	case "filterSearch":
 		exist := make([]bool, 4)
 		var name, min, max, eval []string
 
@@ -198,11 +200,11 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+	path := mux.Vars(r)
 	args := r.URL.Query()
 
-	switch path {
-	case "/order/get":
+	switch path["key"] {
+	case "get":
 		uid, ex1 := args["uid"]
 
 		if ex1 {
@@ -215,7 +217,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/order/add":
+	case "add":
 		exist := make([]bool, 3)
 		var uid, pdid, amount []string
 
@@ -235,7 +237,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/order/del":
+	case "del":
 		uid, exi := args["uid"]
 		pdid, exi2 := args["pdid"]
 		if exi && exi2 {
@@ -257,11 +259,11 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+	path := mux.Vars(r)
 	args := r.URL.Query()
 
-	switch path {
-	case "/bid/get": //For single bid product
+	switch path["key"] {
+	case "get": //For single bid product
 		pdid, ex1 := args["pdid"]
 
 		if ex1 {
@@ -275,7 +277,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/bid/set":
+	case "set":
 		exist := make([]bool, 3)
 		var pdid, uid, money []string
 
@@ -296,7 +298,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/bid/delete":
+	case "delete":
 		pdid, ex1 := args["pdid"]
 
 		if ex1 {
@@ -316,11 +318,11 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+	path := mux.Vars(r)
 	args := r.URL.Query()
 
-	switch path {
-	case "/cart/add": //For single product
+	switch path["key"] {
+	case "add": //For single product
 		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
@@ -338,7 +340,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/cart/remo":
+	case "remo":
 		uid, ex1 := args["id"]
 		pdid, ex2 := args["pdid"]
 
@@ -355,7 +357,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/cart/modf":
+	case "modf":
 		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
@@ -373,7 +375,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/cart/tal":
+	case "tal":
 		uid, ex1 := args["uid"]
 
 		if ex1 {
@@ -388,7 +390,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "/cart/geps": //拿商品
+	case "geps": //拿商品
 		uid, ex1 := args["uid"]
 
 		if ex1 {
@@ -408,11 +410,11 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
+	path := mux.Vars(r)
 	args := r.URL.Query()
 
-	switch path {
-	case "/sell/set": //For single bid product
+	switch path["key"] {
+	case "set": //For single bid product
 		exist := make([]bool, 9)
 		var pdname, price, description, amount, account, sellerID, bid, date, dateLine []string
 		pdname, exist[0] = args["pdname"]

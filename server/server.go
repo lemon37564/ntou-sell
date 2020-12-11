@@ -12,6 +12,8 @@ import (
 	"se/product"
 	"se/sell"
 	"se/user"
+
+	"github.com/gorilla/mux"
 )
 
 // Server handle all services
@@ -33,15 +35,21 @@ func (ser *Server) Serve() {
 	port := os.Getenv("PORT")
 	log.Println("Service running on port:", port)
 
-	http.HandleFunc("/", ser.help)
-	http.HandleFunc("/help", ser.help)
-	http.HandleFunc("/bid", ser.fetchBid)
-	http.HandleFunc("/cart", ser.fetchCart)
-	http.HandleFunc("/history", ser.fetchHistory)
-	http.HandleFunc("/order", ser.fetchOrder)
-	http.HandleFunc("/product", ser.fetchProduct)
-	http.HandleFunc("/sell", ser.fetchSell)
-	http.HandleFunc("/user", ser.fetchUser)
+	r := mux.NewRouter()
+
+	r.HandleFunc("/", ser.help)
+	r.HandleFunc("/help", ser.help)
+	r.HandleFunc("/bid/{key}", ser.fetchBid)
+	r.HandleFunc("/cart/{key}", ser.fetchCart)
+	r.HandleFunc("/history/{key}", ser.fetchHistory)
+	r.HandleFunc("/order/{key}", ser.fetchOrder)
+	r.HandleFunc("/product/{key}", ser.fetchProduct)
+	r.HandleFunc("/sell/{key}", ser.fetchSell)
+	r.HandleFunc("/user/{key}", ser.fetchUser)
+
+	http.Handle("/", r)
+
+	port = "8080"
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
