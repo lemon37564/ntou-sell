@@ -448,7 +448,7 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 			if err1 == nil && err2 == nil && err3 == nil {
 				fmt.Fprint(w, ser.Se.SetProductpdid(pdname[0], pr, description[0], amo, account[0], sel, bi, date[0], dateLine[0]))
 			} else {
-				fmt.Fprint(w, "data has something")
+				fmt.Fprint(w, "data has wrong")
 			}
 
 		} else {

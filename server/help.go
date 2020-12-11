@@ -191,8 +191,8 @@ const helpPage = `
 		/sell/set?pdname=...&price=...&description=...&amount=...&account=...&sellerID=...&bid=...&date=...&dateLine=...<br>
 		販賣商品<br>
 		e.g.在販賣網頁販賣商品<br>
-		<a href=https://se-ssb.herokuapp.com/sell/set?pdname="火箭"&price=50&description="這是火箭"&amount="3"&account="test@gmail.com"&sellerID="2"&bid="true"&date="1229"&dateLine="1231">
-		https://se-ssb.herokuapp.com/sell/set?pdname="火箭"&price=50&description="這是火箭"&amount="3"&account="test@gmail.com"&sellerID="2"&bid="true"&date="1229"&dateLine="1231"</a>
+		<a href=https://se-ssb.herokuapp.com/sell/set?pdname="火箭"&price="50"&description="這是火箭"&amount="3"&account="test@gmail.com"&sellerID="2"&bid="true"&date="1229"&dateLine="1231">
+		https://se-ssb.herokuapp.com/sell/set?pdname="火箭"&price="50"&description="這是火箭"&amount="3"&account="test@gmail.com"&sellerID="2"&bid="true"&date="1229"&dateLine="1231"</a>
 		<br><br>
 	</p>
 </html>
