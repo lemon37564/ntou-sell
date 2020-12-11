@@ -445,6 +445,15 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 			if bid[0] == "true" {
 				bi = true
 			}
+			if err1 == nil {
+				fmt.Fprint(w, "1")
+			}
+			if err2 == nil {
+				fmt.Fprint(w, "2")
+			}
+			if err3 == nil {
+				fmt.Fprint(w, "3")
+			}
 			if err1 == nil && err2 == nil && err3 == nil {
 				fmt.Fprint(w, ser.Se.SetProductpdid(pdname[0], pr, description[0], amo, account[0], sel, bi, date[0], dateLine[0]))
 			} else {
