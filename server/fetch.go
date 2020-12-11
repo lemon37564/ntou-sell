@@ -442,6 +442,9 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 			amo, err2 := strconv.Atoi(amount[0])
 			sel, err3 := strconv.Atoi(sellerID[0])
 			var bi bool
+			if bid[0] == "true" {
+				bi = true
+			}
 
 			if err1 == nil && err2 == nil && err3 == nil {
 				fmt.Fprint(w, ser.Se.SetProductpdid(pdname[0], pr, description[0], amo, account[0], sel, bi, date[0], dateLine[0]))
