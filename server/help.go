@@ -119,8 +119,8 @@ const helpPage = `
 		/order/del?uid=...&pdid=...<br>
 		把商品從訂單中刪除<br>
 		e.g.使用者可以把order裡的東西刪掉(這個需要改，應該要買賣家溝通才能刪)<br>
-		<a href=https://se-ssb.herokuapp.com/order/delete?uid=1&pdid=2>
-		https://se-ssb.herokuapp.com/order/delete?uid=1&pdid=2</a>
+		<a href=https://se-ssb.herokuapp.com/order/del?uid=1&pdid=2>
+		https://se-ssb.herokuapp.com/order/del?uid=1&pdid=2</a>
 		<br><br>
 	</p>
 	<p>
