@@ -49,8 +49,6 @@ func (ser *Server) Serve() {
 
 	http.Handle("/", r)
 
-	port = "8080"
-
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
