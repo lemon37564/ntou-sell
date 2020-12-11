@@ -445,6 +445,7 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 			if bid[0] == "true" {
 				bi = true
 			}
+			fmt.Fprint(w, "gg")
 			if err1 == nil {
 				fmt.Fprint(w, "1")
 			}
