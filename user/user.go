@@ -22,7 +22,8 @@ func NewUser(db *sql.DB) *User {
 }
 
 func (u *User) Login(account, password string) bool {
-	return u.fn.Login(account, password)
+	hash := strToSha256(password)
+	return u.fn.Login(account, hash)
 }
 
 func (u *User) Regist(account, password, name string) string {
