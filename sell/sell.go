@@ -12,6 +12,7 @@ type Sell struct {
 }
 
 func NewSell(db *sql.DB) (s *Sell) {
+	s = new(Sell)
 	s.fn = database.ProductDBInit(db)
 	return
 }
