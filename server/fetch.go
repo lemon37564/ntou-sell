@@ -351,7 +351,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "remo":
-		uid, ex1 := args["id"]
+		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 
 		if ex1 && ex2 {
