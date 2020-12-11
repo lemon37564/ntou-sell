@@ -43,8 +43,6 @@ func (ser *Server) Serve() {
 	http.HandleFunc("/sell", ser.fetchSell)
 	http.HandleFunc("/user", ser.fetchUser)
 
-	port = "8080"
-
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
