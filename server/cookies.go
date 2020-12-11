@@ -12,7 +12,7 @@ func setCookies(w http.ResponseWriter, r *http.Request, sid string) {
 
 	cookie := &http.Cookie{Name: cookieName, Value: sid, Expires: expire, Secure: false, Path: "/", Domain: "se-ssb.herokuapp.com"}
 
-	http.SetCookie(w, cookie)
+	// http.SetCookie(w, cookie)
 	r.AddCookie(cookie)
 }
 
