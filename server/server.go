@@ -34,8 +34,9 @@ func (ser *Server) Serve() {
 	log.Println("Service running on port:", port)
 
 	http.HandleFunc("/", ser.service)
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
+	http.HandleFunc("/help", ser.help)
+
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }

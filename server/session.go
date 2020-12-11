@@ -33,6 +33,8 @@ func NewSession() *session {
 }
 
 func (se *session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
+	se.sessionRefresh()
+
 	se.lock.Lock()
 	defer se.lock.Unlock()
 

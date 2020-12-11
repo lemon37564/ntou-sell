@@ -13,8 +13,6 @@ func (ser *Server) fetch(w http.ResponseWriter, r *http.Request, cmd string, arg
 
 	if len(path) == 0 {
 		http.NotFound(w, r)
-	} else if len(path) == 1 && path[0] == "help" {
-		ser.help(w, r)
 	} else if path[0] == "user" {
 		// user functions need to be in front of verification, or no one can log in anymore
 		ser.fetchUser(w, r, path, args)
@@ -564,8 +562,8 @@ func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
 				/product/search?name=...&minprice=...&maxprice=...&eval=...<br>
 				查詢商品(過濾)<br>
 				e.g.查詢商品名中含有"ifone"的商品，最低價格為10，最高價格為5000，最低評價為2<br>
-				<a href=https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2>
-				https://se-ssb.herokuapp.com/product/search?name=ifone&minprice=10&maxprice=5000&eval=2</a>
+				<a href=https://se-ssb.herokuapp.com/product/filter_search?name=ifone&minprice=10&maxprice=5000&eval=2>
+				https://se-ssb.herokuapp.com/product/filter_search?name=ifone&minprice=10&maxprice=5000&eval=2</a>
 				<br><br>
 			</p>
 			<p> 

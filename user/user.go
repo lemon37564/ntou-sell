@@ -1,7 +1,9 @@
 package user
 
 import (
+	"crypto/sha256"
 	"database/sql"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -24,7 +26,9 @@ func (u *User) Login(account, password string) bool {
 }
 
 func (u *User) Regist(account, password, name string) string {
-	err := u.fn.AddNewUser(account, password, name)
+	hash := strToSha256(password)
+
+	err := u.fn.AddNewUser(account, hash, name)
 	if err != nil {
 		log.Println(err)
 		if fmt.Sprint(err) == "UNIQUE constraint failed: user.account" {
@@ -58,4 +62,15 @@ func (u *User) GetUIDFromAccount(account string) int {
 func (u *User) GetAllUserData() string {
 	res, _ := json.Marshal(u.fn.GetAllUser())
 	return string(res)
+}
+
+func strToSha256(key string) string {
+	salt := "se-ssb"
+	key += salt
+
+	hasher := sha256.New()
+	hasher.Write([]byte(key))
+
+	t := hasher.Sum(nil)
+	return base64.URLEncoding.EncodeToString(t)
 }
