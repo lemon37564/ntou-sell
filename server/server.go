@@ -33,23 +33,19 @@ func (ser *Server) Serve() {
 	port := os.Getenv("PORT")
 	log.Println("Service running on port:", port)
 
-	http.HandleFunc("/", ser.service)
+	http.HandleFunc("/", ser.help)
 	http.HandleFunc("/help", ser.help)
+	http.HandleFunc("/bid", ser.fetchBid)
+	http.HandleFunc("/cart", ser.fetchCart)
+	http.HandleFunc("/history", ser.fetchHistory)
+	http.HandleFunc("/order", ser.fetchOrder)
+	http.HandleFunc("/product", ser.fetchProduct)
+	http.HandleFunc("/sell", ser.fetchSell)
+	http.HandleFunc("/user", ser.fetchUser)
+
+	port = "8080"
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
-}
-
-func (ser *Server) service(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-
-	path := r.URL.Path
-	query := r.URL.Query()
-
-	log.Printf("<host: %v, remote: %v>path: %v, args: %v\n", r.Host, r.RemoteAddr, path, query)
-
-	arg := path[1:] // eliminate first "/"
-
-	ser.fetch(w, r, arg, query)
 }
