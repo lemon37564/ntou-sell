@@ -10,7 +10,9 @@ import (
 )
 
 func (ser *Server) none(w http.ResponseWriter, r *http.Request) {
-
+	if r.URL.Path == "/success" {
+		fmt.Fprintln(w, "登入成功")
+	}
 }
 
 func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
@@ -94,7 +96,6 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 				time.Sleep(time.Millisecond * 10)
 				ser.Sess.setSessionID(w, r)
 				http.Redirect(w, r, `/success`, 301)
-				fmt.Fprintln(w, "登入成功")
 			} else {
 				fmt.Fprint(w, "登入失敗")
 			}
