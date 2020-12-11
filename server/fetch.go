@@ -9,6 +9,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func (ser *Server) none(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, helpPage)
+}
+
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)
 	args := r.URL.Query()
@@ -86,6 +94,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 				time.Sleep(time.Millisecond * 10)
 				ser.Sess.setSessionID(w, r)
 				http.Redirect(w, r, `/success`, 301)
+				fmt.Fprintln(w, "登入成功")
 			} else {
 				fmt.Fprint(w, "登入失敗")
 			}
@@ -448,10 +457,6 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.NotFound(w, r)
 	}
-}
-
-func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, helpPage)
 }
 
 func all(bs []bool) bool {
