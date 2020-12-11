@@ -48,7 +48,7 @@ func CartDBInit(db *sql.DB) *CartDB {
 		panic(err)
 	}
 
-	cart.updateAmnt, err = db.Prepare("UPDATE cart SET amount=? WHERE id=? AND pd_id=?;")
+	cart.updateAmnt, err = db.Prepare("UPDATE cart SET amount=? WHERE uid=? AND pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
