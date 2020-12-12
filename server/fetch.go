@@ -9,14 +9,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (ser *Server) none(w http.ResponseWriter, r *http.Request) {
+func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	if mux.Vars(r)["key"] == "success" {
 		fmt.Fprintln(w, "登入成功")
+	} else {
+		fmt.Fprintln(w, helpPage)
 	}
-}
-
-func (ser *Server) help(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, helpPage)
 }
 
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {

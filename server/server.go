@@ -46,8 +46,7 @@ func (ser *Server) Serve() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/{key}", ser.none)
-	r.HandleFunc("/help", ser.help)
+	r.HandleFunc("/{key}", ser.defaultFunc)
 	r.HandleFunc("/bid/{key}", ser.fetchBid)
 	r.HandleFunc("/cart/{key}", ser.fetchCart)
 	r.HandleFunc("/history/{key}", ser.fetchHistory)
