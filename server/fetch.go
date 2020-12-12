@@ -11,13 +11,18 @@ import (
 
 func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	if mux.Vars(r)["key"] == "success" {
-		fmt.Fprintln(w, "登入成功")
+		fmt.Fprintln(w, "登入成功!")
 	} else {
 		fmt.Fprintln(w, helpPage)
 	}
 }
 
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
+	if !ser.Sess.sessionValid(w, r) {
+		fmt.Fprint(w, "請先登入!")
+		return
+	}
+
 	path := mux.Vars(r)
 	args := r.URL.Query()
 
