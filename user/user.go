@@ -22,12 +22,12 @@ func NewUser(db *sql.DB) *User {
 }
 
 func (u *User) Login(account, password string) bool {
-	hash := strToSha256(password)
+	hash := sha256Hash(password)
 	return u.fn.Login(account, hash)
 }
 
 func (u *User) Regist(account, password, name string) string {
-	hash := strToSha256(password)
+	hash := sha256Hash(password)
 
 	err := u.fn.AddNewUser(account, hash, name)
 	if err != nil {
@@ -65,7 +65,7 @@ func (u *User) GetAllUserData() string {
 	return string(res)
 }
 
-func strToSha256(key string) string {
+func sha256Hash(key string) string {
 	salt := "se-ssb"
 	key += salt
 

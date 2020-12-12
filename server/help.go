@@ -3,18 +3,22 @@ package server
 const helpPage = `
 <html>
 	<H1>後端API</H1>
-	<H4>測試用帳密:account=1234&password=1234<br>
-	<a href=https://se-ssb.herokuapp.com/user/login?account=1234&password=1234>登入</a><br>
+	<H4>
+	<a href=https://se-ssb.herokuapp.com/user/login?account=1234&password=1234>測試用帳密:account=1234&password=1234</a>
+	<br>
 	</H4>
 	<p>
+	<img src=pics/test.png>
+	</p>
+	<p>
 		/user/all<br>
-		列出所有帳號(僅限開發期間)<br>
+		列出所有帳號(此功能已關閉，請註冊新帳號)<br>
 		<a href=/user/all> /user/all </a><br><br>
 	</p>
 	<p> 
 		/history/add?account=...&password=...<br>
 		登入是否成功(bool)<br>
-		e.g.登入帳號為test@gmail.com以及密碼為0000的使用者<br>
+		e.g.登入帳號為test@gmail.com以及密碼為0000的使用者(此密碼是錯的，會顯示登入失敗)<br>
 		<a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
 		https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000</a>
 		<br><br>

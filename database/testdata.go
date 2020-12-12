@@ -16,17 +16,17 @@ func TestInsert(db *sql.DB) {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test@gmail.com", "0000", "測試人員A")
+	err = u.AddNewUser("test@gmail.com", "iKPKa1HeDSdPOr7EshZ0PeeSrcgbK0", "測試人員A")
 	if err != nil {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test2@ntou.mail.com.tw", "ab1112c2c2", "開發人員A")
+	err = u.AddNewUser("test2@ntou.mail.com.tw", "25724d43266f5ab1125724d4332f52c2c2", "開發人員A")
 	if err != nil {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test3@gmail.com", "1234", "路人甲")
+	err = u.AddNewUser("test3@gmail.com", "9a3f7231c6d25724d433266f5812513e63b6b", "路人甲")
 	if err != nil {
 		panic(err)
 	}
@@ -36,7 +36,7 @@ func TestInsert(db *sql.DB) {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test5@what.com", "PASSWORD_HASH", "駭客A")
+	err = u.AddNewUser("test5@what.com", "PA33e63b6bSSWf06d9a3f7231c6d25724d433266f5812512ecH", "駭客A")
 	if err != nil {
 		panic(err)
 	}

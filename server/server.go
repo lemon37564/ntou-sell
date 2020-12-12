@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"se/bid"
 	"se/cart"
 	"se/history"
@@ -32,7 +33,9 @@ type Server struct {
 
 // Serve start all functions provided for user
 func (ser *Server) Serve() {
+	osys := runtime.GOOS
 	port := os.Getenv("PORT")
+	log.Println("system:", osys)
 	log.Println("Service running on port:", port)
 
 	r := mux.NewRouter()

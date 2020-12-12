@@ -81,8 +81,6 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
-	case "all":
-		fmt.Fprintf(w, ser.Ur.GetAllUserData())
 	case "login":
 
 		account, exi := args["account"]
