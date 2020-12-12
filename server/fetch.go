@@ -96,7 +96,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 			if valid {
 				time.Sleep(time.Millisecond * 10)
 				ser.Sess.setSessionID(w, r)
-				//http.Redirect(w, r, `/success`, 301)
+				fmt.Fprintln(w, "登入成功!")
 			} else {
 				fmt.Fprint(w, "登入失敗")
 			}
@@ -124,12 +124,18 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		}
 	case "logout":
 		deleteCookies(w, r)
+		fmt.Fprintln(w, "已登出")
 	default:
 		http.NotFound(w, r)
 	}
 }
 
 func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
+	if !ser.Sess.sessionValid(w, r) {
+		fmt.Fprint(w, "請先登入!")
+		return
+	}
+
 	path := mux.Vars(r)
 	args := r.URL.Query()
 
@@ -213,6 +219,11 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
+	if !ser.Sess.sessionValid(w, r) {
+		fmt.Fprint(w, "請先登入!")
+		return
+	}
+
 	path := mux.Vars(r)
 	args := r.URL.Query()
 
@@ -272,6 +283,11 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
+	if !ser.Sess.sessionValid(w, r) {
+		fmt.Fprint(w, "請先登入!")
+		return
+	}
+
 	path := mux.Vars(r)
 	args := r.URL.Query()
 
@@ -331,6 +347,11 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
+	if !ser.Sess.sessionValid(w, r) {
+		fmt.Fprint(w, "請先登入!")
+		return
+	}
+
 	path := mux.Vars(r)
 	args := r.URL.Query()
 
@@ -423,6 +444,11 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
+	if !ser.Sess.sessionValid(w, r) {
+		fmt.Fprint(w, "請先登入!")
+		return
+	}
+
 	path := mux.Vars(r)
 	args := r.URL.Query()
 

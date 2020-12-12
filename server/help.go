@@ -6,6 +6,8 @@ const helpPage = `
 	<H4>
 	<a href=https://se-ssb.herokuapp.com/user/login?account=1234&password=1234>測試用帳密:account=1234&password=1234</a>
 	<br>
+	<a href=https://se-ssb.herokuapp.com/user/logout>登出</a>
+	<br>
 	</H4>
 	<p>
 	<img src="https://i.imgur.com/AD3MbBi.jpeg"><br>
