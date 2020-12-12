@@ -55,8 +55,9 @@ func (ser *Server) Serve() {
 	r.HandleFunc("/sell/{key}", ser.fetchSell)
 	r.HandleFunc("/user/{key}", ser.fetchUser)
 
+	r.HandleFunc("/pics/{key}", ser.picHandler)
+
 	http.Handle("/", r)
-	// http.HandleFunc("/pics", picHandler)
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
