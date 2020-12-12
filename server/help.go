@@ -10,10 +10,6 @@ const helpPage = `
 	<br>
 	</H4>
 	<p>
-	<img src="https://i.imgur.com/AD3MbBi.jpeg"><br>
-	test image
-	</p>
-	<p>
 		/user/all<br>
 		列出所有帳號(此功能已關閉，請註冊新帳號)<br><br>
 	</p>

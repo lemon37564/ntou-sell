@@ -10,9 +10,12 @@ import (
 )
 
 func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
-	if mux.Vars(r)["key"] == "success" {
+	switch mux.Vars(r)["key"] {
+	case "success":
 		fmt.Fprintln(w, "登入成功!")
-	} else {
+	case "testimg":
+		fmt.Fprint(w, "<img src="+http.Dir("pics/test.png")+">")
+	default:
 		fmt.Fprintln(w, helpPage)
 	}
 }
