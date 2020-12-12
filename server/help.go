@@ -10,6 +10,10 @@ const helpPage = `
 	<br>
 	</H4>
 	<p>
+		<a href="https://se-ssb.herokuapp.com/testpic">
+		測試圖片伺服器</a> <br><br>
+	</p>
+	<p>
 		/user/all<br>
 		列出所有帳號(此功能已關閉，請註冊新帳號)<br><br>
 	</p>

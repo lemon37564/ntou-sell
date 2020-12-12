@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -26,8 +27,8 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer img.Close()
 
-	fmt.Println(img.Name())
+	imgType := strings.Split(img.Name(), ".")[1]
 
-	w.Header().Set("Content-Type", "image/jpg")
+	w.Header().Set("Content-Type", "image/"+imgType)
 	io.Copy(w, img)
 }

@@ -15,6 +15,8 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "登入成功!")
 	case "pics":
 		ser.picHandler(w, r)
+	case "testpic":
+		fmt.Fprint(w, `<html><img src="https://se-ssb.herokuapp.com/pics/server.jpg"></html>`)
 	default:
 		fmt.Fprintln(w, helpPage)
 	}
