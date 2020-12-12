@@ -14,6 +14,8 @@ func setCookies(w http.ResponseWriter, r *http.Request, sid string) {
 
 	http.SetCookie(w, cookie)
 	r.AddCookie(cookie)
+
+	w.WriteHeader(http.StatusOK)
 }
 
 func getCookies(w http.ResponseWriter, r *http.Request) (*http.Cookie, bool) {

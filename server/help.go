@@ -8,13 +8,12 @@ const helpPage = `
 	<br>
 	</H4>
 	<p>
-	<img src="https://i.imgur.com/AD3MbBi.jpeg">
+	<img src="https://i.imgur.com/AD3MbBi.jpeg"><br>
 	test image
 	</p>
 	<p>
 		/user/all<br>
-		列出所有帳號(此功能已關閉，請註冊新帳號)<br>
-		<a href=/user/all> /user/all </a><br><br>
+		列出所有帳號(此功能已關閉，請註冊新帳號)<br><br>
 	</p>
 	<p> 
 		/history/add?account=...&password=...<br>
@@ -70,9 +69,9 @@ const helpPage = `
 	<p>
 		/product/filterSearch?name=...&minprice=...&maxprice=...&eval=...<br>
 		查詢商品(過濾)<br>
-		e.g.查詢商品名中含有"ifone"的商品，最低價格為10，最高價格為5000，最低評價為2<br>
-		<a href=https://se-ssb.herokuapp.com/product/filterSearch?name=ifone&minprice=10&maxprice=5000&eval=2>
-		https://se-ssb.herokuapp.com/product/filterSearch?name=ifone&minprice=10&maxprice=5000&eval=2</a>
+		e.g.查詢商品名中含有"ifone"的商品，最低價格為10，最高價格為5000000，最低評價為0<br>
+		<a href=https://se-ssb.herokuapp.com/product/filterSearch?name=ifone&minprice=10&maxprice=5000000&eval=0>
+		https://se-ssb.herokuapp.com/product/filterSearch?name=ifone&minprice=10&maxprice=5000000&eval=0</a>
 		<br><br>
 	</p>
 	<p> 
