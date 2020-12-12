@@ -10,7 +10,7 @@ import (
 )
 
 func (ser *Server) none(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/success" {
+	if mux.Vars(r)["key"] == "success" {
 		fmt.Fprintln(w, "登入成功")
 	}
 }
