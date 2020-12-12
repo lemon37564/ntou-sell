@@ -26,6 +26,8 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer img.Close()
 
-	w.Header().Set("Content-Type", "image/png")
+	fmt.Println(img.Name())
+
+	w.Header().Set("Content-Type", "image/jpg")
 	io.Copy(w, img)
 }

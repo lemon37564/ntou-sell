@@ -51,6 +51,8 @@ func (se *session) setSessionID(w http.ResponseWriter, r *http.Request) {
 	se.lock.Lock()
 	defer se.lock.Unlock()
 
+	deleteCookies(w, r)
+
 	id := se.genSessID()
 	setCookies(w, r, id)
 
