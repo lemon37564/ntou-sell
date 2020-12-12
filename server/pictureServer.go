@@ -17,7 +17,6 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	path := mux.Vars(r)
-
 	picPath := path["key"]
 
 	img, err := os.Open("pics/" + picPath)

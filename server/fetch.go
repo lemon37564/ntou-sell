@@ -13,6 +13,8 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	switch mux.Vars(r)["key"] {
 	case "success":
 		fmt.Fprintln(w, "登入成功!")
+	case "pics":
+		ser.picHandler(w, r)
 	default:
 		fmt.Fprintln(w, helpPage)
 	}
