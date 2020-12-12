@@ -14,7 +14,7 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	case "success":
 		fmt.Fprintln(w, "登入成功!")
 	case "testimg":
-		fmt.Fprint(w, `img src=`+http.Dir("pics/test.png")+`>`)
+		fmt.Fprint(w, `<img src=`+http.Dir("pics/test.png")+`>`)
 	default:
 		fmt.Fprintln(w, helpPage)
 	}
