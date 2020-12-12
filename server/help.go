@@ -8,7 +8,8 @@ const helpPage = `
 	<br>
 	</H4>
 	<p>
-	<img src=pics/test.png>
+	<img src="https://i.imgur.com/AD3MbBi.jpeg">
+	test image
 	</p>
 	<p>
 		/user/all<br>

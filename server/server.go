@@ -34,8 +34,14 @@ type Server struct {
 // Serve start all functions provided for user
 func (ser *Server) Serve() {
 	osys := runtime.GOOS
-	port := os.Getenv("PORT")
 	log.Println("system:", osys)
+
+	port := os.Getenv("PORT")
+
+	// when test on localhost
+	if osys == "windows" {
+		port = "8080"
+	}
 	log.Println("Service running on port:", port)
 
 	r := mux.NewRouter()
