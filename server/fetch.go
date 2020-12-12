@@ -122,6 +122,8 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+	case "logout":
+		deleteCookies(w, r)
 	default:
 		http.NotFound(w, r)
 	}

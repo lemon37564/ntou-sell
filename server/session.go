@@ -55,7 +55,7 @@ func (se *session) setSessionID(w http.ResponseWriter, r *http.Request) {
 	setCookies(w, r, id)
 
 	se.list[id] = time.Now().Add(lifeTime)
-	http.Redirect(w, r, `/success`, 301)
+	// http.Redirect(w, r, `/success`, http.StatusMovedPermanently)
 }
 
 func (se *session) sessionRefresh() {

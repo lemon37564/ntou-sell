@@ -16,11 +16,18 @@ const helpPage = `
 		列出所有帳號(此功能已關閉，請註冊新帳號)<br><br>
 	</p>
 	<p> 
-		/history/add?account=...&password=...<br>
+		/user/login?account=...&password=...<br>
 		登入是否成功(bool)<br>
 		e.g.登入帳號為test@gmail.com以及密碼為0000的使用者(此密碼是錯的，會顯示登入失敗)<br>
 		<a href=https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000>
 		https://se-ssb.herokuapp.com/user/login?account=test@gmail.com&password=0000</a>
+		<br><br>
+	</p>
+	<p> 
+		/user/logout<br>
+		登出<br>
+		<a href=https://se-ssb.herokuapp.com/user/logout>
+		登出</a>
 		<br><br>
 	</p>
 	<p>
