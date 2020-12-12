@@ -56,6 +56,7 @@ func (ser *Server) Serve() {
 	r.HandleFunc("/user/{key}", ser.fetchUser)
 
 	http.Handle("/", r)
+	http.Handle("/", http.FileServer(http.Dir("")))
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
