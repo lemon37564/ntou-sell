@@ -44,18 +44,18 @@ func (ser *Server) Serve() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/backend/{key}", ser.defaultFunc)
-	r.HandleFunc("/backend/bid/{key}", ser.fetchBid)
-	r.HandleFunc("/backend/cart/{key}", ser.fetchCart)
-	r.HandleFunc("/backend/history/{key}", ser.fetchHistory)
-	r.HandleFunc("/backend/order/{key}", ser.fetchOrder)
-	r.HandleFunc("/backend/product/{key}", ser.fetchProduct)
-	r.HandleFunc("/backend/sell/{key}", ser.fetchSell)
-	r.HandleFunc("/backend/user/{key}", ser.fetchUser)
+	r.HandleFunc("/{key}", ser.defaultFunc)
+	r.HandleFunc("/bid/{key}", ser.fetchBid)
+	r.HandleFunc("/cart/{key}", ser.fetchCart)
+	r.HandleFunc("/history/{key}", ser.fetchHistory)
+	r.HandleFunc("/order/{key}", ser.fetchOrder)
+	r.HandleFunc("/product/{key}", ser.fetchProduct)
+	r.HandleFunc("/sell/{key}", ser.fetchSell)
+	r.HandleFunc("/user/{key}", ser.fetchUser)
 
-	r.HandleFunc("/backend/pics/{key}", ser.picHandler)
+	r.HandleFunc("/pics/{key}", ser.picHandler)
 
-	http.Handle("/backend", r)
+	http.Handle("/backend/", r)
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("ntou-sell"))))
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
