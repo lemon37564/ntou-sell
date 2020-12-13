@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -55,7 +56,8 @@ func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname str
 	}
 	defer file.Close()
 
-	log.Println(r.Body)
+	v, _ := json.Marshal(r.Body)
+	log.Println("request body:", v)
 
 	_, err = io.Copy(file, r.Body)
 	if err != nil {
