@@ -56,7 +56,7 @@ func (ser *Server) Serve() {
 	r.HandleFunc("/pics/{key}", ser.picHandler)
 
 	// http.Handle("/", r)
-	http.Handle("/ntou-sell", http.FileServer(http.Dir("/web")))
+	http.Handle("/", http.FileServer(http.Dir("/web")))
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
