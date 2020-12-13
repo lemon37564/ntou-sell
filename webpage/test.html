@@ -7,7 +7,7 @@ function upload(){
 var temp=document.getElementById("temp");
 
 var request=new XMLHttpRequest;
-request.open("post","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/backend/pics/upload"); 
+request.open("post","backend/pics/upload"); 
 
   request.onreadystatechange = function() { // Define event listener
   // If the request is complete and was successful
