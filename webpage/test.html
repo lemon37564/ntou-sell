@@ -1,0 +1,30 @@
+﻿<html>
+<head>
+
+<script>
+function upload(){
+
+var temp=document.getElementById("temp");
+
+var request=new XMLHttpRequest;
+request.open("post","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/backend/pics/upload"); 
+
+  request.onreadystatechange = function() { // Define event listener
+  // If the request is complete and was successful
+    if (request.readyState === 4 && request.status === 200) {
+    }
+  };
+request.send(temp);
+
+}
+
+
+
+//https://se-ssb.herokuapp.com/backend/pics/upload
+
+</script>
+</head>
+<body>
+<input type="file" id="temp"  accept="image/*" > <!-- data-target="file-uploader" -->
+<button onclick="upload()">upload</button>;
+</body>
