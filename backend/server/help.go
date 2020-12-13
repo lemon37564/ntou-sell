@@ -50,7 +50,7 @@ const helpPage = `
 	<p> 
 		backend/product/all<br>
 		列出所有商品(僅限開發期間)<br>
-		<a href=/product/all> /backend/product/all </a><br><br>
+		<a href=product/all> /backend/product/all </a><br><br>
 	</p>
 	<p>
 		backend/product/newest?amount=...<br>

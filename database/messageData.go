@@ -39,7 +39,7 @@ func MessageDBInit(db *sql.DB) *MessageDB {
 		panic(err)
 	}
 
-	message.get, err = db.Prepare("SELECT * FROM message WHERE sender_uid=? AND receiver_uid=? ORDER BY message_id DESC;")
+	message.get, err = db.Prepare("SELECT sender_uid, receiver_uid, message FROM message WHERE sender_uid=? AND receiver_uid=? ORDER BY message_id DESC;")
 	if err != nil {
 		panic(err)
 	}
