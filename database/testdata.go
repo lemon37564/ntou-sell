@@ -12,7 +12,7 @@ func TestInsert(db *sql.DB) {
 	u := UserDBInit(db)
 	p := ProductDBInit(db)
 
-	err := u.AddNewUser("1234", "POr7EshhcPeeSrcgbKyKY3FiKPKa1HeDSdIZzts-BFo=", "測試用帳號")
+	err := u.AddNewUser("1234", "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "測試用帳號")
 	if err != nil {
 		panic(err)
 	}

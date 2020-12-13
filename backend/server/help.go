@@ -61,9 +61,9 @@ const helpPage = `
 	<p> 
 		backend/product/add?name=...&price=...&description=...&amount=...&bid=...&date=...<br>
 		新增商品<br>
-		e.g.新增一商品->商品名:ifone12價格:5000，商品說明:盜版商品，競標:是，競標期限:2020-12-31<br>
-		<a href=product/add?name=ifone12&price=5000&description=盜版商品&amount=10&bid=true&date=2020-12-31>
-		backend/product/add?name=ifone12&price=5000&description=盜版商品&amount=10&bid=true&date=2020-12-31</a>
+		e.g.新增一商品->商品名:ifone12價格:5000，商品說明:盜版商品，競標:是，競標期限:2006-01-02 15:04<br>
+		<a href=product/add?name=ifone12&price=5000&description=盜版商品&amount=10&bid=true&date=2006-01-02 15:04>
+		backend/product/add?name=ifone12&price=5000&description=盜版商品&amount=10&bid=true&date=2006-01-02 15:04</a>
 		<br><br>
 	</p>
 	<p>

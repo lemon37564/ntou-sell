@@ -64,7 +64,7 @@ func (m *MessageDB) AddMessage(senderUID, receiverUID int, messageText string) e
 	for rows.Next() {
 		err = rows.Scan(&mID)
 		if err != nil {
-			return err
+			mID = 0
 		}
 	}
 
@@ -77,7 +77,7 @@ func (m *MessageDB) AddMessage(senderUID, receiverUID int, messageText string) e
 // GetMessages return all messge between two users
 func (m *MessageDB) GetMessages(senderUID, receiverUID int) (all []Message) {
 
-	rows, err := m.get.Query()
+	rows, err := m.get.Query(senderUID, receiverUID)
 	if err != nil {
 		log.Println(err)
 		return
