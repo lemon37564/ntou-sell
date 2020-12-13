@@ -4,7 +4,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/sessions"
@@ -30,8 +29,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	log.Println("logged in")
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
@@ -47,8 +44,6 @@ func logout(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	log.Println("logged out")
 }
 
 func sessionValid(w http.ResponseWriter, r *http.Request) bool {

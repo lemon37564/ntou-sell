@@ -13,6 +13,10 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	case "success":
 		fmt.Fprintln(w, "登入成功!")
 	case "pics":
+		if !sessionValid(w, r) {
+			fmt.Fprint(w, "請先登入!")
+			return
+		}
 		ser.picHandler(w, r)
 	case "testpic":
 		fmt.Fprint(w, `<html><img src="https://se-ssb.herokuapp.com/pics/server.jpg"></html>`)
