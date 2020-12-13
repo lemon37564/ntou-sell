@@ -9,6 +9,7 @@ import (
 	"se/backend/bid"
 	"se/backend/cart"
 	"se/backend/history"
+	"se/backend/message"
 	"se/backend/order"
 	"se/backend/product"
 	"se/backend/sell"
@@ -27,6 +28,7 @@ type Server struct {
 	Bd *bid.Bid
 	Ct *cart.Cart
 	Se *sell.Sell
+	Ms *message.Message
 }
 
 // Serve start all functions provided for user
@@ -52,6 +54,7 @@ func (ser *Server) Serve() {
 	r.HandleFunc("/backend/product/{key}", ser.fetchProduct)
 	r.HandleFunc("/backend/sell/{key}", ser.fetchSell)
 	r.HandleFunc("/backend/user/{key}", ser.fetchUser)
+	r.HandleFunc("/backend/message/{key}", ser.fetchMessage)
 
 	r.HandleFunc("/backend/pics/{key}", ser.picHandler)
 

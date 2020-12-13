@@ -84,6 +84,7 @@ func (h *HistoryDB) AddHistory(uid, pdid int) error {
 		err = rows.Scan(&seq)
 		if err != nil {
 			log.Println(err)
+			seq = 1
 		}
 	}
 

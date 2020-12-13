@@ -4,7 +4,10 @@ import (
 	"database/sql"
 	"log"
 	"se/database"
+	"time"
 )
+
+const TimeLayout = "2006-01-02 15:04:05"
 
 type Sell struct {
 	fn  *database.ProductDB
@@ -18,7 +21,18 @@ func NewSell(db *sql.DB) (s *Sell) {
 }
 
 func (s *Sell) SetProductpdid(pdname string, price int, description string, amount int, account string, sellerID int, bid bool, date string, dateLine string) string { //當在競標時為競標價格
-	pid, err := s.fn.AddNewProduct(pdname, price, description, amount, account, bid, date)
+
+	dt, err := time.Parse(TimeLayout, date)
+	if err != nil {
+		return "date invalid! (date format is like 2006-01-02 15:04:05)"
+	}
+
+	dtl, err := time.Parse(TimeLayout, dateLine)
+	if err != nil {
+		return "date invalid! (date format is like 2006-01-02 15:04:05)"
+	}
+
+	pid, err := s.fn.AddNewProduct(pdname, price, description, amount, sellerID, bid, dt)
 	if err != nil {
 		log.Println(err)
 		return "Something Wrong when you enter product info"
@@ -26,7 +40,7 @@ func (s *Sell) SetProductpdid(pdname string, price int, description string, amou
 
 	if bid { //等傳
 
-		err := s.fn2.AddNewBid(pid, dateLine, price, sellerID)
+		err := s.fn2.AddNewBid(pid, dtl, price, sellerID)
 		if err != nil {
 			log.Println(err)
 			return "Something Wrong in bid info"

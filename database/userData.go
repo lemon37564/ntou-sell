@@ -67,12 +67,12 @@ func UserDBInit(db *sql.DB) *UserDB {
 		panic(err)
 	}
 
-	user.maxID, err = db.Prepare("SELECT MAX(UID) FROM user")
+	user.maxID, err = db.Prepare("SELECT MAX(UID) FROM user;")
 	if err != nil {
 		panic(err)
 	}
 
-	user.login, err = db.Prepare("SELECT COUNT(*) FROM user WHERE account=? AND password_hash=? AND uid>0;")
+	user.login, err = db.Prepare("SELECT uid FROM user WHERE account=? AND password_hash=? AND uid>0;")
 	if err != nil {
 		panic(err)
 	}
@@ -124,9 +124,9 @@ func (u *UserDB) DeleteUser(account, password string) error {
 	return err
 }
 
-// Login return boolean value to check if it is valid to log in with specific account and password hash
-func (u *UserDB) Login(account, passwordHash string) bool {
-	var cnt int
+// Login return user id and boolean value to check if it is valid to log in with specific account and password hash
+func (u *UserDB) Login(account, passwordHash string) (int, bool) {
+	var cnt, uid int
 
 	rows, err := u.login.Query(account, passwordHash)
 	if err != nil {
@@ -134,14 +134,15 @@ func (u *UserDB) Login(account, passwordHash string) bool {
 	}
 
 	for rows.Next() {
-		err = rows.Scan(&cnt)
+		err = rows.Scan(&uid)
 		if err != nil {
 			panic(err)
 		}
+		cnt++
 	}
 
 	// match only one account and password_hash
-	return cnt == 1
+	return uid, cnt == 1
 }
 
 // ChangePassword updates passeword of a user by account

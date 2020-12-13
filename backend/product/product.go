@@ -7,7 +7,10 @@ import (
 	"log"
 	"se/database"
 	"strconv"
+	"time"
 )
+
+const TimeLayout = "2006-01-02 15:04:05"
 
 type Product struct {
 	fn *database.ProductDB
@@ -20,8 +23,13 @@ func ProductInit(db *sql.DB) *Product {
 }
 
 //新增產品 使用: sell mod
-func (p Product) AddProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) (int, string) {
-	pdid, err := p.fn.AddNewProduct(pdname, price, description, amount, account, bid, date)
+func (p Product) AddProduct(pdname string, price int, description string, amount int, sellerUID int, bid bool, date string) (int, string) {
+	dt, err := time.Parse(TimeLayout, date)
+	if err != nil {
+		return -1, "date invalid! (date format is like 2006-01-02 15:04:05)"
+	}
+
+	pdid, err := p.fn.AddNewProduct(pdname, price, description, amount, sellerUID, bid, dt)
 	if err != nil {
 		if fmt.Sprint(err) == "NOT NULL constraint failed: product.seller_id" {
 			return -1, "沒有此使用者帳號!"
@@ -32,8 +40,8 @@ func (p Product) AddProduct(pdname string, price int, description string, amount
 }
 
 //刪除產品 使用:  mod
-func (p *Product) DeleteProduct(pdid int) string {
-	err := p.fn.Delete(pdid)
+func (p *Product) DeleteProduct(uid int, pdname string) string {
+	err := p.fn.Delete(uid, pdname)
 	if err != nil {
 		return fmt.Sprint(err)
 	}
@@ -144,7 +152,7 @@ func (p *Product) GetProdDescription(pdid int) string { //拿說明
 }
 
 func (p *Product) GetProdDate(pdid int) string { //商品釋出日期
-	return p.fn.GetInfoFromPdID(pdid).Date
+	return p.fn.GetInfoFromPdID(pdid).Date.String()
 }
 
 func (p *Product) GetProdName(pdid int) string { //拿商品名稱

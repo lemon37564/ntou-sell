@@ -21,7 +21,7 @@ func NewUser(db *sql.DB) *User {
 	return u
 }
 
-func (u *User) Login(account, password string) bool {
+func (u *User) Login(account, password string) (int, bool) {
 	hash := sha256Hash(password)
 	return u.fn.Login(account, hash)
 }
@@ -66,7 +66,7 @@ func (u *User) GetAllUserData() string {
 }
 
 func sha256Hash(key string) string {
-	salt := "se-ssb"
+	salt := "ntou-sell"
 	key += salt
 
 	hasher := sha256.New()

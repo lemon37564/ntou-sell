@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -20,7 +21,8 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
-	if !sessionValid(w, r) {
+	uid, valid := sessionValid(w, r)
+	if !valid {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -32,13 +34,11 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	case "all":
 		fmt.Fprint(w, ser.Ht.GetAll())
 	case "get":
-		ac, exi := args["account"]
 		val, exist := args["amount"]
 
-		if exist && exi {
+		if exist {
 			amnt, err := strconv.Atoi(val[0])
 			if err == nil {
-				uid := ser.Ur.GetUIDFromAccount(ac[0])
 				fmt.Fprint(w, ser.Ht.GetHistory(uid, amnt))
 			} else {
 				fmt.Fprint(w, "amount was not an integer")
@@ -47,13 +47,11 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "delete":
-		ac, exi := args["account"]
-		pdid, exi2 := args["pdid"]
+		pdid, exi := args["pdid"]
 
-		if exi && exi2 {
+		if exi {
 			pd, err := strconv.Atoi(pdid[0])
 			if err == nil {
-				uid := ser.Ur.GetUIDFromAccount(ac[0])
 				fmt.Fprint(w, ser.Ht.GetHistory(uid, pd))
 			} else {
 				fmt.Fprint(w, "pdid was not an integer")
@@ -62,13 +60,12 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "add":
-		ac, exi := args["account"]
-		pdid, exi2 := args["pdid"]
+		pdid, exi := args["pdid"]
+		log.Println(pdid, exi)
 
-		if exi && exi2 {
+		if exi {
 			pd, err := strconv.Atoi(pdid[0])
 			if err == nil {
-				uid := ser.Ur.GetUIDFromAccount(ac[0])
 				fmt.Fprint(w, ser.Ht.AddHistory(uid, pd))
 			} else {
 				fmt.Fprint(w, "pdid was not an integer")
@@ -92,11 +89,11 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		pass, exi2 := args["password"]
 
 		if exi && exi2 {
-			valid := ser.Ur.Login(account[0], pass[0])
+			uid, valid := ser.Ur.Login(account[0], pass[0])
 
 			// set cookies to maintain login condition
 			if valid {
-				login(w, r)
+				login(w, r, uid)
 				fmt.Fprintln(w, "登入成功!")
 			} else {
 				fmt.Fprint(w, "登入失敗")
@@ -132,7 +129,8 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
-	if !sessionValid(w, r) {
+	uid, valid := sessionValid(w, r)
+	if !valid {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -144,16 +142,15 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 	case "all":
 		fmt.Fprint(w, ser.Pd.GetAll())
 	case "add":
-		exist := make([]bool, 7)
-		var name, price, des, amount, account, bid, date []string
+		exist := make([]bool, 6)
+		var name, price, des, amount, bid, date []string
 
 		name, exist[0] = args["name"]
 		price, exist[1] = args["price"]
 		des, exist[2] = args["description"]
 		amount, exist[3] = args["amount"]
-		account, exist[4] = args["account"]
-		bid, exist[5] = args["bid"]
-		date, exist[6] = args["date"]
+		bid, exist[4] = args["bid"]
+		date, exist[5] = args["date"]
 
 		if all(exist) {
 			p, err1 := strconv.Atoi(price[0])
@@ -161,7 +158,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			b := (bid[0] == "true")
 
 			if err1 == nil && err2 == nil {
-				_, stat := ser.Pd.AddProduct(name[0], p, des[0], a, account[0], b, date[0])
+				_, stat := ser.Pd.AddProduct(name[0], p, des[0], a, uid, b, date[0])
 				fmt.Fprint(w, stat)
 			} else {
 				fmt.Fprint(w, "price or amount was not an integer.")
@@ -170,6 +167,13 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "delete":
+		val, exi := args["pdname"]
+
+		if exi {
+			fmt.Fprint(w, ser.Pd.DeleteProduct(uid, val[0]))
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	case "newest":
 		val, exi := args["amount"]
 
@@ -221,7 +225,8 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
-	if !sessionValid(w, r) {
+	uid, valid := sessionValid(w, r)
+	if !valid {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -231,32 +236,20 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 
 	switch path["key"] {
 	case "get":
-		uid, ex1 := args["uid"]
+		fmt.Fprint(w, ser.Od.GetOrders(uid))
 
-		if ex1 {
-			i, err1 := strconv.Atoi(uid[0])
-			if err1 == nil {
-				fmt.Fprint(w, ser.Od.GetOrders(i))
-			} else {
-				fmt.Fprint(w, "User id not integer")
-			}
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
 	case "add":
-		exist := make([]bool, 3)
-		var uid, pdid, amount []string
+		exist := make([]bool, 2)
+		var pdid, amount []string
 
-		uid, exist[0] = args["uid"]
-		pdid, exist[1] = args["pdid"]
-		amount, exist[2] = args["amount"]
+		pdid, exist[0] = args["pdid"]
+		amount, exist[1] = args["amount"]
 		if all(exist) {
-			ui, err1 := strconv.Atoi(uid[0])
 			pi, err2 := strconv.Atoi(pdid[0])
 			amo, err3 := strconv.Atoi(amount[0])
 
-			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.Od.AddOrder(ui, pi, amo))
+			if err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Od.AddOrder(uid, pi, amo))
 			} else {
 				fmt.Fprint(w, "Userid,Productid or amount was not as interger")
 			}
@@ -264,13 +257,11 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "del":
-		uid, exi := args["uid"]
-		pdid, exi2 := args["pdid"]
-		if exi && exi2 {
-			ui, err := strconv.Atoi(uid[0])
+		pdid, exi := args["pdid"]
+		if exi {
 			pi, err1 := strconv.Atoi(pdid[0])
-			if err == nil && err1 == nil {
-				fmt.Fprint(w, ser.Od.Delete(ui, pi))
+			if err1 == nil {
+				fmt.Fprint(w, ser.Od.Delete(uid, pi))
 			} else {
 				fmt.Fprint(w, "User id or Product id was not an integer.")
 			}
@@ -285,7 +276,8 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
-	if !sessionValid(w, r) {
+	uid, valid := sessionValid(w, r)
+	if !valid {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -309,20 +301,18 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "set":
-		exist := make([]bool, 3)
-		var pdid, uid, money []string
+		exist := make([]bool, 2)
+		var pdid, money []string
 
 		pdid, exist[0] = args["pdid"]
-		uid, exist[1] = args["uid"]
 		money, exist[2] = args["money"]
 
 		if all(exist) {
 			p, err1 := strconv.Atoi(pdid[0])
-			u, err2 := strconv.Atoi(uid[0])
 			m, err3 := strconv.Atoi(money[0])
 
-			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.Bd.SetBidForBuyer(p, u, m))
+			if err1 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Bd.SetBidForBuyer(p, uid, m))
 			} else {
 				fmt.Fprint(w, "User, Product id or money was not an integer.")
 			}
@@ -349,7 +339,8 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
-	if !sessionValid(w, r) {
+	uid, valid := sessionValid(w, r)
+	if !valid {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -359,16 +350,14 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 
 	switch path["key"] {
 	case "add": //For single product
-		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
 
-		if ex1 && ex2 && ex3 {
-			u, err1 := strconv.Atoi(uid[0])
+		if ex2 && ex3 {
 			p, err2 := strconv.Atoi(pdid[0])
 			amo, err3 := strconv.Atoi(amount[0])
-			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.Ct.AddProductToCart(u, p, amo))
+			if err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Ct.AddProductToCart(uid, p, amo))
 
 			} else {
 				fmt.Fprint(w, "User id ,product id or amount was not integer")
@@ -377,33 +366,29 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "remo":
-		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 
-		if ex1 && ex2 {
-			u, err1 := strconv.Atoi(uid[0])
+		if ex2 {
 			p, err2 := strconv.Atoi(pdid[0])
 
-			if err1 == nil && err2 == nil {
-				fmt.Fprint(w, ser.Ct.RemoveProduct(u, p))
+			if err2 == nil {
+				fmt.Fprint(w, ser.Ct.RemoveProduct(uid, p))
 
 			} else {
-				fmt.Fprint(w, "User id ,product id was not integer")
+				fmt.Fprint(w, "product id was not integer")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
 	case "modf":
-		uid, ex1 := args["uid"]
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
 
-		if ex1 && ex2 && ex3 {
-			u, err1 := strconv.Atoi(uid[0])
+		if ex2 && ex3 {
 			p, err2 := strconv.Atoi(pdid[0])
 			amo, err3 := strconv.Atoi(amount[0])
-			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.Ct.ModifyAmount(u, p, amo))
+			if err2 == nil && err3 == nil {
+				fmt.Fprint(w, ser.Ct.ModifyAmount(uid, p, amo))
 
 			} else {
 				fmt.Fprint(w, "User id ,product id or amount was not integer")
@@ -412,41 +397,19 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "tal":
-		uid, ex1 := args["uid"]
+		fmt.Fprint(w, ser.Ct.TotalCount(uid))
 
-		if ex1 {
-			u, err1 := strconv.Atoi(uid[0])
-
-			if err1 == nil {
-				fmt.Fprint(w, ser.Ct.TotalCount(u))
-
-			} else {
-				fmt.Fprint(w, "User id was not integer")
-			}
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
 	case "geps": //拿商品
-		uid, ex1 := args["uid"]
+		fmt.Fprint(w, ser.Ct.GetProducts(uid))
 
-		if ex1 {
-			u, err1 := strconv.Atoi(uid[0])
-			if err1 == nil {
-				fmt.Fprint(w, ser.Ct.GetProducts(u))
-
-			} else {
-				fmt.Fprint(w, "User id was not integer")
-			}
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
 	default:
 		http.NotFound(w, r)
 	}
 }
 
 func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
-	if !sessionValid(w, r) {
+	_, valid := sessionValid(w, r)
+	if !valid {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -487,6 +450,49 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 
+	default:
+		http.NotFound(w, r)
+	}
+}
+
+func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
+	uid, valid := sessionValid(w, r)
+	if !valid {
+		fmt.Fprint(w, "請先登入!")
+		return
+	}
+
+	path := mux.Vars(r)
+	args := r.URL.Query()
+
+	switch path["key"] {
+	case "add":
+		val, exi := args["receiverUID"]
+		val2, exi2 := args["text"]
+
+		if exi && exi2 {
+			ruid, err := strconv.Atoi(val[0])
+			if err == nil {
+				fmt.Fprint(w, ser.Ms.AddMessage(uid, ruid, val2[0]))
+			} else {
+				fmt.Fprint(w, "receiverUID is not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+	case "get":
+		val, exi := args["receiverUID"]
+
+		if exi {
+			ruid, err := strconv.Atoi(val[0])
+			if err == nil {
+				fmt.Fprint(w, ser.Ms.GetMessages(uid, ruid))
+			} else {
+				fmt.Fprint(w, "receiverUID is not integer")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	default:
 		http.NotFound(w, r)
 	}

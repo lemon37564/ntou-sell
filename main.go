@@ -4,6 +4,7 @@ import (
 	"se/backend/bid"
 	"se/backend/cart"
 	"se/backend/history"
+	"se/backend/message"
 	"se/backend/order"
 	"se/backend/product"
 	"se/backend/sell"
@@ -26,6 +27,7 @@ func main() {
 		Ht: history.NewHistory(db),
 		Bd: bid.NewBid(db),
 		Ct: cart.NewCart(db),
-		Se: sell.NewSell(db)}
+		Se: sell.NewSell(db),
+		Ms: message.NewMessage(db)}
 	service.Serve()
 }

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 )
 
 // TestInsert tests AddNewUser with five new user
@@ -41,27 +42,27 @@ func TestInsert(db *sql.DB) {
 		panic(err)
 	}
 
-	_, err = p.AddNewProduct("ifone16", 2000000, "最新科技", 1, "test5@what.com", false, "null")
+	_, err = p.AddNewProduct("ifone16", 2000000, "最新科技", 1, 2, false, time.Now())
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = p.AddNewProduct("ifone167", 200000000, "cioadjfdsfasdfasdbtefgdfsgfdgdsfgdsfg", 1, "test3@gmail.com", true, "2020-12-31")
+	_, err = p.AddNewProduct("ifone167", 200000000, "cioadjfdsfasdfasdbtefgdfsgfdgdsfgdsfg", 1, 1, true, time.Now())
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = p.AddNewProduct("雜牌耳機", 100, "夜市貨", 16, "test@gmail.com", false, "null")
+	_, err = p.AddNewProduct("雜牌耳機", 100, "夜市貨", 16, 2, false, time.Now())
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = p.AddNewProduct("雜牌手錶", 200, "夜市貨", 8, "test@gmail.com", false, "null")
+	_, err = p.AddNewProduct("雜牌手錶", 200, "夜市貨", 8, 3, false, time.Now())
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = p.AddNewProduct("雜牌鞋子", 700, "夜市貨", 12, "test@gmail.com", false, "null")
+	_, err = p.AddNewProduct("雜牌鞋子", 700, "夜市貨", 12, 1, false, time.Now())
 	if err != nil {
 		panic(err)
 	}

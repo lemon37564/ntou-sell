@@ -12,14 +12,15 @@ const (
 
 var store = sessions.NewCookieStore([]byte(CookieName))
 
-func login(w http.ResponseWriter, r *http.Request) {
+func login(w http.ResponseWriter, r *http.Request, uid int) {
 	session, err := store.Get(r, CookieName)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	session.Values["auth"] = true
+	session.Values["auth"] = uid
+
 	err = session.Save(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -42,20 +43,21 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func sessionValid(w http.ResponseWriter, r *http.Request) bool {
+func sessionValid(w http.ResponseWriter, r *http.Request) (int, bool) {
 	session, err := store.Get(r, CookieName)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return false
+		return -1, false
 	}
 
 	auth := session.Values["auth"]
+
 	if auth != nil {
-		isAuth, ok := auth.(bool)
-		return ok && isAuth
+		isAuth, ok := auth.(int)
+		return isAuth, ok
 	}
 
-	return false
+	return -1, false
 }
 
 // func sessionHandler(w http.ResponseWriter, r *http.Request) {

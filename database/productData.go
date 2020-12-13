@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -15,11 +16,11 @@ const productTable = `CREATE TABLE product(
 						description varchar(256),
 						amount int NOT NULL,
 						eval float,
-						seller_id int NOT NULL,
+						seller_uid int NOT NULL,
 						bid bool,
-						date sting,
+						date timestamp,
 						PRIMARY KEY(pd_id),
-						FOREIGN KEY(seller_id) REFERENCES user
+						FOREIGN KEY(seller_uid) REFERENCES user
 					);`
 
 // Product type store data of a single product
@@ -32,7 +33,7 @@ type Product struct {
 	Eval        float64
 	SellerID    int
 	Bid         bool
-	Date        string
+	Date        time.Time
 }
 
 // ProductDB contain funcions to use
@@ -64,7 +65,7 @@ func (p Product) StringForProduct() (res string) {
 	res += "product name:         " + p.PdName + "\n"
 	res += "product amount:       " + fmt.Sprintf("%d", p.Amount) + "\n"
 	res += "product price:        " + fmt.Sprintf("%d", p.Price) + "\n"
-	res += "product date:         " + p.Date + "\n"
+	res += "product date:         " + p.Date.String() + "\n"
 	res += "product description:  " + p.Description + "\n"
 	res += "product eval:       " + fmt.Sprintf("%f", p.Eval) + "\n"
 
@@ -76,12 +77,12 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 	var err error
 	product := new(ProductDB)
 
-	product.insert, err = db.Prepare("INSERT INTO product VALUES(?,?,?,?,?,?,(SELECT uid FROM user WHERE account=?),?,?);")
+	product.insert, err = db.Prepare("INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);")
 	if err != nil {
 		panic(err)
 	}
 
-	product._delete, err = db.Prepare("DELETE FROM product WHERE pd_id=?;")
+	product._delete, err = db.Prepare("DELETE FROM product WHERE seller_uid=? AND product_name=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -145,7 +146,7 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 }
 
 // AddNewProduct add single product with product name, price, description, amount, seller id, bid and date into database
-func (p *ProductDB) AddNewProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) (int, error) {
+func (p *ProductDB) AddNewProduct(pdname string, price int, description string, amount int, sellerUID int, bid bool, date time.Time) (int, error) {
 	var pdid int
 	rows, err := p.maxpdID.Query()
 	if err != nil {
@@ -160,13 +161,13 @@ func (p *ProductDB) AddNewProduct(pdname string, price int, description string, 
 		}
 	}
 
-	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, 0.0, account, bid, date)
+	_, err = p.insert.Exec(pdid+1, pdname, price, description, amount, 0.0, sellerUID, bid, date)
 	return pdid, err
 }
 
 // Delete product with product id
-func (p *ProductDB) Delete(pdid int) error {
-	_, err := p._delete.Exec(pdid)
+func (p *ProductDB) Delete(uid int, pdname string) error {
+	_, err := p._delete.Exec(uid, pdname)
 
 	return err
 }

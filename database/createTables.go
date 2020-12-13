@@ -22,6 +22,7 @@ func createTables() {
 	createCartTable(db)
 	createHistoryTable(db)
 	createOrderTable(db)
+	createMessageTable(db)
 
 	log.Println("All Table was successfully Created. Time:", time.Since(start))
 }
@@ -39,7 +40,7 @@ func createProductTable(db *sql.DB) {
 	tableLogger("product", err)
 
 	// insert one value into product in order to prevent max(pd_id) = null
-	db.Exec("INSERT INTO product VALUES(0, \"N/A\", 0, \"N/A\", 0, 0.0, 0, false, \"N/A\");")
+	db.Exec("INSERT INTO product VALUES(0, \"N/A\", 0, \"N/A\", 0, 0.0, 0, false, \"2006-01-02 15:04\");")
 }
 
 func createBidTable(db *sql.DB) {
@@ -55,11 +56,22 @@ func createCartTable(db *sql.DB) {
 func createHistoryTable(db *sql.DB) {
 	_, err := db.Exec(historyTable)
 	tableLogger("history", err)
+
+	// insert one value into history in order to prevent max(seq) = null
+	db.Exec("INSERT INTO history VALUES(0, 0, 0);")
 }
 
 func createOrderTable(db *sql.DB) {
 	_, err := db.Exec(ordersTable)
 	tableLogger("orders", err)
+}
+
+func createMessageTable(db *sql.DB) {
+	_, err := db.Exec(messageTable)
+	tableLogger("message", err)
+
+	// insert one value into message in order to prevent max(mid) = null
+	db.Exec("INSERT INTO history VALUES(0, 0, 0, \"none\");")
 }
 
 func tableLogger(table string, err error) {

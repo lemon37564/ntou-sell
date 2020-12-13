@@ -3,13 +3,14 @@ package database
 import (
 	"database/sql"
 	"log"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 const bidTable = `CREATE TABLE bid(
 					pd_id int NOT NULL,
-					deadline varchar(16) NOT NULL,
+					deadline timestamp NOT NULL,
 					now_bidder_uid int NOT NULL,
 					now_money int NOT NULL,
 					seller_uid int NOT NULL,
@@ -20,7 +21,7 @@ const bidTable = `CREATE TABLE bid(
 
 // Bid struct store data of a single bid
 type Bid struct {
-	Deadline    string
+	Deadline    time.Time
 	NowBidderID int
 	NowMoney    int
 	UID         int
@@ -81,7 +82,7 @@ func BidDataInit(db *sql.DB) *BidDB {
 }
 
 // AddNewBid insert new bid information into database
-func (b *BidDB) AddNewBid(pdid int, deadline string, lowestMoney int, uid int) error {
+func (b *BidDB) AddNewBid(pdid int, deadline time.Time, lowestMoney int, uid int) error {
 	_, err := b.insert.Exec(pdid, deadline, nil, lowestMoney, uid)
 	return err
 }
