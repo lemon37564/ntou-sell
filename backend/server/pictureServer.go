@@ -39,6 +39,7 @@ func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname strin
 	defer img.Close()
 
 	imgType := strings.Split(img.Name(), ".")[1]
+	log.Println("image type:", imgType)
 
 	w.Header().Set("Content-Type", "image/"+imgType)
 	_, err = io.Copy(w, img)
