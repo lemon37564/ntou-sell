@@ -12,12 +12,6 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	switch mux.Vars(r)["key"] {
 	case "success":
 		fmt.Fprintln(w, "登入成功!")
-	case "pics":
-		if !sessionValid(w, r) {
-			fmt.Fprint(w, "請先登入!")
-			return
-		}
-		ser.picHandler(w, r)
 	case "testpic":
 		fmt.Fprint(w, `<html><img src="https://se-ssb.herokuapp.com/backend/pics/server.jpg"></html>`)
 	default:
