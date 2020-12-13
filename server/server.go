@@ -44,7 +44,7 @@ func (ser *Server) Serve() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/default/{key}", ser.defaultFunc)
+	r.HandleFunc("/{key}", ser.defaultFunc)
 	r.HandleFunc("/bid/{key}", ser.fetchBid)
 	r.HandleFunc("/cart/{key}", ser.fetchCart)
 	r.HandleFunc("/history/{key}", ser.fetchHistory)
@@ -55,8 +55,8 @@ func (ser *Server) Serve() {
 
 	r.HandleFunc("/pics/{key}", ser.picHandler)
 
-	http.Handle("/", r)
-	http.Handle("/ntou-sell/", http.StripPrefix("/ntou-sell/", http.FileServer(http.Dir("ntou-sell"))))
+	http.Handle("/backend", r)
+	http.Handle("/", http.FileServer(http.Dir("ntou-sell/Login.html")))
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
