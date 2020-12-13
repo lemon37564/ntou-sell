@@ -19,7 +19,7 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 		}
 		ser.picHandler(w, r)
 	case "testpic":
-		fmt.Fprint(w, `<html><img src="https://se-ssb.herokuapp.com/pics/server.jpg"></html>`)
+		fmt.Fprint(w, `<html><img src="https://se-ssb.herokuapp.com/backend/pics/server.jpg"></html>`)
 	default:
 		fmt.Fprintln(w, helpPage)
 	}
