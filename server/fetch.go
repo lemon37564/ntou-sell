@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -23,7 +22,7 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
-	if !ser.Sess.sessionValid(w, r) {
+	if !sessionValid(w, r) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -99,8 +98,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 
 			// set cookies to maintain login condition
 			if valid {
-				time.Sleep(time.Millisecond * 10)
-				ser.Sess.setSessionID(w, r)
+				login(w, r)
 				fmt.Fprintln(w, "登入成功!")
 			} else {
 				fmt.Fprint(w, "登入失敗")
@@ -128,7 +126,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "logout":
-		deleteCookies(w, r)
+		logout(w, r)
 		fmt.Fprintln(w, "已登出")
 	default:
 		http.NotFound(w, r)
@@ -136,7 +134,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
-	if !ser.Sess.sessionValid(w, r) {
+	if !sessionValid(w, r) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -224,7 +222,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
-	if !ser.Sess.sessionValid(w, r) {
+	if !sessionValid(w, r) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -288,7 +286,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
-	if !ser.Sess.sessionValid(w, r) {
+	if !sessionValid(w, r) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -352,7 +350,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
-	if !ser.Sess.sessionValid(w, r) {
+	if !sessionValid(w, r) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
@@ -449,7 +447,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
-	if !ser.Sess.sessionValid(w, r) {
+	if !sessionValid(w, r) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}

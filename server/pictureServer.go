@@ -12,7 +12,7 @@ import (
 )
 
 func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
-	if !ser.Sess.sessionValid(w, r) {
+	if !sessionValid(w, r) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}

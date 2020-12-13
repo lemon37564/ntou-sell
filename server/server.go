@@ -27,8 +27,6 @@ type Server struct {
 	Bd *bid.Bid
 	Ct *cart.Cart
 	Se *sell.Sell
-
-	Sess *session
 }
 
 // Serve start all functions provided for user

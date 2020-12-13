@@ -3,83 +3,84 @@ package server
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"fmt"
+	"log"
 	"net/http"
-	"sync"
-	"time"
+
+	"github.com/gorilla/sessions"
 )
 
 const (
-	idLen       = 32
-	cookieName  = "sessID"
-	lifeTime    = time.Hour * 24
-	refreshTime = time.Hour
+	IDLen      = 32
+	CookieName = "sessID"
 )
 
-type session struct {
-	lock sync.Mutex
+var store = sessions.NewCookieStore([]byte(CookieName))
 
-	// use to record valid sessions
-	list map[string]time.Time
+func login(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	lastRefresh time.Time
+	session.Values["auth"] = true
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	log.Println("logged in")
 }
 
-// NewSession return a session handler
-func NewSession() *session {
-	s := new(session)
-	s.list = make(map[string]time.Time)
+func logout(w http.ResponseWriter, r *http.Request) {
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	session.Values["auth"] = nil
 
-	return s
+	err = session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	log.Println("logged out")
 }
 
-func (se *session) sessionValid(w http.ResponseWriter, r *http.Request) bool {
+func sessionValid(w http.ResponseWriter, r *http.Request) bool {
+	session, err := store.Get(r, "session-name")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return false
+	}
 
-	// release all functions at a time because the login
-	// cookies sometimes cannot be set or read.
-	return true
-
-	se.sessionRefresh()
-
-	se.lock.Lock()
-	defer se.lock.Unlock()
-
-	cookie, exist := getCookies(w, r)
-	if exist {
-		_, exi := se.list[cookie.Value]
-		return exi
+	auth := session.Values["auth"]
+	if auth != nil {
+		isAuth, ok := auth.(bool)
+		return ok && isAuth
 	}
 
 	return false
 }
 
-func (se *session) setSessionID(w http.ResponseWriter, r *http.Request) {
-	se.lock.Lock()
-	defer se.lock.Unlock()
+func sessionHandler(w http.ResponseWriter, r *http.Request) {
 
-	deleteCookies(w, r)
-
-	id := se.genSessID()
-	setCookies(w, r, id)
-
-	se.list[id] = time.Now().Add(lifeTime)
-}
-
-func (se *session) sessionRefresh() {
-	// check sessions is valid (delete it if not)
-	if time.Since(se.lastRefresh) > refreshTime {
-		now := time.Now()
-		se.lastRefresh = now
-
-		for i, v := range se.list {
-			if now.After(v) {
-				delete(se.list, i)
-			}
-		}
+	session, err := store.Get(r, "s1")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
+	fmt.Println(session)
+	session.Values["id"] = genSessID()
+	session.Save(r, w)
 }
 
-func (se *session) genSessID() string {
-	id := make([]byte, idLen)
+func genSessID() string {
+	id := make([]byte, IDLen)
 
 	if _, err := rand.Read(id); err != nil {
 		panic(err)
