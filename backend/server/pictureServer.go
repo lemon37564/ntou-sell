@@ -33,7 +33,7 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname string) {
 	img, err := os.Open("pics/" + picname)
 	if err != nil {
-		log.Println(err)
+		log.Println("opening file:", err)
 		return
 	}
 	defer img.Close()
@@ -43,21 +43,21 @@ func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname strin
 	w.Header().Set("Content-Type", "image/"+imgType)
 	_, err = io.Copy(w, img)
 	if err != nil {
-		log.Println(err)
+		log.Println("showing file:", err)
 	}
 }
 
 func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname string) {
 	file, err := os.Create("pics/" + picname)
 	if err != nil {
-		log.Println(err)
+		log.Println("creating file:", err)
 		return
 	}
 	defer file.Close()
 
 	_, err = io.Copy(file, r.Body)
 	if err != nil {
-		log.Println(err)
+		log.Println("copying file:", err)
 		return
 	}
 
