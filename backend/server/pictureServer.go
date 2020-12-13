@@ -39,7 +39,6 @@ func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname strin
 	defer img.Close()
 
 	imgType := strings.Split(img.Name(), ".")[1]
-	log.Println("image type:", imgType)
 
 	w.Header().Set("Content-Type", "image/"+imgType)
 	_, err = io.Copy(w, img)
@@ -55,6 +54,8 @@ func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname str
 		return
 	}
 	defer file.Close()
+
+	log.Println(r.Body)
 
 	_, err = io.Copy(file, r.Body)
 	if err != nil {
