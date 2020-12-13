@@ -96,10 +96,25 @@ request.send(null);
 }
 
 //logout的功能
+
+
+//logout的功能
 function logout(){
 localStorage.clear();
-alert("帳號登出!");
-//後端的登出處理還沒做
+
+
+var logoutRequest=new XMLHttpRequest;
+logoutRequest.open("get","backend/user/logout"); 
+
+  request.onreadystatechange = function() { // Define event listener
+  // If the request is complete and was successful
+    if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
+    alert("帳號登出!");
+	}
+  }
+logoutRequest.send(null);
+
+//alert("帳號登出!");
 //測試用 console.log(localStorage.getItem("account"));
 window.location.href="Login.html";
 }

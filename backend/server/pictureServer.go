@@ -21,9 +21,9 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch path["key"] {
 	case "upload":
-		ser.picUpload(w, r, "filename")
+		ser.picUpload(w, r, "temp")
 	case "show":
-		ser.picShow(w, r, "filename")
+		ser.picShow(w, r, "temp")
 	default:
 		http.NotFound(w, r)
 	}
