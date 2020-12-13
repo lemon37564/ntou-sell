@@ -31,7 +31,7 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname string) {
-	img, err := os.Open("pics/" + picname)
+	img, err := os.Open("backend/pics/" + picname)
 	if err != nil {
 		log.Println("opening file:", err)
 		return
@@ -48,7 +48,7 @@ func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname strin
 }
 
 func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname string) {
-	file, err := os.Create("pics/" + picname)
+	file, err := os.Create("backend/pics/" + picname)
 	if err != nil {
 		log.Println("creating file:", err)
 		return
