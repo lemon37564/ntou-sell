@@ -1,17 +1,13 @@
 package server
 
 import (
-	"crypto/rand"
-	"encoding/base64"
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/sessions"
 )
 
 const (
-	IDLen      = 32
-	CookieName = "sessID"
+	CookieName = "SESSID"
 )
 
 var store = sessions.NewCookieStore([]byte(CookieName))
@@ -62,24 +58,24 @@ func sessionValid(w http.ResponseWriter, r *http.Request) bool {
 	return false
 }
 
-func sessionHandler(w http.ResponseWriter, r *http.Request) {
+// func sessionHandler(w http.ResponseWriter, r *http.Request) {
 
-	session, err := store.Get(r, "s1")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	fmt.Println(session)
-	session.Values["id"] = genSessID()
-	session.Save(r, w)
-}
+// 	session, err := store.Get(r, "s1")
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+// 	fmt.Println(session)
+// 	session.Values["id"] = genSessID()
+// 	session.Save(r, w)
+// }
 
-func genSessID() string {
-	id := make([]byte, IDLen)
+// func genSessID() string {
+// 	id := make([]byte, IDLen)
 
-	if _, err := rand.Read(id); err != nil {
-		panic(err)
-	}
+// 	if _, err := rand.Read(id); err != nil {
+// 		panic(err)
+// 	}
 
-	return base64.URLEncoding.EncodeToString(id)
-}
+// 	return base64.URLEncoding.EncodeToString(id)
+// }
