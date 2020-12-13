@@ -2,7 +2,8 @@
 <head>
 
 <script>
-function upload(){
+/*
+  function upload(){
 
 var temp=document.getElementById("temp");
 console.log(temp.value);
@@ -14,17 +15,19 @@ request.open("post","backend/pics/upload");
     if (request.readyState === 4 && request.status === 200) {
     }
   };
-request.send(temp.value);
+request.send(temp);
 
 }
 
-
+*/
 
 //https://se-ssb.herokuapp.com/backend/pics/upload
 
 </script>
 </head>
 <body>
-<input type="file" id="temp" name="temp"  accept="image/*" > <!-- data-target="file-uploader" -->
-<button onclick="upload()">upload</button>;
+  <form action="backup/pics/upload" method="post">
+    <input type="file" id="temp" name="temp"  accept="image/*" > <!-- data-target="file-uploader" -->
+    <button type="submit" onclick="upload()">upload</button>  
+  </form>
 </body>
