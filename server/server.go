@@ -13,8 +13,6 @@ import (
 	"se/product"
 	"se/sell"
 	"se/user"
-
-	"github.com/gorilla/mux"
 )
 
 // Server handle all services
@@ -42,21 +40,21 @@ func (ser *Server) Serve() {
 	}
 	log.Println("Service running on port:", port)
 
-	r := mux.NewRouter()
+	// r := mux.NewRouter()
 
-	r.HandleFunc("/default/{key}", ser.defaultFunc)
-	r.HandleFunc("/bid/{key}", ser.fetchBid)
-	r.HandleFunc("/cart/{key}", ser.fetchCart)
-	r.HandleFunc("/history/{key}", ser.fetchHistory)
-	r.HandleFunc("/order/{key}", ser.fetchOrder)
-	r.HandleFunc("/product/{key}", ser.fetchProduct)
-	r.HandleFunc("/sell/{key}", ser.fetchSell)
-	r.HandleFunc("/user/{key}", ser.fetchUser)
+	// r.HandleFunc("/default/{key}", ser.defaultFunc)
+	// r.HandleFunc("/bid/{key}", ser.fetchBid)
+	// r.HandleFunc("/cart/{key}", ser.fetchCart)
+	// r.HandleFunc("/history/{key}", ser.fetchHistory)
+	// r.HandleFunc("/order/{key}", ser.fetchOrder)
+	// r.HandleFunc("/product/{key}", ser.fetchProduct)
+	// r.HandleFunc("/sell/{key}", ser.fetchSell)
+	// r.HandleFunc("/user/{key}", ser.fetchUser)
 
-	r.HandleFunc("/pics/{key}", ser.picHandler)
+	// r.HandleFunc("/pics/{key}", ser.picHandler)
 
 	// http.Handle("/", r)
-	http.Handle("/", http.FileServer(http.Dir("/web")))
+	http.Handle("/ntou-sell/", http.FileServer(http.Dir("web")))
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
