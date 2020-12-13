@@ -1,0 +1,24 @@
+﻿html,body{
+  height: 100%;
+}
+div.fixed {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 0;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+/*
+.main-menu { color:#FFFFFF; background-color:#666666; padding:5px; margin:0px; cursor:pointer; display:inline-block; }  主選單的樣式 
+.main-menu:hover { background-color:#0000FF; }
+.sub-menu { color:#0000FF; background-color:#CCCCCC; margin:5px -5px; padding:0px; list-style-type:none; position:absolute; }  下拉清單的樣式 
+.sub-menu li { padding: 3px 5px; text-align:left; }  下拉清單每一列的樣式 
+.sub-menu li:hover { color:#FFFFFF; background-color:#0000FF; }
+.sub-menu a { text-align:left; display:block; text-decoration:none; color:#0000FF; }
+.sub-menu a:hover { color:#FFFFFF; background-color:#0000FF; text-decoration:none; }
+*/

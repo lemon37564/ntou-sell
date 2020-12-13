@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<!--bootstrap-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+<!--css-->
+<link href="css/page.css" rel="stylesheet">
+
+<title>海大拍賣主頁</title>
+
+<script type="text/javascript">
+//以下為載入新商品的function
+window.onload=ShowNewProduct;
+
+function ShowNewProduct(){
+
+var newProduct='';
+
+var request=new XMLHttpRequest;
+request.open("get","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+
+  request.onreadystatechange = function() { // Define event listener
+  // If the request is complete and was successful
+    if (request.readyState === 4 && request.status === 200) {
+      var type = request.getResponseHeader("Content-Type");
+      if (type.match(/^text/)){ // Make sure response is text
+		var datastr = JSON.parse(request.responseText);
+		var len  = datastr.length;
+		var str= "";
+		for (var i = 0; i < len; i++) {
+			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
+            //偵錯用  console.log(content);
+			newProduct=newProduct+content;
+			str+=content;
+		};
+		document.getElementById("NP").innerHTML=newProduct;
+      }
+    }
+  };
+request.send(null);
+
+}
+
+
+//以下為userlist點開清單的顯示
+var VisibleMenu = ''; // 記錄目前顯示的子選單的 ID
+
+// 顯示或隱藏子選單
+function switchMenu( theMainMenu, theSubMenu, theEvent ){
+    var SubMenu = document.getElementById( theSubMenu );
+    if( SubMenu.style.display == 'none' ){ // 顯示子選單
+        SubMenu.style.minWidth = theMainMenu.clientWidth; // 讓子選單的最小寬度與主選單相同 (僅為了美觀)
+        SubMenu.style.display = 'inline';
+        hideMenu(); // 隱藏子選單
+        VisibleMenu = theSubMenu;
+    }
+    else{ // 隱藏子選單
+        if( theEvent != 'MouseOver' || VisibleMenu != theSubMenu ){
+            SubMenu.style.display = 'none';
+            VisibleMenu = '';
+        }
+    }
+}
+
+// 隱藏子選單
+function hideMenu(){
+    if( VisibleMenu != '' ){
+        document.getElementById( VisibleMenu ).style.display = 'none';
+    }
+    VisibleMenu = '';
+}
+
+
+//以下是搜尋商品的function，目前無圖片及連結
+
+function searchProduct(){
+
+var msg="https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/search?";
+var name=document.getElementById("name");
+var minprice=document.getElementById("minprice");
+var maxprice=document.getElementById("maxprice");
+var eval=document.getElementById("eval");
+
+if(name.value!=''){msg=msg+"name="+name.value};
+if(minprice.value!=''){msg=msg+"&minprice="+name.value};
+if(maxprice.value!=''){msg=msg+"&maxprice="+name.value};
+if(eval.value!=''){msg=msg+"&eval="+name.value};
+
+
+var searchResult='';
+
+var request=new XMLHttpRequest;
+request.open("get",msg); 
+
+  request.onreadystatechange = function() { // Define event listener
+  // If the request is complete and was successful
+    if (request.readyState === 4 && request.status === 200) {
+      var type = request.getResponseHeader("Content-Type");
+      if (type.match(/^text/)){ // Make sure response is text
+		var datastr = JSON.parse(request.responseText);
+		var len  = datastr.length;
+		var str= "";
+		for (var i = 0; i < len; i++) {
+			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
+            //偵錯用  console.log(content);
+			searchResult=searchResult+content;
+			str+=content;
+		};
+		document.getElementById("NP").innerHTML=searchResult;
+      }
+    }
+  };
+request.send(null);
+
+}
+
+
+//logout的功能
+function logout(){
+localStorage.clear();
+alert("帳號登出!");
+//後端的登出處理還沒做
+//測試用 console.log(localStorage.getItem("account"));
+window.location.href="login.html";
+}
+
+</script>
+
+</head>
+
+<body style="margin:0px; padding:0px; background:#fff url(img/bg2.jpg) center center fixed no-repeat;background-size:cover; display:block;">
+  <div style="background:rgba(57,73,172,0.8);">
+    <div>
+	<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
+    <ul id="SubMenu" class="sub-menu" style="display:none;">
+	    <h2 style="display:inline;">
+        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
+        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Order</a></li>
+        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
+		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Sell</a></li>
+		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
+		<li style="display:inline;"><a onclick="logout()">&nbsp;&nbsp;Logout</a></li>
+		</h2
+		<br></br>
+    </ul>
+	
+    <font color="FFFFFF"><h1 style="display:inline;">海大拍賣&nbsp;&nbsp;</h1></font>
+    <!--已改用js處理<form id="search" action="https://se-ssb.herokuapp.com/product/search" method="get" style="margin:0px;display:inline;"> <!--action接後端程式-->
+	  <font color="FFFFFF"><h3 style="display:inline;">
+	  關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
+	  最低價:<input id="minprice" type="text" name="minprice" value="" size="15" style=""> <!--輸入商品最低價-->
+	  最高價:<input id="maxprice" type="text" name="maxprice" value="" size="15" style=""> <!--輸入商品最高價-->
+	  評價:<input id="eval" type="text" name="eval" value="" size="15" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
+	  <button onclick="searchProduct()" >搜尋</button>
+	  </h3>
+	<!--</form>-->
+    </div>
+  </div>
+  
+  <table height="10"></table>
+  <div align="center">
+  <table id=NP style="background:rgba(243,241,241,0.6);" width="1000" height="700">
+	  <h2>New Product</h2>
+	  <tr><td>
+	  </td></tr>
+  </table>
+  </div>
+</body>
+
+</html>
