@@ -17,7 +17,9 @@ function ShowNewProduct(){
 var newProduct='';
 
 var request=new XMLHttpRequest;
-request.open("get","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+//request.open("get","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+
+request.open("get","backend/product/newest?amount=3"); 
 
   request.onreadystatechange = function() { // Define event listener
   // If the request is complete and was successful
@@ -75,7 +77,11 @@ function hideMenu(){
 
 function searchProduct(){
 
-var msg="https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/search?";
+//var msg="https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/search?";
+
+var msg="backend/product/search?";
+
+
 var name=document.getElementById("name");
 var minprice=document.getElementById("minprice");
 var maxprice=document.getElementById("maxprice");
