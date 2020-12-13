@@ -18,7 +18,7 @@ const (
 var store = sessions.NewCookieStore([]byte(CookieName))
 
 func login(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "session-name")
+	session, err := store.Get(r, CookieName)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -35,7 +35,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "session-name")
+	session, err := store.Get(r, CookieName)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -52,7 +52,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func sessionValid(w http.ResponseWriter, r *http.Request) bool {
-	session, err := store.Get(r, "session-name")
+	session, err := store.Get(r, CookieName)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return false
