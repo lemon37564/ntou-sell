@@ -161,7 +161,8 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			b := (bid[0] == "true")
 
 			if err1 == nil && err2 == nil {
-				fmt.Fprint(w, ser.Pd.AddProduct(name[0], p, des[0], a, account[0], b, date[0]))
+				_, stat := ser.Pd.AddProduct(name[0], p, des[0], a, account[0], b, date[0])
+				fmt.Fprint(w, stat)
 			} else {
 				fmt.Fprint(w, "price or amount was not an integer.")
 			}

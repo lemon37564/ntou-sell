@@ -20,15 +20,15 @@ func ProductInit(db *sql.DB) *Product {
 }
 
 //新增產品 使用: sell mod
-func (p Product) AddProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) string {
-	_, err := p.fn.AddNewProduct(pdname, price, description, amount, account, bid, date)
+func (p Product) AddProduct(pdname string, price int, description string, amount int, account string, bid bool, date string) (int, string) {
+	pdid, err := p.fn.AddNewProduct(pdname, price, description, amount, account, bid, date)
 	if err != nil {
 		if fmt.Sprint(err) == "NOT NULL constraint failed: product.seller_id" {
-			return "沒有此使用者帳號!"
+			return -1, "沒有此使用者帳號!"
 		}
-		return fmt.Sprint(err)
+		return -1, fmt.Sprint(err)
 	}
-	return "ok"
+	return pdid, "ok"
 }
 
 //刪除產品 使用:  mod

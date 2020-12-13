@@ -1,15 +1,15 @@
 package main
 
 import (
-	"se/bid"
-	"se/cart"
+	"se/backend/bid"
+	"se/backend/cart"
+	"se/backend/history"
+	"se/backend/order"
+	"se/backend/product"
+	"se/backend/sell"
+	"se/backend/server"
+	"se/backend/user"
 	"se/database"
-	"se/history"
-	"se/order"
-	"se/product"
-	"se/sell"
-	"se/server"
-	"se/user"
 )
 
 func main() {

@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"os"
 	"runtime"
-	"se/bid"
-	"se/cart"
-	"se/history"
-	"se/order"
-	"se/product"
-	"se/sell"
-	"se/user"
+	"se/backend/bid"
+	"se/backend/cart"
+	"se/backend/history"
+	"se/backend/order"
+	"se/backend/product"
+	"se/backend/sell"
+	"se/backend/user"
 
 	"github.com/gorilla/mux"
 )
@@ -52,10 +52,12 @@ func (ser *Server) Serve() {
 	r.HandleFunc("/backend/product/{key}", ser.fetchProduct)
 	r.HandleFunc("/backend/sell/{key}", ser.fetchSell)
 	r.HandleFunc("/backend/user/{key}", ser.fetchUser)
+
 	r.HandleFunc("/backend/pics/{key}", ser.picHandler)
 
 	http.Handle("/backend/", r)
-	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("ntou-sell"))))
+
+	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("webpage"))))
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)

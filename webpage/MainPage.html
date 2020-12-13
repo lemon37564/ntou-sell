@@ -9,13 +9,37 @@
 <title>海大拍賣主頁</title>
 
 <script type="text/javascript">
-//以下為載入帳戶資料的function
-window.onload=ShowAccount;
+//以下為載入新商品的function
+window.onload=ShowNewProduct;
 
-function ShowAccount(){
-    
-	document.getElementById("acc").innerHTML=localStorage.getItem("account");
-	document.getElementById("pas").innerHTML=localStorage.getItem("password");
+function ShowNewProduct(){
+
+var newProduct='';
+
+var request=new XMLHttpRequest;
+//request.open("get","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+
+request.open("get","backend/product/newest?amount=3"); 
+
+  request.onreadystatechange = function() { // Define event listener
+  // If the request is complete and was successful
+    if (request.readyState === 4 && request.status === 200) {
+      var type = request.getResponseHeader("Content-Type");
+      if (type.match(/^text/)){ // Make sure response is text
+		var datastr = JSON.parse(request.responseText);
+		var len  = datastr.length;
+		var str= "";
+		for (var i = 0; i < len; i++) {
+			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
+            //偵錯用  console.log(content);
+			newProduct=newProduct+content;
+			str+=content;
+		};
+		document.getElementById("NP").innerHTML=newProduct;
+      }
+    }
+  };
+request.send(null);
 
 }
 
@@ -49,13 +73,14 @@ function hideMenu(){
 }
 
 
-//以下是搜尋商品的function
+//以下是搜尋商品的function，目前無圖片及連結
 
 function searchProduct(){
 
 //var msg="https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/product/search?";
 
 var msg="backend/product/search?";
+
 
 var name=document.getElementById("name");
 var minprice=document.getElementById("minprice");
@@ -95,16 +120,27 @@ request.send(null);
 
 }
 
+
 //logout的功能
 function logout(){
 localStorage.clear();
-alert("帳號登出!");
-//後端的登出處理還沒做
+
+
+var logoutRequest=new XMLHttpRequest;
+logoutRequest.open("get","backend/user/logout"); 
+
+  request.onreadystatechange = function() { // Define event listener
+  // If the request is complete and was successful
+    if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
+    alert("帳號登出!");
+	}
+  }
+logoutRequest.send(null);
+
+//alert("帳號登出!");
 //測試用 console.log(localStorage.getItem("account"));
-window.location.href="login.html";
+window.location.href="Login.html";
 }
-
-
 
 </script>
 
@@ -120,7 +156,7 @@ window.location.href="login.html";
         <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Order</a></li>
         <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
 		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Sell</a></li>
-		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Account</a></li>
+		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
 		<li style="display:inline;"><a onclick="logout()">&nbsp;&nbsp;Logout</a></li>
 		</h2
 		<br></br>
@@ -141,14 +177,10 @@ window.location.href="login.html";
   
   <table height="10"></table>
   <div align="center">
-  <h2>Account</h2>
-  <table id="" style="background:rgba(243,241,241,0.6);" width="1000" height="700">
-	  <tr>
-	  <td><h3 style="display:inline;">Account:</h3><h3 id="acc" style="display:inline;"></h3></td>
-	  </tr>
-	  <tr>
-	  <td><h3  style="display:inline;">Password:</h3><h3 id="pas" style="display:inline;"></h3></td>
-	  </tr>
+  <table id=NP style="background:rgba(243,241,241,0.6);" width="1000" height="700">
+	  <h2>New Product</h2>
+	  <tr><td>
+	  </td></tr>
   </table>
   </div>
 </body>
