@@ -5,7 +5,7 @@
 function upload(){
 
 var temp=document.getElementById("temp");
-
+console.log(temp.value);
 var request=new XMLHttpRequest;
 request.open("post","backend/pics/upload"); 
 
@@ -14,7 +14,7 @@ request.open("post","backend/pics/upload");
     if (request.readyState === 4 && request.status === 200) {
     }
   };
-request.send(temp);
+request.send(temp.value);
 
 }
 
@@ -25,6 +25,6 @@ request.send(temp);
 </script>
 </head>
 <body>
-<input type="file" id="temp"  accept="image/*" > <!-- data-target="file-uploader" -->
+<input type="file" id="temp" name="temp"  accept="image/*" > <!-- data-target="file-uploader" -->
 <button onclick="upload()">upload</button>;
 </body>
