@@ -218,8 +218,7 @@ request.send(null);
                     if (type.match(/^text/)){ // Make sure response is text
 		                 datastr = JSON.parse(request.responseText);
                          for(var i=0;i<datastr.length;i++){
-                           /* arr.pdid.push(datastr[i].Pdid);
-                            arr.amo.push(datastr[i].Amount);*/
+                         
                          }
 		            };
 		
@@ -236,7 +235,8 @@ request.send(null);
             
             if(prods[i].type == "checkbox"){
                 if(prods[i].checked){
-                    alert(String(datastr[i].Pdid));
+                    alert(ddd);
+                    alert(datastr[i].Pdid);
                     var pdid = String(datastr[i].Pdid);
                     var amount = String(datastr[i].Amount);
                     var temp = msgsend+"";
