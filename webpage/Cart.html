@@ -215,11 +215,8 @@ request.send(null);
         request.onreadystatechange = function() { 
             if (request.readyState === 4 && request.status === 200) {
                 var type = request.getResponseHeader("Content-Type");
-                    if (type.match(/^text/)){ // Make sure response is text
-		                 datastr = JSON.parse(request.responseText);
-                         for(var i=0;i<datastr.length;i++){
-                         
-                         }
+                    if (type.match(/^text/)){ 
+		                 alert(cc);
 		            };
 		
             }else{
