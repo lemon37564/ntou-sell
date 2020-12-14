@@ -27,14 +27,14 @@ type MessageDB struct {
 // Message struct store data of a single Message
 type Message struct {
 	SenderName   string
-	RecieverName string
+	ReceiverName string
 	Text         string
 }
 
 type MessID struct {
 	MessageID   int
 	SenderUID   int
-	RecieverUID int
+	ReceiverUID int
 	Text        string
 }
 
@@ -127,7 +127,7 @@ func (m *MessageDB) GetMessages(senderUID, receiverUID int, ascend bool) (all []
 
 	var mess Message
 	for rows.Next() {
-		err = rows.Scan(&mess.SenderName, &mess.RecieverName, &mess.Text)
+		err = rows.Scan(&mess.SenderName, &mess.ReceiverName, &mess.Text)
 		if err != nil {
 			log.Println(err)
 			return
@@ -150,7 +150,7 @@ func (m *MessageDB) GetAll() (all []MessID) {
 
 	var mess MessID
 	for rows.Next() {
-		err = rows.Scan(&mess.MessageID, &mess.SenderUID, &mess.RecieverUID, &mess.Text)
+		err = rows.Scan(&mess.MessageID, &mess.SenderUID, &mess.ReceiverUID, &mess.Text)
 		if err != nil {
 			log.Println(err)
 			return
