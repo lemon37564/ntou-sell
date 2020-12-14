@@ -230,10 +230,11 @@ request.send(null);
         var value = new Array();
         var temp = 0;
         
-        
+        alert(3);
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
             //alert(arr);
+            alert("i="+i);
             if(prods[i].type == "checkbox"){
                 if(prods[i].checked){
                     
@@ -241,7 +242,6 @@ request.send(null);
                     var amount = datastr[i].Amount;
                     var temp = msgsend;
                     alert(i);
-                    temp=temp+"uid="+1;
                     temp=temp+"&pdid="+pdid;
                     temp=temp+"&amount"+amount;
                     request.open("get",temp); 
