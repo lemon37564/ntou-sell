@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -14,7 +13,7 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	case "success":
 		fmt.Fprintln(w, "登入成功!")
 	case "testpic":
-		fmt.Fprint(w, `<html><img src="https://se-ssb.herokuapp.com/backend/pics/server.jpg"></html>`)
+		fmt.Fprint(w, `<html><img src="/backend/pics/server.jpg"></html>`)
 	default:
 		fmt.Fprintln(w, HelpPage)
 	}
@@ -63,7 +62,6 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		}
 	case "add":
 		pdid, exi := args["pdid"]
-		log.Println(pdid, exi)
 
 		if exi {
 			pd, err := strconv.Atoi(pdid[0])
@@ -95,8 +93,8 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		if exi && exi2 {
 			uid, valid := ser.Ur.Login(account[0], pass[0])
 
-			// set cookies to maintain login condition
 			if valid {
+				// set session to maintain login condition
 				login(w, r, uid)
 				fmt.Fprintln(w, "登入成功!")
 			} else {
@@ -247,12 +245,9 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, ser.Od.GetOrders(uid))
 
 	case "add":
-		exist := make([]bool, 2)
-		var pdid, amount []string
-
-		pdid, exist[0] = args["pdid"]
-		amount, exist[1] = args["amount"]
-		if all(exist) {
+		pdid, exi := args["pdid"]
+		amount, exi2 := args["amount"]
+		if exi && exi2 {
 			pi, err2 := strconv.Atoi(pdid[0])
 			amo, err3 := strconv.Atoi(amount[0])
 
@@ -267,8 +262,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 	case "del":
 		pdid, exi := args["pdid"]
 		if exi {
-			pi, err1 := strconv.Atoi(pdid[0])
-			if err1 == nil {
+			if pi, err1 := strconv.Atoi(pdid[0]); err1 == nil {
 				fmt.Fprint(w, ser.Od.Delete(uid, pi))
 			} else {
 				fmt.Fprint(w, "User id or Product id was not an integer.")
@@ -300,9 +294,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 		pdid, ex1 := args["pdid"]
 
 		if ex1 {
-			i, err1 := strconv.Atoi(pdid[0])
-			if err1 == nil {
-
+			if i, err1 := strconv.Atoi(pdid[0]); err1 == nil {
 				fmt.Fprint(w, ser.Bd.GetProductBidInfo(i))
 			} else {
 				fmt.Fprint(w, "product id not integer")
@@ -311,13 +303,10 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "set":
-		exist := make([]bool, 2)
-		var pdid, money []string
+		pdid, exi := args["pdid"]
+		money, exi2 := args["money"]
 
-		pdid, exist[0] = args["pdid"]
-		money, exist[1] = args["money"]
-
-		if all(exist) {
+		if exi && exi2 {
 			p, err1 := strconv.Atoi(pdid[0])
 			m, err3 := strconv.Atoi(money[0])
 
@@ -378,12 +367,10 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "remo":
-		pdid, ex2 := args["pdid"]
+		pdid, exi := args["pdid"]
 
-		if ex2 {
-			p, err2 := strconv.Atoi(pdid[0])
-
-			if err2 == nil {
+		if exi {
+			if p, err := strconv.Atoi(pdid[0]); err == nil {
 				fmt.Fprint(w, ser.Ct.RemoveProduct(uid, p))
 
 			} else {
