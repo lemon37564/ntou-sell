@@ -16,7 +16,7 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	case "testpic":
 		fmt.Fprint(w, `<html><img src="https://se-ssb.herokuapp.com/backend/pics/server.jpg"></html>`)
 	default:
-		fmt.Fprintln(w, helpPage)
+		fmt.Fprintln(w, HelpPage)
 	}
 }
 
@@ -31,6 +31,8 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, HistoryHelp)
 	case "all":
 		fmt.Fprint(w, ser.Ht.GetAll())
 	case "get":
@@ -83,6 +85,8 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, UserHelp)
 	case "login":
 
 		account, exi := args["account"]
@@ -139,6 +143,8 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, ProductHelp)
 	case "all":
 		fmt.Fprint(w, ser.Pd.GetAll())
 	case "add":
@@ -235,6 +241,8 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, OrderHelp)
 	case "get":
 		fmt.Fprint(w, ser.Od.GetOrders(uid))
 
@@ -286,6 +294,8 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, BidHelp)
 	case "get": //For single bid product
 		pdid, ex1 := args["pdid"]
 
@@ -305,7 +315,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 		var pdid, money []string
 
 		pdid, exist[0] = args["pdid"]
-		money, exist[2] = args["money"]
+		money, exist[1] = args["money"]
 
 		if all(exist) {
 			p, err1 := strconv.Atoi(pdid[0])
@@ -349,6 +359,8 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, CartHelp)
 	case "add": //For single product
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
@@ -418,6 +430,8 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, SellHelp)
 	case "set": //For single bid product
 		exist := make([]bool, 9)
 		var pdname, price, description, amount, account, sellerID, bid, date, dateLine []string
@@ -466,6 +480,8 @@ func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, MessageHelp)
 	case "add":
 		val, exi := args["receiverUID"]
 		val2, exi2 := args["text"]

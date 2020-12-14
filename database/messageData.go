@@ -24,9 +24,9 @@ type MessageDB struct {
 
 // Message struct store data of a single Message
 type Message struct {
-	SenderUID   int
-	RecieverUID int
-	MessageText string
+	SenderName   string
+	RecieverName string
+	MessageText  string
 }
 
 // MessageDBInit prepare function for database using
@@ -39,7 +39,7 @@ func MessageDBInit(db *sql.DB) *MessageDB {
 		panic(err)
 	}
 
-	message.get, err = db.Prepare("SELECT sender_uid, receiver_uid, message FROM message WHERE sender_uid=? AND receiver_uid=? ORDER BY message_id DESC;")
+	message.get, err = db.Prepare("SELECT sender_uid, receiver_uid, message FROM message WHERE sender_uid=? AND receiver_uid=? ORDER BY message_id ASC;")
 	if err != nil {
 		panic(err)
 	}
@@ -85,7 +85,7 @@ func (m *MessageDB) GetMessages(senderUID, receiverUID int) (all []Message) {
 
 	var mess Message
 	for rows.Next() {
-		err = rows.Scan(&mess.SenderUID, &mess.RecieverUID, &mess.MessageText)
+		err = rows.Scan(&mess.SenderName, &mess.RecieverName, &mess.MessageText)
 		if err != nil {
 			log.Println(err)
 			return

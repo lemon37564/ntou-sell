@@ -40,7 +40,7 @@ func createProductTable(db *sql.DB) {
 	tableLogger("product", err)
 
 	// insert one value into product in order to prevent max(pd_id) = null
-	db.Exec("INSERT INTO product VALUES(0, \"N/A\", 0, \"N/A\", 0, 0.0, 0, false, \"2006-01-02 15:04\");")
+	db.Exec("INSERT INTO product VALUES(0, \"N/A\", 0, \"N/A\", 0, 0.0, 0, false, \"2006-01-02\");")
 }
 
 func createBidTable(db *sql.DB) {

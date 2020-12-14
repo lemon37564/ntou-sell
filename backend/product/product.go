@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const TimeLayout = "2006-01-02 15:04:05"
+const TimeLayout = "2006-01-02"
 
 type Product struct {
 	fn *database.ProductDB
@@ -26,7 +26,7 @@ func ProductInit(db *sql.DB) *Product {
 func (p Product) AddProduct(pdname string, price int, description string, amount int, sellerUID int, bid bool, date string) (int, string) {
 	dt, err := time.Parse(TimeLayout, date)
 	if err != nil {
-		return -1, "date invalid! (date format is like 2006-01-02 15:04:05)"
+		return -1, "date invalid! (date format is like 2006-01-02)"
 	}
 
 	pdid, err := p.fn.AddNewProduct(pdname, price, description, amount, sellerUID, bid, dt)
