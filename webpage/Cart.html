@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-#bord{
- border:#0000FF 5px solid
-    }
+
 <style type="text/css">
 /*#DIV1{
     width:200px;　
@@ -17,11 +15,12 @@ body {
 	background-color: powderblue;
 }
 div.tobuy{
+  margin-bottom: 0px;
   margin-left:auto;
   margin-right:auto;
   background-color:azure;
   padding-left: 70px;
-  height:100px;
+  height:130px;
 
 }
 div.underborder{
@@ -264,17 +263,18 @@ request.send(null);
     }
     function total() {
         alert("xxx");
+        
         var request=new XMLHttpRequest;
         request.open("get","/backend/cart/tal"); //前面網址解決CORS
         request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
-		var datastr = request.responseText;
+		var datastr = request.response;
 		
         }
         }   
-        document.getElementById("SHOWTOT").innerHTML="wtf";
+        document.getElementById("SHOWTOT").innerHTML=datastr;
         };
     }
 </script>
@@ -354,7 +354,7 @@ ctx.fillRect(300, 50, 600, 300);
     
 <div id="tobuy">
     <div id="div1">
-        <div id="div1" color:black><font size="3">目前所選:</font></div>>
+        <div id="div1" color:black><font size="3">目前所選:</font></div>
     </div>
     <div id="div1">
         
