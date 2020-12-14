@@ -13,7 +13,7 @@
 //以下為註冊的function
 
 function regist(){
-//var msg="https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/user/regist?";  //前面的連結解決CORS
+//var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/user/regist?";  //前面的連結解決CORS
 
 var msg="backend/user/regist?";  
 
@@ -31,7 +31,7 @@ request.open("get",msg);
       if (type.match(/^text/)){ // Make sure response is text
         //if(request.responseText==="true"){
         alert(request.responseText); // Pass it to callback
-        window.location.href="Login.html";
+        window.location.href="index.html";
         //}
       }
     }
@@ -57,7 +57,7 @@ request.send(null);
 	    <div align="center">
 		<font color="3949AB"><h1><b>註冊帳戶</b></h1>
 		</div>
-        <!--已改用js處理<form id="regist" action="https://se-ssb.herokuapp.com/user/regist" method="get"> <!--action接後端程式-->
+        <!--已改用js處理<form id="regist" action="https://ntou-sell.herokuapp.com/user/regist" method="get"> <!--action接後端程式-->
           <section style="margin-left:30px;"><h4><b>帳號:</b></h4></section>
           <input id="account" type="text" name="account" value="" size="35" style="margin-left:30px; margin-right:30px;">
           <section style="margin-left:30px;"><h4><b>密碼:</b></h4></section>
@@ -70,7 +70,7 @@ request.send(null);
 		  </div>
         <!--</form>-->
 		<div align="right" style="margin-right:15px;">
-		  <a href="Login.html"><h4>登入頁面</h4></a> <!--前往登入頁面-->
+		  <a href="index.html"><h4>登入頁面</h4></a> <!--前往登入頁面-->
 		</div>
       </td></tr>
     </table>
@@ -78,10 +78,10 @@ request.send(null);
 </body>
 
 <!--後端連結
-https://se-ssb.herokuapp.com/user/all
-https://se-ssb.herokuapp.com/product/all
-https://se-ssb.herokuapp.com/product/search?name=ifone16
-https://github.com/lemon37564/SE-SSB
+https://ntou-sell.herokuapp.com/user/all
+https://ntou-sell.herokuapp.com/product/all
+https://ntou-sell.herokuapp.com/product/search?name=ifone16
+https://github.com/lemon37564/ntou-sell
 -->
 
 </html>
