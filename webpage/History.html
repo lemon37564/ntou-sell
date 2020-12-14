@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style type="text/css">
+/*#DIV1{
+    width:200px;　
+    line-height:50px;　
+    padding:20px;
+    border:2px blue solid;
+    margin-right:10px;　
+
+}*/
+body {
+	background-color: powderblue;
+}
+div.tobuy{
+  margin-left:auto;
+  margin-right:auto;
+  background-color:azure;
+  padding-left: 70px;
+  height:100px;
+
+}
+div.border{
+   
+  position: relative;
+  top: 100px;
+  width: 850px;
+  height: 800px;
+  border-style:groove;
+  border-width: 50px 4px 4px 4px;
+  border-color:brown;
+  background-color:cadetblue;
+  padding-left: 50px;
+  padding-top:50px;
+}
+div.littbord1{
+    float:left;
+    position: relative;
+    margin-top:250px;
+    margin-left:20px;
+    width:300px;
+    height:150px;
+    border-style:solid;
+    border-color:burlywood;
+    background-color: powderblue;
+}
+div.littbord2{
+    float:left;
+    position: relative;
+    margin-top:250px;
+    margin-left:80px;
+    width:300px;
+    height:150px;
+    border-style:solid;
+    border-color:burlywood;
+    background-color: powderblue;
+}
+div.cart-title{/*上片的bar*/
+  position: relative;
+  top: 0px;
+  background-color:darkgoldenrod;
+  border:1px solid #000;
+  border-bottom-left-radius:30px;
+  border-bottom-right-radius: 30px;
+  width: 900px;
+  height: 50px; 
+}
+Class.mybutto {   /*total*/
+    
+	box-shadow: 3px 4px 0px 0px #899599;
+	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+	background-color:#ededed;
+	border-radius:15px;
+	border:1px solid #d6bcd6;
+	display:inline-block;
+	cursor:pointer;
+	color:#3a8a9e;
+	font-family:Arial;
+	font-size:17px;
+	padding:7px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #e1e2ed;
+    width:30px;
+    height:20px;
+}
+class.myButton:hover {
+	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+	background-color:#bab1ba;
+}
+class.myButton:active {
+	position:relative;
+	top:1px;
+}
+#div1{/*商品價個數量*/
+    float:left;
+     margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 60px;
+    margin-left: 80px;
+    color:aliceblue;
+    font-size:30px
+}
+#tobuy{
+        margin-bottom: 0px;
+        width:1000px;
+        height:120px;
+        background-color:darkgoldenrod;
+        border-style : solid;
+        border-color: #b8571e;
+    }
+#div2{/*for showing product*/
+    position: relative;
+    top: 20px;
+    background-color:blanchedalmond;
+    border:3px solid #000;
+    width:600px;
+    height:80px;
+    padding-left: 80px;
+    margin-left:40px;
+    margin-top:20px;
+    float:left;
+}
+#div3{
+        font-weight:bold;
+        font-size:35px;
+        color:gray;
+        width:20px;
+        height:20px;
+        
+    float:left;
+}
+#div4{
+        
+}
+</style>
+    
+
+<script type="text/javascript">
+    window.onload=ShowNewProduct;
+
+    function GetHistoryProducts(){
+
+        var newProduct='';
+
+        var request=new XMLHttpRequest;
+
+        //amount 之後改
+        request.open("get","backend/history/get?amount=3"); 
+
+        request.onreadystatechange = function() { // Define event listener
+  // If the request is complete and was successful
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+		var datastr = JSON.parse(request.responseText);
+		var len  = datastr.length;
+		var str= "";
+		for (var i = 0; i < len; i++) {
+			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'數量'+datastr[i].Amount</li>'+'</p>';
+            //偵錯用  console.log(content);
+			newProduct=newProduct+content;
+			str+=content;
+		};
+		document.getElementById("TP").innerHTML=newProduct;
+      }
+    }
+  };
+request.send(null);
+
+}
+    function switchMenu( theMainMenu, theSubMenu, theEvent ){
+        var SubMenu = document.getElementById( theSubMenu );
+        if( SubMenu.style.display == 'none' ){ // 顯示子選單
+            SubMenu.style.minWidth = theMainMenu.clientWidth; // 讓子選單的最小寬度與主選單相同 (僅為了美觀)
+            SubMenu.style.display = 'inline';
+            hideMenu(); // 隱藏子選單
+            VisibleMenu = theSubMenu;
+        }
+        else{ // 隱藏子選單
+            if( theEvent != 'MouseOver' || VisibleMenu != theSubMenu ){
+                SubMenu.style.display = 'none';
+                VisibleMenu = '';
+            }
+        }
+    }
+
+// 隱藏子選單
+    function hideMenu(){
+        if( VisibleMenu != '' ){
+            document.getElementById( VisibleMenu ).style.display = 'none';
+        }
+        VisibleMenu = '';
+    }
+    function getData(){
+            return 1
+    }
+    function myFunction() {
+      document.getElementById("demo").innerHTML = "Paragraph changed.";
+    }
+    function addall(){
+        return ff
+    }
+    function temp() {
+        var x= document.getElementsByID("temp1");
+      document.getElementById("d44d").innerHTML= x;
+    }
+    function addall(){
+            
+            var prods=document.getElementsByName("test");
+            for (var i=0;i<prods.length;i++){
+                if(prods[i].type == "checkbox"){
+                prods[i].checked = true;
+            
+                }
+            }
+        }
+    
+    function goToBuy(){
+        alert("已加入訂單");
+        
+        
+        var msg= "/backend/cart/geps";
+        
+        var msgsend = "/backend/order/add?";
+        var request=new XMLHttpRequest;
+        var datastr = "";
+        request.open("get","/backend/cart/geps"); //前面網址解決CORS
+        request.onreadystatechange = function() { 
+            
+            if (request.readyState === 4 && request.status === 200) {
+                
+                var type = request.getResponseHeader("Content-Type");
+                    if (type.match(/^text/)){ 
+                        datastr = JSON.parse(request.responseText);
+		                
+		            };
+		
+            }else{
+                alert("err in get response")
+            }
+        }
+        var value = new Array();
+        alert(datastr[0].Pdid);
+        
+        var prods=document.getElementsByName("test");
+        for (var i=0;i<prods.length;i++){
+            //alert(arr);
+            
+            if(prods[i].type == "checkbox"){
+                
+                if(prods[i].checked){
+                    alert("ddd");
+                    
+                    var pdid = datastr[i].Pdid;
+                    alert("c");
+                    var amount = datastr[i].Amount;
+                    alert("cc");
+                    var temp = msgsend;
+                    alert("dd");
+                    
+                    temp=temp+"pdid="+pdid;
+                    temp=temp+"&amount"+amount;
+                    request.open("get",temp); 
+                    request.send(null);
+                    alert("d");
+                }
+            }
+        }
+        alert("已加入訂單");
+        request.send(null);
+    }
+    function submit(){
+        var msg="/backend/sell/set?";
+        var pdname=document.getElementById("pdname");
+        var pdpic=document.getElementById("pdpic");
+        var desc=document.getElementById("desc");
+        var date=document.getElementById("date");
+        var price=document.getElementById("price");
+        var number=document.getElementById("number");
+        var initprice=document.getElementById("initprice");
+        var dateline=document.getElementById("dateline");
+        
+        
+        <!--這裡我先假設為輸入正確-->
+        /backend/sell/set?pdname=...&price=...&description=...&amount=...&account=...&sellerID=...&bid=...&date=...&dateLine=...<br>
+        if(pdname.initprice!=''){//有誤
+        msg=msg+"pdname="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&account="++"&seller   ID="+"&bid="+"true"+"&date="+date+"&dateLine="+dateline
+        }
+        var request=new XMLHttpRequest;
+        request.open("get",msg); 
+        request.onreadystatechange = function() { // Define event       listener
+            // If the request is complete and was successful
+            if (request.readyState === 4 && request.status === 200) {
+                var type = request.getResponseHeader("Content-Type");
+                if (type.match(/^text/)){ // Make sure response is text
+		              var datastr = JSON.parse(request.responseText);
+		              
+		        }
+            }
+        };
+        request.send(null);
+    }
+    function total() {
+        alert("xxx");
+        var request=new XMLHttpRequest;
+        request.open("get","/backend/cart/tal"); //前面網址解決CORS
+        request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+		var datastr = request.responseText;
+		
+        }
+        }   
+        document.getElementById("SHOWTOT").innerHTML="wtf";
+        };
+    }
+</script>
+
+</head>
+
+<body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
+
+<div style=background:rgba(57,73,172,0.8)>
+		<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
+        <ul id="SubMenu" class="sub-menu" style="display:none;">
+	    <h2 style="display:inline;">
+        <li style="display:inline;"><a href="MainPage.html" target="_self">&nbsp;&nbsp;Main</a></li>
+        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Order</a></li>
+        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
+		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Sell</a></li>
+		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Account</a></li>
+		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Logout</a></li>
+		</h2
+		<br></br>
+    </ul>
+		<font color="FFFFFF">
+			<h1 style="display:inline;">歷史紀錄&nbsp;&nbsp;</h1>
+		</font>
+		
+</div>
+<div align=center><!--對其-->
+
+
+<div class="border"><!--版面-->
+    <h1 style="text-align: left;font-size:50px">歷史紀錄</h1>
+    <div style="padding-left: 20px">
+    <table id=TP style="background:rgba(243,241,241,0.6);align-content: center" width="700" height="600">
+    <tr><td>
+	  </td></tr>
+  </table>
+  </div>
+    
+    
+    
+  
+
+</div>
+ 
+</body>
+</html> 
