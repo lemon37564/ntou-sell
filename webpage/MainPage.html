@@ -133,14 +133,14 @@ logoutRequest.open("get","backend/user/logout");
   // If the request is complete and was successful
     if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
     alert("帳號登出!");
-    window.location.href="Login.html";
+    window.location.href="index.html";
 	}
   }
 logoutRequest.send(null);
 
 //alert("帳號登出!");
 //測試用 console.log(localStorage.getItem("account"));
-//window.location.href="Login.html";
+//window.location.href="index.html";
 }
 
 </script>
