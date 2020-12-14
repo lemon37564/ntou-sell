@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/lemon37564/SE-SS.svg?branch=main)](https://travis-ci.org/lemon37564/SE-SS)
 
 # Website
-https://se-ssb.herokuapp.com/Login.html
+https://ntou-sell.herokuapp.com
 
 # Requirements
 https://github.com/mattn/go-sqlite3 \
