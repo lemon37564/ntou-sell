@@ -5,21 +5,21 @@
  border:#0000FF 5px solid
     }
 <style type="text/css">
-#DIV1{
-width:200px;　
-line-height:50px;　
-padding:20px;
-border:2px blue solid;
-margin-right:10px;　
+/*#DIV1{
+    width:200px;　
+    line-height:50px;　
+    padding:20px;
+    border:2px blue solid;
+    margin-right:10px;　
 
-}
+}*/
 body {
 	background-color: powderblue;
 }
 div.tobuy{
   margin:0px;
-  background-color:azure
-  padding-left:70px:
+  background-color:azure;
+  padding-left: 70px;
 }
 div.underborder{
    
@@ -76,7 +76,7 @@ class.myButton:active {
     margin-right: 60px;
     margin-left: 80px;
     color:aliceblue;
-    <!--font-size:30px
+    font-size:30px
 }
 #tobuy{
         float:left;
@@ -119,7 +119,7 @@ class.myButton:active {
         var newProduct='';
         var request=new XMLHttpRequest;
         /*request.open("get","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/backend/cart/geps?uid=1");*/
-        request.open("get","/backend/cart/geps?uid=1");
+        request.open("get","/backend/cart/geps");
         request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
@@ -206,12 +206,12 @@ request.send(null);
         alert("已加入訂單");
         
         
-        var msg= "/backend/cart/geps?uid=1";
+        var msg= "/backend/cart/geps";
         
         var msgsend = "/backend/order/add?";
         var request=new XMLHttpRequest;
-        
-        request.open("get","/backend/cart/geps?uid=1"); //前面網址解決CORS
+        var datastr = "";
+        request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
             if (request.readyState === 4 && request.status === 200) {
                 var type = request.getResponseHeader("Content-Type");
@@ -236,7 +236,7 @@ request.send(null);
             //alert(arr);
             if(prods[i].type == "checkbox"){
                 if(prods[i].checked){
-                    alert(datastr)
+                    
                     var pdid = datastr[i].Pdid;
                     var amount = datastr[i].Amount;
                     var temp = msgsend;
@@ -254,7 +254,7 @@ request.send(null);
     }
     function total(){
         var request=new XMLHttpRequest;
-        request.open("get","/backend/cart/tal?uid=1"); //前面網址解決CORS
+        request.open("get","/backend/cart/tal"); //前面網址解決CORS
         request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
@@ -270,7 +270,7 @@ request.send(null);
 
 </head>
 
-<body style="margin:0px; padding:0px; background:#fff url(img/bg2.jpg) center center fixed no-repeat;background-size:cover; display:block;">
+<body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
 
 <div style=background:rgba(57,73,172,0.8)>
 		<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
