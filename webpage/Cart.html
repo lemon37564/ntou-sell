@@ -228,8 +228,7 @@ request.send(null);
             }
         }
         var value = new Array();
-        var temp = 0;
-        
+       
         alert(3);
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
@@ -240,7 +239,7 @@ request.send(null);
                     
                     var pdid = String(datastr[i].Pdid);
                     var amount = String(datastr[i].Amount);
-                    var temp = msgsend;
+                    var temp = msgsend+"";
                     alert(pdid);
                     alert(amount);
                     alert(i);
