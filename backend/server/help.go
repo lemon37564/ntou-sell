@@ -272,11 +272,11 @@ const MessageHelp = `
 		<br><br>
 	</p>
 	<p>
-		/backend/message/add?remoteUID=...&text=...<br>
+		/backend/message/send?remoteUID=...&text=...<br>
 		新增聊天紀錄<br>
 		e.g.新增聊天紀錄<br>
-		<a href=/backend/message/add?remoteUID=2&text="你好">
-		/backend/message/add?remote=2&text="你好"</a>
+		<a href=/backend/message/send?remoteUID=2&text="你好">
+		/backend/message/send?remote=2&text="你好"</a>
 		<br><br>
 	</p>
 	<p>
