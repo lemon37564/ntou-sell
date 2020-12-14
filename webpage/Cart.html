@@ -5,21 +5,21 @@
  border:#0000FF 5px solid
     }
 <style type="text/css">
-#DIV1{
-width:200px;　
-line-height:50px;　
-padding:20px;
-border:2px blue solid;
-margin-right:10px;　
+/*#DIV1{
+    width:200px;　
+    line-height:50px;　
+    padding:20px;
+    border:2px blue solid;
+    margin-right:10px;　
 
-}
+}*/
 body {
 	background-color: powderblue;
 }
 div.tobuy{
   margin:0px;
-  background-color:azure
-  padding-left:70px:
+  background-color:azure;
+  padding-left: 70px;
 }
 div.underborder{
    
@@ -76,7 +76,7 @@ class.myButton:active {
     margin-right: 60px;
     margin-left: 80px;
     color:aliceblue;
-    <!--font-size:30px
+    font-size:30px
 }
 #tobuy{
         float:left;
@@ -100,12 +100,15 @@ class.myButton:active {
     float:left;
 }
 #div3{
+        font-weight:bold;
+        font-size:35px;
+        color:gray;
         width:20px;
         height:20px;
         
     float:left;
 }
-    #div4{
+#div4{
         
 }
 </style>
@@ -119,14 +122,14 @@ class.myButton:active {
         var newProduct='';
         var request=new XMLHttpRequest;
         /*request.open("get","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/backend/cart/geps?uid=1");*/
-        request.open("get","/backend/cart/geps?uid=1");
+        request.open("get","/backend/cart/geps");
         request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
 		var datastr = JSON.parse(request.responseText);
 		var len  = datastr.length;
-          
+        
 		var str= "";
 		for (var i = 0; i < len; i++) {
            
@@ -206,21 +209,20 @@ request.send(null);
         alert("已加入訂單");
         
         
-        var msg= "/backend/cart/geps?uid=1";
+        var msg= "/backend/cart/geps";
         
         var msgsend = "/backend/order/add?";
         var request=new XMLHttpRequest;
-        
-        request.open("get","/backend/cart/geps?uid=1"); //前面網址解決CORS
+        var datastr = "";
+        request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
+            
             if (request.readyState === 4 && request.status === 200) {
+                
                 var type = request.getResponseHeader("Content-Type");
-                    if (type.match(/^text/)){ // Make sure response is text
-		                 datastr = JSON.parse(request.responseText);
-                         for(var i=0;i<datastr.length;i++){
-                           /* arr.pdid.push(datastr[i].Pdid);
-                            arr.amo.push(datastr[i].Amount);*/
-                         }
+                    if (type.match(/^text/)){ 
+                        datastr = JSON.parse(request.responseText);
+		                
 		            };
 		
             }else{
@@ -228,24 +230,29 @@ request.send(null);
             }
         }
         var value = new Array();
-        var temp = 0;
-        
+        alert(datastr[0].Pdid);
         
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
             //alert(arr);
+            
             if(prods[i].type == "checkbox"){
+                
                 if(prods[i].checked){
-                    alert(datastr)
+                    alert("ddd");
+                    
                     var pdid = datastr[i].Pdid;
+                    alert("c");
                     var amount = datastr[i].Amount;
+                    alert("cc");
                     var temp = msgsend;
-                    alert(i);
-                    temp=temp+"uid="+1;
-                    temp=temp+"&pdid="+pdid;
+                    alert("dd");
+                    
+                    temp=temp+"pdid="+pdid;
                     temp=temp+"&amount"+amount;
                     request.open("get",temp); 
                     request.send(null);
+                    alert("d");
                 }
             }
         }
@@ -254,7 +261,7 @@ request.send(null);
     }
     function total(){
         var request=new XMLHttpRequest;
-        request.open("get","/backend/cart/tal?uid=1"); //前面網址解決CORS
+        request.open("get","/backend/cart/tal"); //前面網址解決CORS
         request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
@@ -270,7 +277,7 @@ request.send(null);
 
 </head>
 
-<body style="margin:0px; padding:0px; background:#fff url(img/bg2.jpg) center center fixed no-repeat;background-size:cover; display:block;">
+<body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
 
 <div style=background:rgba(57,73,172,0.8)>
 		<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
