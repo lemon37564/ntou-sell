@@ -262,7 +262,8 @@ request.send(null);
         alert("已加入訂單");
         request.send(null);
     }
-    function total(){
+    function total() {
+        alert("xxx");
         var request=new XMLHttpRequest;
         request.open("get","/backend/cart/tal"); //前面網址解決CORS
         request.onreadystatechange = function() { 
@@ -275,7 +276,7 @@ request.send(null);
         }   
         document.getElementById("SHOWTOT").innerHTML="wtf";
         };
-}
+    }
 </script>
 
 </head>
