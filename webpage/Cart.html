@@ -213,9 +213,9 @@ request.send(null);
         var datastr = "";
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
-            alert(ff);
+            
             if (request.readyState === 4 && request.status === 200) {
-                alert(dd);
+                
                 var type = request.getResponseHeader("Content-Type");
                     if (type.match(/^text/)){ 
                         datastr = JSON.parse(request.responseText);
@@ -234,9 +234,9 @@ request.send(null);
             //alert(arr);
             
             if(prods[i].type == "checkbox"){
-                alert(ddd);
+                
                 if(prods[i].checked){
-                    alert(ddd);
+                    alert("ddd");
                     
                     var pdid = String(datastr[i].Pdid);
                     var amount = String(datastr[i].Amount);
