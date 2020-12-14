@@ -482,8 +482,10 @@ func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, MessageHelp)
-	case "add":
-		val, exi := args["receiverUID"]
+	case "all":
+		fmt.Fprint(w, ser.Ms.GetAll())
+	case "send":
+		val, exi := args["remoteUID"]
 		val2, exi2 := args["text"]
 
 		if exi && exi2 {
@@ -497,12 +499,13 @@ func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "argument error")
 		}
 	case "get":
-		val, exi := args["receiverUID"]
+		val, exi := args["remoteUID"]
+		val2, exi2 := args["ascend"]
 
-		if exi {
+		if exi && exi2 {
 			ruid, err := strconv.Atoi(val[0])
 			if err == nil {
-				fmt.Fprint(w, ser.Ms.GetMessages(uid, ruid))
+				fmt.Fprint(w, ser.Ms.GetMessages(uid, ruid, val2[0] == "true"))
 			} else {
 				fmt.Fprint(w, "receiverUID is not integer")
 			}

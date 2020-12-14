@@ -84,11 +84,14 @@ func (h *HistoryDB) AddHistory(uid, pdid int) error {
 		err = rows.Scan(&seq)
 		if err != nil {
 			log.Println(err)
-			seq = 1
+			// error when user has no history (set seq as 0)
+			seq = 0
 		}
 	}
 
-	_, err = h.insert.Exec(uid, pdid, seq+1)
+	seq++
+
+	_, err = h.insert.Exec(uid, pdid, seq)
 	return err
 }
 

@@ -10,7 +10,7 @@ const HelpPage = `
 	<br>
 	</H4>
 	<H1>
-	注意：後端功能從現在起不須加上uid或是account的argument(登入的時候後端有存了)(除user模組外)，請注意功能是否正確使用
+	注意：後端功能從現在起不須加上uid或是account的argument(登入的時候後端有存了)(除user模組外)，<br>請注意功能是否正確使用
 	</H1>
 	
 	<a href=/backend/user/help>關於使用者的功能...</a><br><br>
@@ -33,6 +33,7 @@ const HelpPage = `
 
 const UserHelp = `
 <html>
+	<h5>有關帳密的功能不應該使用get(安全性問題)，需要修正</h5>
 	<p>
 		/backend/user/all<br>
 		列出所有帳號(此功能已關閉，請註冊新帳號)<br><br>
@@ -264,19 +265,26 @@ const SellHelp = `
 const MessageHelp = `
 <html>
 	<p>
-		/backend/message/add?receiverUID=...&text=...<br>
-		新增聊天紀錄<br>
-		e.g.新增聊天紀錄<br>
-		<a href=/backend/message/add?receiverUID=1&text="你好">
-		/backend/message/add?receiverUID=1&text="你好"</a>
+		/backend/message/all<br>
+		所有聊天紀錄(僅限開發期間)<br>
+		<a href=/backend/message/all>
+		/backend/message/all</a>
 		<br><br>
 	</p>
 	<p>
-		/backend/message/get?receiverUID=...<br>
-		取得聊天紀錄<br>
+		/backend/message/add?remoteUID=...&text=...<br>
+		新增聊天紀錄<br>
+		e.g.新增聊天紀錄<br>
+		<a href=/backend/message/add?remoteUID=2&text="你好">
+		/backend/message/add?remote=2&text="你好"</a>
+		<br><br>
+	</p>
+	<p>
+		/backend/message/get?remoteUID=...&ascend=...<br>
+		取得聊天紀錄，(ascend=true會讓最新的在最前面，ascend=false則反之)<br>
 		e.g.取得跟某用戶的聊天紀錄(有照時間順序排好)<br>
-		<a href=/backend/message/get?receiverUID=2>
-		/backend/message/get?receiverUID=2</a>
+		<a href=/backend/message/get?remoteUID=2&ascend=true>
+		/backend/message/get?remoteUID=2&ascend=true</a>
 		<br><br>
 	</p>
 </html>
