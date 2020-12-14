@@ -213,10 +213,13 @@ request.send(null);
         var datastr = "";
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
+            alert(ff);
             if (request.readyState === 4 && request.status === 200) {
+                alert(dd);
                 var type = request.getResponseHeader("Content-Type");
                     if (type.match(/^text/)){ 
-		                 alert(cc);
+                        datastr = JSON.parse(request.responseText);
+		                alert(cc);
 		            };
 		
             }else{
