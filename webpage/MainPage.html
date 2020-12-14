@@ -129,17 +129,18 @@ localStorage.clear();
 var logoutRequest=new XMLHttpRequest;
 logoutRequest.open("get","backend/user/logout"); 
 
-  request.onreadystatechange = function() { // Define event listener
+  logoutRequest.onreadystatechange = function() { // Define event listener
   // If the request is complete and was successful
     if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
     alert("帳號登出!");
+    window.location.href="Login.html";
 	}
   }
 logoutRequest.send(null);
 
 //alert("帳號登出!");
 //測試用 console.log(localStorage.getItem("account"));
-window.location.href="Login.html";
+//window.location.href="Login.html";
 }
 
 </script>
@@ -151,14 +152,14 @@ window.location.href="Login.html";
     <div>
 	<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
     <ul id="SubMenu" class="sub-menu" style="display:none;">
-	    <h2 style="display:inline;">
+	    <h2 color=#3366BB style="display:inline;">
         <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
         <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Order</a></li>
         <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
 		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Sell</a></li>
 		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
-		<li style="display:inline;"><a onclick="logout()">&nbsp;&nbsp;Logout</a></li>
-		</h2
+		<li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
+		</h2>
 		<br></br>
     </ul>
 	
