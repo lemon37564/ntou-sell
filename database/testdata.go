@@ -17,7 +17,7 @@ func TestInsert(db *sql.DB) {
 		panic(err)
 	}
 
-	err = u.AddNewUser("test@gmail.com", "iKPKa1HeDSdPOr7EshZ0PeeSrcgbK0", "測試人員A")
+	err = u.AddNewUser("abcd", "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "除錯人員ABC")
 	if err != nil {
 		panic(err)
 	}
