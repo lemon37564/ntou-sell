@@ -229,18 +229,18 @@ request.send(null);
         }
         var value = new Array();
        
-        alert(3);
+        
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
             //alert(arr);
-            alert("i="+i);
+            
             if(prods[i].type == "checkbox"){
                 if(prods[i].checked){
-                    
+                    alert(String(datastr[i].Pdid));
                     var pdid = String(datastr[i].Pdid);
                     var amount = String(datastr[i].Amount);
                     var temp = msgsend+"";
-                    alert(pdid);
+                    
                     alert(amount);
                     alert(i);
                     temp=temp+"pdid="+pdid;
