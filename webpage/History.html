@@ -138,7 +138,7 @@ class.myButton:active {
     
 
 <script type="text/javascript">
-    window.onload=ShowNewProduct;
+    window.onload=GetHistoryProducts;
 
     function GetHistoryProducts(){
 
@@ -158,7 +158,7 @@ class.myButton:active {
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
-			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'數量'+datastr[i].Amount</li>'+'</p>';
+			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'數量'+datastr[i].Amount+'</li>'+'</p>';
             //偵錯用  console.log(content);
 			newProduct=newProduct+content;
 			str+=content;
@@ -271,37 +271,7 @@ request.send(null);
         alert("已加入訂單");
         request.send(null);
     }
-    function submit(){
-        var msg="/backend/sell/set?";
-        var pdname=document.getElementById("pdname");
-        var pdpic=document.getElementById("pdpic");
-        var desc=document.getElementById("desc");
-        var date=document.getElementById("date");
-        var price=document.getElementById("price");
-        var number=document.getElementById("number");
-        var initprice=document.getElementById("initprice");
-        var dateline=document.getElementById("dateline");
-        
-        
-        <!--這裡我先假設為輸入正確-->
-        /backend/sell/set?pdname=...&price=...&description=...&amount=...&account=...&sellerID=...&bid=...&date=...&dateLine=...<br>
-        if(pdname.initprice!=''){//有誤
-        msg=msg+"pdname="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&account="++"&seller   ID="+"&bid="+"true"+"&date="+date+"&dateLine="+dateline
-        }
-        var request=new XMLHttpRequest;
-        request.open("get",msg); 
-        request.onreadystatechange = function() { // Define event       listener
-            // If the request is complete and was successful
-            if (request.readyState === 4 && request.status === 200) {
-                var type = request.getResponseHeader("Content-Type");
-                if (type.match(/^text/)){ // Make sure response is text
-		              var datastr = JSON.parse(request.responseText);
-		              
-		        }
-            }
-        };
-        request.send(null);
-    }
+    
     function total() {
         alert("xxx");
         var request=new XMLHttpRequest;
