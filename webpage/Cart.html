@@ -241,12 +241,13 @@ request.send(null);
                     var pdid = String(datastr[i].Pdid);
                     var amount = String(datastr[i].Amount);
                     var temp = msgsend+"";
-                    
+                    alert("dd");
                     
                     temp=temp+"pdid="+pdid;
                     temp=temp+"&amount"+amount;
                     request.open("get",temp); 
                     request.send(null);
+                    alert("d");
                 }
             }
         }
