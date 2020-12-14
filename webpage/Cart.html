@@ -148,8 +148,6 @@ class.myButton:active {
 		};
 		
       }
-    }else{
-        alert(gogo);
     }
     
       
@@ -221,7 +219,7 @@ request.send(null);
                 var type = request.getResponseHeader("Content-Type");
                     if (type.match(/^text/)){ 
                         datastr = JSON.parse(request.responseText);
-		                alert(cc);
+		                
 		            };
 		
             }else{
@@ -238,13 +236,12 @@ request.send(null);
             if(prods[i].type == "checkbox"){
                 if(prods[i].checked){
                     alert(ddd);
-                    alert(datastr[i].Pdid);
+                    
                     var pdid = String(datastr[i].Pdid);
                     var amount = String(datastr[i].Amount);
                     var temp = msgsend+"";
                     
-                    alert(amount);
-                    alert(i);
+                    
                     temp=temp+"pdid="+pdid;
                     temp=temp+"&amount"+amount;
                     request.open("get",temp); 
