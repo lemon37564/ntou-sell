@@ -2,7 +2,6 @@ package server
 
 import (
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/gorilla/sessions"
@@ -62,37 +61,4 @@ func sessionValid(w http.ResponseWriter, r *http.Request) (int, bool) {
 	}
 
 	return -1, false
-}
-
-func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
-	r.ParseForm()
-
-	ip := strings.Split(r.RemoteAddr, ":")[0]
-
-	_, exi := ser.BlackList[ip]
-	if exi {
-		http.Error(w, "BLOCKED", http.StatusForbidden)
-		return false
-	}
-
-	_, exi = ser.IPList[ip]
-	if exi {
-		ser.IPList[ip]++
-	} else {
-		ser.IPList[ip] = 1
-	}
-
-	if time.Since(ser.Timer) > refreshTime {
-		ser.Timer = time.Now()
-
-		for i, v := range ser.IPList {
-			if v > limitAccess {
-				ser.BlackList[ip] = true
-			}
-
-			delete(ser.IPList, i)
-		}
-	}
-
-	return true
 }

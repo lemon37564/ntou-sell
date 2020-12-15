@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"se/server/backend"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -63,4 +64,38 @@ func (ser *Server) Serve() {
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+}
+
+func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
+	r.ParseForm()
+
+	ip := strings.Split(r.RemoteAddr, ":")[0]
+
+	_, exi := ser.BlackList[ip]
+	if exi {
+		http.Error(w, "403 forbidden", http.StatusForbidden)
+		return false
+	}
+
+	_, exi = ser.IPList[ip]
+	if exi {
+		ser.IPList[ip]++
+	} else {
+		ser.IPList[ip] = 1
+	}
+
+	if time.Since(ser.Timer) > refreshTime {
+		ser.Timer = time.Now()
+
+		for i, v := range ser.IPList {
+			if v > limitAccess {
+				log.Println(ser.IPList[ip])
+				ser.BlackList[ip] = true
+			}
+
+			delete(ser.IPList, i)
+		}
+	}
+
+	return true
 }
