@@ -232,7 +232,7 @@ request.send(null);
             }
         }
         var value = new Array();
-        alert(datastr[0].Pdid);
+        alert(String(datastr[0].Pdid));
         
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
@@ -251,7 +251,7 @@ request.send(null);
                     alert("dd");
                     
                     temp=temp+"pdid="+datastr[i].Pdid;
-                    temp=temp+"&amount"+datastr[i].Amount;
+                    temp=temp+"&amount="+datastr[i].Amount;
                     request.open("get",temp); 
                     request.send(null);
                     alert("d");
