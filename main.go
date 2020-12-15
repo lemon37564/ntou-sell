@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+	panic("stop")
+
 	db := database.Open()
 	defer db.Close()
 
