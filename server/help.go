@@ -282,6 +282,7 @@ const MessageHelp = `
 	<p>
 		/backend/message/get?remoteUID=...&ascend=...<br>
 		取得聊天紀錄，(ascend=true會讓最新的在最前面，ascend=false則反之)<br>
+		內有參數Status，若為s表示send，r表示receive<br>
 		e.g.取得跟某用戶的聊天紀錄(有照時間順序排好)<br>
 		<a href=/backend/message/get?remoteUID=2&ascend=true>
 		/backend/message/get?remoteUID=2&ascend=true</a>

@@ -33,8 +33,8 @@ type Messages struct {
 
 // message struct store data of a single message
 type message struct {
-	// Status is 's' or 'r' to represent sender or receiver
-	Status rune
+	// Status is "s" or "r" to represent sender or receiver
+	Status string
 	Text   string
 }
 
@@ -148,15 +148,15 @@ func (m *MessageDB) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 
 		// local is sender or receiver
 		if tmpID == localUID {
-			ms.Status = 's'
+			ms.Status = "s"
 		} else {
-			ms.Status = 'r'
+			ms.Status = "r"
 		}
 
 		all = append(all, ms)
 	}
 
-	return Messages{ContactorName: m.getName(localUID), Content: all}
+	return Messages{ContactorName: m.getName(remoteUID), Content: all}
 }
 
 // GetAll return all messages (debugging only)
