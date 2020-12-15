@@ -263,7 +263,7 @@ request.send(null);
         request.send(null);
     }
     function total() {
-        alert("xxx");
+       
         
         var request=new XMLHttpRequest;
         request.open("get","/backend/cart/tal"); //前面網址解決CORS
@@ -271,11 +271,12 @@ request.send(null);
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
-		var datastr = request.response;
+		var datastr = request.responseText;
+		
 		
         }
         }   
-        document.getElementById("SHOWTOT").innerHTML=datastr;
+        document.getElementById("SHOWTOT").innerHTML=datastr.value;
         };
     }
 </script>
