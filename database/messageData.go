@@ -17,25 +17,33 @@ const messageTable = `CREATE TABLE message(
 
 // MessageDB contain funcions to use
 type MessageDB struct {
-	all    *sql.Stmt
-	add    *sql.Stmt
-	getnew *sql.Stmt
-	getold *sql.Stmt
-	maxid  *sql.Stmt
+	all          *sql.Stmt
+	add          *sql.Stmt
+	getnew       *sql.Stmt
+	getold       *sql.Stmt
+	maxid        *sql.Stmt
+	getNameByUID *sql.Stmt
 }
 
-// Message struct store data of a single Message
-type Message struct {
-	SenderName   string
-	ReceiverName string
-	Text         string
+// Messages struct contain all message with contactor name
+type Messages struct {
+	ContactorName string
+	Content       []message
 }
 
+// message struct store data of a single message
+type message struct {
+	// Status is 's' or 'r' to represent sender or receiver
+	status rune
+	text   string
+}
+
+// MessID is a struct only for getting all messages(debugging)
 type MessID struct {
-	MessageID   int
-	SenderUID   int
-	ReceiverUID int
-	Text        string
+	messageID   int
+	senderUID   int
+	receiverUID int
+	text        string
 }
 
 // MessageDBInit prepare function for database using
@@ -54,10 +62,9 @@ func MessageDBInit(db *sql.DB) *MessageDB {
 	}
 
 	message.getold, err = db.Prepare(`
-		SELECT T.name, S.name, text
-		FROM user as T, user as S, message
-		WHERE ((sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?))
-			AND (sender_uid=T.uid AND receiver_uid=S.uid)
+		SELECT text, sender_uid
+		FROM message
+		WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
 		ORDER BY message_id ASC;
 	`)
 	if err != nil {
@@ -65,10 +72,9 @@ func MessageDBInit(db *sql.DB) *MessageDB {
 	}
 
 	message.getnew, err = db.Prepare(`
-		SELECT T.name, S.name, text
-		FROM user as T, user as S, message
-		WHERE ((sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?))
-			AND (sender_uid=T.uid AND receiver_uid=S.uid)
+		SELECT text, sender_uid
+		FROM message
+		WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
 		ORDER BY message_id DESC;
 	`)
 	if err != nil {
@@ -76,6 +82,11 @@ func MessageDBInit(db *sql.DB) *MessageDB {
 	}
 
 	message.maxid, err = db.Prepare("SELECT max(message_id) FROM message;")
+	if err != nil {
+		panic(err)
+	}
+
+	message.getNameByUID, err = db.Prepare("SELECT name FROM user WHERE uid=? AND uid>0;")
 	if err != nil {
 		panic(err)
 	}
@@ -106,37 +117,46 @@ func (m *MessageDB) AddMessage(senderUID, receiverUID int, messageText string) e
 }
 
 // GetMessages return all messge between two users
-func (m *MessageDB) GetMessages(senderUID, receiverUID int, ascend bool) (all []Message) {
+func (m *MessageDB) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 
 	var rows *sql.Rows
 	var err error
 
 	if ascend {
-		rows, err = m.getnew.Query(senderUID, receiverUID, senderUID, receiverUID)
+		rows, err = m.getnew.Query(localUID, remoteUID, localUID, remoteUID)
 		if err != nil {
 			log.Println(err)
-			return
+			return Messages{}
 		}
 	} else {
-		rows, err = m.getold.Query(senderUID, receiverUID, senderUID, receiverUID)
+		rows, err = m.getold.Query(localUID, remoteUID, localUID, remoteUID)
 		if err != nil {
 			log.Println(err)
-			return
+			return Messages{}
 		}
 	}
 
-	var mess Message
+	var all []message
+	var ms message
+	var tmpID int
 	for rows.Next() {
-		err = rows.Scan(&mess.SenderName, &mess.ReceiverName, &mess.Text)
+		err = rows.Scan(&ms.text, &tmpID)
 		if err != nil {
 			log.Println(err)
-			return
+			return Messages{}
 		}
 
-		all = append(all, mess)
+		// local is sender or receiver
+		if tmpID == localUID {
+			ms.status = 's'
+		} else {
+			ms.status = 'r'
+		}
+
+		all = append(all, ms)
 	}
 
-	return
+	return Messages{ContactorName: m.getName(localUID), Content: all}
 }
 
 // GetAll return all messages (debugging only)
@@ -150,13 +170,32 @@ func (m *MessageDB) GetAll() (all []MessID) {
 
 	var mess MessID
 	for rows.Next() {
-		err = rows.Scan(&mess.MessageID, &mess.SenderUID, &mess.ReceiverUID, &mess.Text)
+		err = rows.Scan(&mess.messageID, &mess.senderUID, &mess.receiverUID, &mess.text)
 		if err != nil {
 			log.Println(err)
 			return
 		}
 
 		all = append(all, mess)
+	}
+
+	return
+}
+
+func (m *MessageDB) getName(uid int) (name string) {
+
+	rows, err := m.getNameByUID.Query(uid)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&name)
+		if err != nil {
+			log.Println(err)
+			return
+		}
 	}
 
 	return
