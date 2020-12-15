@@ -41,11 +41,10 @@ const UserHelp = `
 		列出所有帳號(此功能已關閉，請註冊新帳號)<br><br>
 	</p>
 	<p> 
-		/backend/user/login?account=...&password=...<br>
-		登入是否成功(bool)<br>
-		e.g.登入帳號為test@gmail.com以及密碼為0000的使用者(此密碼是錯的，會顯示登入失敗)<br>
-		<a href=/backend/user/login?account=test@gmail.com&password=0000>
-		/backend/user/login?account=test@gmail.com&password=0000</a>
+		/backend/user/login<br>
+		登入是否成功<br>
+		使用post<br>
+		參數: "account", "password"
 		<br><br>
 	</p>
 	<p> 
@@ -56,19 +55,30 @@ const UserHelp = `
 		<br><br>
 	</p>
 	<p>
-		/backend/user/regist?account=...&password=...&name=...<br>
+		/backend/user/regist<br>
 		註冊新帳號<br>
-		e.g.註冊一帳號為test2@gmail.com，密碼為1234，使用者姓名為Wilson的帳號<br>
-		<a href=/backend/user/regist?account=test2@gmail.com&password=1234&name=Wilson>
-		/backend/user/regist?account=test2@gmail.com&password=1234&name=Wilson</a>
+		使用post<br>
+		參數: "account", "password", "name"<br><br>
+	</p>
+	<p>
+		/backend/user/delete<br>
+		刪除帳號<br>
+		使用post<br>
+		參數: "account", "password"
 		<br><br>
 	</p>
 	<p>
-		/backend/user/delete?account=...&password=...<br>
-		刪除帳號<br>
-		e.g.刪除帳號為test3@gmail.com的帳號(需要輸入密碼驗證:密碼為1234)<br>
-		<a href=/backend/user/delete?account=test3@gmail.com&password=1234>
-		/backend/user/delete?account=test3@gmail.com&password=1234</a>
+		/backend/user/delete<br>
+		更換密碼<br>
+		使用post<br>
+		參數: "account", "oldPassword", "newPassword"
+		<br><br>
+	</p>
+	<p>
+		/backend/user/delete<br>
+		更換使用者姓名(暱稱)<br>
+		使用post<br>
+		參數: "account", "newName"
 		<br><br>
 	</p>
 </html>
