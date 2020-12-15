@@ -7,7 +7,6 @@ import (
 	"os"
 	"runtime"
 	"se/server/backend"
-	"strings"
 	"sync"
 	"time"
 
@@ -78,7 +77,7 @@ func (ser *Server) Serve() {
 func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 	r.ParseForm()
 
-	ip := strings.Split(r.RemoteAddr, ":")[0]
+	ip := ser.getIP(r)
 
 	_, exi := ser.BlackList[ip]
 	if exi {
@@ -99,13 +98,15 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (ser *Server) refresh() {
-	for ; ; time.Sleep(time.Second) {
+	for loop := 0; ; time.Sleep(time.Second) {
 		if time.Since(ser.Timer) > refreshTime {
 			ser.Timer = time.Now()
 
 			// unbanned
-			for i := range ser.BlackList {
-				delete(ser.BlackList, i)
+			if loop%5 == 0 {
+				for i := range ser.BlackList {
+					delete(ser.BlackList, i)
+				}
 			}
 
 			for i, v := range ser.IPList {
@@ -117,6 +118,20 @@ func (ser *Server) refresh() {
 
 				delete(ser.IPList, i)
 			}
+
+			loop++
 		}
+
 	}
+}
+
+func (ser *Server) getIP(r *http.Request) string {
+	IPAddress := r.Header.Get("X-Real-Ip")
+	if IPAddress == "" {
+		IPAddress = r.Header.Get("X-Forwarded-For")
+	}
+	if IPAddress == "" {
+		IPAddress = r.RemoteAddr
+	}
+	return IPAddress
 }
