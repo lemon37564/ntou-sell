@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"se/database"
+	"time"
 )
 
 type Order struct {
@@ -32,7 +33,7 @@ func (o *Order) GetOrders(uid int) string {
 }
 
 func (o *Order) AddOrder(uid, pdid, amount int) bool {
-	err := o.fn.AddOrder(uid, pdid, amount)
+	err := o.fn.AddOrder(uid, pdid, amount, time.Now())
 	if err != nil {
 		return false
 	}
