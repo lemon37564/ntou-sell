@@ -30,7 +30,7 @@ request.open("get","backend/product/newest?amount=3");
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
-		var content = '<p>'+'<li>pdid:'+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
+		var content = '<p>'+'<li><h4 onclick="toProduct('+datastr[i].Pdid+')">pdid:'+datastr[i].Pdid+'</h4>'+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
             //偵錯用  console.log(content);
 			newProduct=newProduct+content;
 			str+=content;
@@ -43,6 +43,12 @@ request.send(null);
 
 }
 
+function toProduct(Pdid){
+    localStorage.setItem('Pdid', Pdid);
+    window.location.href="Product.html";
+}
+	
+	
 
 //以下為userlist點開清單的顯示
 var VisibleMenu = ''; // 記錄目前顯示的子選單的 ID
