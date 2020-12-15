@@ -250,7 +250,7 @@ request.send(null);
                     alert("xx");
                     alert(datastr[i].Pdid.value);
                     
-                    temp=temp+"pdid="+datastr[i].Pdid.value;
+                    temp=temp+"pdid="+String(datastr[i].Pdid);
                     temp=temp+"&amount="+datastr[i].Amount.value;
                     request.open("get",temp); 
                     request.send(null);
