@@ -30,10 +30,9 @@ type Server struct {
 	Se *backend.Sell
 	Ms *backend.Message
 
-	Timer     time.Time
-	IPList    map[string]int
-	BlackList map[string]bool
-	Lock      sync.Mutex
+	IPList    *map[string]int
+	BlackList *map[string]bool
+	Lock      *sync.Mutex
 }
 
 // Serve start all functions provided for user
@@ -79,18 +78,18 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 
 	ip := ser.getIP(r)
 
-	_, exi := ser.BlackList[ip]
+	_, exi := (*ser.BlackList)[ip]
 	if exi {
 		http.Error(w, "403 forbidden", http.StatusForbidden)
 		return false
 	}
 
 	ser.Lock.Lock()
-	_, exi = ser.IPList[ip]
+	_, exi = (*ser.IPList)[ip]
 	if exi {
-		ser.IPList[ip]++
+		(*ser.IPList)[ip]++
 	} else {
-		ser.IPList[ip] = 1
+		(*ser.IPList)[ip] = 1
 	}
 	ser.Lock.Unlock()
 
@@ -98,25 +97,27 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (ser *Server) refresh() {
-	for loop := 0; ; time.Sleep(time.Second) {
-		if time.Since(ser.Timer) > refreshTime {
-			ser.Timer = time.Now()
+	timer := time.Now()
 
-			// unbanned
-			if loop%5 == 0 {
-				for i := range ser.BlackList {
-					delete(ser.BlackList, i)
+	for loop := 0; ; time.Sleep(time.Second) {
+		if time.Since(timer) > refreshTime {
+			timer = time.Now()
+
+			// unban
+			if loop%4 == 0 {
+				for i := range *ser.BlackList {
+					delete(*ser.BlackList, i)
 				}
 			}
 
-			for i, v := range ser.IPList {
+			for i, v := range *ser.IPList {
 				log.Println(i, "access:", v)
 
 				if v > limitAccess {
-					ser.BlackList[i] = true
+					(*ser.BlackList)[i] = true
 				}
 
-				delete(ser.IPList, i)
+				delete(*ser.IPList, i)
 			}
 
 			loop++

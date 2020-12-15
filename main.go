@@ -4,7 +4,6 @@ import (
 	"se/database"
 	"se/server"
 	"se/server/backend"
-	"time"
 )
 
 func main() {
@@ -26,8 +25,7 @@ func main() {
 		Ct:        backend.NewCart(db),
 		Se:        backend.NewSell(db),
 		Ms:        backend.NewMessage(db),
-		Timer:     time.Now(),
-		IPList:    list,
-		BlackList: blist}
+		IPList:    &list,
+		BlackList: &blist}
 	service.Serve()
 }
