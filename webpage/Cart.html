@@ -233,10 +233,10 @@ request.send(null);
         }
         localStorage.setItem('data',datastr);
         var getData = localStorage.getItem('data');
-        var getDataArr = JSON.parse(getData);
+        //var getDataArr = JSON.parse(getData);
 
         var value = new Array();
-        alert("gogo");
+        alert(getData);
         
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
