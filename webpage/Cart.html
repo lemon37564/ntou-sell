@@ -231,12 +231,10 @@ request.send(null);
                 alert("err in get response")
             }
         }
-        localStorage.setItem('data',datastr);
-        var getData = localStorage.getItem('data');
-        //var getDataArr = JSON.parse(getData);
-        console.log(getData);
+        
+        
         var value = new Array();
-        alert(getData);
+        alert(datastr);
         
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
