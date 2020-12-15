@@ -2,8 +2,8 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -14,6 +14,7 @@ const ordersTable = `CREATE TABLE orders(
 						pd_id int NOT NULL,
 						amount int,
 						state varchar(8),
+						order_date timestamp,
 						PRIMARY KEY(uid, pd_id),
 						FOREIGN KEY(uid) REFERENCES user,
 						FOREIGN KEY(pd_id) REFERENCES product
@@ -22,15 +23,10 @@ const ordersTable = `CREATE TABLE orders(
 // Order type store data of a single order
 type Order struct {
 	Pdid   int
+	PdName string
 	Amount int
 	State  string
-}
-
-func (o Order) String() (res string) {
-	res += " product ID:       " + fmt.Sprintf("%d\n", o.Pdid) + "\n"
-	res += " product Amount:   " + fmt.Sprintf("%d\n", o.Amount) + "\n"
-	res += "product State:     " + fmt.Sprintf("%s\n", o.State) + "\n"
-	return
+	Time   time.Time
 }
 
 // OrderDB contain funcions to use
@@ -47,7 +43,7 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 	var err error
 	order := new(OrderDB)
 
-	order.insert, err = db.Prepare("INSERT INTO orders VALUES(?,?,?,?);")
+	order.insert, err = db.Prepare("INSERT INTO orders VALUES(?,?,?,?,?);")
 	if err != nil {
 		panic(err)
 	}
@@ -62,12 +58,12 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 		panic(err)
 	}
 
-	order.getall, err = db.Prepare("SELECT pd_id, amount, state FROM orders WHERE uid=?;")
+	order.getall, err = db.Prepare("SELECT pd_id, amount, state, order_date FROM orders WHERE uid=?;")
 	if err != nil {
 		panic(err)
 	}
 
-	order.getOrder, err = db.Prepare("SELECT pd_id, amount, state FROM orders WHERE uid=? AND pd_id=?;")
+	order.getOrder, err = db.Prepare("SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? AND pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -76,8 +72,9 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 }
 
 // AddOrder add order into order of specific user by user id
-func (o *OrderDB) AddOrder(uid, pdid, amount int) error {
-	_, err := o.insert.Exec(uid, pdid, amount, "unknown")
+func (o *OrderDB) AddOrder(uid, pdid, amount int, date time.Time) error {
+
+	_, err := o.insert.Exec(uid, pdid, amount, "unknown", date)
 	return err
 }
 
@@ -96,7 +93,7 @@ func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
 
 	var od Order
 	for rows.Next() {
-		err = rows.Scan(&od.Pdid, &od.Amount, &od.State)
+		err = rows.Scan(&od.Pdid, &od.Amount, &od.State, &od.Time)
 		if err != nil {
 			log.Println(err)
 		}
@@ -114,7 +111,7 @@ func (o *OrderDB) GetAllOrder(uid int) (ods []Order) {
 
 	for rows.Next() {
 		var tmp Order
-		err = rows.Scan(&tmp.Pdid, &tmp.Amount, &tmp.State)
+		err = rows.Scan(&tmp.Pdid, &tmp.Amount, &tmp.State, &tmp.Time)
 		if err != nil {
 			log.Println(err)
 		}
