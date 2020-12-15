@@ -40,7 +40,7 @@ func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname str
 	defer file.Close()
 
 	fmt.Fprint(w, handler.Header)
-	f, err := os.Create("webpage/img/" + picname)
+	f, err := os.Create("webpage/img/" + handler.Filename)
 	if err != nil {
 		log.Println(err)
 		return
