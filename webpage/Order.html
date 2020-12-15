@@ -48,7 +48,28 @@
     margin-left: 40px;
     color:black;
     font-size:24px;
-}
+  }
+  #div2{
+    position: relative;
+    top: 20px;
+    background-color:blanchedalmond;
+    border:3px solid #000;
+    width:700px;
+    height:80px;
+    padding-left: 80px;
+    margin-left:40px;
+    margin-top:20px;
+    float:left;
+  }
+  #div3{
+    font-weight:bold;
+        font-size:35px;
+        color:gray;
+        width:20px;
+        height:20px;
+        
+    float:left;
+  }
 </style>
 <script type="text/javascript">
 
@@ -105,8 +126,17 @@ request.open("get",msg);
     var searchResult="";
    // var strbutt=<button type="button" onclick="changeSta()" style="width:30px;height:20px">Change</button>
 		for (var i = 0; i < len; i++) {
-      var content = '<p>'+'<li>'+datastr[i].Pdid+datastr[i].Amount+'&nbsp;&nbsp;'+datastr[i].State+'</li>'+'</p>';
-           
+      var content = 
+      '<div id="div2">'+
+      '<div id="div3">'+
+                
+                '<input type="checkbox" id="box1" name="test" value="56">'+
+      '</div>'+
+      '<p id="div3">'+
+      '<li>'+datastr[i].Pdid+'&nbsp;&nbsp;'+datastr[i].Pdname+'&nbsp;&nbsp'+datastr[i].Amount+'&nbsp;&nbsp;'+datastr[i].State+'&nbsp;&nbsp;'+datastr[i].Time+'</li>';
+      '</p>'+
+      '</div>'+
+      '</div>';
 			searchResult=searchResult+content;
 		
 		};
