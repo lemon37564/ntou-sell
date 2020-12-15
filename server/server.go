@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	limitAccess = 60
+	limitAccess = 90
 	refreshTime = time.Second * 30
 )
 
@@ -66,13 +66,26 @@ func (ser *Server) Serve() {
 
 	http.Handle("/backend/", r)
 
-	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("webpage"))))
+	fs := http.FileServer(http.Dir("webpage"))
+	http.Handle("/", ser.middleware(fs))
 
 	go ser.refresh()
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+}
+
+func (ser *Server) middleware(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println(r.URL.Path)
+
+		if !ser.validation(w, r) {
+			return
+		}
+
+		h.ServeHTTP(w, r)
+	})
 }
 
 func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
