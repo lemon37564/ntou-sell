@@ -30,7 +30,7 @@ request.open("get","backend/product/newest?amount=3");
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
-			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
+		var content = '<p>'+'<li>pdid:'+datastr[i].pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
             //偵錯用  console.log(content);
 			newProduct=newProduct+content;
 			str+=content;
