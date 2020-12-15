@@ -223,7 +223,7 @@ request.send(null);
                 
                 var type = request.getResponseHeader("Content-Type");
                     if (type.match(/^text/)){ 
-                        datastr = JSON.parse(request.responseText);
+                        datastr = JSON.stringify(request.responseText);
 		                
 		            };
 		
@@ -231,6 +231,10 @@ request.send(null);
                 alert("err in get response")
             }
         }
+        localStorage.setItem('data',datastr);
+        var getData = localStorage.getItem('data');
+        var getDataArr = JSON.parse(getData);
+
         var value = new Array();
         alert("gogo");
         
@@ -250,8 +254,8 @@ request.send(null);
                     var temp = msgsend;
                     alert("dd");
                     
-                    temp=temp+"pdid="+datastr[i].Pdid;
-                    temp=temp+"&amount="+datastr[i].Amount;
+                    temp=temp+"pdid="+getDataArr[i].Pdid;
+                    temp=temp+"&amount="+getDataArr[i].Amount;
                     request.open("get",temp); 
                     request.send(null);
                     alert("d");
