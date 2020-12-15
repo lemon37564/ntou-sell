@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"se/server/backend"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -33,6 +34,7 @@ type Server struct {
 	Timer     time.Time
 	IPList    map[string]int
 	BlackList map[string]bool
+	Lock      sync.Mutex
 }
 
 // Serve start all functions provided for user
@@ -66,6 +68,8 @@ func (ser *Server) Serve() {
 
 	http.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("webpage"))))
 
+	go ser.refresh()
+
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
@@ -82,25 +86,31 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 
+	ser.Lock.Lock()
 	_, exi = ser.IPList[ip]
 	if exi {
 		ser.IPList[ip]++
 	} else {
 		ser.IPList[ip] = 1
 	}
-
-	if time.Since(ser.Timer) > refreshTime {
-		ser.Timer = time.Now()
-
-		for i, v := range ser.IPList {
-			log.Println(ip, "access:", ser.IPList[ip])
-			if v > limitAccess {
-				ser.BlackList[ip] = true
-			}
-
-			delete(ser.IPList, i)
-		}
-	}
+	ser.Lock.Unlock()
 
 	return true
+}
+
+func (ser *Server) refresh() {
+	for ; ; time.Sleep(time.Second) {
+		if time.Since(ser.Timer) > refreshTime {
+			ser.Timer = time.Now()
+
+			for i, v := range ser.IPList {
+				log.Println(i, "access:", v)
+				if v > limitAccess {
+					ser.BlackList[i] = true
+				}
+
+				delete(ser.IPList, i)
+			}
+		}
+	}
 }
