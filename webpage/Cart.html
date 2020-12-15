@@ -248,10 +248,10 @@ request.send(null);
                     alert("cc");*/
                     var temp = msgsend;
                     alert("xx");
-                    alert(getDataArr[i].Pdid.value);
+                    alert(datastr[i].Pdid.value);
                     
-                    temp=temp+"pdid="+getDataArr[i].Pdid.value;
-                    temp=temp+"&amount="+getDataArr[i].Amount.value;
+                    temp=temp+"pdid="+datastr[i].Pdid.value;
+                    temp=temp+"&amount="+datastr[i].Amount.value;
                     request.open("get",temp); 
                     request.send(null);
                     alert("d");
