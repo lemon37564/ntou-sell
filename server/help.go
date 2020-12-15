@@ -313,7 +313,7 @@ const PicHelp = `
 	</p>
 	<p>
 		/backend/pics/upload<br>
-		上傳圖片(用post)(此功能目前無法運作)<br>
+		上傳圖片(用post)<br>
 
 		前端範例:<br>
 		<form enctype="multipart/form-data" action="/backend/pics/upload" method="post"><br>
@@ -321,9 +321,6 @@ const PicHelp = `
 		<input type="hidden" name="token" value="{{.}}"/><br>
 		<input type="submit" value="upload" /><br>
 
-		e.g.上傳dog.jpg<br>
-		<a href=/backend/pics/upload>
-		/backend/pics/upload</a>
 		<br><br>
 	</p>
 </html>
