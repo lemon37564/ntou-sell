@@ -102,7 +102,7 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 		panic(err)
 	}
 
-	product.search, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE ? AND pd_id>0;")
+	product.search, err = db.Prepare("SELECT * FROM product WHERE product_name LIKE ? AND pd_id>0 ORDER BY pd_id DESC;")
 	if err != nil {
 		panic(err)
 	}
@@ -110,7 +110,8 @@ func ProductDBInit(db *sql.DB) *ProductDB {
 	product.enhancesearch, err = db.Prepare(`
 		SELECT *
 		FROM product
-		WHERE product_name LIKE ? AND price>=? AND price<=? AND eval>=? AND pd_id>0;
+		WHERE product_name LIKE ? AND price>=? AND price<=? AND eval>=? AND pd_id>0
+		ORDER BY pd_id DESC;
 	`)
 	if err != nil {
 		panic(err)

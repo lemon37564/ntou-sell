@@ -59,7 +59,7 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 		panic(err)
 	}
 
-	order.getall, err = db.Prepare("SELECT pd_id, amount, state, order_date FROM orders WHERE uid=?;")
+	order.getall, err = db.Prepare("SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? ORDER BY order_date DESC;")
 	if err != nil {
 		panic(err)
 	}
