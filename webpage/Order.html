@@ -58,17 +58,15 @@ request.open("get",msg);
       if (type.match(/^text/)){ // Make sure response is text
 		var datastr = JSON.parse(request.responseText);
 		var len  = datastr.length;
-		var str= "";
+		var searchResult="";
 		for (var i = 0; i < len; i++) {
 			var content = '<p>'+'<li>'+'ID:'+datastr[i].Pdid+'數量：'+datastr[i].Amount+'狀態：'+datastr[i].State+'</li>'+'</p>';
             //偵錯用  console.log(content);
 			searchResult=searchResult+content;
-			str+=content;
+		
 		};
 		document.getElementById("NP").innerHTML=searchResult;
       }
-    }else{
-      alert("err")
     }
   };
 request.send(null);
