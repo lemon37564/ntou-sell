@@ -29,11 +29,13 @@ type Server struct {
 	Ct *backend.Cart
 	Se *backend.Sell
 	Ms *backend.Message
-
-	IPList    *map[string]int
-	BlackList *map[string]bool
-	Lock      *sync.Mutex
 }
+
+var (
+	IPList    = make(map[string]int)
+	BlackList = make(map[string]bool)
+	Lock      sync.Mutex
+)
 
 // Serve start all functions provided for user
 func (ser *Server) Serve() {
@@ -78,20 +80,20 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 
 	ip := ser.getIP(r)
 
-	_, exi := (*ser.BlackList)[ip]
+	_, exi := BlackList[ip]
 	if exi {
 		http.Error(w, "403 forbidden", http.StatusForbidden)
 		return false
 	}
 
-	ser.Lock.Lock()
-	_, exi = (*ser.IPList)[ip]
+	Lock.Lock()
+	_, exi = IPList[ip]
 	if exi {
-		(*ser.IPList)[ip]++
+		IPList[ip]++
 	} else {
-		(*ser.IPList)[ip] = 1
+		IPList[ip] = 1
 	}
-	ser.Lock.Unlock()
+	Lock.Unlock()
 
 	return true
 }
@@ -105,19 +107,19 @@ func (ser *Server) refresh() {
 
 			// unban
 			if loop%4 == 0 {
-				for i := range *ser.BlackList {
-					delete(*ser.BlackList, i)
+				for i := range BlackList {
+					delete(BlackList, i)
 				}
 			}
 
-			for i, v := range *ser.IPList {
+			for i, v := range IPList {
 				log.Println(i, "access:", v)
 
 				if v > limitAccess {
-					(*ser.BlackList)[i] = true
+					(BlackList)[i] = true
 				}
 
-				delete(*ser.IPList, i)
+				delete(IPList, i)
 			}
 
 			loop++
