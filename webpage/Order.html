@@ -129,14 +129,16 @@ request.open("get",msg);
       var content = 
       '<div id="div2">'+
       '<div id="div3">'+
-                
-                '<input type="checkbox" id="box1" name="test" value="56">'+
-      '</div>'+
-      '<p id="div3">'+
+        '<p id="div3">'+
       '<li>'+datastr[i].Pdid+'&nbsp;&nbsp;'+datastr[i].Pdname+'&nbsp;&nbsp'+datastr[i].Amount+'&nbsp;&nbsp;'+datastr[i].State+'&nbsp;&nbsp;'+datastr[i].Time+'</li>';
       '</p>'+
+                
       '</div>'+
+      '<div id="div3">'
+      '<button type="button" onclick="changeSta()" style="width:30px;height:20px">Change</button>'+
+      '</div>'
       '</div>';
+    
 			searchResult=searchResult+content;
 		
 		};
