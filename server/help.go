@@ -314,6 +314,13 @@ const PicHelp = `
 	<p>
 		/backend/pics/upload?name=...<br>
 		上傳名為...的圖片(用post)(此功能目前無法運作)<br>
+
+		前端範例:<br>
+		<form enctype="multipart/form-data" action="/upload" method="post"><br>
+		<input type="file" name="uploadfile" /><br>
+		<input type="hidden" name="token" value="{{.}}"/><br>
+		<input type="submit" value="upload" /><br>
+
 		e.g.上傳dog.jpg<br>
 		<a href=/backend/pics/upload?name=dog.jpg>
 		/backend/pics/upload?name=dog.jpg</a>
