@@ -36,6 +36,7 @@ type OrderDB struct {
 	updateAmount *sql.Stmt
 	getall       *sql.Stmt
 	getOrder     *sql.Stmt
+	getPdName    *sql.Stmt
 }
 
 // OrderDBInit prepare function for database using
@@ -68,6 +69,11 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 		panic(err)
 	}
 
+	order.getPdName, err = db.Prepare("SELECT product_name FROM product WHERE pd_id=? AND pd_id>0;")
+	if err != nil {
+		panic(err)
+	}
+
 	return order
 }
 
@@ -89,6 +95,7 @@ func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
 	rows, err := o.getOrder.Query(uid, pdid)
 	if err != nil {
 		log.Println(err)
+		return Order{}
 	}
 
 	var od Order
@@ -96,8 +103,11 @@ func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
 		err = rows.Scan(&od.Pdid, &od.Amount, &od.State, &od.Time)
 		if err != nil {
 			log.Println(err)
+			return Order{}
 		}
 	}
+
+	od.PdName = o.getPdNameByPdID(pdid)
 
 	return od
 }
@@ -119,5 +129,29 @@ func (o *OrderDB) GetAllOrder(uid int) (ods []Order) {
 		ods = append(ods, tmp)
 	}
 
+	for i, v := range ods {
+		ods[i].PdName = o.getPdNameByPdID(v.Pdid)
+	}
+
 	return
+}
+
+func (o *OrderDB) getPdNameByPdID(pdid int) string {
+	var name string
+
+	rows, err := o.getPdName.Query(pdid)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&name)
+		if err != nil {
+			log.Println(err)
+			return ""
+		}
+	}
+
+	return name
 }
