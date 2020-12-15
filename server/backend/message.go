@@ -1,4 +1,4 @@
-package message
+package backend
 
 import (
 	"database/sql"

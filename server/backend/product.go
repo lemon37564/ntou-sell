@@ -1,4 +1,4 @@
-package product
+package backend
 
 import (
 	"database/sql"
@@ -9,8 +9,6 @@ import (
 	"strconv"
 	"time"
 )
-
-const TimeLayout = "2006-01-02"
 
 type Product struct {
 	fn *database.ProductDB

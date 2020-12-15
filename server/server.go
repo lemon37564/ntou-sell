@@ -6,14 +6,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
-	"se/backend/bid"
-	"se/backend/cart"
-	"se/backend/history"
-	"se/backend/message"
-	"se/backend/order"
-	"se/backend/product"
-	"se/backend/sell"
-	"se/backend/user"
+	"se/server/backend"
 
 	"github.com/gorilla/mux"
 )
@@ -21,14 +14,14 @@ import (
 // Server handle all services
 type Server struct {
 	DB *sql.DB
-	Ur *user.User
-	Pd *product.Product
-	Od *order.Order
-	Ht *history.History
-	Bd *bid.Bid
-	Ct *cart.Cart
-	Se *sell.Sell
-	Ms *message.Message
+	Ur *backend.User
+	Pd *backend.Product
+	Od *backend.Order
+	Ht *backend.History
+	Bd *backend.Bid
+	Ct *backend.Cart
+	Se *backend.Sell
+	Ms *backend.Message
 }
 
 // Serve start all functions provided for user

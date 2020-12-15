@@ -1,4 +1,4 @@
-package sell
+package backend
 
 import (
 	"database/sql"
@@ -6,8 +6,6 @@ import (
 	"se/database"
 	"time"
 )
-
-const TimeLayout = "2006-01-02"
 
 type Sell struct {
 	fn  *database.ProductDB

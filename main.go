@@ -1,16 +1,9 @@
 package main
 
 import (
-	"se/backend/bid"
-	"se/backend/cart"
-	"se/backend/history"
-	"se/backend/message"
-	"se/backend/order"
-	"se/backend/product"
-	"se/backend/sell"
-	"se/backend/server"
-	"se/backend/user"
 	"se/database"
+	"se/server"
+	"se/server/backend"
 )
 
 func main() {
@@ -21,13 +14,13 @@ func main() {
 
 	service := server.Server{
 		DB: db,
-		Ur: user.NewUser(db),
-		Pd: product.ProductInit(db),
-		Od: order.NewOrder(db),
-		Ht: history.NewHistory(db),
-		Bd: bid.NewBid(db),
-		Ct: cart.NewCart(db),
-		Se: sell.NewSell(db),
-		Ms: message.NewMessage(db)}
+		Ur: backend.NewUser(db),
+		Pd: backend.ProductInit(db),
+		Od: backend.NewOrder(db),
+		Ht: backend.NewHistory(db),
+		Bd: backend.NewBid(db),
+		Ct: backend.NewCart(db),
+		Se: backend.NewSell(db),
+		Ms: backend.NewMessage(db)}
 	service.Serve()
 }

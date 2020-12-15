@@ -1,4 +1,4 @@
-package user
+package backend
 
 import (
 	"crypto/sha256"

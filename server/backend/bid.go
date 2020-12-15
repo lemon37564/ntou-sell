@@ -1,4 +1,4 @@
-package bid
+package backend
 
 import (
 	"database/sql"
