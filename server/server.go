@@ -103,8 +103,14 @@ func (ser *Server) refresh() {
 		if time.Since(ser.Timer) > refreshTime {
 			ser.Timer = time.Now()
 
+			// unbanned
+			for i := range ser.BlackList {
+				delete(ser.BlackList, i)
+			}
+
 			for i, v := range ser.IPList {
 				log.Println(i, "access:", v)
+
 				if v > limitAccess {
 					ser.BlackList[i] = true
 				}
