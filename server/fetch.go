@@ -169,6 +169,18 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+	case "get":
+		val, exi := args["pdid"]
+
+		if exi {
+			if pdid, err := strconv.Atoi(val[0]); err == nil {
+				fmt.Fprint(w, ser.Pd.GetProductInfo(pdid))
+			} else {
+				fmt.Fprint(w, "pdid is not an integer!")
+			}
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	case "delete":
 		val, exi := args["pdname"]
 

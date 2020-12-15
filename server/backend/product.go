@@ -126,15 +126,15 @@ func (p *Product) GetNewest(number int) string {
 	return string(temp)
 }
 
-func (p *Product) GetProductInfo(uid int) string {
+func (p *Product) GetProductInfo(pdid int) string {
 	//var orders string = ""
-	temp, err := json.Marshal(p.fn.GetInfoFromPdID(uid))
+	temp, err := json.Marshal(p.fn.GetInfoFromPdID(pdid))
 	if err != nil {
 		log.Println(err)
-		return "Null"
+		return ""
 	}
-	return string(temp)
 
+	return string(temp)
 }
 
 func (p *Product) GetProdPrice(pdid int) string { //拿價格
