@@ -115,9 +115,9 @@ func (ser *Server) refresh() {
 			for i, v := range IPList {
 				if v > limitAccess {
 					(BlackList)[i] = true
-					log.Printf("ip adress %15s access %d times in 30s, banned.\n", i, v)
+					log.Printf("ip adress %15s access %5d times in 30s, banned.\n", i, v)
 				} else {
-					log.Printf("ip adress %15s access %d times in 30s\n", i, v)
+					log.Printf("ip adress %15s access %5d times in 30s\n", i, v)
 				}
 
 				delete(IPList, i)
