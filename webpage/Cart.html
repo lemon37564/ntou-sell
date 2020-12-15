@@ -231,7 +231,7 @@ request.send(null);
         
         
         var value = new Array();
-        alert(datastr);
+        
         
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
@@ -247,10 +247,11 @@ request.send(null);
                     var amount = datastr[i].Amount;
                     alert("cc");*/
                     var temp = msgsend;
-                    alert("dd");
+                    alert("xx");
+                    alert(getDataArr[i].Pdid.value);
                     
-                    temp=temp+"pdid="+getDataArr[i].Pdid;
-                    temp=temp+"&amount="+getDataArr[i].Amount;
+                    temp=temp+"pdid="+getDataArr[i].Pdid.value;
+                    temp=temp+"&amount="+getDataArr[i].Amount.value;
                     request.open("get",temp); 
                     request.send(null);
                     alert("d");
