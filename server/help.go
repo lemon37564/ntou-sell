@@ -162,7 +162,7 @@ const OrderHelp = `
 		取得使用者訂單資訊<br>
 		e.g.使用者進入訂單時顯示他購買東西 (使用前要先買喔)<br>
 		<a href=/backend/order/get>
-		/backend/history/order/get</a>
+		/backend/order/get</a>
 		<br><br>
 	</p>
 	<p>
