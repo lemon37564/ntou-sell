@@ -46,7 +46,7 @@ function getProductOrder(){
 
 //var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/search?";
 
-var msg="backend/order/get?";
+var msg="backend/order/get";
 
 var request=new XMLHttpRequest;
 request.open("get",msg); 
@@ -60,7 +60,7 @@ request.open("get",msg);
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
-			var content = '<p>'+'<li>'+'ID'+datastr[i].Pdid+'數量：'+datastr[i].Amount+'狀態：'+datastr[i].State+'</li>'+'</p>';
+			var content = '<p>'+'<li>'+'ID:'+datastr[i].Pdid+'數量：'+datastr[i].Amount+'狀態：'+datastr[i].State+'</li>'+'</p>';
             //偵錯用  console.log(content);
 			searchResult=searchResult+content;
 			str+=content;
