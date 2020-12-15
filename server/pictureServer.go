@@ -20,16 +20,29 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	path := mux.Vars(r)
+	args := r.URL.Query()
 
 	switch path["key"] {
 	case "upload":
-		ser.picUpload(w, r, "temp.jpg")
+		picName, exi := args["picname"]
+		if exi {
+			ser.picUpload(w, r, picName[0])
+
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
+
 	case "show":
-		ser.picShow(w, r, "temp.jpg")
+		picName, exi := args["picname"]
+		if exi {
+			ser.picShow(w, r, picName[0])
+
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	default:
 		http.NotFound(w, r)
 	}
-
 }
 
 func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname string) {

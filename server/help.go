@@ -28,6 +28,8 @@ const HelpPage = `
 	<a href=/backend/sell/help>關於販賣商品的功能...</a><br><br>
 	
 	<a href=/backend/message/help>關於使用者對話的功能...</a><br><br>
+
+	<a href=/backend/pics/help>關於圖片的功能...</a><br><br>
 </html>
 `
 
@@ -293,6 +295,28 @@ const MessageHelp = `
 		e.g.取得跟某用戶的聊天紀錄(有照時間順序排好)<br>
 		<a href=/backend/message/get?remoteUID=2&ascend=true>
 		/backend/message/get?remoteUID=2&ascend=true</a>
+		<br><br>
+	</p>
+</html>
+`
+
+const PicHelp = `
+<html>
+	<p>
+		/img/<br>
+		列出所有圖片(僅限開發期間)<br>
+		<a href=/img/>
+		/img/</a><br>
+		查看單一圖片時，網址為/img/server.png<br>
+		<a href=/img/server.png>查看
+		<br><br>
+	</p>
+	<p>
+		/backend/pics/upload?name=...<br>
+		上傳名為...的圖片<br>
+		e.g.上傳dog.jpg<br>
+		<a href=/backend/pics/upload?name=dog.jpg>
+		/backend/pics/upload?name=dog.jpg</a>
 		<br><br>
 	</p>
 </html>
