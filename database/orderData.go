@@ -25,18 +25,19 @@ type Order struct {
 	Pdid   int
 	PdName string
 	Amount int
+	Price  int
 	State  string
 	Time   time.Time
 }
 
 // OrderDB contain funcions to use
 type OrderDB struct {
-	insert       *sql.Stmt
-	_delete      *sql.Stmt
-	updateAmount *sql.Stmt
-	getall       *sql.Stmt
-	getOrder     *sql.Stmt
-	getPdName    *sql.Stmt
+	insert            *sql.Stmt
+	_delete           *sql.Stmt
+	updateAmount      *sql.Stmt
+	getall            *sql.Stmt
+	getOrder          *sql.Stmt
+	getPdNameAndPrice *sql.Stmt
 }
 
 // OrderDBInit prepare function for database using
@@ -69,7 +70,7 @@ func OrderDBInit(db *sql.DB) *OrderDB {
 		panic(err)
 	}
 
-	order.getPdName, err = db.Prepare("SELECT product_name FROM product WHERE pd_id=? AND pd_id>0;")
+	order.getPdNameAndPrice, err = db.Prepare("SELECT product_name, price FROM product WHERE pd_id=? AND pd_id>0;")
 	if err != nil {
 		panic(err)
 	}
@@ -107,7 +108,7 @@ func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
 		}
 	}
 
-	od.PdName = o.getPdNameByPdID(pdid)
+	od.PdName, od.Price = o.getPdNameAndPriceByPdID(pdid)
 
 	return od
 }
@@ -130,28 +131,29 @@ func (o *OrderDB) GetAllOrder(uid int) (ods []Order) {
 	}
 
 	for i, v := range ods {
-		ods[i].PdName = o.getPdNameByPdID(v.Pdid)
+		ods[i].PdName, ods[i].Price = o.getPdNameAndPriceByPdID(v.Pdid)
 	}
 
 	return
 }
 
-func (o *OrderDB) getPdNameByPdID(pdid int) string {
+func (o *OrderDB) getPdNameAndPriceByPdID(pdid int) (string, int) {
 	var name string
+	var price int
 
-	rows, err := o.getPdName.Query(pdid)
+	rows, err := o.getPdNameAndPrice.Query(pdid)
 	if err != nil {
 		log.Println(err)
-		return ""
+		return "", -1
 	}
 
 	for rows.Next() {
-		err = rows.Scan(&name)
+		err = rows.Scan(&name, &price)
 		if err != nil {
 			log.Println(err)
-			return ""
+			return "", -1
 		}
 	}
 
-	return name
+	return name, price
 }
