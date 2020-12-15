@@ -93,6 +93,14 @@ const ProductHelp = `
 		/backend/product/add?name=ifone12&price=5000&description=盜版商品&amount=10&bid=true&date=2006-01-02</a>
 		<br><br>
 	</p>
+	<p> 
+		/backend/product/get?pdid=...<br>
+		取得商品資訊(使用商品id取)<br>
+		e.g.取得商品id為1的資訊<br>
+		<a href=/backend/product/get?pdid=1>
+		/backend/product/get?pdid=1</a>
+		<br><br>
+	</p>
 	<p>
 		/backend/product/search?name=...<br>
 		查詢商品<br>

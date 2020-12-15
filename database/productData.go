@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"time"
 
@@ -51,25 +50,6 @@ type ProductDB struct {
 	enhancesearch *sql.Stmt
 	getPdInfo     *sql.Stmt
 	allpd         *sql.Stmt
-}
-
-func (p Product) StringForSearch() (res string) {
-	res += "product id:         " + fmt.Sprintf("%d", p.Pdid) + "\n"
-	res += "product name:       " + p.PdName + "\n"
-
-	return
-}
-
-func (p Product) StringForProduct() (res string) {
-
-	res += "product name:         " + p.PdName + "\n"
-	res += "product amount:       " + fmt.Sprintf("%d", p.Amount) + "\n"
-	res += "product price:        " + fmt.Sprintf("%d", p.Price) + "\n"
-	res += "product date:         " + p.Date.String() + "\n"
-	res += "product description:  " + p.Description + "\n"
-	res += "product eval:       " + fmt.Sprintf("%f", p.Eval) + "\n"
-
-	return
 }
 
 // ProductDBInit prepare function for database using
