@@ -103,7 +103,7 @@ request.open("get",msg);
 		var datastr = JSON.parse(request.responseText);
 		var len  = datastr.length;
     var searchResult="";
-    var strbutt=<button type="button" onclick="changeSta()" style="width:30px;height:20px">Change</button>
+   // var strbutt=<button type="button" onclick="changeSta()" style="width:30px;height:20px">Change</button>
 		for (var i = 0; i < len; i++) {
       var content = '<p>'+'<li>'+datastr[i].Pdid+datastr[i].Amount+'&nbsp;&nbsp;'+datastr[i].State+'</li>'+'</p>';
            
@@ -194,7 +194,7 @@ function getOrder(){
     </div>
     <br>
     <div id=NP></div>
-    </div>>
+    </div>
   
   </div>
 </body>
