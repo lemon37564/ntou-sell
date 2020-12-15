@@ -13,6 +13,11 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const (
+	limitAccess = 60
+	refreshTime = time.Second * 30
+)
+
 // Server handle all services
 type Server struct {
 	DB *sql.DB
@@ -88,8 +93,8 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 		ser.Timer = time.Now()
 
 		for i, v := range ser.IPList {
+			log.Println(ip, "access:", ser.IPList[ip])
 			if v > limitAccess {
-				log.Println(ser.IPList[ip])
 				ser.BlackList[ip] = true
 			}
 

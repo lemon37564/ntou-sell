@@ -2,15 +2,12 @@ package server
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gorilla/sessions"
 )
 
 const (
-	CookieName  = "SESSID"
-	limitAccess = 30
-	refreshTime = time.Second * 10
+	CookieName = "SESSID"
 )
 
 var store = sessions.NewCookieStore([]byte(CookieName))
