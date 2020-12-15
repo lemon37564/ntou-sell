@@ -52,7 +52,12 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 		panic(err)
 	}
 
-	history.maxSeq, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;")
+	history.maxSeq, err = db.Prepare("SELECT max(seq) FROM history;")
+	if err != nil {
+		panic(err)
+	}
+
+	history.getnew, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
@@ -82,7 +87,7 @@ func (h *HistoryDB) AddHistory(uid, pdid int) error {
 		return err
 	}
 
-	rows, err := h.maxSeq.Query(uid)
+	rows, err := h.maxSeq.Query()
 	if err != nil {
 		log.Println(err)
 		return err

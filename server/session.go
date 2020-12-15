@@ -2,12 +2,16 @@ package server
 
 import (
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/gorilla/sessions"
 )
 
 const (
-	CookieName = "SESSID"
+	CookieName  = "SESSID"
+	limitAccess = 30
+	refreshTime = time.Second * 10
 )
 
 var store = sessions.NewCookieStore([]byte(CookieName))
@@ -60,24 +64,35 @@ func sessionValid(w http.ResponseWriter, r *http.Request) (int, bool) {
 	return -1, false
 }
 
-// func sessionHandler(w http.ResponseWriter, r *http.Request) {
+func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
+	r.ParseForm()
 
-// 	session, err := store.Get(r, "s1")
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 		return
-// 	}
-// 	fmt.Println(session)
-// 	session.Values["id"] = genSessID()
-// 	session.Save(r, w)
-// }
+	ip := strings.Split(r.RemoteAddr, ":")[0]
 
-// func genSessID() string {
-// 	id := make([]byte, IDLen)
+	_, exi := ser.BlackList[ip]
+	if exi {
+		http.Error(w, "BLOCKED", http.StatusForbidden)
+		return false
+	}
 
-// 	if _, err := rand.Read(id); err != nil {
-// 		panic(err)
-// 	}
+	_, exi = ser.IPList[ip]
+	if exi {
+		ser.IPList[ip]++
+	} else {
+		ser.IPList[ip] = 1
+	}
 
-// 	return base64.URLEncoding.EncodeToString(id)
-// }
+	if time.Since(ser.Timer) > refreshTime {
+		ser.Timer = time.Now()
+
+		for i, v := range ser.IPList {
+			if v > limitAccess {
+				ser.BlackList[ip] = true
+			}
+
+			delete(ser.IPList, i)
+		}
+	}
+
+	return true
+}

@@ -9,6 +9,10 @@ import (
 )
 
 func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	switch mux.Vars(r)["key"] {
 	case "success":
 		fmt.Fprintln(w, "登入成功!")
@@ -20,6 +24,10 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	uid, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")
@@ -78,6 +86,10 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	path := mux.Vars(r)
 	r.ParseForm()
 
@@ -117,6 +129,10 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	uid, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")
@@ -227,6 +243,10 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	uid, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")
@@ -276,6 +296,10 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	uid, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")
@@ -336,6 +360,10 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	uid, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")
@@ -405,6 +433,10 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	_, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")
@@ -455,6 +487,10 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
+	if !ser.validation(w, r) {
+		return
+	}
+
 	uid, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")

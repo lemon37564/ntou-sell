@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"se/server/backend"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -22,6 +23,10 @@ type Server struct {
 	Ct *backend.Cart
 	Se *backend.Sell
 	Ms *backend.Message
+
+	Timer     time.Time
+	IPList    map[string]int
+	BlackList map[string]bool
 }
 
 // Serve start all functions provided for user
