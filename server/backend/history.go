@@ -27,8 +27,8 @@ func (h History) AddHistory(uid, pdid int) string {
 	return "ok"
 }
 
-func (h History) GetHistory(uid int, amount int) string { //get all history
-	pd := h.historydb.Get(uid, amount)
+func (h History) GetHistory(uid int, amount int, newest bool) string { //get all history
+	pd := h.historydb.Get(uid, amount, newest)
 
 	str, err := json.Marshal(pd)
 	if err != nil {
@@ -37,16 +37,16 @@ func (h History) GetHistory(uid int, amount int) string { //get all history
 	return string(str)
 }
 
-func (h History) GetAll() string {
-	all := h.historydb.GetAll()
-	res, err := json.Marshal(all)
-	if err != nil {
-		panic(err)
-	}
+// func (h History) GetAll() string {
+// 	all := h.historydb.GetAll()
+// 	res, err := json.Marshal(all)
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	return string(res)
-}
+// 	return string(res)
+// }
 
-func (h History) Delete(uid, pid int) {
-	h.historydb.Delete(uid, pid)
+func (h History) Delete(uid, pid int) string {
+	return h.historydb.Delete(uid, pid).Error()
 }

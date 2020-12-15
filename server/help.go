@@ -116,8 +116,7 @@ const HistoryHelp = `
 <html>
 	<p> 
 		/backend/history/all<br>
-		列出歷史紀錄(僅限開發期間)<br>
-		<a href=/backend//history/all> /backend/history/all </a><br><br>
+		列出歷史紀錄(此功能已關閉)<br><br>
 	</p>
 	<p> 
 		/backend/history/add?pdid=...<br>
@@ -128,11 +127,11 @@ const HistoryHelp = `
 		<br><br>
 	</p>
 	<p>
-		/backend/history/get?amount=...<br>
-		查詢歷史紀錄<br>
+		/backend/history/get?amount=...&newest=...<br>
+		查詢歷史紀錄(newest=true則最新的紀錄在前面，newest=false則反之)<br>
 		e.g.查詢目前登入帳號的歷史紀錄<br>
-		<a href=/backend/history/get?amount=10>
-		/backend/history/get?amount=10</a>
+		<a href=/backend/history/get?amount=10&newest=true>
+		/backend/history/get?amount=10&newest=true</a>
 		<br><br>
 	</p>
 	<p>
@@ -275,8 +274,8 @@ const MessageHelp = `
 		/backend/message/send?remoteUID=...&text=...<br>
 		新增聊天紀錄<br>
 		e.g.新增聊天紀錄<br>
-		<a href=/backend/message/send?remoteUID=2&text="你好">
-		/backend/message/send?remote=2&text="你好"</a>
+		<a href=/backend/message/send?remoteUID=2&text=你好>
+		/backend/message/send?remote=2&text=你好</a>
 		<br><br>
 	</p>
 	<p>

@@ -22,14 +22,13 @@ type HistoryDB struct {
 	_delete *sql.Stmt
 	delAll  *sql.Stmt
 	maxSeq  *sql.Stmt
-	get     *sql.Stmt
+	getnew  *sql.Stmt
+	getold  *sql.Stmt
 	getall  *sql.Stmt
 }
 
 type History struct {
-	UID  int
 	Pdid int
-	Seq  int
 }
 
 // HistoryDBInit prepare function for database using
@@ -57,7 +56,12 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 		panic(err)
 	}
 
-	history.get, err = db.Prepare("SELECT * FROM product WHERE pd_id IN (SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?);")
+	history.getnew, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?);")
+	if err != nil {
+		panic(err)
+	}
+
+	history.getold, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?);")
 	if err != nil {
 		panic(err)
 	}
@@ -108,41 +112,52 @@ func (h *HistoryDB) DeleteAll(uid int) error {
 }
 
 // Get return all history of a user by id (descend order by time)
-func (h *HistoryDB) Get(uid int, amount int) (all []Product) {
-	rows, err := h.get.Query(uid, amount)
-	if err != nil {
-		panic(err)
+func (h *HistoryDB) Get(uid int, amount int, newest bool) (all []History) {
+
+	var rows *sql.Rows
+	var err error
+
+	if newest {
+		rows, err = h.getnew.Query(uid, amount)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		rows, err = h.getold.Query(uid, amount)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	for rows.Next() {
-		var pd Product
-		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
+		var hs History
+		err = rows.Scan(&hs.Pdid)
 		if err != nil {
 			panic(err)
 		}
 
-		all = append(all, pd)
+		all = append(all, hs)
 	}
 
 	return
 }
 
-// GetAll return all historys(debugging only)
-func (h *HistoryDB) GetAll() (all []History) {
-	rows, err := h.getall.Query()
-	if err != nil {
-		log.Println(err)
-	}
+// this function has closed
+// func (h *HistoryDB) GetAll() (all []History) {
+// 	rows, err := h.getall.Query()
+// 	if err != nil {
+// 		log.Println(err)
+// 	}
 
-	for rows.Next() {
-		var hi History
-		err = rows.Scan(&hi.UID, &hi.Pdid, &hi.Seq)
-		if err != nil {
-			log.Println(err)
-		}
+// 	for rows.Next() {
+// 		var hi History
+// 		err = rows.Scan(&hi.UID, &hi.Pdid)
+// 		if err != nil {
+// 			log.Println(err)
+// 		}
 
-		all = append(all, hi)
-	}
+// 		all = append(all, hi)
+// 	}
 
-	return
-}
+// 	return
+// }

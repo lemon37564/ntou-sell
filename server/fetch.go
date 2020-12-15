@@ -32,15 +32,14 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, HistoryHelp)
-	case "all":
-		fmt.Fprint(w, ser.Ht.GetAll())
 	case "get":
 		val, exist := args["amount"]
+		val2, exi2 := args["newest"]
 
-		if exist {
+		if exist && exi2 {
 			amnt, err := strconv.Atoi(val[0])
 			if err == nil {
-				fmt.Fprint(w, ser.Ht.GetHistory(uid, amnt))
+				fmt.Fprint(w, ser.Ht.GetHistory(uid, amnt, val2[0] == "true"))
 			} else {
 				fmt.Fprint(w, "amount was not an integer")
 			}
@@ -53,7 +52,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		if exi {
 			pd, err := strconv.Atoi(pdid[0])
 			if err == nil {
-				fmt.Fprint(w, ser.Ht.GetHistory(uid, pd))
+				fmt.Fprint(w, ser.Ht.Delete(uid, pd))
 			} else {
 				fmt.Fprint(w, "pdid was not an integer")
 			}
