@@ -65,7 +65,7 @@ request.open("get",msg);
 			searchResult=searchResult+content;
 			str+=content;
 		};
-		document.getElementById("NP").innerHTML=searchResult;
+		document.getElementById("NP").innerHTML="searchResult";
       }
     }
   };
@@ -137,7 +137,7 @@ function getOrder(){
   
   <div class = "border">
 
-  <table border="1">
+  <table>
     <h2>Order</h2>
     <tr>
       <td style="color:black;font-size:17px;font-weight:bold;border:1">order id</td>
@@ -147,7 +147,7 @@ function getOrder(){
       <td style="color:black;font-size:17px;font-weight:bold;border:1">buyer id</td>
       <td style="color:black;font-size:17px;font-weight:bold;border:1">state</td>
     </tr>
-    <tr><p id= NP ></p></tr>
+    <tr><p id= NP></p></tr>
 
 	  
   </table>
