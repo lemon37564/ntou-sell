@@ -223,8 +223,7 @@ request.send(null);
                 
                 var type = request.getResponseHeader("Content-Type");
                     if (type.match(/^text/)){ 
-                        datastr = JSON.stringify(request.responseText);
-		                console.log(datastr);
+                        datastr = JSON.parse(request.responseText);
 		            };
 		
             }else{
