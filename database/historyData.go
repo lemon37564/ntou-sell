@@ -24,7 +24,7 @@ type HistoryDB struct {
 	maxSeq  *sql.Stmt
 	getnew  *sql.Stmt
 	getold  *sql.Stmt
-	getall  *sql.Stmt
+	// getall  *sql.Stmt
 }
 
 type History struct {
@@ -56,20 +56,20 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 		panic(err)
 	}
 
-	history.getnew, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?);")
+	history.getnew, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
 
-	history.getold, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?);")
+	history.getold, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
 
-	history.getall, err = db.Prepare("SELECT * FROM history ORDER BY seq DESC;")
-	if err != nil {
-		panic(err)
-	}
+	// history.getall, err = db.Prepare("SELECT * FROM history ORDER BY seq DESC;")
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	return history
 }
