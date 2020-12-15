@@ -50,6 +50,32 @@ func (u *User) DeleteUser(account, password string) string {
 	return "ok"
 }
 
+func (u *User) ChangePassword(account, oldPassword, newPassword string) string {
+
+	_, ok := u.Login(account, oldPassword)
+	if !ok {
+		return "舊密碼錯誤"
+	}
+
+	err := u.fn.ChangePassword(account, newPassword)
+	if err != nil {
+		log.Println(err)
+		return err.Error()
+	}
+
+	return "ok"
+}
+
+func (u *User) ChangeName(account, newname string) string {
+	err := u.fn.ChangeName(account, newname)
+	if err != nil {
+		log.Println(err)
+		return "failed"
+	}
+
+	return "ok"
+}
+
 func (u *User) GetUserData(account string) string {
 	res, _ := json.Marshal(u.fn.GetDatasFromAccount(account))
 	return string(res)

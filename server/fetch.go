@@ -79,48 +79,35 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 
 func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)
-	args := r.URL.Query()
+	r.ParseForm()
 
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, UserHelp)
 	case "login":
 
-		account, exi := args["account"]
-		pass, exi2 := args["password"]
+		uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
 
-		if exi && exi2 {
-			uid, valid := ser.Ur.Login(account[0], pass[0])
-
-			if valid {
-				// set session to maintain login condition
-				login(w, r, uid)
-				fmt.Fprintln(w, "登入成功!")
-			} else {
-				fmt.Fprint(w, "登入失敗")
-			}
+		if valid {
+			// set session to maintain login condition
+			login(w, r, uid)
+			fmt.Fprintln(w, "登入成功!")
 		} else {
-			fmt.Fprint(w, "argument error")
+			fmt.Fprint(w, "登入失敗")
 		}
+
 	case "delete":
-		val, exi := args["account"]
-		val2, exi2 := args["password"]
+		fmt.Fprint(w, ser.Ur.DeleteUser(r.Form["account"][0], r.Form["password"][0]))
 
-		if exi && exi2 {
-			fmt.Fprint(w, ser.Ur.DeleteUser(val[0], val2[0]))
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
 	case "regist":
-		val, exi := args["account"]
-		val2, exi2 := args["password"]
-		val3, exi3 := args["name"]
+		fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
 
-		if exi && exi2 && exi3 {
-			fmt.Fprint(w, ser.Ur.Regist(val[0], val2[0], val3[0]))
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
+	case "changePassword":
+		fmt.Fprint(w, ser.Ur.ChangePassword(r.Form["account"][0], r.Form["oldPassword"][0], r.Form["newPassword"][0]))
+
+	case "changeName":
+		fmt.Fprint(w, ser.Ur.ChangeName(r.Form["account"][0], r.Form["newName"][0]))
+
 	case "logout":
 		logout(w, r)
 		fmt.Fprintln(w, "已登出")
