@@ -42,25 +42,11 @@ function hideMenu(){
 
 //以下是搜尋商品的function，目前無圖片及連結
 
-function searchProduct(){
+function getProductOrder(){
 
 //var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/search?";
 
-var msg="backend/product/search?";
-
-
-var name=document.getElementById("name");
-var minprice=document.getElementById("minprice");
-var maxprice=document.getElementById("maxprice");
-var eval=document.getElementById("eval");
-
-if(name.value!=''){msg=msg+"name="+name.value};
-if(minprice.value!=''){msg=msg+"&minprice="+name.value};
-if(maxprice.value!=''){msg=msg+"&maxprice="+name.value};
-if(eval.value!=''){msg=msg+"&eval="+name.value};
-
-
-var searchResult='';
+var msg="backend/order/get?";
 
 var request=new XMLHttpRequest;
 request.open("get",msg); 
@@ -74,7 +60,7 @@ request.open("get",msg);
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
-			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
+			var content = '<p>'+'<li>'+'ID'+datastr[i].Pdid+'數量：'+datastr[i].Amount+'狀態：'+datastr[i].State+'</li>'+'</p>';
             //偵錯用  console.log(content);
 			searchResult=searchResult+content;
 			str+=content;
@@ -151,16 +137,17 @@ function getOrder(){
   
   <table height="10"></table>
   <div align="center">
-  <table id="NP" style="background:rgba(243,241,241,0.6);" width="1000" height="700">
+  <table border="1" width="1000" height="700">
     <h2>Order</h2>
     <tr>
-      <td>order id</td>
-      <td>Name</td>
-      <td>Price</td>
-      <td>數量</td>
-      <td>buyer id</td>
-      <td>state</td>
-    </tr>>
+      <td style="color:black;font-size:17px;font-weight:bold;border:1">order id</td>
+      <td style="color:black;font-size:17px;font-weight:bold;border:1">Name</td>
+      <td style="color:black;font-size:17px;font-weight:bold;border:1">Price</td>
+      <td style="color:black;font-size:17px;font-weight:bold;border:1">數量</td>
+      <td style="color:black;font-size:17px;font-weight:bold;border:1">buyer id</td>
+      <td style="color:black;font-size:17px;font-weight:bold;border:1">state</td>
+    </tr>
+    <tr><p id="NP"></p></tr>
 
 	  <!--
 	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Name:</h4><input id="pdname"></td></tr>
