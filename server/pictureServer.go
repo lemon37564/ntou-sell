@@ -1,13 +1,11 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -33,53 +31,28 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-
-	case "show":
-		picName, exi := args["picname"]
-		if exi {
-			ser.picShow(w, r, picName[0])
-
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
 	default:
 		http.NotFound(w, r)
 	}
 }
 
-func (ser *Server) picShow(w http.ResponseWriter, r *http.Request, picname string) {
-	img, err := os.Open("webpage/img/" + picname)
-	if err != nil {
-		log.Println("opening file:", err)
-		return
-	}
-	defer img.Close()
-
-	imgType := strings.Split(img.Name(), ".")[1]
-
-	w.Header().Set("Content-Type", "image/"+imgType)
-	_, err = io.Copy(w, img)
-	if err != nil {
-		log.Println("showing file:", err)
-	}
-}
-
 func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname string) {
-	file, err := os.Create("webpage/img/" + picname)
+
+	r.ParseMultipartForm(32 << 20)
+	file, handler, err := r.FormFile("uploadfile")
 	if err != nil {
-		log.Println("creating file:", err)
+		log.Println(err)
 		return
 	}
 	defer file.Close()
 
-	v, _ := json.Marshal(r.Body)
-	log.Println("request body:", v)
-
-	_, err = io.Copy(file, r.Body)
+	fmt.Fprint(w, handler.Header)
+	f, err := os.Create("webpage/img/" + handler.Filename)
 	if err != nil {
-		log.Println("copying file:", err)
+		log.Println(err)
 		return
 	}
+	defer f.Close()
 
-	fmt.Fprint(w, "ok")
+	io.Copy(f, file)
 }
