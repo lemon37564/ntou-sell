@@ -437,7 +437,7 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, valid := sessionValid(w, r)
+	uid, valid := sessionValid(w, r)
 	if !valid {
 		fmt.Fprint(w, "請先登入!")
 		return
@@ -450,29 +450,27 @@ func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
 	case "help":
 		fmt.Fprint(w, SellHelp)
 	case "set": //For single bid product
-		exist := make([]bool, 9)
-		var pdname, price, description, amount, account, sellerID, bid, date, dateLine []string
+		exist := make([]bool, 8)
+		var pdname, price, description, amount, account, bid, date, dateLine []string
 		pdname, exist[0] = args["pdname"]
 		price, exist[1] = args["price"]
 		description, exist[2] = args["description"]
 		amount, exist[3] = args["amount"]
 		account, exist[4] = args["account"]
-		sellerID, exist[5] = args["sellerID"]
-		bid, exist[6] = args["bid"]
-		date, exist[7] = args["date"]
-		dateLine, exist[8] = args["dateLine"]
+		bid, exist[5] = args["bid"]
+		date, exist[6] = args["date"]
+		dateLine, exist[7] = args["dateLine"]
 
 		if all(exist) {
 			pr, err1 := strconv.Atoi(price[0])
 			amo, err2 := strconv.Atoi(amount[0])
-			sel, err3 := strconv.Atoi(sellerID[0])
 			var bi bool
 			if bid[0] == "true" {
 				bi = true
 			}
 
-			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.Se.SetProductpdid(pdname[0], pr, description[0], amo, account[0], sel, bi, date[0], dateLine[0]))
+			if err1 == nil && err2 == nil {
+				fmt.Fprint(w, ser.Se.SetProductpdid(pdname[0], pr, description[0], amo, account[0], uid, bi, date[0], dateLine[0]))
 			} else {
 				fmt.Fprint(w, "data has wrong")
 			}
