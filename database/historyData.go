@@ -18,15 +18,16 @@ const historyTable = `CREATE TABLE history(
 
 // HistoryDB contain funcions to use
 type HistoryDB struct {
-	insert  *sql.Stmt
-	_delete *sql.Stmt
-	delAll  *sql.Stmt
-	maxSeq  *sql.Stmt
-	getnew  *sql.Stmt
-	getold  *sql.Stmt
-	// getall  *sql.Stmt
+	insert        *sql.Stmt
+	_delete       *sql.Stmt
+	delAll        *sql.Stmt
+	maxSeq        *sql.Stmt
+	getnew        *sql.Stmt
+	getold        *sql.Stmt
+	getPdFrompdid *sql.Stmt
 }
 
+// History contain product ids
 type History struct {
 	Pdid int
 }
@@ -51,25 +52,20 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 		panic(err)
 	}
 
-	history.maxSeq, err = db.Prepare("SELECT max(seq) FROM history WHERE uid=?;")
+	history.maxSeq, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
 
-	history.getnew, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;")
+	history.getold, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;")
 	if err != nil {
 		panic(err)
 	}
 
-	history.getold, err = db.Prepare("SELECT * FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;")
+	history.getPdFrompdid, err = db.Prepare("SELECT * FROM product WHERE pd_id=?;")
 	if err != nil {
 		panic(err)
 	}
-
-	// history.getall, err = db.Prepare("SELECT * FROM history ORDER BY seq DESC;")
-	// if err != nil {
-	// 	panic(err)
-	// }
 
 	return history
 }
@@ -78,9 +74,18 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 // return's an error
 // may encounter error when there's no history (beacuse max(seq) = null)
 func (h *HistoryDB) AddHistory(uid, pdid int) error {
+	// do this is to prevent history duplicate (delete the old one and add a new one)
+	// then the new one will be close to the front.
+	_, err := h._delete.Exec(uid, pdid)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
 	rows, err := h.maxSeq.Query(uid)
 	if err != nil {
 		log.Println(err)
+		return err
 	}
 
 	var seq int
@@ -112,52 +117,59 @@ func (h *HistoryDB) DeleteAll(uid int) error {
 }
 
 // Get return all history of a user by id (descend order by time)
-func (h *HistoryDB) Get(uid int, amount int, newest bool) (all []History) {
+func (h *HistoryDB) Get(uid int, amount int, newest bool) (all []Product) {
 
 	var rows *sql.Rows
 	var err error
+	var pdids []int
 
 	if newest {
 		rows, err = h.getnew.Query(uid, amount)
 		if err != nil {
-			panic(err)
+			log.Println(err)
+			return
 		}
 	} else {
 		rows, err = h.getold.Query(uid, amount)
 		if err != nil {
-			panic(err)
+			log.Println(err)
+			return
 		}
 	}
 
 	for rows.Next() {
-		var hs History
-		err = rows.Scan(&hs.Pdid)
+		var id int
+		err = rows.Scan(&id)
 		if err != nil {
-			panic(err)
+			log.Println(err)
+			return
 		}
 
-		all = append(all, hs)
+		pdids = append(pdids, id)
+	}
+
+	for _, v := range pdids {
+		all = append(all, h.getPdByPdid(v))
 	}
 
 	return
 }
 
-// this function has closed
-// func (h *HistoryDB) GetAll() (all []History) {
-// 	rows, err := h.getall.Query()
-// 	if err != nil {
-// 		log.Println(err)
-// 	}
+func (h *HistoryDB) getPdByPdid(pdid int) (pd Product) {
 
-// 	for rows.Next() {
-// 		var hi History
-// 		err = rows.Scan(&hi.UID, &hi.Pdid)
-// 		if err != nil {
-// 			log.Println(err)
-// 		}
+	rows, err := h.getPdFrompdid.Query(pdid)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-// 		all = append(all, hi)
-// 	}
+	for rows.Next() {
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	}
 
-// 	return
-// }
+	return
+}

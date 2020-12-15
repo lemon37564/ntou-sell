@@ -112,6 +112,7 @@ func (p *Product) GetAll() string {
 	res, err := json.Marshal(pds)
 	if err != nil {
 		log.Println(err)
+		return err.Error()
 	}
 
 	return string(res)
@@ -121,7 +122,7 @@ func (p *Product) GetNewest(number int) string {
 	temp, err := json.Marshal(p.fn.NewestProduct(number))
 	if err != nil {
 		log.Println(err)
-		return "Fail"
+		return err.Error()
 	}
 	return string(temp)
 }

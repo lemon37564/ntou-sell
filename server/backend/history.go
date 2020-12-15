@@ -3,42 +3,40 @@ package backend
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"se/database"
 )
 
 type History struct {
-	historydb *database.HistoryDB
-	productdb *database.ProductDB
+	fn *database.HistoryDB
 }
 
 func NewHistory(db *sql.DB) (u *History) {
 	u = new(History)
-	u.historydb = database.HistoryDBInit(db)
+	u.fn = database.HistoryDBInit(db)
 	return
 }
 
 func (h History) AddHistory(uid, pdid int) string {
-	err := h.historydb.AddHistory(uid, pdid)
+	err := h.fn.AddHistory(uid, pdid)
 	if err != nil {
-		return fmt.Sprint(err)
+		return err.Error()
 	}
 
 	return "ok"
 }
 
 func (h History) GetHistory(uid int, amount int, newest bool) string { //get all history
-	pd := h.historydb.Get(uid, amount, newest)
+	pd := h.fn.Get(uid, amount, newest)
 
 	str, err := json.Marshal(pd)
 	if err != nil {
-		panic(err)
+		return err.Error()
 	}
 	return string(str)
 }
 
 // func (h History) GetAll() string {
-// 	all := h.historydb.GetAll()
+// 	all := h.fn.GetAll()
 // 	res, err := json.Marshal(all)
 // 	if err != nil {
 // 		panic(err)
@@ -48,5 +46,5 @@ func (h History) GetHistory(uid int, amount int, newest bool) string { //get all
 // }
 
 func (h History) Delete(uid, pid int) string {
-	return h.historydb.Delete(uid, pid).Error()
+	return h.fn.Delete(uid, pid).Error()
 }

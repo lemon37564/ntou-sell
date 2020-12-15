@@ -16,7 +16,7 @@ func (s *Search) Search(keyword string) (str string) {
 	res, err := json.Marshal(s.fn.Search(keyword))
 	if err != nil {
 		log.Println(err)
-		return "Fail"
+		return err.Error()
 	}
 	return string(res)
 }

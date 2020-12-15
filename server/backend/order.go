@@ -23,9 +23,8 @@ func (o *Order) GetOrders(uid int) string {
 	pds := o.fn.GetAllOrder(uid)
 	res, err := json.Marshal(pds)
 	if err != nil {
-
 		log.Println(err)
-		return "NO Orders..."
+		return err.Error()
 	}
 
 	return string(res)

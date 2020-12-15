@@ -307,13 +307,13 @@ const PicHelp = `
 		列出所有圖片(僅限開發期間)<br>
 		<a href=/img/>
 		/img/</a><br>
-		查看單一圖片時，網址為/img/server.png<br>
-		<a href=/img/server.png>查看
+		查看特定圖片時，網址為/img/檔名<br>
+		<a href=/img/server.jpg>範例:/img/server.jpg</a>
 		<br><br>
 	</p>
 	<p>
 		/backend/pics/upload?name=...<br>
-		上傳名為...的圖片<br>
+		上傳名為...的圖片(用post)(此功能目前無法運作)<br>
 		e.g.上傳dog.jpg<br>
 		<a href=/backend/pics/upload?name=dog.jpg>
 		/backend/pics/upload?name=dog.jpg</a>

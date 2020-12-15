@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"time"
 )
@@ -67,39 +66,39 @@ func TestInsert(db *sql.DB) {
 		panic(err)
 	}
 
-	log.Println("insert complete")
+	log.Println("Test insert complete")
 }
 
 // TestSearch shows all the users
-func TestSearch(db *sql.DB) {
-	fmt.Println("start searching...")
+// func TestSearch(db *sql.DB) {
+// 	fmt.Println("start searching...")
 
-	rows, err := db.Query("select * from user;")
-	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
+// 	rows, err := db.Query("select * from user;")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer rows.Close()
 
-	var (
-		uid      string
-		account  string
-		password string
-		name     string
-		eval     float64
-	)
+// 	var (
+// 		uid      string
+// 		account  string
+// 		password string
+// 		name     string
+// 		eval     float64
+// 	)
 
-	for rows.Next() {
-		err = rows.Scan(&uid, &account, &password, &name, &eval)
-		if err != nil {
-			panic(err)
-		}
+// 	for rows.Next() {
+// 		err = rows.Scan(&uid, &account, &password, &name, &eval)
+// 		if err != nil {
+// 			panic(err)
+// 		}
 
-		fmt.Println("results:")
-		fmt.Println("    uid:", uid)
-		fmt.Println("    account:", account)
-		fmt.Println("    password hash:", password)
-		fmt.Println("    name:", name)
-		fmt.Println("    eval:", eval)
-		fmt.Println()
-	}
-}
+// 		fmt.Println("results:")
+// 		fmt.Println("    uid:", uid)
+// 		fmt.Println("    account:", account)
+// 		fmt.Println("    password hash:", password)
+// 		fmt.Println("    name:", name)
+// 		fmt.Println("    eval:", eval)
+// 		fmt.Println()
+// 	}
+// }
