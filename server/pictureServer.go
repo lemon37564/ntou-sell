@@ -23,6 +23,8 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, PicHelp)
 	case "upload":
 		picName, exi := args["picname"]
 		if exi {
