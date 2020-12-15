@@ -34,8 +34,8 @@ type Messages struct {
 // message struct store data of a single message
 type message struct {
 	// Status is 's' or 'r' to represent sender or receiver
-	status rune
-	text   string
+	Status rune
+	Text   string
 }
 
 // MessID is a struct only for getting all messages(debugging)
@@ -140,7 +140,7 @@ func (m *MessageDB) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 	var ms message
 	var tmpID int
 	for rows.Next() {
-		err = rows.Scan(&ms.text, &tmpID)
+		err = rows.Scan(&ms.Text, &tmpID)
 		if err != nil {
 			log.Println(err)
 			return Messages{}
@@ -148,9 +148,9 @@ func (m *MessageDB) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 
 		// local is sender or receiver
 		if tmpID == localUID {
-			ms.status = 's'
+			ms.Status = 's'
 		} else {
-			ms.status = 'r'
+			ms.Status = 'r'
 		}
 
 		all = append(all, ms)
