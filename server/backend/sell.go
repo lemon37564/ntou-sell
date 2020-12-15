@@ -18,7 +18,7 @@ func NewSell(db *sql.DB) (s *Sell) {
 	return
 }
 
-func (s *Sell) SetProductpdid(pdname string, price int, description string, amount int, account string, sellerID int, bid bool, date string, dateLine string) string { //當在競標時為競標價格
+func (s *Sell) SetProductpdid(pdname string, price int, description string, amount int, sellerID int, bid bool, date string, dateLine string) string { //當在競標時為競標價格
 
 	dt, err := time.Parse(TimeLayout, date)
 	if err != nil {

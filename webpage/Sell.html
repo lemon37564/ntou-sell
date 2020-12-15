@@ -297,7 +297,7 @@ request.send(null);
        // <!--這裡我先假設為輸入正確-->
         
         if(pdname.initprice!=''){//有誤
-        msg=msg+"pdname="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&account="+1+"&sellerID="+"&bid="+"true"+"&date="+date+"&dateLine="+dateline
+        msg=msg+"pdname="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&bid="+"true"+"&date="+date+"&dateLine="+dateline
         }
         var request=new XMLHttpRequest;
         request.open("get",msg); 
@@ -359,7 +359,7 @@ request.send(null);
     <h1 style="text-align: left;font-size:50px">販賣</h1>
     
     <form  style="text-align: left">
-    <label style="font-size: 45px">Product Name:</label>
+    <label style="font-size: 45px">Product Name:&nbsp;&nbsp;</label>
     <input type="text" style="font-size:45px" id="pdname" name="pdname" value=""><br>
     <label style="font-size:45px">Product Picture:</label>
     <input type="text" style="font-size:45px" id="pdpic" name="pdpic" value=""><br>
