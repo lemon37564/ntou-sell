@@ -10,100 +10,56 @@
 <title>海大拍賣主頁</title>
 
 <script type="text/javascript">
-
-function req2(Pdid,content1){
-var msg2='backend/pics/get?pdid='+Pdid;
-console.log(msg2);
-var request2=new XMLHttpRequest;
-request2.open("get",msg2);
-    //request2.onreadystatechange= function(){
-    request2.send(null);
-    while(request2.readyState!=4){};
-    if(request2.readyState===4&&request2.status===200){
-		content1=content1+request2.responseText+'" width="100" height="100" onclick="toProduct('+Pdid+')">';
-		console.log(content1);
-		return content1;
-	}
-        //request2.send(null);
-    //}
-    console.log(msg2);
-}
-	
-	
-	
 //以下為載入新商品的function
 window.onload=ShowNewProduct;
 
-	
-	
-	
 function ShowNewProduct(){
 
-var newProduct='';
+    var newProduct='';
 
-var request=new XMLHttpRequest;
-//request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+    var request=new XMLHttpRequest;
+    //request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
 
-request.open("get","backend/product/newest?amount=3"); 
-
-  request.onreadystatechange = function() { // Define event listener
-  // If the request is complete and was successful
-    if (request.readyState === 4 && request.status === 200) {
-      var type = request.getResponseHeader("Content-Type");
-      if (type.match(/^text/)){ // Make sure response is text
-		var datastr = JSON.parse(request.responseText);
-		var len  = datastr.length;
-		var str= "";
-		for (var i = 0; i < len; i++) {
-			var Pdid=datastr[i].Pdid;
-			var content2='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
-			var content1='<tr><td><img src="img/';
-			content1=req2(Pdid,content1);
-			//content1=content1+'" width="100" height="100" onclick="toProduct('+id+')">';
-			newProduct=newProduct+content1+content2;
-			/*
-			var msg2='backend/pics/get?pdid='+datastr[i].Pdid;
-			//var imgURL='';
-			var request2=new XMLHttpRequest;
-			request2.open("get",msg2);
-			request2.onreadystatechange= function(){
-			    if(request2.readyState===4&&request2.status===200){
-				    //imgURL.value=request2.responseText;
-				    content1='<tr><td><img src="img/'+request2.responseText+'" width="100" height="100" onclick="toProduct('+id+')">';
-				    console.log(content1);
-				    newProduct=newProduct+content1+content2;
-			    }
-			}
-			request2.send(null);
-			*/
-			
-			//console.log(imgURL);
-			//var content1='<tr><td><img src="img/'+imgURL+'" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
-			
-			//content1=content1+datastr[i].Pdid+')">';
-			
-			//var content1='<tr><td><img src="img/'+datastr[i].Pdid+'.jpg" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
-		        //var content2='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
-                        //偵錯用  console.log(content);
-			//newProduct=newProduct+content2;
-		};
-	        console.log(newProduct);
-		document.getElementById("NP").innerHTML=newProduct;
-      }
-    }
-	  //console.log(newProduct);
-	  //document.getElementById("NP").innerHTML=newProduct;
-  };
-request.send(null);
-
+    request.open("get","backend/product/newest?amount=3"); 
+	
+    request.onreadystatechange = function() { // Define event listener
+    // If the request is complete and was successful
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader("Content-Type");
+            if (type.match(/^text/)){ // Make sure response is text
+		        var datastr = JSON.parse(request.responseText);
+		        var len  = datastr.length;
+		        for (var i = 0; i < len; i++) {
+			        var msg2='img/get?pdid='+datastr[i].Pdid;
+					console.log(msg2);
+			        var imgURL='';
+			        var request2=new XMLHttpRequest;
+			        request2.open("get",msg2);
+			        request2.onreadystatechange= function(){
+			            if(request2.readyState===4&&request2.status===200){
+			    	        imgURL=request2.responseText;
+			    	    }
+			        }
+			        request2.send(null);
+			        console.log(imgURL);
+			        var content1='<tr><td><img src="img/'+imgURL+'" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
+			        //var content1='<tr><td><img src="img/'+datastr[i].Pdid+'.jpg" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
+		            var content2='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
+                    //偵錯用  console.log(content);
+			        newProduct=newProduct+content1+content2;
+		        };
+	            console.log(newProduct);
+		        document.getElementById("NP").innerHTML=newProduct;
+            }
+        }
+    };
+    request.send(null);
 }
 
 function toProduct(Pdid){
     localStorage.setItem('Pdid', Pdid);
     window.location.href="Product.html";
 }
-	
-	
 	
 	
 
