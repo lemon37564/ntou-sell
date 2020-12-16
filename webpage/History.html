@@ -139,8 +139,7 @@ class.myButton:active {
 
 <script type="text/javascript">
     window.onload=GetHistoryProducts;
-
-    function ShowCart(){
+    function GetHistoryProducts(){
 
         var newProduct='';
         var request=new XMLHttpRequest;
@@ -155,11 +154,10 @@ class.myButton:active {
 
                 var str= "";
                 for (var i = 0; i < len; i++) {
-   
+                
                 var content = 
                     '<div id="div2">'+
                     '<div id="div3">'+
-                    
                     '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
                     '</div>'+
                     /*'<div id="div3">'+
@@ -176,7 +174,6 @@ class.myButton:active {
                     '</div>'; 
     //偵錯用  console.log(content);
                     newProduct=newProduct+content;
-                 str+=content;
                 };
 
                 }
