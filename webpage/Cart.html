@@ -291,16 +291,13 @@ request.send(null);
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                   str=str+datastr[0].PdPrice;
-                   var a = parseInt(str);
+                   str=str+datastr[0].Price;
+                   var a = parseInt(str,10);
+                   alert(a);
                    mon=mon+a;
-                    alert(mon);
+                   alert(mon);
            }
            
-          
-           //偵錯用  console.log(content);
-           newProduct=newProduct+content;
-           str+=content;
        };
        
      }
@@ -329,8 +326,7 @@ request.send(null);
 		for (var i = 0; i < len; i++) {
             if(prods[i].type == "checkbox"){
                     //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                    var content = 
-               '<div>'+datastr[i].PdName&nbsp&nbsp;+'</div>';
+                    var content = '<div>'+datastr[i].PdName+"   "+'</div>';
             }
 			
            
