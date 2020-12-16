@@ -177,6 +177,8 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 				pdid, stat = ser.Pd.AddProduct(name, p, des, a, uid, b, date)
 			}
 
+			fmt.Fprint(w, "ok")
+
 			file, handler, err := r.FormFile("uploadfile")
 			if err != nil {
 				log.Println("at upload file:", err)
