@@ -21,7 +21,7 @@ function ShowNewProduct(){
     //request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
 
     request.open("get","backend/product/newest?amount=3"); 
-	
+	var count=0;
     request.onreadystatechange = function() { // Define event listener
     // If the request is complete and was successful
         if (request.readyState === 4 && request.status === 200) {
@@ -29,7 +29,7 @@ function ShowNewProduct(){
             if (type.match(/^text/)){ // Make sure response is text
 		        var datastr = JSON.parse(request.responseText);
 		        var len  = datastr.length;
-				var count= 0;
+				//var count= 0;
 				var imgURL= new Array(len);
 				var content1=new Array(len);
 				var content2=new Array(len);
@@ -45,6 +45,7 @@ function ShowNewProduct(){
 			    	        imgURL[count]=request2.responseText;
 							console.log(count);
 							count=count+1;
+							console.log(count);
 					        console.log(imgURL);
 							var newProduct2='';
 							for(var j=0;j<len;j++){
