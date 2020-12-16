@@ -228,7 +228,7 @@ request.send(null);
         var request2 = new XMLHttpRequest;
         var datastr = "";
 
-        request2.open("post","/backend/order/add?");
+        request2.open("post","backend/order/add");
         request2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request2.onreadystatechange = function() { // Define event listener
         // If the request is compete and was successful
