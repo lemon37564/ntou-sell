@@ -183,6 +183,14 @@ const HistoryHelp = `
 		<br><br>
 	</p>
 	<p>
+		/backend/history/delete?pdids=...,...,...,...<br>
+		刪除特定歷史紀錄(複數)<br>
+		e.g.刪除目前登入的帳號中商品編號為1,2,3,4的歷史紀錄<br>
+		<a href=/backend/history/delete?pdids=1,2,3,4>
+		/backend/history/delete?pdids=1,2,3,4</a>
+		<br><br>
+	</p>
+	<p>
 		/backend/history/deleteall<br>
 		刪除所有歷史紀錄<br>
 		e.g.刪除目前登入的帳號的所有歷史紀錄<br>

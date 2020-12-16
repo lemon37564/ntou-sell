@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"encoding/json"
 	"se/database"
+	"strconv"
+	"strings"
 )
 
 // History contains functions to use
@@ -43,6 +45,24 @@ func (h History) GetHistory(uid int, amount int, newest bool) string {
 func (h History) Delete(uid, pid int) string {
 	if err := h.fn.Delete(uid, pid); err != nil {
 		return err.Error()
+	}
+
+	return "ok"
+}
+
+// DeleteSpecific delete multiple historys
+func (h History) DeleteSpecific(uid int, pdid string) string {
+	pdids := strings.Split(pdid, ",")
+
+	for _, v := range pdids {
+		sipd, err := strconv.Atoi(v)
+		if err != nil {
+			return "query contains non-integer"
+		}
+
+		if err := h.fn.Delete(uid, sipd); err != nil {
+			return err.Error()
+		}
 	}
 
 	return "ok"
