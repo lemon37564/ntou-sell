@@ -346,7 +346,7 @@ const PicHelp = `
 		<br><br>
 	</p>
 	<p>
-		/img/get?pdid=...<br>
+		/backend/pics/get?pdid=...<br>
 		查詢圖片名稱<br>
 		回傳圖片路徑<br>
 		<br><br>

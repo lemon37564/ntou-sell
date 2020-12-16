@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -19,7 +19,7 @@ function regist(){
     var acc=document.getElementById("account");
     var pas=document.getElementById("password");
     var nam=document.getElementById("name");
-    var params='account='+acc.value+'&password='+pas.value+'&name='nam.value;
+    var params='account='+acc.value+'&password='+pas.value+'&name='+nam.value;
     //msg=msg+"account="+acc.value+"&password="+pas.value+"&name="+nam.value;
     var request=new XMLHttpRequest;
     request.open("post",'backend/user/regist');
@@ -33,7 +33,7 @@ function regist(){
                 window.location.href="index.html";
             }
         }
-    };
+    }
     request.send(params);
 }
 
