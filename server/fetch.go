@@ -100,26 +100,31 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)
 	r.ParseForm()
 
+	switch path["key"] {
+	case "help":
+		fmt.Fprint(w, UserHelp)
+		return
+
+	case "login":
+		uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
+
+		if valid {
+			// set session to maintain login condition
+			login(w, r, uid)
+			fmt.Fprintln(w, "登入成功!")
+		} else {
+			fmt.Fprint(w, "登入失敗")
+		}
+		return
+
+	case "regist":
+		fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
+		return
+	}
+
 	uid, valid := sessionValid(w, r)
 	if valid {
 		switch path["key"] {
-		case "help":
-			fmt.Fprint(w, UserHelp)
-
-		case "login":
-			uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
-
-			if valid {
-				// set session to maintain login condition
-				login(w, r, uid)
-				fmt.Fprintln(w, "登入成功!")
-			} else {
-				fmt.Fprint(w, "登入失敗")
-			}
-
-		case "regist":
-			fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
-
 		case "delete":
 			fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.Form["password"][0]))
 
@@ -137,28 +142,6 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 			http.NotFound(w, r)
 		}
 		return
-	}
-
-	switch path["key"] {
-	case "help":
-		fmt.Fprint(w, UserHelp)
-
-	case "login":
-		uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
-
-		if valid {
-			// set session to maintain login condition
-			login(w, r, uid)
-			fmt.Fprintln(w, "登入成功!")
-		} else {
-			fmt.Fprint(w, "登入失敗")
-		}
-
-	case "regist":
-		fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
-
-	default:
-		http.NotFound(w, r)
 	}
 
 }
@@ -189,6 +172,8 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			amount := r.Form["amount"][0]
 			bid := r.Form["bid"][0]
 			date := r.Form["date"][0]
+
+			log.Println(name, price, des, amount, bid, date)
 
 			p, err1 := strconv.Atoi(price)
 			a, err2 := strconv.Atoi(amount)
