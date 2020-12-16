@@ -237,7 +237,7 @@ request.send(null);
         //if (type.match(/^text/)){ // Make sure response is text
         if(request2.responseText=== "true" ){
         alert("true"); 
-        window.location.href="MainPage.html";
+        
         }
 	    if(request2.responseText==="false"){
         //alert(request.responseText); 
@@ -266,7 +266,7 @@ request.send(null);
                                 
                             str=str+datastr[i].Pdid;
                             var temp="";
-                            temp=temp+("pdid="+str);
+                            temp=("pdid="+str);
                             str=datastr[i].Amount;
                             temp=temp+("&amount="+str);
                             alert(temp);
