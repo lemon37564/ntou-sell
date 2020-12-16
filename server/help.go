@@ -177,9 +177,17 @@ const HistoryHelp = `
 	<p>
 		/backend/history/delete?pdid=...<br>
 		刪除歷史紀錄<br>
-		e.g.刪除帳號test3@gmail.com以及商品編號為2的歷史紀錄<br>
+		e.g.刪除目前登入的帳號中商品編號為2的歷史紀錄<br>
 		<a href=/backend/history/delete?pdid=2>
 		/backend/history/delete?pdid=2</a>
+		<br><br>
+	</p>
+	<p>
+		/backend/history/deleteall<br>
+		刪除所有歷史紀錄<br>
+		e.g.刪除目前登入的帳號的所有歷史紀錄<br>
+		<a href=/backend/history/deleteall>
+		/backend/history/deleteall</a>
 		<br><br>
 	</p>
 </html>

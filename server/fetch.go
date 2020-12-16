@@ -64,6 +64,8 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+	case "deleteall":
+		fmt.Fprint(w, ser.Ht.DeleteAll(uid))
 	case "add":
 		pdid, exi := args["pdid"]
 
@@ -422,8 +424,6 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, CartHelp)
-	case "all":
-		fmt.Fprint(w, ser.Ct.Debug())
 	case "add": //For single product
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]

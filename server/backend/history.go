@@ -18,6 +18,7 @@ func HistoryInit(db *sql.DB) (h *History) {
 	return
 }
 
+// AddHistory add a history into user's record
 func (h History) AddHistory(uid, pdid int) string {
 	err := h.fn.AddHistory(uid, pdid)
 	if err != nil {
@@ -27,7 +28,8 @@ func (h History) AddHistory(uid, pdid int) string {
 	return "ok"
 }
 
-func (h History) GetHistory(uid int, amount int, newest bool) string { //get all history
+// GetHistory return all historys of a user whose uid is ?
+func (h History) GetHistory(uid int, amount int, newest bool) string {
 	pd := h.fn.Get(uid, amount, newest)
 
 	str, err := json.Marshal(pd)
@@ -37,6 +39,20 @@ func (h History) GetHistory(uid int, amount int, newest bool) string { //get all
 	return string(str)
 }
 
+// Delete can delete a history user don't want to see
 func (h History) Delete(uid, pid int) string {
-	return h.fn.Delete(uid, pid).Error()
+	if err := h.fn.Delete(uid, pid); err != nil {
+		return err.Error()
+	}
+
+	return "ok"
+}
+
+// DeleteAll deletes all history of a user
+func (h History) DeleteAll(uid int) string {
+	if err := h.fn.DeleteAll(uid); err != nil {
+		return err.Error()
+	}
+
+	return "ok"
 }

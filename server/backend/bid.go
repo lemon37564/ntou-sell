@@ -8,21 +8,22 @@ import (
 	"se/database"
 )
 
+// Bid type handle bids
 type Bid struct {
-	bidDb     *database.BidDB
-	productDb *database.ProductDB
+	fn *database.BidDB
 }
 
+// BidInit return a Bid type which handle bids
 func BidInit(db *sql.DB) *Bid {
 	b := new(Bid)
-	b.bidDb = database.BidDataInit(db)
+	b.fn = database.BidDataInit(db)
 	return b
-
 }
 
-func (b Bid) GetProductInfo(id int) string { //回傳商品資訊
+//GetProductInfo 回傳商品資訊
+func (b Bid) GetProductInfo(pdid int) string {
 
-	temp, err := json.Marshal(b.productDb.GetInfoFromPdID(id))
+	temp, err := json.Marshal(b.fn.GetAllBidProducts(pdid))
 	if err != nil {
 		log.Println(err)
 		return "fail to get Productinfo"
@@ -30,8 +31,9 @@ func (b Bid) GetProductInfo(id int) string { //回傳商品資訊
 	return string(temp)
 }
 
-func (b Bid) GetProductBidInfo(id int) string { //回傳商品目前競標商品資訊
-	temp, err := json.Marshal(b.bidDb.GetBidByID(id))
+//GetProductBidInfo 回傳商品目前競標商品資訊
+func (b Bid) GetProductBidInfo(pdid int) string {
+	temp, err := json.Marshal(b.fn.GetBidByID(pdid))
 	if err != nil {
 		log.Println(err)
 		return "fail to get Bidinfo"
@@ -39,17 +41,18 @@ func (b Bid) GetProductBidInfo(id int) string { //回傳商品目前競標商品
 	return string(temp)
 }
 
-func (b *Bid) SetBidForBuyer(pdid, uid, money int) bool { //更新商品價格，目前競標者
-	if money > b.bidDb.GetBidByID(pdid).NowMoney { // 取得競標價格
-		b.bidDb.NewBidderGet(pdid, uid, money)
+// SetBidForBuyer 更新商品價格，目前競標者
+func (b *Bid) SetBidForBuyer(pdid, uid, money int) bool {
+	if money > b.fn.GetBidByID(pdid).NowMoney { // 取得競標價格
+		b.fn.NewBidderGet(pdid, uid, money)
 		return true
 	}
 	return false
 }
 
-//刪除競標
+// DeleteBid 刪除競標
 func (b *Bid) DeleteBid(pdid int) string {
-	err := b.bidDb.DeleteBid(pdid)
+	err := b.fn.DeleteBid(pdid)
 	if err != nil {
 		log.Println(err)
 		return fmt.Sprintf("%v", err)
