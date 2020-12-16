@@ -2,8 +2,12 @@ package server
 
 import (
 	"fmt"
+	"io"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -13,14 +17,7 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	switch mux.Vars(r)["key"] {
-	case "success":
-		fmt.Fprintln(w, "登入成功!")
-	case "testpic":
-		fmt.Fprint(w, `<html><img src="/backend/pics/server.jpg"></html>`)
-	default:
-		fmt.Fprintln(w, HelpPage)
-	}
+	fmt.Fprintln(w, HelpPage)
 }
 
 func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
@@ -138,6 +135,55 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "請先登入!")
 		return
 	}
+
+	// temp area
+	if r.Method == "POST" {
+		log.Println("receive post (product)")
+		if mux.Vars(r)["key"] == "postadd" {
+			var pdid int
+			var stat string
+
+			r.ParseMultipartForm(32 << 20)
+
+			name := r.Form["name"][0]
+			price := r.Form["price"][0]
+			des := r.Form["description"][0]
+			amount := r.Form["amount"][0]
+			bid := r.Form["bid"][0]
+			date := r.Form["date"][0]
+
+			p, err1 := strconv.Atoi(price)
+			a, err2 := strconv.Atoi(amount)
+			b := (bid == "true")
+
+			if err1 == nil && err2 == nil {
+				pdid, stat = ser.Pd.AddProduct(name, p, des, a, uid, b, date)
+			}
+
+			file, handler, err := r.FormFile("uploadfile")
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			defer file.Close()
+
+			spt := strings.Split(handler.Filename, ".")
+			subName := spt[len(spt)-1]
+
+			fmt.Fprint(w, handler.Header)
+			f, err := os.Create("webpage/img/" + fmt.Sprint(pdid) + subName)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			defer f.Close()
+
+			io.Copy(f, file)
+			fmt.Fprint(w, "\n", stat)
+		}
+		return
+	}
+	// temp area
 
 	path := mux.Vars(r)
 	args := r.URL.Query()
