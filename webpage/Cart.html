@@ -228,7 +228,7 @@ request.send(null);
         var request2 = new XMLHttpRequest;
         var datastr = "";
 
-        request2.open("post","backend/order/add");
+        request2.open("post","/backend/order/add");
         request2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request2.onreadystatechange = function() { // Define event listener
         // If the request is compete and was successful
@@ -243,7 +243,7 @@ request.send(null);
         //alert(request.responseText); 
             alert("false");
         }
-      //}
+     
         }else {
             alert("err");
         }
@@ -270,6 +270,7 @@ request.send(null);
                             str=datastr[i].Amount;
                             temp=temp+("&amount="+str);
                             alert(temp);
+                            console.log(temp);
                             request2.send(temp); 
                             }     
                     };
