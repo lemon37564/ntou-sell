@@ -59,7 +59,7 @@ func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname str
 
 func (ser *Server) getPic(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
-	// bad way
+	// bad way, rewrite it later
 	psb := []string{".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico", ".bmp"}
 
 	pdid, exi := args["pdid"]

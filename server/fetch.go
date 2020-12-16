@@ -37,6 +37,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, HistoryHelp)
+
 	case "get":
 		val, exist := args["amount"]
 		val2, exi2 := args["newest"]
@@ -51,6 +52,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "delete":
 		pdid, exi := args["pdid"]
 
@@ -64,8 +66,10 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "deleteall":
 		fmt.Fprint(w, ser.Ht.DeleteAll(uid))
+
 	case "deletespec":
 		pdids, exi := args["pdids"]
 
@@ -74,6 +78,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "add":
 		pdid, exi := args["pdid"]
 
@@ -87,6 +92,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	default:
 		http.NotFound(w, r)
 	}
@@ -210,8 +216,10 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, ProductHelp)
+
 	case "all":
 		fmt.Fprint(w, ser.Pd.GetAll())
+
 	case "add":
 		exist := make([]bool, 6)
 		var name, price, des, amount, bid, date []string
@@ -237,6 +245,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "get":
 		val, exi := args["pdid"]
 
@@ -249,6 +258,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "delete":
 		val, exi := args["pdname"]
 
@@ -257,6 +267,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "newest":
 		val, exi := args["amount"]
 
@@ -272,6 +283,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "search":
 		val, exi := args["name"]
 
@@ -280,6 +292,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "filterSearch":
 		exist := make([]bool, 4)
 		var name, min, max, eval []string
@@ -302,6 +315,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	default:
 		http.NotFound(w, r)
 	}
@@ -324,6 +338,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, OrderHelp)
+
 	case "get":
 		fmt.Fprint(w, ser.Od.GetOrders(uid))
 
@@ -342,6 +357,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "del":
 		pdid, exi := args["pdid"]
 		if exi {
@@ -354,6 +370,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	default:
 		http.NotFound(w, r)
 	}
@@ -377,6 +394,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, BidHelp)
+
 	case "get": //For single bid product
 		pdid, ex1 := args["pdid"]
 
@@ -389,6 +407,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "set":
 		pdid, exi := args["pdid"]
 		money, exi2 := args["money"]
@@ -405,6 +424,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "delete":
 		pdid, ex1 := args["pdid"]
 
@@ -441,6 +461,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, CartHelp)
+
 	case "add": //For single product
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
@@ -457,6 +478,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "remo":
 		pdid, exi := args["pdid"]
 
@@ -470,6 +492,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "modf":
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
@@ -486,6 +509,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	// case "tal":
 	// 	fmt.Fprint(w, ser.Ct.TotalCount(uid))
 
@@ -514,8 +538,10 @@ func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, MessageHelp)
+
 	case "all":
 		fmt.Fprint(w, ser.Ms.GetAll())
+
 	case "send":
 		val, exi := args["remoteUID"]
 		val2, exi2 := args["text"]
@@ -530,6 +556,7 @@ func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	case "get":
 		val, exi := args["remoteUID"]
 		val2, exi2 := args["ascend"]
@@ -544,6 +571,7 @@ func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
+
 	default:
 		http.NotFound(w, r)
 	}
