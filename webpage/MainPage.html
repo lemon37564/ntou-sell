@@ -29,34 +29,42 @@ function ShowNewProduct(){
             if (type.match(/^text/)){ // Make sure response is text
 		        var datastr = JSON.parse(request.responseText);
 		        var len  = datastr.length;
+				var count= 0;
+				var imgUrl= new Array(len);
+				var content1=new Array(len);
+				var content2=new Array(len);
 		        for (var i = 0; i < len; i++) {
 			        var msg2='backend/pics/get?pdid='+datastr[i].Pdid;
-				console.log(msg2);
-			        var imgURL='';
+				    console.log(msg2);
 			        var request2=new XMLHttpRequest;
 			        request2.open("get",msg2);
-				request2.send(null);
-				while(request2.readyState!=4){
-				    if(request2.status===404){
-				        break;
-				    }
-				}
+				    //request2.send(null);
+					
 			        request2.onreadystatechange= function(){
 			            if(request2.readyState===4&&request2.status===200){
-			    	        imgURL=request2.responseText;
-					console.log(imgURL);
+			    	        imgURL[count]=request2.responseText;
+							count=count+1;
+					        console.log(imgURL);
+							var newProduct2='';
+							for(var j=0;j<len;j++){
+							    newProduct2=content1[j]+imgURL[j]+content2[j];
+							}
+							document.getElementById("NP").innerHTML=newProduct2;
 			    	    }
 			        }
-			        //request2.send(null);
+			        request2.send(null);
 			        console.log(imgURL);
-			        var content1='<tr><td><img src="img/'+imgURL+'" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
+			        content1[i]='<tr><td><img src="img/'+'" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
 			        //var content1='<tr><td><img src="img/'+datastr[i].Pdid+'.jpg" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
-		            var content2='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
+		            content2[i]='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
                     //偵錯用  console.log(content);
-			        newProduct=newProduct+content1+content2;
+			        for(var k=0;k<=i;k++){
+					    newProduct=newProduct+content1[k]+content2[k];
+					}
+					document.getElementById("NP").innerHTML=newProduct;
 		        };
 	            console.log(newProduct);
-		        document.getElementById("NP").innerHTML=newProduct;
+		        //document.getElementById("NP").innerHTML=newProduct;
             }
         }
     };
@@ -211,8 +219,9 @@ function toMainPage(){
   <div align="center">
   <table id=NP style="background:rgba(243,241,241,0.6);" width="1000" height="700">
 	  <h2>New Product</h2>
-	  <tr><td>
-	  </td></tr>
+	  <tr><td><p id="a"></p></td></tr>
+	  <tr><td><p id="b"></p></td></tr>
+	  <tr><td><p id="c"></p></td></tr>
   </table>
   </div>
 </body>
