@@ -59,7 +59,7 @@ function ShowProduct(){
 				request2.open("get",msg2);
 				request2.onreadystatechange=function(){
 				    if(request2.readyState===4&&request2.status===200){
-					    var productInfo='<tr><td><img src="img/'+request2.responseText+'" width="200" height="200"></td></tr>'+productInfo;
+					    productInfo='<tr><td><img src="img/'+request2.responseText+'" width="200" height="200"></td></tr>'+productInfo;
 					    document.getElementById("NP").innerHTML=productInfo;
 					}
 				}
