@@ -236,7 +236,18 @@ class.myButton:active {
         };
         
         request.send(temp);
-
+        var str="/backend/product/add?";
+        str=str+temp;
+        request.open("get",str);
+        alert(str);
+        request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+		alert(str);
+		
+      }
+    }
     }
  
 </script>
