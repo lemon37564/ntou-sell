@@ -272,35 +272,44 @@ request.send(null);
         alert("已加入訂單");
         request.send(null);
     }
-    function total() {
+    function totalmoney() {
        
-        /*alert("dd");
-        
-        var request2=new XMLHttpRequest;
-        request2.open("get","/backend/cart/geps"); //前面網址解決CORS
-        request2.onreadystatechange = function() { 
-        if (request2.readyState === 4 && request2.status === 200) {
-        var type = request2.getResponseHeader("Content-Type");
-        if (type.match(/^text/)){ // Make sure response is text
-        var datastr = JSON.parse(request2.responseText);
-        alert("fff");
-        var str="";
-		var prods=document.getElementsByName("test");
-            for (var i=0;i<prods.length;i++){
-                if(prods[i].type == "checkbox"){
-                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                    alert("xx");
-                }
-            }
-		
-        }
-        } else{
-            alert("connect err");
-        }
-        alert("ss");
-        document.getElementById("SHOWTOT").innerHTML=str;
-        };
-        request2.send(null);*/
+       var newProduct='';
+       var request=new XMLHttpRequest;
+       /*request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/backend/cart/geps?uid=1");*/
+       request.open("get","/backend/cart/geps");
+       request.onreadystatechange = function() { 
+       if (request.readyState === 4 && request.status === 200) {
+       var type = request.getResponseHeader("Content-Type");
+       if (type.match(/^text/)){ // Make sure response is text
+       var datastr = JSON.parse(request.responseText);
+       var len  = datastr.length;
+       
+       var str= "";
+       var prods=document.getElementsByName("test");
+       for (var i = 0; i < len; i++) {
+           if(prods[i].type == "checkbox"){
+                   //str=str+'<div>'+datastr[i].Pdid+'</div>';
+                   var content = 
+              '<div>'+datastr[i].PdName&nbsp&nbsp;+'</div>';
+           }
+           
+          
+           //偵錯用  console.log(content);
+           newProduct=newProduct+content;
+           str+=content;
+       };
+       
+     }
+   }
+   
+     
+   document.getElementById("money").innerHTML=newProduct;
+ };
+request.send(null);
+   }
+    function total() {//目前所選
+       
         var newProduct='';
         var request=new XMLHttpRequest;
         /*request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/backend/cart/geps?uid=1");*/
@@ -413,12 +422,15 @@ ctx.fillRect(300, 50, 600, 300);
 <div id="tobuy">
     <div id="div3">
         <h4 style="color:#3a8a9e">目前所選:</h4>
-        <h4 id="SHOWTOT" >無</h4>
+        
     </div>
-    
+    <div id="div3">     
+    <h4 id="SHOWTOT">無</h4>
+    <h4 id="money">無</h4>
+    </div>
 
     
-    <button type="button" onclick="total()" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
+    <button type="button" onclick="total();totalmoney();" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
     
     
      <button type="button" onclick="goToBuy()" style="margin-top:50px;width:80px;height:40px;background-color: gray;"><font size="5">結帳</button>
