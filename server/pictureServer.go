@@ -71,7 +71,7 @@ func (ser *Server) getPic(w http.ResponseWriter, r *http.Request) {
 		for _, v := range psb {
 			_, err := os.Stat("webpage/img/" + pdid[0] + v)
 			if err == nil {
-				fmt.Fprint(w, "img"+pdid[0]+v)
+				fmt.Fprint(w, "img/"+pdid[0]+v)
 				return
 			}
 		}
