@@ -126,8 +126,8 @@ class.myButton:active {
         font-weight:bold;
         font-size:35px;
         color:rgb(15, 115, 51);
-        margin-left:50px;
-        margin-right:83px;
+        margin-left:30px;
+        margin-right:20px;
         /*width:20px;
         height:20px;*/
         
@@ -156,20 +156,17 @@ class.myButton:active {
                 
                 var content = 
                     '<div id="div2">'+
-                    '<div id="div3">'+
-                    '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
-                    '</div>'+
-                    /*'<div id="div3">'+
-                    '<li>'+*/
+                    
                     '<div id="div3">'+datastr[i].PdName+
                     '</div>'+
                     '<div id="div3">'+datastr[i].Price+
                     '</div>'+
                     '<div id="div3">'+datastr[i].Amount+
                     '</div>'+
-                    /*'</li>'+
-                    '</div>'+*/
+                    '<div id="div3">'+
+                    '<button type="button" onclick="" style="margin-top:20px;width:90px;height:40px;background-color:gray;"><font size="5">'+總金額+'</button>'+
                     '</div>'+
+                    
                     '</div>'; 
     //偵錯用  console.log(content);
                     newProduct=newProduct+content;
