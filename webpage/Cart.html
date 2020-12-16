@@ -300,9 +300,8 @@ request.send(null);
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
                    str=str+datastr[0].Price;
-                   var a = parseInt(str,10);
-                   var b = parseInt(mon,10);
-                   mon=a+b;
+                   mon = Number(str)+Number(mon);
+                   
                    
            }
            
@@ -436,14 +435,14 @@ ctx.fillRect(300, 50, 600, 300);
 </div>
 <div id="tobuy">
     
-    <div id="div3">  
+    
     <div style="float:left">
     <h2 style="float:none;margin-left:0px;">Total:</h2>
     </div>
     <div style="float:left">
     <h5 id="money" style="float:none;margin-left:0px;">無</h5>
     </div>
-    </div>
+   
 
     
     <button type="button" onclick="total();totalmoney();" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
