@@ -30,7 +30,7 @@ const HelpPage = `
 
 	<a href=/backend/cart/help>關於購物車的功能...</a><br><br>
 	
-	<a href=/backend/sell/help>關於販賣商品的功能...</a><br><br>
+	關於販賣商品的功能...(此功能已整合到product)<br><br>
 	
 	<a href=/backend/message/help>關於使用者對話的功能...</a><br><br>
 
@@ -268,19 +268,6 @@ const CartHelp = `
 		e.g.<br>
 		<a href=/backend/cart/geps>
 		/backend/cart/geps</a>
-		<br><br>
-	</p>
-</html>
-`
-
-const SellHelp = `
-<html>
-	<p>
-		/backend/sell/set?pdname=...&price=...&description=...&amount=...&account=...&bid=...&date=...&dateLine=...<br>
-		販賣商品<br>
-		e.g.在販賣網頁販賣商品<br>
-		<a href=/backend/sell/set?pdname="火箭"&price=50&description="這是火箭"&amount=3&account="test@gmail.com"&bid="true"&date="1229"&dateLine="1231">
-		/backend/sell/set?pdname="火箭"&price=50&description="這是火箭"&amount=3&account="test@gmail.com"&bid="true"&date="1229"&dateLine="1231"</a>
 		<br><br>
 	</p>
 </html>

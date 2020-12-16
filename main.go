@@ -20,7 +20,6 @@ func main() {
 		Ht: backend.HistoryInit(db),
 		Bd: backend.BidInit(db),
 		Ct: backend.CartInit(db),
-		Se: backend.SellInit(db),
 		Ms: backend.MessageInit(db)}
 	service.Serve()
 }
