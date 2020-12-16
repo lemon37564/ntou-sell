@@ -283,7 +283,7 @@ request.send(null);
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
         var datastr = JSON.parse(request.responseText);
-        
+        alert("fff");
         var str="";
 		var prods=document.getElementsByName("test");
             for (var i=0;i<prods.length;i++){
@@ -294,7 +294,9 @@ request.send(null);
             }
 		
         }
-        }   
+        } else{
+            alert("connect err");
+        }
         alert("ss");
         document.getElementById("SHOWTOT").innerHTML=str;
         };
