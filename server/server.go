@@ -95,15 +95,19 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 
 	ip := ser.getIP(r)
 
+	// has a possbility to panic: map concurrent read and write
+	// when it is refreshing
 	_, exi := BlockSet[ip]
 	if exi {
 		http.Error(w, "403 forbidden", http.StatusForbidden)
 		return false
 	}
 
-	_, exi = IPList[ip]
+	// mutex (prevent race condition)
+	// it is forbidden to concurrent read and write
 	Lock.Lock()
-	if exi {
+
+	if _, exi = IPList[ip]; exi {
 		IPList[ip]++
 	} else {
 		IPList[ip] = 1
