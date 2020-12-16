@@ -7,10 +7,12 @@ import (
 	"se/database"
 )
 
+// Cart is a module that handle cart functions
 type Cart struct {
 	db *database.CartDB
 }
 
+// CartInit return cart module
 func CartInit(db *sql.DB) *Cart {
 	c := new(Cart)
 	c.db = database.CartDBInit(db)
@@ -19,7 +21,7 @@ func CartInit(db *sql.DB) *Cart {
 
 }
 
-// AddProduct return true if add success
+// AddProductToCart return true if add success
 func (c *Cart) AddProductToCart(uid, pdid, amount int) bool {
 	err := c.db.AddProductIntoCart(uid, pdid, amount)
 	if err != nil {
@@ -71,6 +73,7 @@ func (c Cart) GetProducts(uid int) string {
 // 	return strconv.Itoa(c.db.Total)
 // }
 
+// Debug func is only for debugging
 func (c *Cart) Debug() string {
 	str, err := json.Marshal(c.db.Debug())
 	if err != nil {
