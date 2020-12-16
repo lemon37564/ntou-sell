@@ -216,18 +216,7 @@ request.send(null);
                 }
             }
         }
-    
-    function goToBuy(){
-        alert("已加入訂單");
-        
-        
-        var msg= "/backend/cart/geps";
-        
-        var msgsend = "/backend/order/add?";
-        var request=new XMLHttpRequest;
-        var request2 = new XMLHttpRequest;
-        var datastr = "";
-
+    function test(){
         var request2=new XMLHttpRequest;
         request2.open("post","backend/user/login");
         request2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -249,6 +238,17 @@ request.send(null);
         };
         request2.send("account=1234&password=1234");
        
+    }
+    function goToBuy(){
+        alert("已加入訂單");
+        
+        
+        var msg= "/backend/cart/geps";
+        
+        var msgsend = "/backend/order/add?";
+        var request=new XMLHttpRequest;
+        var request2 = new XMLHttpRequest;
+        var datastr = "";
 
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
@@ -271,6 +271,7 @@ request.send(null);
                             temp=temp+("&amount="+str);
                             alert(temp);
                             console.log(temp);
+                            test();
                             //request2.send(temp); 
                             }     
                     };
