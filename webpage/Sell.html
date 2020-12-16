@@ -191,8 +191,8 @@ class.myButton:active {
         }
     
     
-    function submit(){
-        alert("dd");
+    function submiit() {
+        
         var temp = "";
         
         var pdname=document.getElementById("pdname");
@@ -204,7 +204,7 @@ class.myButton:active {
         var initprice=document.getElementById("initprice");
         var dateline=document.getElementById("dateline");
         
-        alert(pdname.value);
+        
        // <!--這裡我先假設為輸入正確-->
         //name=...&price=...&description=...&amount=...&bid=...&date=...
         if(initprice.value!=''){
@@ -284,7 +284,7 @@ class.myButton:active {
         <label style="font-size: 20px">Number:</label>
         <input type="text" style="font-size:20px" id="number" name="number" value=""><br>
 
-        <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>
+        <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submiit()">確定</button>
         </form>
       
     </div>
@@ -297,7 +297,7 @@ class.myButton:active {
         <input type="text" style="font-size:20px" id="dateline" name="dateline" value=""><br>
             
         <!--<input type="submit" style="font-size:20px" value="Submit">-->
-        <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>
+        <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submiit()">確定</button>
         </form>
     </div>
     
