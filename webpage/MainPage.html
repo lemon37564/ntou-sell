@@ -149,6 +149,11 @@ logoutRequest.send(null);
 //window.location.href="index.html";
 }
 
+function toMainPage(){
+    window.location.href="MainPage.html";	
+}
+	
+	
 </script>
 
 </head>
@@ -161,7 +166,7 @@ logoutRequest.send(null);
 	    <h2 color=#3366BB style="display:inline;">
         <li style="display:inline;"><a href="Cart.html" target="_self">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
         <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
-        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
+        <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
 		<li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
 		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
 		<li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
@@ -169,7 +174,7 @@ logoutRequest.send(null);
 		<br></br>
     </ul>
 	
-    <font color="FFFFFF"><h1 style="display:inline;">海大拍賣&nbsp;&nbsp;</h1></font>
+    <font color="FFFFFF"><h1 style="display:inline;" onclick="toMainPage()">海大拍賣&nbsp;&nbsp;</h1></font>
     <!--已改用js處理<form id="search" action="https://ntou-sell.herokuapp.com/product/search" method="get" style="margin:0px;display:inline;"> <!--action接後端程式-->
 	  <font color="FFFFFF"><h3 style="display:inline;">
 	  關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
