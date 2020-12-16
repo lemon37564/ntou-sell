@@ -13,31 +13,28 @@
 //以下為註冊的function
 
 function regist(){
-//var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/user/regist?";  //前面的連結解決CORS
+    //var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/user/regist?";  //前面的連結解決CORS
+    //var msg="backend/user/regist?";  
 
-//var msg="backend/user/regist?";  
-
-var acc=document.getElementById("account");
-var pas=document.getElementById("password");
-var nam=document.getElementById("name");
+    var acc=document.getElementById("account");
+    var pas=document.getElementById("password");
+    var nam=document.getElementById("name");
     var params='account='+acc.value+'&password='+pas.value+'&name='nam.value;
-//msg=msg+"account="+acc.value+"&password="+pas.value+"&name="+nam.value;
-var request=new XMLHttpRequest;
-request.open("post",'backend/user/regist');
-request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-  request.onreadystatechange = function() { // Define event listener
-  // If the request is compete and was successful
-    if (request.readyState === 4 && request.status === 200) {
-      var type = request.getResponseHeader("Content-Type");
-      if (type.match(/^text/)){ // Make sure response is text
-        //if(request.responseText==="true"){
-        alert(request.responseText); // Pass it to callback
-        window.location.href="index.html";
-        //}
-      }
-    }
-  };
-request.send(params);
+    //msg=msg+"account="+acc.value+"&password="+pas.value+"&name="+nam.value;
+    var request=new XMLHttpRequest;
+    request.open("post",'backend/user/regist');
+    request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    request.onreadystatechange = function() { // Define event listener
+        // If the request is compete and was successful
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader("Content-Type");
+            if (type.match(/^text/)){ // Make sure response is text
+                alert(request.responseText); // Pass it to callback
+                window.location.href="index.html";
+            }
+        }
+    };
+    request.send(params);
 }
 
 
