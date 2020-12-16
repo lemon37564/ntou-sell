@@ -297,7 +297,7 @@ request.send(null);
        if (type.match(/^text/)){ // Make sure response is text
        var datastr = JSON.parse(request.responseText);
        var len  = datastr.length;
-       
+       var content="";
        var str= "";
        var mon= Number(0);
        var prods=document.getElementsByName("test");
@@ -306,8 +306,9 @@ request.send(null);
                    str=datastr[i].Price;
                    var a = Number(str);
                    mon = a+mon;
-                   
-                   
+                   if(i!=0){content = '<div style="float:left;margin-left:10px;font-size:20px;">'+','+datastr[i].PdName+'</div>';}
+                    else {content = '<div style="float:left;margin-left:8px;font-size:20px;">'+datastr[i].PdName+'</div>';}
+                   newProduct=newProduct+content;
            }
            
        };
@@ -315,7 +316,7 @@ request.send(null);
      }
    }
    
-     
+   document.getElementById("SHOWTOT").innerHTML=newProduct;
    document.getElementById("money").innerHTML=mon;
  };
 request.send(null);
@@ -337,15 +338,14 @@ request.send(null);
         var prods=document.getElementsByName("test");
 		for (var i = 0; i < len; i++) {
             if(prods[i].type == "checkbox"&& prods[i].checked == true){
-                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                    if(i!=0)var content = '<div style="float:left;margin-left:10px;font-size:20px;">'+','+datastr[i].PdName+'</div>';
-                    else var content = '<div style="float:left;margin-left:8px;font-size:20px;">'+datastr[i].PdName+'</div>';
+                   
+                    if(i!=0){var content = '<div style="float:left;margin-left:10px;font-size:20px;">'+','+datastr[i].PdName+'</div>';}
+                    else {var content = '<div style="float:left;margin-left:8px;font-size:20px;">'+datastr[i].PdName+'</div>';}
             }
 			
            
             //偵錯用  console.log(content);
-			newProduct=newProduct+content;
-			str+=content;
+			
 		};
 		
       }
@@ -451,7 +451,7 @@ ctx.fillRect(300, 50, 600, 300);
    
 
     
-    <button type="button" onclick="total();totalmoney();" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
+    <button type="button" onclick="totalmoney()" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
     
     
      <button type="button" onclick="goToBuy()" style="margin-top:50px;width:80px;height:40px;background-color: gray;"><font size="5">結帳</button>
