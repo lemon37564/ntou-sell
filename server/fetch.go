@@ -432,59 +432,6 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser *Server) fetchSell(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
-		return
-	}
-
-	_, valid := sessionValid(w, r)
-	if !valid {
-		fmt.Fprint(w, "請先登入!")
-		return
-	}
-
-	path := mux.Vars(r)
-	args := r.URL.Query()
-
-	switch path["key"] {
-	case "help":
-		fmt.Fprint(w, SellHelp)
-	case "set": //For single bid product
-		exist := make([]bool, 8)
-		var pdname, price, description, amount, sellerid, bid, date, dateLine []string
-		pdname, exist[0] = args["pdname"]
-		price, exist[1] = args["price"]
-		description, exist[2] = args["description"]
-		amount, exist[3] = args["amount"]
-		sellerid, exist[4] = args["sellerid"]
-		bid, exist[5] = args["bid"]
-		date, exist[6] = args["date"]
-		dateLine, exist[7] = args["dateLine"]
-
-		if all(exist) {
-			pr, err1 := strconv.Atoi(price[0])
-			amo, err2 := strconv.Atoi(amount[0])
-			seid, err3 := strconv.Atoi(sellerid[0])
-			var bi bool
-			if bid[0] == "true" {
-				bi = true
-			}
-
-			if err1 == nil && err2 == nil && err3 == nil {
-				fmt.Fprint(w, ser.Se.SetProductpdid(pdname[0], pr, description[0], amo, seid, bi, date[0], dateLine[0]))
-			} else {
-				fmt.Fprint(w, "data has wrong")
-			}
-
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
-
-	default:
-		http.NotFound(w, r)
-	}
-}
-
 func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
