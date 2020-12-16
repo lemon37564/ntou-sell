@@ -228,14 +228,14 @@ request.send(null);
         var request2 = new XMLHttpRequest;
         var datastr = "";
 
-        request2.open("post","backend/order/add?");
+        request2.open("post","/backend/order/add?");
         request2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request2.onreadystatechange = function() { // Define event listener
         // If the request is compete and was successful
         if (request2.readyState === 4 && request2.status === 200) {
         var type = request2.getResponseHeader("Content-Type");
         //if (type.match(/^text/)){ // Make sure response is text
-        if(request2.responseText==="true"){
+        if(request2.responseText=== "true" ){
         alert("true"); 
         window.location.href="MainPage.html";
         }
@@ -244,6 +244,8 @@ request.send(null);
             alert("false");
         }
       //}
+        }else {
+            alert("err");
         }
         };
        
