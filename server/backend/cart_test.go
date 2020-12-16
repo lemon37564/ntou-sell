@@ -13,21 +13,15 @@ func TestCart(t *testing.T) {
 	c := CartInit(db)
 
 	uid := 1
-	pdid := 2
+	pdid := 0
 	amount := 3
 
 	c.AddProductToCart(uid, pdid, amount)
 
 	time.Sleep(time.Second)
 
-	t.Log(c.Debug())
-
 	if c.GetProducts(uid) == "null" {
 		t.Error("add to cart but cannot found")
 	}
-
-	// if c.TotalCount(uid) == "0" {
-	// 	t.Error("add to cart but cannot found")
-	// }
 
 }
