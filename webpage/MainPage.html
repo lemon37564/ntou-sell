@@ -43,6 +43,7 @@ function ShowNewProduct(){
 			        request2.onreadystatechange= function(){
 			            if(request2.readyState===4&&request2.status===200){
 			    	        imgURL[count]=request2.responseText;
+							console.log(count);
 							count=count+1;
 					        console.log(imgURL);
 							var newProduct2='';
