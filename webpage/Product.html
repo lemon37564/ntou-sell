@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <!--bootstrap-->
@@ -13,68 +13,62 @@
 window.onload=ShowProduct;
 
 function ShowProduct(){
-//測試用 alert(localStorage.getItem("Pdid"));
-var msg="backend/product/get?pdid="+localStorage.getItem("Pdid");
+    document.getElementById("currentTitle").innerHTML='Product Information';
+    //測試用 alert(localStorage.getItem("Pdid"));
+    var msg="backend/product/get?pdid="+localStorage.getItem("Pdid");
 
-var productInfo='';
+    var productInfo='';
 
-var request=new XMLHttpRequest;
-//request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+    var request=new XMLHttpRequest;
+    request.open("get",msg); 
 
-request.open("get",msg); 
-
-  request.onreadystatechange = function() { // Define event listener
-  // If the request is complete and was successful
-    if (request.readyState === 4 && request.status === 200) {
-      var type = request.getResponseHeader("Content-Type");
-      if (type.match(/^text/)){ // Make sure response is text
-		var datastr = JSON.parse(request.responseText);
-		//var len  = datastr.length;
-		var str= "";
-		//for (var i = 0; i < len; i++) {
-		//var content = '<p>'+'<li><h4 onclick="toProduct('+datastr[i].Pdid+')">pdid:'+datastr[i].Pdid+'</h4>'+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
-        //偵錯用  console.log(content);
-		var Bid=datastr.Bid;
-		console.log(Bid);
-		    if(Bid===false){
-			    console.log("ok1");
-		        //var content = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr[i].PdName+'</h4></td></tr><tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:'+datastr[i].Description+'</h4></td></tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Price:'+datastr[i].Price+'</h4></td></tr><tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:'+datastr[i].Amount+'</h4></td></tr><tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
-			    var content1='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
-				var content2='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Description+'</h4></td></tr>';
-				var content3='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Price+'</h4></td></tr>';
-				var content4='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Amount+'</h4></td></tr>';
-				var content5='<tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
+    request.onreadystatechange = function() { // Define event listener
+        // If the request is complete and was successful
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader("Content-Type");
+            if (type.match(/^text/)){ // Make sure response is text
+		        var datastr = JSON.parse(request.responseText);
+		        var Bid=datastr.Bid;
+		        console.log(Bid);
+		        if(Bid===false){
+			        console.log("ok1");
+			        var content1='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
+				    var content2='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Description+'</h4></td></tr>';
+				    var content3='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Price+'</h4></td></tr>';
+				    var content4='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Amount+'</h4></td></tr>';
+					var content5='<tr><td><h4 style="display:inline;margin-left:30px;">Evaluate:'+datastr.Eval+'</h4></td></tr>';
+					var content6='<tr><td><h4 style="display:inline;margin-left:30px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
+				    var content7='<tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
 				
-				productInfo=productInfo+content1+content2+content3+content4+content5;
-		    }
-		    if(Bid===true){
-			    console.log('ok2');
-			    var content1 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
-				var content2 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Description:'+datastr.Description+'</h4></td></tr>';
-				var content3 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
-				var content4 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
-				var content5 = '<tr><td><h4 style="display:inline;margin-left:30px;">Time:~'+datastr.Date+'</h4></td></tr>';
-				
-				productInfo=productInfo+content1+content2+content3+content4+content5;
-			}
-		
-		//};
-		document.getElementById("NP").innerHTML=productInfo;
-      }
-    }
-  };
-request.send(null);
-
+				    productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7;
+		        }
+		        if(Bid===true){
+			        console.log('ok2');
+			        var content1 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
+				    var content2 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Description:'+datastr.Description+'</h4></td></tr>';
+				    var content3 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
+				    var content4 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
+					var content5 = '<tr><td><h4 style="display:inline;margin-left:30px;">Price:'+datastr.Price+'</h4></td></tr>';
+					var content6 = '<tr><td><h4 style="display:inline;margin-left:30px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
+				    var content7 = '<tr><td><h4 style="display:inline;margin-left:30px;">Time:~'+datastr.Date+'</h4></td></tr>';
+				    var content8 = '<tr><td><input id="bidSet" name="money" size="15"><button style="background:rgba(144,202,249,1);margin-left:75px;width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
+				    productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7+content8;
+			    }
+				var request2=new XMLHttpRequest;
+				var msg2='backend/pics/get?Pdid='+localStorage.getItem("Pdid");
+				request2.open("get",msg2);
+				request2.onreadystatechange=function(){
+				    if(request2.readyState===4&&request2.status===200){
+					    var productInfo='<tr><td><img src="img/'+request2.responseText+'" width="200" height="200"></td></tr>'+productInfo;
+					    document.getElementById("NP").innerHTML=productInfo;
+					}
+				}
+		        document.getElementById("NP").innerHTML=productInfo;
+            }
+        }
+    };
+    request.send(null);
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -108,80 +102,123 @@ function hideMenu(){
 }
 
 
-//以下是搜尋商品的function，目前無圖片及連結
-
+//以下是搜尋商品的function
 function searchProduct(){
+    document.getElementById("currentTitle").innerHTML='Search Result';
+    var searchResult='';
 
-//var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/search?";
+    var request=new XMLHttpRequest;
+    //request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+    var msg="backend/product/search?";
 
-var msg="backend/product/search?";
+    var name=document.getElementById("name");
+    var minprice=document.getElementById("minprice");
+    var maxprice=document.getElementById("maxprice");
+    var eval=document.getElementById("eval");
 
-
-var name=document.getElementById("name");
-var minprice=document.getElementById("minprice");
-var maxprice=document.getElementById("maxprice");
-var eval=document.getElementById("eval");
-
-if(name.value!=''){msg=msg+"name="+name.value};
-if(minprice.value!=''){msg=msg+"&minprice="+minprice.value};
-if(maxprice.value!=''){msg=msg+"&maxprice="+maxprice.value};
-if(eval.value!=''){msg=msg+"&eval="+eval.value};
-
-
-var searchResult='';
-
-var request=new XMLHttpRequest;
-request.open("get",msg); 
-request.onreadystatechange = function() { // Define event listener
-  // If the request is complete and was successful
-    if (request.readyState === 4 && request.status === 200) {
-      var type = request.getResponseHeader("Content-Type");
-      if (type.match(/^text/)){ // Make sure response is text
-		var datastr = JSON.parse(request.responseText);
-		var len  = datastr.length;
-		var str= "";
-		for (var i = 0; i < len; i++) {
-			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
-            //偵錯用  console.log(content);
-			searchResult=searchResult+content;
-			str+=content;
-		};
-		document.getElementById("NP").innerHTML=searchResult;
-      }
-    }
-  };
-request.send(null);
-
+    if(name.value!=''){msg=msg+"name="+name.value};
+    if(name.value!=''&&minprice.value!=''){msg=msg+"&minprice="+minprice.value}
+	else if(minprice.value!=''){msg=msg+"minprice="+minprice.value};
+    if((name.value!=''||minprice.value!='')&&maxprice.value!=''){msg=msg+"&maxprice="+maxprice.value}
+	else if(maxprice.value!=''){msg=msg+"maxprice="+maxprice.value};
+    if((name.value!=''||minprice.value!=''||maxprice.value!='')&&eval.value!=''){msg=msg+"&eval="+eval.value}
+	else if(eval.value!=''){msg=msg+"eval="+eval.value};
+	
+    request.open("get",msg); 
+	var count=0;
+	var count2=0;
+	
+    request.onreadystatechange = function() { // Define event listener
+    // If the request is complete and was successful
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader("Content-Type");
+            if (type.match(/^text/)){ // Make sure response is text
+		        var datastr = JSON.parse(request.responseText);
+		        var len  = datastr.length;
+				var imgURL= new Array(len);
+				var content1=new Array(len);
+				var content2=new Array(len);
+				var msg2=new Array(len);
+		        for (var i = 0; i < len; i++) {
+			        msg2[i]='backend/pics/get?pdid='+datastr[i].Pdid;
+				    console.log(msg2);
+			        //var request2=new XMLHttpRequest;
+			        //request2.open("get",msg2);
+				    //request2.send(null);
+					setTimeout(function(){
+					    console.log(msg2);
+					    var request2=new XMLHttpRequest;
+					    request2.open("get",msg2[count2]);
+					    console.log(msg2[count2]);
+					    count2=count2+1;
+			            request2.onreadystatechange= function(){
+			                if(request2.readyState===4&&request2.status===200){
+						        console.log(request2.responseText);
+			    	            imgURL[count]=request2.responseText;
+							    console.log(count);
+							    count=count+1;
+							    console.log(count);
+					            console.log(imgURL);
+							    var searchResult2='';
+							    for(var j=0;j<len;j++){
+							        if(j<count){
+							            searchResult2=searchResult2+content1[j]+'img/'+imgURL[j]+content2[j];
+							        }
+								    if(j>=count){
+								        searchResult2=searchResult2+content1[j]+content2[j];
+								    }
+							    }
+							    console.log(searchResult2);
+							    document.getElementById("NP").innerHTML=searchResult2;
+			    	        }
+			            }
+			            request2.send(null);
+					},count*1000);
+					
+			        console.log(imgURL[i]);
+			        content1[i]='<tr><td><img src="';
+		            content2[i]='" width="135" height="135" style="margin-left:30px;" onclick="toProduct('+datastr[i].Pdid+')">&nbsp;&nbsp;Pdid: '+datastr[i].Pdid+'&nbsp;&nbsp;名稱：'+datastr[i].PdName+'&nbsp;&nbsp;價錢：'+datastr[i].Price+'</td></tr>';
+			        for(var k=0;k<=i;k++){
+					    searchResult=searchResult+content1[k]+content2[k];
+					}
+					document.getElementById("NP").innerHTML=searchResult;
+		        };
+	            console.log(searchResult);
+            }
+        }
+    };
+    request.send(null);
 }
 
 
 //logout的功能
 function logout(){
-localStorage.clear();
-
-
-var logoutRequest=new XMLHttpRequest;
-logoutRequest.open("get","backend/user/logout"); 
-
-  logoutRequest.onreadystatechange = function() { // Define event listener
-  // If the request is complete and was successful
-    if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
-    alert("帳號登出!");
-    window.location.href="index.html";
-	}
-  }
-logoutRequest.send(null);
-
+    localStorage.clear();
+    var logoutRequest=new XMLHttpRequest;
+    logoutRequest.open("get","backend/user/logout"); 
+    logoutRequest.onreadystatechange = function() { // Define event listener
+    // If the request is complete and was successful
+        if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
+            alert("帳號登出!");
+            window.location.href="index.html";
+	    }
+    }
+    logoutRequest.send(null);
 //alert("帳號登出!");
 //測試用 console.log(localStorage.getItem("account"));
 //window.location.href="index.html";
+}
+
+function toMainPage(){
+    window.location.href="MainPage.html";	
 }
 
 
 function addToCart(){
 }
 
-
+function bid(){
+}
 
 
 </script>
@@ -189,53 +226,39 @@ function addToCart(){
 </head>
 
 <body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
-  <div style="background:rgba(57,73,172,0.8);">
-    <div>
-	<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
-    <ul id="SubMenu" class="sub-menu" style="display:none;">
-	    <h2 color=#3366BB style="display:inline;">
-        <li style="display:inline;"><a href="Cart.html" target="_self">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
-        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Order</a></li>
-        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
-		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Sell</a></li>
-		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
-		<li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
-		</h2>
-		<br></br>
-    </ul>
+    <div style="background:rgba(57,73,172,0.8);">
+        <div>
+	        <button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
+            <ul id="SubMenu" class="sub-menu" style="display:none;">
+	        <h2 color=#3366BB style="display:inline;">
+            <li style="display:inline;"><a href="Cart.html" target="_self">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
+            <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
+            <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
+		    <li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
+		    <li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
+		    <li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
+		    </h2>
+		    <br></br>
+            </ul>
 	
-    <font color="FFFFFF"><h1 style="display:inline;">海大拍賣&nbsp;&nbsp;</h1></font>
-    <!--已改用js處理<form id="search" action="https://ntou-sell.herokuapp.com/product/search" method="get" style="margin:0px;display:inline;"> <!--action接後端程式-->
-	  <font color="FFFFFF"><h3 style="display:inline;">
-	  關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
-	  最低價:<input id="minprice" type="text" name="minprice" value="" size="15" style=""> <!--輸入商品最低價-->
-	  最高價:<input id="maxprice" type="text" name="maxprice" value="" size="15" style=""> <!--輸入商品最高價-->
-	  評價:<input id="eval" type="text" name="eval" value="" size="15" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
-	  <button onclick="searchProduct()" >搜尋</button>
-	  </h3>
-	<!--</form>-->
+            <font color="FFFFFF"><h1 style="display:inline;" onclick="toMainPage()">海大拍賣&nbsp;&nbsp;</h1></font>
+            <!--已改用js處理<form id="search" action="https://ntou-sell.herokuapp.com/product/search" method="get" style="margin:0px;display:inline;"> <!--action接後端程式-->
+	        <font color="FFFFFF"><h3 style="display:inline;">
+	        關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
+	        最低價:<input id="minprice" type="text" name="minprice" value="" size="15" style=""> <!--輸入商品最低價-->
+	        最高價:<input id="maxprice" type="text" name="maxprice" value="" size="15" style=""> <!--輸入商品最高價-->
+	        評價:<input id="eval" type="text" name="eval" value="" size="15" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
+	        <button onclick="searchProduct()" >搜尋</button>
+	        </h3>
+	        <!--</form>-->
+        </div>
     </div>
-  </div>
-  
-  <table height="10"></table>
-  <div align="center">
-  <table id="NP" style="background:rgba(243,241,241,0.6);" width="1000" height="700">
-	  <h2>Product</h2>
-	  <!--
-	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Picture:</h4></td></tr>
-	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Name:</h4></td></tr>
-	  <tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:</h4></td></tr>
-	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Price:</h4></td></tr>
-	  <tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:</h4></td></tr>
-	  <tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>
-	  -->
-	  <!--
-	  <tr><td><h4 style="display:inline;margin-left:30px;">Min Price:</h4><input id="minPrice"></td></tr>  
-	  <tr><td><h4 style="display:inline;margin-left:30px;">Time:</h4><input id="date"></td></tr>
-	  <tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="upload()">Add Bid Product</button></td></tr>
-	  -->
-  </table>
-  </div>
+    <table height="10"></table>
+    <div align="center">
+        <table id="NP" style="background:rgba(243,241,241,0.6);" width="1000" height="700">
+	        <h2 id="currentTitle"></h2>
+        </table>
+    </div>
 </body>
 
 </html>
