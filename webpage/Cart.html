@@ -283,13 +283,13 @@ request.send(null);
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
         var datastr = JSON.parse(request.responseText);
-        var len = datastr.length;
+        
         var str="";
 		var prods=document.getElementsByName("test");
             for (var i=0;i<prods.length;i++){
                 if(prods[i].type == "checkbox"){
-                    str=str+'<div>'+datastr[i].Pdid+'</div>';
-            
+                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
+                    alert("xx");
                 }
             }
 		
@@ -383,10 +383,10 @@ ctx.fillRect(300, 50, 600, 300);
     </div>
 
     
-    <button type="button" onclick="total()" style="width:80px;height:40px;background-color:gray;)"><font size="3">總金額</button>
+    <button type="button" onclick="total()" style="margin-top:50px;width:80px;height:40px;background-color:gray;)"><font size="3">總金額</button>
     
     
-     <button type="button" onclick="goToBuy()" style="margin-top:30px;width:80px;height:40px;border:3px orange double;background-color: gray;"><font size="5">結帳</font></button>
+     <button type="button" onclick="goToBuy()" style="margin-top:50px;width:80px;height:40px;border:3px orange double;background-color: gray;"><font size="5">結帳</font></button>
            <!-- <input class="checkout" type="button">-->    
     
     
