@@ -28,14 +28,13 @@ request.open("get",msg);
     if (request.readyState === 4 && request.status === 200) {
       var type = request.getResponseHeader("Content-Type");
       if (type.match(/^text/)){ // Make sure response is text
-	        request.responseText='['+request.responseText+']';
 		var datastr = JSON.parse(request.responseText);
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
                 //var content = '<p>'+'<li><h4 onclick="toProduct('+datastr[i].Pdid+')">pdid:'+datastr[i].Pdid+'</h4>'+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
                 //偵錯用  console.log(content);
-		var content = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr[i].PdName+'</h4></td></tr><tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:'+datastr[i].Description+'</h4></td></tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Price:'+datastr[i].Price+'</h4></td></tr><tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:'+datastr[i].Amount+'</h4></td></tr><tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
+		var content = '<p><li><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr[i].PdName+'</h4></li></p>  ';//  </tr><tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:'+datastr[i].Description+'</h4></td></tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Price:'+datastr[i].Price+'</h4></td></tr><tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:'+datastr[i].Amount+'</h4></td></tr><tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
 			productInfo=productInfo+content;
 			str+=content;
 		};
