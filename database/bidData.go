@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"time"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 const bidTable = `CREATE TABLE IF NOT EXISTS bid(
@@ -36,6 +34,7 @@ type BidDB struct {
 	updateDeadLine *sql.Stmt
 	getAllBid      *sql.Stmt
 	getBid         *sql.Stmt
+	getBidPd       *sql.Stmt
 }
 
 // BidDataInit prepare functions for database using. require arg *sql.DB
@@ -78,6 +77,11 @@ func BidDataInit(db *sql.DB) *BidDB {
 		panic(err)
 	}
 
+	bid.getBidPd, err = db.Prepare("SELECT * FROM bid WHERE pd_id=?")
+	if err != nil {
+		panic(err)
+	}
+
 	return bid
 }
 
@@ -112,8 +116,24 @@ func (b *BidDB) GetBidByID(pdid int) (bid Bid) {
 	}
 
 	for rows.Next() {
-		bid = *new(Bid)
 		err = rows.Scan(&bid.Deadline, &bid.NowBidderID, &bid.NowMoney, &bid.UID)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	return
+}
+
+// GetAllBidProducts return literally product info by pdid
+func (b *BidDB) GetAllBidProducts(pdid int) (pd Product) {
+	rows, err := b.getBid.Query(pdid)
+	if err != nil {
+		log.Println(err)
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
 			log.Println(err)
 		}

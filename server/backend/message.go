@@ -6,6 +6,7 @@ import (
 	"se/database"
 )
 
+// Message is a module that handle messages
 type Message struct {
 	fn *database.MessageDB
 }
@@ -48,6 +49,7 @@ func (m *Message) GetMessages(senderUID, recieverUID int, ascend bool) string {
 	return string(str)
 }
 
+// GetAll return all messages(for debugging only)
 func (m *Message) GetAll() string {
 	ms := m.fn.GetAll()
 

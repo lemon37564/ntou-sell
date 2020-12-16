@@ -6,21 +6,22 @@ import (
 	"fmt"
 	"log"
 	"se/database"
-	"strconv"
 	"time"
 )
 
+// Product is a module that handle products
 type Product struct {
 	fn *database.ProductDB
 }
 
+// ProductInit return product module
 func ProductInit(db *sql.DB) *Product {
 	p := new(Product)
 	p.fn = database.ProductDBInit(db)
 	return p
 }
 
-//新增產品 使用: sell mod
+// AddProduct adds a product with multiple parameters
 func (p Product) AddProduct(pdname string, price int, description string, amount int, sellerUID int, bid bool, date string) (int, string) {
 	dt, err := time.Parse(TimeLayout, date)
 	if err != nil {
@@ -37,7 +38,8 @@ func (p Product) AddProduct(pdname string, price int, description string, amount
 	return pdid, "ok"
 }
 
-//刪除產品 使用:  mod
+// DeleteProduct deletes a product with seller_uid and product name
+// This may me cause some problem, need to fix
 func (p *Product) DeleteProduct(uid int, pdname string) string {
 	err := p.fn.Delete(uid, pdname)
 	if err != nil {
@@ -47,7 +49,7 @@ func (p *Product) DeleteProduct(uid int, pdname string) string {
 	return "ok"
 }
 
-//
+// ChangePrice changes price of a specific product with it's product id
 func (p *Product) ChangePrice(pdid, price int) string {
 	err := p.fn.UpdatePrice(pdid, price)
 	if err != nil {
@@ -56,6 +58,7 @@ func (p *Product) ChangePrice(pdid, price int) string {
 	return "Price has been changed"
 }
 
+// ChangeAmount changes amount of a specific product with it's product id
 func (p *Product) ChangeAmount(pdid, amount int) string {
 
 	err := p.fn.UpdateAmount(pdid, amount)
@@ -65,6 +68,7 @@ func (p *Product) ChangeAmount(pdid, amount int) string {
 	return "Amount change success"
 }
 
+// ChangeDescription changes description of a specific product with it's product id
 func (p *Product) ChangeDescription(pdid int, description string) string {
 
 	err := p.fn.UpdateDescription(pdid, description)
@@ -74,6 +78,7 @@ func (p *Product) ChangeDescription(pdid int, description string) string {
 	return "Description change success"
 }
 
+// SetEvaluation updates eval of a specific product with it's product id
 func (p *Product) SetEvaluation(pdid int, eval float64) string {
 	err := p.fn.UpdateEval(pdid, eval)
 	if err != nil {
@@ -94,6 +99,8 @@ func (p *Product) SearchProductsByName(name string) string {
 	return string(res)
 }
 
+// EnhanceSearchProductsByName is a advanced function of normal search function
+// it can limit the maximum price, minimum price and evaluation
 func (p *Product) EnhanceSearchProductsByName(name string, minPrice, maxPrice, eval int) string {
 	pds := p.fn.SearchWithFilter(name, minPrice, maxPrice, eval)
 
@@ -105,7 +112,7 @@ func (p *Product) EnhanceSearchProductsByName(name string, minPrice, maxPrice, e
 	return string(res)
 }
 
-// debugging only
+// GetAll returns all product (debugging only)
 func (p *Product) GetAll() string {
 	pds := p.fn.All()
 
@@ -118,6 +125,7 @@ func (p *Product) GetAll() string {
 	return string(res)
 }
 
+// GetNewest return the newest product(s) in the database
 func (p *Product) GetNewest(number int) string {
 	temp, err := json.Marshal(p.fn.NewestProduct(number))
 	if err != nil {
@@ -127,6 +135,7 @@ func (p *Product) GetNewest(number int) string {
 	return string(temp)
 }
 
+// GetProductInfo return data of a product by it's id
 func (p *Product) GetProductInfo(pdid int) string {
 	//var orders string = ""
 	temp, err := json.Marshal(p.fn.GetInfoFromPdID(pdid))
@@ -136,28 +145,4 @@ func (p *Product) GetProductInfo(pdid int) string {
 	}
 
 	return string(temp)
-}
-
-func (p *Product) GetProdPrice(pdid int) string { //拿價格
-	return strconv.Itoa(p.fn.GetInfoFromPdID(pdid).Price)
-}
-
-func (p *Product) GetProAmount(pdid int) string { //拿數量
-	return strconv.Itoa(p.fn.GetInfoFromPdID(pdid).Amount)
-}
-
-func (p *Product) GetProdDescription(pdid int) string { //拿說明
-	return p.fn.GetInfoFromPdID(pdid).Description
-}
-
-func (p *Product) GetProdDate(pdid int) string { //商品釋出日期
-	return p.fn.GetInfoFromPdID(pdid).Date.String()
-}
-
-func (p *Product) GetProdName(pdid int) string { //拿商品名稱
-	return p.fn.GetInfoFromPdID(pdid).PdName
-}
-
-func (p *Product) GetProdEval(pdid int) string { //拿評價
-	return strconv.FormatFloat(p.fn.GetInfoFromPdID(pdid).Eval, 'E', -1, 64)
 }

@@ -8,10 +8,12 @@ import (
 	"time"
 )
 
+// Order is a module that handle orders
 type Order struct {
 	fn *database.OrderDB
 }
 
+// OrderInit return order module
 func OrderInit(db *sql.DB) *Order {
 	o := new(Order)
 	o.fn = database.OrderDBInit(db)
@@ -19,6 +21,7 @@ func OrderInit(db *sql.DB) *Order {
 	return o
 }
 
+// GetOrders Return orders of a specific user
 func (o *Order) GetOrders(uid int) string {
 	//var orders string = ""
 	pds := o.fn.GetAllOrder(uid)
@@ -32,6 +35,7 @@ func (o *Order) GetOrders(uid int) string {
 
 }
 
+// AddOrder adds a order of a specific user with product id and amount
 func (o *Order) AddOrder(uid, pdid, amount int) bool {
 	err := o.fn.AddOrder(uid, pdid, amount, time.Now())
 	if err != nil {
@@ -41,6 +45,7 @@ func (o *Order) AddOrder(uid, pdid, amount int) bool {
 	return true
 }
 
+// Delete order
 func (o *Order) Delete(uid, pdid int) bool {
 	err := o.fn.Delete(uid, pdid)
 	if err != nil {

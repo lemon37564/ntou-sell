@@ -4,8 +4,6 @@ import (
 	"database/sql"
 	"log"
 	"time"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 const productTable = `CREATE TABLE IF NOT EXISTS product(
