@@ -8,7 +8,7 @@ import (
 )
 
 // seq is for ordering
-const historyTable = `CREATE TABLE history(
+const historyTable = `CREATE TABLE IF NOT EXISTS history(
 						uid int NOT NULL,
 						pd_id int NOT NULL,
 						seq int NOT NULL,

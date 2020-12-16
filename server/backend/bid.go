@@ -13,7 +13,7 @@ type Bid struct {
 	productDb *database.ProductDB
 }
 
-func NewBid(db *sql.DB) *Bid {
+func BidInit(db *sql.DB) *Bid {
 	b := new(Bid)
 	b.bidDb = database.BidDataInit(db)
 	return b

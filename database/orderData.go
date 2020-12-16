@@ -9,7 +9,7 @@ import (
 )
 
 // rename order as orders (order is a keword in SQL)
-const ordersTable = `CREATE TABLE orders(
+const ordersTable = `CREATE TABLE IF NOT EXISTS orders(
 						uid int NOT NULL,
 						pd_id int NOT NULL,
 						amount int,

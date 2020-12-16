@@ -88,7 +88,7 @@ func (p *Product) SearchProductsByName(name string) string {
 
 	res, err := json.Marshal(pds)
 	if err != nil {
-		return "Search Not Found"
+		return err.Error()
 	}
 
 	return string(res)
