@@ -34,6 +34,7 @@ type UserDB struct {
 	login      *sql.Stmt
 	getData    *sql.Stmt
 	getUID     *sql.Stmt
+	getAccount *sql.Stmt
 	allUser    *sql.Stmt
 }
 
@@ -52,7 +53,7 @@ func UserDBInit(db *sql.DB) *UserDB {
 		panic(err)
 	}
 
-	user.updateName, err = db.Prepare("UPDATE user SET name=? WHERE account=?")
+	user.updateName, err = db.Prepare("UPDATE user SET name=? WHERE uid=?")
 	if err != nil {
 		panic(err)
 	}
@@ -83,6 +84,11 @@ func UserDBInit(db *sql.DB) *UserDB {
 	}
 
 	user.getUID, err = db.Prepare("SELECT uid FROM USER WHERE account=? AND uid>0;")
+	if err != nil {
+		panic(err)
+	}
+
+	user.getAccount, err = db.Prepare("SELECT account FROM USER WHERE uid=?;")
 	if err != nil {
 		panic(err)
 	}
@@ -152,8 +158,8 @@ func (u *UserDB) ChangePassword(account, newpass string) error {
 }
 
 // ChangeName updates name of a user by account
-func (u *UserDB) ChangeName(account, newname string) error {
-	_, err := u.updateName.Exec(account, newname)
+func (u *UserDB) ChangeName(uid int, newname string) error {
+	_, err := u.updateName.Exec(uid, newname)
 	return err
 }
 
@@ -168,17 +174,39 @@ func (u *UserDB) GetUIDFromAccount(account string) int {
 	var id int
 	rows, err := u.getUID.Query(account)
 	if err != nil {
-		panic(err)
+		log.Println(err)
+		return -1
 	}
 
 	for rows.Next() {
 		err = rows.Scan(&id)
 		if err != nil {
-			panic(err)
+			log.Println(err)
+			return -1
 		}
 	}
 
 	return id
+}
+
+// GetAccountFromUID return account by user id
+func (u *UserDB) GetAccountFromUID(uid int) string {
+	var account string
+	rows, err := u.getAccount.Query(uid)
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&account)
+		if err != nil {
+			log.Println(err)
+			return ""
+		}
+	}
+
+	return account
 }
 
 // GetDatasFromAccount return data of user, matching by account

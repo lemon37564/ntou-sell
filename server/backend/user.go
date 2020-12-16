@@ -56,7 +56,9 @@ func (u *User) DeleteUser(uid int, password string) string {
 }
 
 // ChangePassword changes user's password
-func (u *User) ChangePassword(account, oldPassword, newPassword string) string {
+func (u *User) ChangePassword(uid int, oldPassword, newPassword string) string {
+
+	account := u.fn.GetAccountFromUID(uid)
 
 	_, ok := u.Login(account, oldPassword)
 	if !ok {
@@ -73,8 +75,8 @@ func (u *User) ChangePassword(account, oldPassword, newPassword string) string {
 }
 
 // ChangeName changes user name
-func (u *User) ChangeName(account, newname string) string {
-	err := u.fn.ChangeName(account, newname)
+func (u *User) ChangeName(uid int, newname string) string {
+	err := u.fn.ChangeName(uid, newname)
 	if err != nil {
 		log.Println(err)
 		return "failed"

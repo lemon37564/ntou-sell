@@ -15,9 +15,6 @@ const HelpPage = `
 	<a href=/backend/user/logout>登出</a>
 	<br>
 	</H4>
-	<H1>
-	注意：後端功能從現在起不須加上uid或是account的argument(登入的時候後端有存了)(除user模組外)，<br>請注意功能是否正確使用
-	</H1>
 	
 	<a href=/backend/user/help>關於使用者的功能...</a><br><br>
 
@@ -42,7 +39,7 @@ const HelpPage = `
 // UserHelp is API of user functions
 const UserHelp = `
 <html>
-	<h5>有關帳密的功能不應該使用get(安全性問題)，需要修正</h5>
+	<h3>使用者的所有功能皆使用POST傳輸</h3>
 	<p>
 		/backend/user/all<br>
 		列出所有帳號(此功能已關閉，請註冊新帳號)<br><br>
@@ -50,7 +47,6 @@ const UserHelp = `
 	<p> 
 		/backend/user/login<br>
 		登入是否成功<br>
-		使用post<br>
 		參數: "account", "password"
 		<br><br>
 	</p>
@@ -64,28 +60,24 @@ const UserHelp = `
 	<p>
 		/backend/user/regist<br>
 		註冊新帳號<br>
-		使用post<br>
 		參數: "account", "password", "name"<br><br>
 	</p>
 	<p>
 		/backend/user/delete<br>
 		刪除帳號<br>
-		使用post<br>
 		參數: "password"
 		<br><br>
 	</p>
 	<p>
 		/backend/user/delete<br>
-		更換密碼<br>
-		使用post<br>
-		參數: "account", "oldPassword", "newPassword"
+		更換目前登入帳號的密碼<br>
+		參數: "oldPassword", "newPassword"
 		<br><br>
 	</p>
 	<p>
 		/backend/user/delete<br>
-		更換使用者姓名(暱稱)<br>
-		使用post<br>
-		參數: "account", "newName"
+		更換目前登入帳號的使用者姓名(暱稱)<br>
+		參數: "newName"
 		<br><br>
 	</p>
 </html>
