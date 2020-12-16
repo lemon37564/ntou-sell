@@ -10,9 +10,9 @@ type History struct {
 	fn *database.HistoryDB
 }
 
-func NewHistory(db *sql.DB) (u *History) {
-	u = new(History)
-	u.fn = database.HistoryDBInit(db)
+func HistoryInit(db *sql.DB) (h *History) {
+	h = new(History)
+	h.fn = database.HistoryDBInit(db)
 	return
 }
 

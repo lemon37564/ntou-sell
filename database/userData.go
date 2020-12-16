@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-const userTable = `CREATE TABLE user(
+const userTable = `CREATE TABLE IF NOT EXISTS user(
 						uid int NOT NULL,
 						account varchar(64) NOT NULL UNIQUE,
 						password_hash varchar(64) NOT NULL,

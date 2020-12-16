@@ -14,13 +14,13 @@ func main() {
 
 	service := server.Server{
 		DB: db,
-		Ur: backend.NewUser(db),
+		Ur: backend.UserInit(db),
 		Pd: backend.ProductInit(db),
-		Od: backend.NewOrder(db),
-		Ht: backend.NewHistory(db),
-		Bd: backend.NewBid(db),
-		Ct: backend.NewCart(db),
-		Se: backend.NewSell(db),
-		Ms: backend.NewMessage(db)}
+		Od: backend.OrderInit(db),
+		Ht: backend.HistoryInit(db),
+		Bd: backend.BidInit(db),
+		Ct: backend.CartInit(db),
+		Se: backend.SellInit(db),
+		Ms: backend.MessageInit(db)}
 	service.Serve()
 }

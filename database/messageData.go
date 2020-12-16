@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-const messageTable = `CREATE TABLE message(
+const messageTable = `CREATE TABLE IF NOT EXISTS message(
 						message_id int NOT NULL,
 						sender_uid int NOT NULL,
 						receiver_uid int NOT NULL,

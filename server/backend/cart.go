@@ -9,11 +9,10 @@ import (
 )
 
 type Cart struct {
-	db  *database.CartDB
-	db2 *database.ProductDB
+	db *database.CartDB
 }
 
-func NewCart(db *sql.DB) *Cart {
+func CartInit(db *sql.DB) *Cart {
 	c := new(Cart)
 	c.db = database.CartDBInit(db)
 

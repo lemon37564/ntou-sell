@@ -34,7 +34,7 @@ request.open("get",msg);
 		//for (var i = 0; i < len; i++) {
                 //var content = '<p>'+'<li><h4 onclick="toProduct('+datastr[i].Pdid+')">pdid:'+datastr[i].Pdid+'</h4>'+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
                 //偵錯用  console.log(content);
-		var content = '<p><li><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></li><tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:'+datastr[i].Description+'</h4></td></tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Price:'+datastr[i].Price+'</h4></td></tr><tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:'+datastr[i].Amount+'</h4></td></tr><tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr></p>';
+		var content = '<p><li><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></li><li><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:'+datastr.Description+'</h4></li><li><h4 style="display:inline;margin-left:30px;">Product Price:'+datastr.Price+'</h4></li><li><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:'+datastr.Amount+'</h4></li><li><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></li></p>';
 			productInfo=productInfo+content;
 			str+=content;
 		//};

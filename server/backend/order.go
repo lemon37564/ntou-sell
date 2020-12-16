@@ -12,7 +12,7 @@ type Order struct {
 	fn *database.OrderDB
 }
 
-func NewOrder(db *sql.DB) *Order {
+func OrderInit(db *sql.DB) *Order {
 	o := new(Order)
 	o.fn = database.OrderDBInit(db)
 

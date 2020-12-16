@@ -8,7 +8,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const bidTable = `CREATE TABLE bid(
+const bidTable = `CREATE TABLE IF NOT EXISTS bid(
 					pd_id int NOT NULL,
 					deadline timestamp NOT NULL,
 					now_bidder_uid int NOT NULL,
