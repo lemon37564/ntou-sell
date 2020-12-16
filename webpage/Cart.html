@@ -291,8 +291,9 @@ request.send(null);
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                   str=str+datastr[0].PdName;
-                   mon=mon+parseInt(str,10);
+                   str=str+datastr[0].PdPrice;
+                   var a = parseInt(str);
+                   mon=mon+a;
                     alert(mon);
            }
            
