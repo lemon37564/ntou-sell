@@ -39,7 +39,8 @@ request.open("get","backend/product/newest?amount=3");
 			request2.open("get",msg2);
 			request2.onreadystatechange= function(){
 			    if(request2.readyState===4&&request2.status===200){
-				    imgURL=request2.responseText;
+				    imgURL.value=request2.responseText;
+				    console.log(imgURL);
 				}
 			}
 			request2.send(null);
