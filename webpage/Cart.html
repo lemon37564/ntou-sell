@@ -236,6 +236,7 @@ request.send(null);
                         datastr = JSON.parse(request.responseText);
                         var prods=document.getElementsByName("test");
                         var str ="";
+                        var len=datastr.length;
                         for (var i = 0; i < len; i++) {
                             if(prods[i].type == "checkbox"){
                             str=str+datastr[i].Pdid;
