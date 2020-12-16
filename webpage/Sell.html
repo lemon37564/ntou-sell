@@ -200,13 +200,13 @@ class.myButton:active {
         var initprice=document.getElementById("initprice");
         var dateline=document.getElementById("dateline");
         
-        alert(pdname);
+        alert(pdname.value);
        // <!--這裡我先假設為輸入正確-->
         //name=...&price=...&description=...&amount=...&bid=...&date=...
-        if(pdname.initprice!=''){//有誤
-        temp="name="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&bid="+"true"+"&date="+date;
+        if(initprice.value!=''){//有誤
+        temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value;
         }else{
-            temp="name="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&bid="+"false"+"&date="+date;
+            temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"false"+"&date="+date.value;
         }
         var request=new XMLHttpRequest;
         request.open("post","backend/product/add");
