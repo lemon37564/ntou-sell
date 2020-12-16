@@ -290,7 +290,7 @@ request.send(null);
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                   document.getElementById("fname").innerHTML=datastr[0].PdName;
+                   document.getElementById("fname").innerHTML=datastr[0].PdName.value;
                    var content = 
               '<div>'+datastr[i].PdName+" "+'</div>';
               alert(document.getElementById("fname"));
