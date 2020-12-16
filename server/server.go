@@ -117,22 +117,25 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
+// a thread refreshing the blockSet and ipList
 func (ser *Server) refresh() {
 	const (
-		limitAccess = 90
+		limitAccess = 120
 		refreshTime = time.Second * 30
 	)
 
 	for loop := 0; ; time.Sleep(refreshTime) {
 
-		blockLock.RLock()
-		// unban(3min)
-		if loop%6 == 0 {
+		// write lock
+		blockLock.Lock()
+		// unban (30min)
+		if loop%60 == 0 {
 			// leave the old one to GC
 			blockSet = make(map[string]void)
 		}
-		blockLock.RUnlock()
+		blockLock.Unlock()
 
+		// read lock
 		ipLock.RLock()
 		for i, v := range ipList {
 			if v > limitAccess {
