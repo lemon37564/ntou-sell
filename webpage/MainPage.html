@@ -16,11 +16,13 @@ window.onload=ShowNewProduct;
 function ShowNewProduct(){
 
     var newProduct='';
+
     var request=new XMLHttpRequest;
     //request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
 
     request.open("get","backend/product/newest?amount=3"); 
 	var count=0;
+	var count2=0;
     request.onreadystatechange = function() { // Define event listener
     // If the request is complete and was successful
         if (request.readyState === 4 && request.status === 200) {
@@ -43,8 +45,9 @@ function ShowNewProduct(){
 					setTimeout(function(){
 					console.log(msg2);
 					var request2=new XMLHttpRequest;
-					request2.open("get",msg2[count]);
-					console.log(msg2[count]);
+					request2.open("get",msg2[count2]);
+					console.log(msg2[count2]);
+					count2=count2+1;
 			        request2.onreadystatechange= function(){
 			            if(request2.readyState===4&&request2.status===200){
 						    console.log(request2.responseText);
