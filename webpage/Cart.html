@@ -228,7 +228,7 @@ request.send(null);
         var datastr = "";
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
-            
+
             if (request.readyState === 4 && request.status === 200) {
                 
                 var type = request.getResponseHeader("Content-Type");
@@ -244,6 +244,7 @@ request.send(null);
                             temp=temp+("pdid="+str);
                             str=datastr[i].Amount;
                             temp=temp+("&amount="+str);
+                            alert(temp);
                             request.open("post",temp); 
                             }     
                     };
