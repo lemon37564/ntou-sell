@@ -14,8 +14,6 @@ window.onload=ShowAccount;
 
 function ShowAccount(){
     document.getElementById("currentTitle").innerHTML='Account Information';
-	document.getElementById("acc").innerHTML=localStorage.getItem("account");
-	document.getElementById("pas").innerHTML=localStorage.getItem("password");
 	document.getElementById("NP").innerHTML='<tr><td><h4>Account:'+localStorage.getItem("account")+'</h4></td></tr><tr><td><h4>Password:'+localStorage.getItem("password")+'</h4></td></tr>';
 }
 
