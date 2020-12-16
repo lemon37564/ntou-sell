@@ -290,6 +290,7 @@ request.send(null);
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
+                   document.getElementById("fname").innerHTML=datastr[0].PdName;
                    var content = 
               '<div>'+datastr[i].PdName&nbsp&nbsp;+'</div>';
            }
@@ -424,7 +425,8 @@ ctx.fillRect(300, 50, 600, 300);
         <h4 style="color:#3a8a9e">目前所選:</h4>
         
     </div>
-    <div id="div3">     
+    <div id="div3">  
+    <h4 id="fname">無</h4>   
     <h4 id="SHOWTOT">無</h4>
     <h4 id="money">無</h4>
     </div>
