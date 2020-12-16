@@ -107,10 +107,10 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.Form["password"][0]))
 
 		case "changePassword":
-			fmt.Fprint(w, ser.Ur.ChangePassword(r.Form["account"][0], r.Form["oldPassword"][0], r.Form["newPassword"][0]))
+			fmt.Fprint(w, ser.Ur.ChangePassword(uid, r.Form["oldPassword"][0], r.Form["newPassword"][0]))
 
 		case "changeName":
-			fmt.Fprint(w, ser.Ur.ChangeName(r.Form["account"][0], r.Form["newName"][0]))
+			fmt.Fprint(w, ser.Ur.ChangeName(uid, r.Form["newName"][0]))
 
 		case "logout":
 			logout(w, r)
