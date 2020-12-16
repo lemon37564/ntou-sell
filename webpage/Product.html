@@ -55,7 +55,7 @@ function ShowProduct(){
 				    productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7+content8;
 			    }
 				var request2=new XMLHttpRequest;
-				var msg2='backend/pics/get?Pdid='+localStorage.getItem("Pdid");
+				var msg2='backend/pics/get?pdid='+localStorage.getItem("Pdid");
 				request2.open("get",msg2);
 				request2.onreadystatechange=function(){
 				    if(request2.readyState===4&&request2.status===200){
