@@ -234,37 +234,25 @@ request.send(null);
                 var type = request.getResponseHeader("Content-Type");
                     if (type.match(/^text/)){ 
                         datastr = JSON.parse(request.responseText);
+                        var prods=document.getElementsByName("test");
+                        var str ="";
+                        for (var i = 0; i < len; i++) {
+                            if(prods[i].type == "checkbox"){
+                            str=str+datastr[i].Pdid;
+                            var temp=msgsend;
+                            temp=temp+("pdid="+str);
+                            str=datastr[i].Amount;
+                            temp=temp+("&amount="+str);
+                            request.open("get",temp); 
+                            }     
+                    };
 		            };
 		
             }else{
                 alert("err in get response");
             }
         }
-        
-        
-       
-        var prods=document.getElementsByName("test");
-        for (var i=0;i<prods.length;i++){
-            //alert(arr);
-            
-            if(prods[i].type == "checkbox"){
-                
-                if(prods[i].checked){
-                   
-                    var temp = msgsend;
-                    
-                    
-                    var str = "";
-                    str=datastr[i].Pdid;
-                    temp=temp+"pdid="+str;
-                    str=datastr[i].Amount;
-                    temp=temp+"&amount="+str;
-                    request.open("get",temp); 
-                    request.send(null);
-                    alert("d");
-                }
-            }
-        }
+
         alert("已加入訂單");
         request.send(null);
     }
@@ -289,7 +277,7 @@ request.send(null);
                    str=datastr[i].Price;
                    var a = Number(str);
                    mon = a+mon;
-                   alert(mon);
+                   
                    
            }
            
