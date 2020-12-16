@@ -22,7 +22,6 @@ type Server struct {
 	Ht *backend.History
 	Bd *backend.Bid
 	Ct *backend.Cart
-	Se *backend.Sell
 	Ms *backend.Message
 }
 
@@ -47,7 +46,6 @@ func (ser *Server) Serve() {
 	r.HandleFunc("/backend/history/{key}", ser.fetchHistory)
 	r.HandleFunc("/backend/order/{key}", ser.fetchOrder)
 	r.HandleFunc("/backend/product/{key}", ser.fetchProduct)
-	r.HandleFunc("/backend/sell/{key}", ser.fetchSell)
 	r.HandleFunc("/backend/user/{key}", ser.fetchUser)
 	r.HandleFunc("/backend/message/{key}", ser.fetchMessage)
 
