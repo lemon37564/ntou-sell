@@ -314,6 +314,12 @@ const PicHelp = `
 		<br><br>
 	</p>
 	<p>
+		/img/get?pdid=...<br>
+		查詢圖片名稱<br>
+		回傳圖片路徑<br>
+		<br><br>
+	</p>
+	<p>
 		/backend/pics/upload<br>
 		上傳圖片(用post)<br>
 
