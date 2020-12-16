@@ -243,8 +243,6 @@ request.send(null);
         
         
         var value = new Array();
-        
-        
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
             //alert(arr);
@@ -252,17 +250,13 @@ request.send(null);
             if(prods[i].type == "checkbox"){
                 
                 if(prods[i].checked){
-                    
-                    
-                    /*var pdid = datastr[i].Pdid;
-                    alert("c");
-                    var amount = datastr[i].Amount;
-                    alert("cc");*/
+                   
                     var temp = msgsend;
-                    alert("xx");
-                    alert(datastr[i].Pdid.value);
                     
-                    temp=temp+"pdid="+String(datastr[i].Pdid);
+                    
+                    var str = "";
+                    
+                    temp=temp+"pdid="+datastr[i].Pdid;
                     temp=temp+"&amount="+datastr[i].Amount.value;
                     request.open("get",temp); 
                     request.send(null);
@@ -419,13 +413,13 @@ ctx.fillRect(300, 50, 600, 300);
 
   </div>
 <div id="tobuyup">
-    <div style="float:left;height:50px;width:160px">
-    <h4 style="color:#031a20;width:160px"><font size = "6px">目前所選:</h4>
+   
+    <div style="float:left">
+    <h2 style="float:none;margin-left:0px;">目前所選:</h2>
     </div>
-    <div style="float:left;height:50px;margin-left:100px;margin-bottom:10px">
-        <h4 id="SHOWTOT" style="height:50px"><font size = "6px">無</h4>
-    </div>
-       
+    <div style="float:left">
+    <h3 id="SHOWTOT" style="float:none;margin-left:0px;margin-top:25px;font-size: 30px;height:10px;">無</h3>
+    </div>   
 </div>
 <div id="tobuy">
     
@@ -434,7 +428,7 @@ ctx.fillRect(300, 50, 600, 300);
     <h2 style="float:none;margin-left:0px;">Total:</h2>
     </div>
     <div style="float:left">
-    <h3 id="money" style="float:none;margin-left:0px;">無</h3>
+        <h3 id="money" style="float:none;margin-left:0px;margin-top:25px"><font size = "10px">無</font></h3>
     </div>
    
 
