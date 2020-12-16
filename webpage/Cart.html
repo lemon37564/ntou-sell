@@ -275,6 +275,7 @@ request.send(null);
     function total() {
        
         alert("dd");
+        document.getElementById("SHOWTOT").innerHTML="幹";
         var request=new XMLHttpRequest;
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
@@ -382,7 +383,7 @@ ctx.fillRect(300, 50, 600, 300);
     </div>
 
     
-    <button type="button" onclick="total()" style="width:80px;height:30px;background-color: rgb(107, 125, 211)"><font size="3">總金額</button>
+    <button type="button" onclick="total()" style="width:80px;height:40px;background-color:gray;)"><font size="3">總金額</button>
     
     
      <button type="button" onclick="goToBuy()" style="margin-top:30px;width:80px;height:40px;border:3px orange double;background-color: gray;"><font size="5">結帳</font></button>
