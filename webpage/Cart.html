@@ -269,8 +269,9 @@ request.send(null);
                             temp=("pdid="+str);
                             str=datastr[i].Amount;
                             temp=temp+("&amount="+str);
-                            alert(temp);
-                            
+                           
+                            temp=msgsend+temp;
+                             alert(temp);
                             request.open("get",temp);
                            
                             
