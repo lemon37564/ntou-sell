@@ -276,17 +276,25 @@ request.send(null);
        
         
         var request=new XMLHttpRequest;
-        request.open("get","/backend/cart/tal"); //前面網址解決CORS
+        request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
-		var datastr = request.responseText;
-		
+        var datastr = JSON.parse(request.responseText);
+        var len = datastr.length;
+        var str="";
+		var prods=document.getElementsByName("test");
+            for (var i=0;i<prods.length;i++){
+                if(prods[i].type == "checkbox"){
+                    str=str+'<div>'+datastr[i].Pdid+'</div>';
+            
+                }
+            }
 		
         }
         }   
-        document.getElementById("SHOWTOT").innerHTML=datastr.value;
+        document.getElementById("SHOWTOT").innerHTML=str;
         };
     }
 </script>
@@ -373,10 +381,10 @@ ctx.fillRect(300, 50, 600, 300);
     </div>
 
     <div id="div3">
-    <button type="button" onclick="total()" style="width:60px;height:2px;background-color: rgb(11, 24, 90)"><font size="3">總金額</button>
+    <button type="button" onclick="total()" style="width:60px;height:30px;background-color: rgb(11, 24, 90)"><font size="3">總金額</button>
     </div>
     <div id="div3"> 
-     <button type="button" onclick="goToBuy()" style="width:120px;height:40px;border:3px orange double;background-color: gray;"><font size="5">結帳</font></button>
+     <button type="button" onclick="goToBuy()" style="width:60px;height:40px;border:3px orange double;background-color: gray;"><font size="5">結帳</font></button>
            <!-- <input class="checkout" type="button">-->    
     </div>
     
