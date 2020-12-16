@@ -33,8 +33,9 @@ function ShowNewProduct(){
 				var imgURL= new Array(len);
 				var content1=new Array(len);
 				var content2=new Array(len);
+				var msg2=new Array(len);
 		        for (var i = 0; i < len; i++) {
-			        var msg2='backend/pics/get?pdid='+datastr[i].Pdid;
+			        var msg2[i]='backend/pics/get?pdid='+datastr[i].Pdid;
 				    console.log(msg2);
 			        //var request2=new XMLHttpRequest;
 			        //request2.open("get",msg2);
@@ -43,7 +44,7 @@ function ShowNewProduct(){
 					setTimeout(function(){
 					console.log(msg2);
 					var request2=new XMLHttpRequest;
-					request2.open("get",msg2);
+					request2.open("get",msg2[count]);
 			        request2.onreadystatechange= function(){
 			            if(request2.readyState===4&&request2.status===200){
 						    console.log(request2.responseText);
