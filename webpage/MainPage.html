@@ -30,14 +30,15 @@ function ShowNewProduct(){
 		        var datastr = JSON.parse(request.responseText);
 		        var len  = datastr.length;
 		        for (var i = 0; i < len; i++) {
-			        var msg2='img/get?pdid='+datastr[i].Pdid;
-					console.log(msg2);
+			        var msg2='backend/pics/get?pdid='+datastr[i].Pdid;
+				console.log(msg2);
 			        var imgURL='';
 			        var request2=new XMLHttpRequest;
 			        request2.open("get",msg2);
 			        request2.onreadystatechange= function(){
 			            if(request2.readyState===4&&request2.status===200){
 			    	        imgURL=request2.responseText;
+					console.log(imgURL);
 			    	    }
 			        }
 			        request2.send(null);
