@@ -225,14 +225,15 @@ class.myButton:active {
                         alert(request.responseText); 
                        
                     }else{
+                        request.open("get","/backend/product/add"+temp);
                         alert("不ok");
                     }
       //}
             }
         };
         
-        request.send(temp);
-        
+        request.send(String(temp));
+
     }
  
 </script>
