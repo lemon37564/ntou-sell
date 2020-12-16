@@ -31,11 +31,13 @@ request.open("get","backend/product/newest?amount=3");
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
-			var content1='';
-			var id=datastr[i].Pdid;
+			var Pdid=datastr[i].Pdid;
 			var content2='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
-			
-			
+			var content1='<tr><td><img src="img/';
+			req2(Pdid,content1);
+			//content1=content1+'" width="100" height="100" onclick="toProduct('+id+')">';
+			newProduct=newProduct+content1+content2;
+			/*
 			var msg2='backend/pics/get?pdid='+datastr[i].Pdid;
 			//var imgURL='';
 			var request2=new XMLHttpRequest;
@@ -49,6 +51,8 @@ request.open("get","backend/product/newest?amount=3");
 			    }
 			}
 			request2.send(null);
+			*/
+			
 			//console.log(imgURL);
 			//var content1='<tr><td><img src="img/'+imgURL+'" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
 			
@@ -74,6 +78,20 @@ function toProduct(Pdid){
     localStorage.setItem('Pdid', Pdid);
     window.location.href="Product.html";
 }
+
+function req2(Pdid,content1){
+	var msg2='backend/pics/get?pdid='+Pdid;
+	var request2=new XMLHttpRequest;
+	request2.open("get",msg2);
+	request2.onreadystatechange= function(){
+	    if(request2.readyState===4&&request2.status===200){
+		content1=content1+request2.responseText+'" width="100" height="100" onclick="toProduct('+Pdid+')">';
+		console.log(content1);
+	    }
+            request2.send(null);
+	}
+}
+	
 	
 	
 
