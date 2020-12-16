@@ -237,12 +237,12 @@ request.send(null);
 		            };
 		
             }else{
-                alert("err in get response")
+                alert("err in get response");
             }
         }
         
         
-        var value = new Array();
+       
         var prods=document.getElementsByName("test");
         for (var i=0;i<prods.length;i++){
             //alert(arr);
@@ -321,8 +321,8 @@ request.send(null);
 		for (var i = 0; i < len; i++) {
             if(prods[i].type == "checkbox"){
                     //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                    if(i!=0)var content = '<div style="float:left;margin-left:10px;font-size:10px;">'+','+datastr[i].PdName+'</div>';
-                    else var content = '<div style="float:left;margin-left:8px;font-size:10px;">'+datastr[i].PdName+'</div>';
+                    if(i!=0)var content = '<div style="float:left;margin-left:10px;font-size:20px;">'+','+datastr[i].PdName+'</div>';
+                    else var content = '<div style="float:left;margin-left:8px;font-size:20px;">'+datastr[i].PdName+'</div>';
             }
 			
            
