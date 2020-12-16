@@ -14,7 +14,7 @@
 window.onload=ShowNewProduct;
 
 function ShowNewProduct(){
-
+    document.getElementById("currentTitle").innerHTML='New Product';
     var newProduct='';
 
     var request=new XMLHttpRequest;
@@ -166,7 +166,7 @@ function searchProduct(){
 
 
 function searchProduct(){
-
+    document.getElementById("currentTitle").innerHTML='Search Result';
     var searchResult='';
 
     var request=new XMLHttpRequest;
@@ -311,10 +311,7 @@ function toMainPage(){
     <table height="10"></table>
     <div align="center">
         <table id=NP style="background:rgba(243,241,241,0.6);" width="1000" height="700">
-	        <h2>New Product</h2>
-	        <tr><td><p id="a"></p></td></tr>
-	        <tr><td><p id="b"></p></td></tr>
-	        <tr><td><p id="c"></p></td></tr>
+	        <h2 id="currentTitle"></h2>
         </table>
     </div>
 </body>
