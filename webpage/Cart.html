@@ -312,11 +312,15 @@ request.send(null);
 		var datastr = JSON.parse(request.responseText);
 		var len  = datastr.length;
         
-		var str= "";
+        var str= "";
+        var prods=document.getElementsByName("test");
 		for (var i = 0; i < len; i++) {
-           
-			var content = 
+            if(prods[i].type == "checkbox"){
+                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
+                    var content = 
                '<div>'+"dde"+'</div>';
+            }
+			
            
             //偵錯用  console.log(content);
 			newProduct=newProduct+content;
@@ -327,7 +331,7 @@ request.send(null);
     }
     
       
-    document.getElementById("NP").innerHTML=newProduct;
+    document.getElementById("SHOWTOT").innerHTML=newProduct;
   };
 request.send(null);
     }
