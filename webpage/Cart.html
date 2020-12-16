@@ -299,7 +299,7 @@ request.send(null);
        var prods=document.getElementsByName("test");
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
-                   str=str+datastr[0].Price;
+                   str=str+datastr[i].Price;
                    mon = Number(str)+Number(mon);
                    alert(mon);
                    
@@ -426,10 +426,10 @@ ctx.fillRect(300, 50, 600, 300);
   </div>
 <div id="tobuyup">
     <div style="float:left">
-    <h4 style="color:#031a20;float:left;"><font size = "6px">目前所選:</h4>
+    <h4 style="color:#031a20;"><font size = "6px">目前所選:</h4>
     </div>
-    <div style="float:left">
-        <h4 id="SHOWTOT" style="float:left;height:50px"><font size = "6px">無</h4>
+    <div style="float:left;height:50px">
+        <h4 id="SHOWTOT" style="height:50px"><font size = "6px">無</h4>
     </div>
        
 </div>
