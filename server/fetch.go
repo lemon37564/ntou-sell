@@ -103,6 +103,7 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, UserHelp)
+		return
 
 	case "login":
 		uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
@@ -114,9 +115,11 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "登入失敗")
 		}
+		return
 
 	case "regist":
 		fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
+		return
 	}
 
 	uid, valid := sessionValid(w, r)
