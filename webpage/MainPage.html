@@ -44,7 +44,7 @@ request.open("get","backend/product/newest?amount=3");
 			    if(request2.readyState===4&&request2.status===200){
 				    //imgURL.value=request2.responseText;
 				    content1='<tr><td><img src="img/'+request2.responseText+'" width="100" height="100" onclick="toProduct('+id+')">';
-				    alert(content1);
+				    console.log(content1);
 				    newProduct=newProduct+content1+content2;
 			    }
 			}
