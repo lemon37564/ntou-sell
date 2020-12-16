@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	// CookieName represents the name of cookie
 	CookieName = "SESSID"
 )
 

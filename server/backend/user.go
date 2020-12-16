@@ -9,10 +9,12 @@ import (
 	"se/database"
 )
 
+// User is a module that handle users
 type User struct {
 	fn *database.UserDB
 }
 
+// UserInit return a user module
 func UserInit(db *sql.DB) *User {
 	u := new(User)
 	u.fn = database.UserDBInit(db)
@@ -20,11 +22,13 @@ func UserInit(db *sql.DB) *User {
 	return u
 }
 
+// Login return user id and is it valid to login
 func (u *User) Login(account, password string) (int, bool) {
 	hash := sha256Hash(password)
 	return u.fn.Login(account, hash)
 }
 
+// Regist let user regist his own account
 func (u *User) Regist(account, password, name string) string {
 	hash := sha256Hash(password)
 
@@ -40,8 +44,9 @@ func (u *User) Regist(account, password, name string) string {
 	return "ok"
 }
 
-func (u *User) DeleteUser(account, password string) string {
-	err := u.fn.DeleteUser(account, password)
+// DeleteUser simple delete his account
+func (u *User) DeleteUser(uid int, password string) string {
+	err := u.fn.DeleteUser(uid, password)
 	if err != nil {
 		log.Println(err)
 		return err.Error()
@@ -50,6 +55,7 @@ func (u *User) DeleteUser(account, password string) string {
 	return "ok"
 }
 
+// ChangePassword changes user's password
 func (u *User) ChangePassword(account, oldPassword, newPassword string) string {
 
 	_, ok := u.Login(account, oldPassword)
@@ -66,6 +72,7 @@ func (u *User) ChangePassword(account, oldPassword, newPassword string) string {
 	return "ok"
 }
 
+// ChangeName changes user name
 func (u *User) ChangeName(account, newname string) string {
 	err := u.fn.ChangeName(account, newname)
 	if err != nil {
@@ -76,15 +83,13 @@ func (u *User) ChangeName(account, newname string) string {
 	return "ok"
 }
 
+// GetUserData return user data with account
 func (u *User) GetUserData(account string) string {
 	res, _ := json.Marshal(u.fn.GetDatasFromAccount(account))
 	return string(res)
 }
 
-func (u *User) GetUIDFromAccount(account string) int {
-	return u.fn.GetUIDFromAccount(account)
-}
-
+// GetAllUserData return all users (debugging only)
 func (u *User) GetAllUserData() string {
 	res, _ := json.Marshal(u.fn.GetAllUser())
 	return string(res)
