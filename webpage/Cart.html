@@ -301,9 +301,9 @@ request.send(null);
            if(prods[i].type == "checkbox"){
                    str=str+datastr[0].Price;
                    var a = parseInt(str,10);
-                   alert(a);
-                   mon=mon+a;
-                   alert(mon);
+                   var b = parseInt(mon,10);
+                   mon=a+b;
+                   
            }
            
        };
@@ -334,7 +334,7 @@ request.send(null);
 		for (var i = 0; i < len; i++) {
             if(prods[i].type == "checkbox"){
                     //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                    var content = '<div>'+datastr[i].PdName+"   "+'</div>';
+                    var content = '<div style="float:left">'+'<font size="10px">'+datastr[i].PdName+"   "+'</div>';
             }
 			
            
@@ -437,9 +437,12 @@ ctx.fillRect(300, 50, 600, 300);
 <div id="tobuy">
     
     <div id="div3">  
-    
+    <div style="float:left">
     <h2 style="float:none">Total:</h2>
+    </div>
+    <div style="float:left">
     <h5 id="money" style="float:none">無</h5>
+    </div>
     </div>
 
     
