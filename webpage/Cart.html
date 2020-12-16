@@ -93,10 +93,10 @@ class.myButton:active {
     top: 20px;
     background-color:blanchedalmond;
     border:3px solid #000;
-    width:600px;
+    width:700px;
     height:80px;
     padding-left: 80px;
-    margin-left:40px;
+    margin-right:40px;
     margin-top:20px;
     font-size:30px;
     font-weight:bold;
@@ -141,7 +141,14 @@ class.myButton:active {
                 '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
                 '</div>'+
                 '<div id="div3">'+
-                '<li>'+datastr[i].PdName+'&nbps&npbs&npbs&npbs'+datastr[i].Price+'&npbs&npbs&npbs'+datastr[i].Amount+'</li>'+
+                '<li>'+
+                '<div id="div3">'+datastr[i].PdName+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Price+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Amount+
+                '</div>'+
+                '</li>'+
                 '</div>'+
                 '</div>'+
                 '</div>';
