@@ -179,9 +179,18 @@ function searchProduct(){
     var eval=document.getElementById("eval");
 
     if(name.value!=''){msg=msg+"name="+name.value};
-    if(minprice.value!=''){msg=msg+"&minprice="+minprice.value};
-    if(maxprice.value!=''){msg=msg+"&maxprice="+maxprice.value};
-    if(eval.value!=''){msg=msg+"&eval="+eval.value};
+    if(name.value!=''&&minprice.value!=''){msg=msg+"&minprice="+minprice.value}
+	else(
+	    if(minprice.value!=''){msg=msg+"minprice="+minprice.value}
+	)
+    if((name.value!=''||minprice.value!='')&&maxprice.value!=''){msg=msg+"&maxprice="+maxprice.value}
+	else(
+	    if(maxprice.value!=''){msg=msg+"maxprice="+maxprice.value}
+	)
+    if((name.value!=''||minprice.value!=''||maxprice.value!='')&&eval.value!=''){msg=msg+"&eval="+eval.value}
+	else(
+	    if(eval.value!=''){msg=msg+"eval="+eval.value}
+	)
 	
     request.open("get",msg); 
 	var count=0;
