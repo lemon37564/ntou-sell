@@ -103,6 +103,21 @@ const ProductHelp = `
 		/backend/product/newest?amount=3</a>
 		<br><br>
 	<p> 
+		暫時新增的上傳商品(POST)
+		/backend/product/postadd<br>
+		新增商品以及圖片<br>
+		參數:<br>
+		name<br>
+		price<br>
+		description<br>
+		amount<br>
+		bid<br>
+		date<br>
+		uploadefile(圖片)<br>
+		參數內容可以參考一般的add
+		<br><br>
+	</p>
+	<p> 
 		/backend/product/add?name=...&price=...&description=...&amount=...&bid=...&date=...<br>
 		新增商品<br>
 		e.g.新增一商品->商品名:ifone12價格:5000，商品說明:盜版商品，競標:是，競標期限:2006-01-02<br>
