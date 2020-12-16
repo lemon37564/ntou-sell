@@ -21,8 +21,8 @@ func CartInit(db *sql.DB) *Cart {
 }
 
 // AddProduct return true if add success
-func (c *Cart) AddProductToCart(id, pdid, amount int) bool {
-	err := c.db.AddProductIntoCart(id, pdid, amount)
+func (c *Cart) AddProductToCart(uid, pdid, amount int) bool {
+	err := c.db.AddProductIntoCart(uid, pdid, amount)
 	if err != nil {
 		log.Println(err)
 		return false

@@ -64,8 +64,8 @@ func CartDBInit(db *sql.DB) *CartDB {
 }
 
 // AddProductIntoCart add product into cart with pdid and amount
-func (c *CartDB) AddProductIntoCart(id, pdid, amount int) error {
-	_, err := c.insert.Exec(id, pdid, amount)
+func (c *CartDB) AddProductIntoCart(uid, pdid, amount int) error {
+	_, err := c.insert.Exec(uid, pdid, amount)
 	return err
 }
 
