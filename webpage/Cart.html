@@ -287,12 +287,13 @@ request.send(null);
        var len  = datastr.length;
        
        var str= "";
-       var mon=0;
+       var mon= Number(0);
        var prods=document.getElementsByName("test");
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
                    str=str+datastr[i].Price;
-                   mon = Number(str)+Number(mon);
+                   var a = Number(str);
+                   mon = a+mon;
                    alert(mon);
                    
            }
