@@ -228,27 +228,26 @@ request.send(null);
         var request2 = new XMLHttpRequest;
         var datastr = "";
 
-        request2.open("post","/backend/order/add");
+        var request2=new XMLHttpRequest;
+        request2.open("post","backend/user/login");
         request2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request2.onreadystatechange = function() { // Define event listener
         // If the request is compete and was successful
-        if (request2.readyState === 4 && request2.status === 200) {
-        alert("gogo");
-        var type = request2.getResponseHeader("Content-Type");
+        if (request2.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
         //if (type.match(/^text/)){ // Make sure response is text
-        if(request2.responseText=== "true" ){
-        alert("true"); 
+        if(request2.responseText==="登入成功!\n"){
+        alert(request2.responseText); 
         
         }
-	    if(request2.responseText==="false"){
+	    if(request2.responseText==="登入失敗"){
         //alert(request.responseText); 
-            alert("false");
+        
         }
-     
-        }else {
-            alert("err");
+      //}
         }
         };
+        request2.send("account=1234&password=1234");
        
 
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
@@ -260,9 +259,9 @@ request.send(null);
                     if (type.match(/^text/)){ 
                         datastr = JSON.parse(request.responseText);
                         var prods=document.getElementsByName("test");
-                        var str ="";
-                        var len=datastr.length;
-                        for (var i = 0; i < len; i++) {
+                        var str = "";
+                        
+                        for (var i = 0; i < prods.length; i++) {
                             if(prods[i].type == "checkbox"&&prods[i].checked == true){
                                 
                             str=str+datastr[i].Pdid;
@@ -272,7 +271,7 @@ request.send(null);
                             temp=temp+("&amount="+str);
                             alert(temp);
                             console.log(temp);
-                            request2.send(temp); 
+                            //request2.send(temp); 
                             }     
                     };
 		            };
