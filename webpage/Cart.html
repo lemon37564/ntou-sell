@@ -260,7 +260,7 @@ request.send(null);
                         var str ="";
                         var len=datastr.length;
                         for (var i = 0; i < len; i++) {
-                            if(prods[i].type == "checkbox"&&prod[i].checked == true){
+                            if(prods[i].type == "checkbox"&&prods[i].checked == true){
                                 
                             str=str+datastr[i].Pdid;
                             var temp="";
@@ -297,7 +297,7 @@ request.send(null);
        var mon= Number(0);
        var prods=document.getElementsByName("test");
        for (var i = 0; i < len; i++) {
-           if(prods[i].type == "checkbox"&&prod[i].checked ==true){
+           if(prods[i].type == "checkbox"&&prods[i].checked ==true){
                    str=datastr[i].Price;
                    var a = Number(str);
                    mon = a+mon;
@@ -331,7 +331,7 @@ request.send(null);
         var str= "";
         var prods=document.getElementsByName("test");
 		for (var i = 0; i < len; i++) {
-            if(prods[i].type == "checkbox"&&prod[i].checked == true){
+            if(prods[i].type == "checkbox"&& prods[i].checked == true){
                     //str=str+'<div>'+datastr[i].Pdid+'</div>';
                     if(i!=0)var content = '<div style="float:left;margin-left:10px;font-size:20px;">'+','+datastr[i].PdName+'</div>';
                     else var content = '<div style="float:left;margin-left:8px;font-size:20px;">'+datastr[i].PdName+'</div>';
