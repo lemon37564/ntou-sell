@@ -14,6 +14,6 @@ func TestPd(t *testing.T) {
 	p.AddProduct("test_product", 100, "wow", 5, 1, false, "2020-12-31")
 
 	if res := p.SearchProductsByName("test_product"); res == "null" {
-		t.Error("add new product but cannot search")
+		t.Error("add new product but cannot found")
 	}
 }
