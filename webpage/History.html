@@ -147,7 +147,7 @@ class.myButton:active {
         var request=new XMLHttpRequest;
 
         //amount 之後改
-        request.open("get","backend/history/get"); 
+        request.open("get","/backend/history/get?amount=5&newest=true"); 
 
         request.onreadystatechange = function() { // Define event listener
   // If the request is complete and was successful
@@ -159,7 +159,7 @@ class.myButton:active {
 		var str= "";
 		for (var i = 0; i < len; i++) {
 			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'數量'+datastr[i].Amount+'</li>'+'</p>';
-            //偵錯用  console.log(content);
+            
 			newProduct=newProduct+content;
 			str+=content;
 		};
