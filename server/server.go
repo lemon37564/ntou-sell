@@ -13,11 +13,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const (
-	limitAccess = 90
-	refreshTime = time.Second * 30
-)
-
 // Server handle all services
 type Server struct {
 	DB *sql.DB
@@ -30,17 +25,6 @@ type Server struct {
 	Se *backend.Sell
 	Ms *backend.Message
 }
-
-type void struct {
-	// sizeof(void) = 0
-}
-
-var (
-	IPList   = make(map[string]int)
-	BlockSet = make(map[string]void)
-        ipLock   sync.RWMutex
-        blockLock sync.RWMutex
-)
 
 // Serve start all functions provided for user
 func (ser *Server) Serve() {
@@ -91,31 +75,44 @@ func (ser *Server) middleware(h http.Handler) http.Handler {
 	})
 }
 
+type void struct {
+	// sizeof(void) = 0
+}
+
+var (
+	ipList   = make(map[string]int)
+	blockSet = make(map[string]void)
+
+	// read write mutex (prevent race condition)
+	// it is forbidden to read and write the map concurrently
+	ipLock    sync.RWMutex
+	blockLock sync.RWMutex
+)
+
 func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 	r.ParseForm()
 
 	ip := ser.getIP(r)
 
-        blockLock.RLock()
-	_, exi := BlockSet[ip]
-        blockLock.RUnlock()
+	blockLock.RLock()
+	_, exi := blockSet[ip]
+	blockLock.RUnlock()
 	if exi {
 		http.Error(w, "403 forbidden", http.StatusForbidden)
 		return false
 	}
 
-	// read write mutex (prevent race condition)
-	// it is forbidden to concurrent read and write
+	// read lock
 	ipLock.RLock()
-        _, exi = IPList[ip]
-        ipLock.RUnlock()
+	_, exi = ipList[ip]
+	ipLock.RUnlock()
 
-        // write lock
-        ipLock.Lock()
+	// write lock
+	ipLock.Lock()
 	if exi {
-		IPList[ip]++
+		ipList[ip]++
 	} else {
-		IPList[ip] = 1
+		ipList[ip] = 1
 	}
 	ipLock.Unlock()
 
@@ -123,33 +120,38 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (ser *Server) refresh() {
+	const (
+		limitAccess = 90
+		refreshTime = time.Second * 30
+	)
+
 	for loop := 0; ; time.Sleep(refreshTime) {
 
-                blockLock.RLock()
+		blockLock.RLock()
 		// unban(3min)
 		if loop%6 == 0 {
 			// leave the old one to GC
-			BlockSet = make(map[string]void)
+			blockSet = make(map[string]void)
 		}
-                blockLock.RUnlock()
+		blockLock.RUnlock()
 
-                ipLock.RLock()
-		for i, v := range IPList {
+		ipLock.RLock()
+		for i, v := range ipList {
 			if v > limitAccess {
-                                // write lock
-                                blockLock.Lock()
-				BlockSet[i] = void{}
-                                blockLock.Unlock()
+				// write lock
+				blockLock.Lock()
+				blockSet[i] = void{}
+				blockLock.Unlock()
 
 				log.Printf("ip %15s access %5d times in 30s, banned.\n", i, v)
 			} else {
 				log.Printf("ip %15s access %5d times in 30s\n", i, v)
 			}
 		}
-                ipLock.RUnlock()
+		ipLock.RUnlock()
 
 		// leave the old one to GC
-		IPList = make(map[string]int)
+		ipList = make(map[string]int)
 		loop++
 	}
 }
