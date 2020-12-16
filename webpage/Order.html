@@ -127,6 +127,10 @@ function dele(id){
     }
     request.send(null);
 
+    
+
+}
+function addhis(id){
     var request2=new XMLHttpRequest;
     var str2 = "/backend/history/add?pdid="+id;
     request2.open("get",str2);
@@ -139,9 +143,7 @@ function dele(id){
     }
     }
     request2.send(null);
-
 }
-
 //以下是搜尋商品的function，目前無圖片及連結
 window.onload=getProductOrder;
 function getProductOrder(){
@@ -173,7 +175,7 @@ request.open("get",msg);
       '<div id="div4">'+
       '<input type="button" style="font-size:4px;width:40px;height:30px;margin-right:10px;" id="box1" name="button2" value="更改">'+
       
-      ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="dele(this.id)">'+"完成"+'</button>'+
+      ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="addhis(this.id);dele(this.id);">'+"完成"+'</button>'+
       '</div>'+
       '</div>';
     
