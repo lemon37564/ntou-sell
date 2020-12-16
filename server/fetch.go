@@ -66,6 +66,14 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		}
 	case "deleteall":
 		fmt.Fprint(w, ser.Ht.DeleteAll(uid))
+	case "deletespec":
+		pdids, exi := args["pdids"]
+
+		if exi {
+			fmt.Fprint(w, ser.Ht.DeleteSpecific(uid, pdids[0]))
+		} else {
+			fmt.Fprint(w, "argument error")
+		}
 	case "add":
 		pdid, exi := args["pdid"]
 
