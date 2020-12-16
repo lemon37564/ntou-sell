@@ -119,7 +119,7 @@ function hideMenu(){
 }
 
 
-//以下是搜尋商品的function，目前無圖片及連結
+//以下是搜尋商品的function
 /*
 function searchProduct(){
 
@@ -180,17 +180,11 @@ function searchProduct(){
 
     if(name.value!=''){msg=msg+"name="+name.value};
     if(name.value!=''&&minprice.value!=''){msg=msg+"&minprice="+minprice.value}
-	else(
-	    if(minprice.value!=''){msg=msg+"minprice="+minprice.value}
-	)
+	else if(minprice.value!=''){msg=msg+"minprice="+minprice.value};
     if((name.value!=''||minprice.value!='')&&maxprice.value!=''){msg=msg+"&maxprice="+maxprice.value}
-	else(
-	    if(maxprice.value!=''){msg=msg+"maxprice="+maxprice.value}
-	)
+	else if(maxprice.value!=''){msg=msg+"maxprice="+maxprice.value};
     if((name.value!=''||minprice.value!=''||maxprice.value!='')&&eval.value!=''){msg=msg+"&eval="+eval.value}
-	else(
-	    if(eval.value!=''){msg=msg+"eval="+eval.value}
-	)
+	else if(eval.value!=''){msg=msg+"eval="+eval.value};
 	
     request.open("get",msg); 
 	var count=0;
@@ -257,14 +251,6 @@ function searchProduct(){
     };
     request.send(null);
 }
-
-
-
-
-
-
-
-
 
 
 //logout的功能
