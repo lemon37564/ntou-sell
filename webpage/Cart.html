@@ -300,8 +300,8 @@ request.send(null);
         <ul id="SubMenu" class="sub-menu" style="display:none;">
 	    <h2 style="display:inline;">
         <li style="display:inline;"><a href="MainPage.html" target="_self">&nbsp;&nbsp;Main</a></li>
-        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Order</a></li>
-        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
+        <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
+        <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
 		<li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
 		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Account</a></li>
 		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Logout</a></li>
@@ -341,9 +341,9 @@ ctx.fillRect(300, 50, 600, 300);
  <div class="cart-title">
      
      <div id="div1">
-         <h>全選</h>
+         
             <!--<input type="checkbox" name="subscribe" value="1"style="width:20px;height:20px;font-size:20px;color:black;" > -->
-         <button type="button" width="80px" height="60px" style="background-color:#3949AB;" onclick="addall()">all</button>
+         <button type="button" style="background-color:#3949AB;width:40px;height:30px;" onclick="addall()"><font size="6px">全選</button>
      </div>
 
      <div id="div1">產品</div>
@@ -369,13 +369,13 @@ ctx.fillRect(300, 50, 600, 300);
         <h4 style="color:#3a8a9e">目前所選</h4>
     </div>
     <div id="div3">     
-    <p id="SHOWTOT">無</p>
+    <h4 id="SHOWTOT">無</h4>
     </div>
 
     <div id="div3">
-    <button type="button" onclick="total()" style="width:60px;height:2px;border:5px #34470e;background-color: rgb(11, 24, 90)"><font size="3">總金額</button>
+    <button type="button" onclick="total()" style="width:60px;height:2px;background-color: rgb(11, 24, 90)"><font size="3">總金額</button>
     </div>
-    <div id="div1"> 
+    <div id="div3"> 
      <button type="button" onclick="goToBuy()" style="width:120px;height:40px;border:3px orange double;background-color: gray;"><font size="5">結帳</font></button>
            <!-- <input class="checkout" type="button">-->    
     </div>
