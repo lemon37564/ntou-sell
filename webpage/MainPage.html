@@ -86,7 +86,7 @@ function req2(Pdid,content1){
 	request2.onreadystatechange= function(){
 	    if(request2.readyState===4&&request2.status===200){
 		content1=content1+request2.responseText+'" width="100" height="100" onclick="toProduct('+Pdid+')">';
-		return(content1);
+		return content1;
 	    }
             request2.send(null);
 	}
