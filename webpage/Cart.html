@@ -249,7 +249,7 @@ request.send(null);
         var request=new XMLHttpRequest;
         var request2 = new XMLHttpRequest;
         var datastr = "";
-
+        var st = [];
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
         request.onreadystatechange = function() { 
 
@@ -271,7 +271,8 @@ request.send(null);
                             temp=temp+("&amount="+str);
                             alert(temp);
                             console.log(temp);
-                            test();
+                            st.push(temp);
+                           
                             //request2.send(temp); 
                             }     
                     };
@@ -280,7 +281,7 @@ request.send(null);
             }
         }
         //-------------------------------------
-        
+        alert(st);
         alert("已加入訂單");
         request.send(null);
     }
