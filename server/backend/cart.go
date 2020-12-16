@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"se/database"
-	"strconv"
 )
 
 type Cart struct {
@@ -52,7 +51,7 @@ func (c *Cart) ModifyAmount(uid, pdid, amount int) bool {
 
 // GetProducts returns all the product in cart
 func (c Cart) GetProducts(uid int) string {
-	pds := c.db.GetAllProductOfUser(uid)
+	pds, _ := c.db.GetAllProductOfUser(uid)
 
 	res, err := json.Marshal(pds)
 	if err != nil {
@@ -64,19 +63,19 @@ func (c Cart) GetProducts(uid int) string {
 }
 
 // TotalCount returns how many different products in the cart
-func (c *Cart) TotalCount(uid int) string {
-	if c.db.Total == 0 {
-		c.GetProducts(uid)
-	}
-
-	return strconv.Itoa(c.db.Total)
-}
-
-// Sum returns the total price of products in the cart
-// func (c Cart) Sum() (sum int) {
-// 	for i, v := range c.products {
-// 		sum += i.Price() * v
+// func (c *Cart) TotalCount(uid int) string {
+// 	if c.db.Total == 0 {
+// 		c.GetProducts(uid)
 // 	}
 
-// 	return
+// 	return strconv.Itoa(c.db.Total)
 // }
+
+func (c *Cart) Debug() string {
+	str, err := json.Marshal(c.db.Debug())
+	if err != nil {
+		log.Println(err)
+	}
+
+	return string(str)
+}

@@ -3,6 +3,7 @@ package backend
 import (
 	"se/database"
 	"testing"
+	"time"
 )
 
 func TestCart(t *testing.T) {
@@ -11,13 +12,22 @@ func TestCart(t *testing.T) {
 
 	c := CartInit(db)
 
-	uid := 2
-	pdid := 1
-	amount := 50
+	uid := 1
+	pdid := 2
+	amount := 3
 
 	c.AddProductToCart(uid, pdid, amount)
 
-	if res := c.GetProducts(uid); res == "null" {
+	time.Sleep(time.Second)
+
+	t.Log(c.Debug())
+
+	if c.GetProducts(uid) == "null" {
 		t.Error("add to cart but cannot found")
 	}
+
+	// if c.TotalCount(uid) == "0" {
+	// 	t.Error("add to cart but cannot found")
+	// }
+
 }

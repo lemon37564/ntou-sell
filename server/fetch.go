@@ -376,6 +376,8 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, CartHelp)
+	case "all":
+		fmt.Fprint(w, ser.Ct.Debug())
 	case "add": //For single product
 		pdid, ex2 := args["pdid"]
 		amount, ex3 := args["amount"]
@@ -387,7 +389,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprint(w, ser.Ct.AddProductToCart(uid, p, amo))
 
 			} else {
-				fmt.Fprint(w, "User id ,product id or amount was not integer")
+				fmt.Fprint(w, "product id or amount was not integer")
 			}
 		} else {
 			fmt.Fprint(w, "argument error")
