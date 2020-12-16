@@ -15,15 +15,16 @@
 function regist(){
 //var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/user/regist?";  //前面的連結解決CORS
 
-var msg="backend/user/regist?";  
+//var msg="backend/user/regist?";  
 
 var acc=document.getElementById("account");
 var pas=document.getElementById("password");
 var nam=document.getElementById("name");
-msg=msg+"account="+acc.value+"&password="+pas.value+"&name="+nam.value;
+    var params='account='+acc.value+'&password='+pas.value+'&name='nam.value;
+//msg=msg+"account="+acc.value+"&password="+pas.value+"&name="+nam.value;
 var request=new XMLHttpRequest;
-request.open("get",msg);
-
+request.open("post",'backend/user/regist');
+request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   request.onreadystatechange = function() { // Define event listener
   // If the request is compete and was successful
     if (request.readyState === 4 && request.status === 200) {
@@ -36,7 +37,7 @@ request.open("get",msg);
       }
     }
   };
-request.send(null);
+request.send(params);
 }
 
 
