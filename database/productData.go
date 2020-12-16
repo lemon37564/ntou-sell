@@ -8,7 +8,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const productTable = `CREATE TABLE product(
+const productTable = `CREATE TABLE IF NOT EXISTS product(
 						pd_id int NOT NULL,
 						product_name varchar(64) NOT NULL,
 						price int NOT NULL,

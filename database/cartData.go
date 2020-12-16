@@ -7,7 +7,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const cartTable = `CREATE TABLE cart(
+const cartTable = `CREATE TABLE IF NOT EXISTS cart(
 						uid int NOT NULL,
 						pd_id int NOT NULL,
 						amount int NOT NULL,

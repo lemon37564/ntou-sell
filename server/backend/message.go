@@ -10,8 +10,8 @@ type Message struct {
 	fn *database.MessageDB
 }
 
-// NewMessage init database
-func NewMessage(db *sql.DB) (m *Message) {
+// MessageInit inits database
+func MessageInit(db *sql.DB) (m *Message) {
 	m = new(Message)
 	m.fn = database.MessageDBInit(db)
 	return

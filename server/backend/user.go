@@ -13,7 +13,7 @@ type User struct {
 	fn *database.UserDB
 }
 
-func NewUser(db *sql.DB) *User {
+func UserInit(db *sql.DB) *User {
 	u := new(User)
 	u.fn = database.UserDBInit(db)
 
