@@ -67,7 +67,7 @@
         color:#3949AB;
         height:30px;
         padding-left:40px; 
-        padding-right:75px;
+        padding-right:85px;
        float:left;
   }
   #div4{
@@ -109,8 +109,8 @@ function hideMenu(){
     }
     VisibleMenu = '';
 }
-function ChangeSta(){
-    
+function dele(id){
+    alert(id);
 }
 
 //以下是搜尋商品的function，目前無圖片及連結
@@ -145,7 +145,8 @@ request.open("get",msg);
       '<input type="button" style="font-size:10px;width:40px;height:30px;margin-right:10px;" id="box1" name="button2" value="更改">'+
       '</div>'+
       '<div id="div4">'+
-      ' <button type="button" width="25px" height="10px" style="background-color:#3949AB;margin-right:10px;" onclick="submiit()">'+"完成"+'</button>'+
+      '<input type="button" value="Click me" onclick="msg()">'+
+      ' <button type="button" name='+i+' style="width:25px;height:10px;background-color:#3949AB;margin-right:10px;" onclick="dele(this.id)">'+"完成"+'</button>'+
       '</div>'+
       '</div>';
     
