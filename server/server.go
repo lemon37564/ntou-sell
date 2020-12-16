@@ -38,7 +38,8 @@ type void struct {
 var (
 	IPList   = make(map[string]int)
 	BlockSet = make(map[string]void)
-	Lock     sync.Mutex
+        ipLock   sync.RWMutex
+        blockLock sync.RWMutex
 )
 
 // Serve start all functions provided for user
@@ -95,24 +96,28 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 
 	ip := ser.getIP(r)
 
-	// has a possbility to panic: map concurrent read and write
-	// when it is refreshing
+        blockLock.RLock()
 	_, exi := BlockSet[ip]
+        blockLock.RUnlock()
 	if exi {
 		http.Error(w, "403 forbidden", http.StatusForbidden)
 		return false
 	}
 
-	// mutex (prevent race condition)
+	// read write mutex (prevent race condition)
 	// it is forbidden to concurrent read and write
-	Lock.Lock()
+	ipLock.RLock()
+        _, exi = IPList[ip]
+        ipLock.RUnlock()
 
-	if _, exi = IPList[ip]; exi {
+        // write lock
+        ipLock.Lock()
+	if exi {
 		IPList[ip]++
 	} else {
 		IPList[ip] = 1
 	}
-	Lock.Unlock()
+	ipLock.Unlock()
 
 	return true
 }
@@ -120,20 +125,28 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 func (ser *Server) refresh() {
 	for loop := 0; ; time.Sleep(refreshTime) {
 
+                blockLock.RLock()
 		// unban(3min)
 		if loop%6 == 0 {
 			// leave the old one to GC
 			BlockSet = make(map[string]void)
 		}
+                blockLock.RUnlock()
 
+                ipLock.RLock()
 		for i, v := range IPList {
 			if v > limitAccess {
+                                // write lock
+                                blockLock.Lock()
 				BlockSet[i] = void{}
+                                blockLock.Unlock()
+
 				log.Printf("ip %15s access %5d times in 30s, banned.\n", i, v)
 			} else {
 				log.Printf("ip %15s access %5d times in 30s\n", i, v)
 			}
 		}
+                ipLock.RUnlock()
 
 		// leave the old one to GC
 		IPList = make(map[string]int)
