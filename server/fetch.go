@@ -169,8 +169,6 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			bid := r.Form["bid"][0]
 			date := r.Form["date"][0]
 
-			log.Println(name, price, des, amount, bid, date)
-
 			p, err1 := strconv.Atoi(price)
 			a, err2 := strconv.Atoi(amount)
 			b := (bid == "true")
@@ -181,7 +179,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 
 			file, handler, err := r.FormFile("uploadfile")
 			if err != nil {
-				log.Println(err)
+				log.Println("at upload file:", err)
 				return
 			}
 			defer file.Close()
@@ -192,7 +190,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, handler.Header)
 			f, err := os.Create("webpage/img/" + fmt.Sprint(pdid) + subName)
 			if err != nil {
-				log.Println(err)
+				log.Println("at creatingfile:", err)
 				return
 			}
 			defer f.Close()
