@@ -225,8 +225,11 @@ class.myButton:active {
                         alert(request.responseText); 
                        
                     }else{
-                        request.open("get","/backend/product/add"+temp);
-                        alert("不ok");
+                        alert(request.responseText);
+                        var str="/backend/product/add";
+                        str=str+temp;
+                        request.open("get",str);
+                        
                     }
       //}
             }
