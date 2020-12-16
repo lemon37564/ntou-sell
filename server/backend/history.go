@@ -6,10 +6,12 @@ import (
 	"se/database"
 )
 
+// History contains functions to use
 type History struct {
 	fn *database.HistoryDB
 }
 
+// HistoryInit return handler of History
 func HistoryInit(db *sql.DB) (h *History) {
 	h = new(History)
 	h.fn = database.HistoryDBInit(db)
@@ -34,16 +36,6 @@ func (h History) GetHistory(uid int, amount int, newest bool) string { //get all
 	}
 	return string(str)
 }
-
-// func (h History) GetAll() string {
-// 	all := h.fn.GetAll()
-// 	res, err := json.Marshal(all)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	return string(res)
-// }
 
 func (h History) Delete(uid, pid int) string {
 	return h.fn.Delete(uid, pid).Error()
