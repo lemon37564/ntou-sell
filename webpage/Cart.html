@@ -255,9 +255,10 @@ request.send(null);
                     
                     
                     var str = "";
-                    
-                    temp=temp+"pdid="+datastr[i].Pdid;
-                    temp=temp+"&amount="+datastr[i].Amount.value;
+                    str=datastr[i].Pdid;
+                    temp=temp+"pdid="+str;
+                    str=datastr[i].Amount;
+                    temp=temp+"&amount="+str;
                     request.open("get",temp); 
                     request.send(null);
                     alert("d");
@@ -320,8 +321,8 @@ request.send(null);
 		for (var i = 0; i < len; i++) {
             if(prods[i].type == "checkbox"){
                     //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                    if(i!=0)var content = '<div style="float:left;margin-left:10px">'+'<font size="10px">'+','+datastr[i].PdName+'</div>';
-                    else var content = '<div style="float:left;margin-left:10px">'+'<font size="10px">'+datastr[i].PdName+'</div>';
+                    if(i!=0)var content = '<div style="float:left;margin-left:10px;font-size:10px;">'+','+datastr[i].PdName+'</div>';
+                    else var content = '<div style="float:left;margin-left:8px;font-size:10px;">'+datastr[i].PdName+'</div>';
             }
 			
            
@@ -418,7 +419,7 @@ ctx.fillRect(300, 50, 600, 300);
     <h2 style="float:none;margin-left:0px;">目前所選:</h2>
     </div>
     <div style="float:left">
-    <h3 id="SHOWTOT" style="float:none;margin-left:0px;margin-top:25px;font-size: 30px;height:10px;">無</h3>
+    <h3 id="SHOWTOT" style="float:none;margin-left:0px;margin-top:15px;font-size: 30px;height:10px;">無</h3>
     </div>   
 </div>
 <div id="tobuy">
