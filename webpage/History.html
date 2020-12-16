@@ -140,36 +140,52 @@ class.myButton:active {
 <script type="text/javascript">
     window.onload=GetHistoryProducts;
 
-    function GetHistoryProducts(){
+    function ShowCart(){
 
         var newProduct='';
-
         var request=new XMLHttpRequest;
 
-        //amount 之後改
-        request.open("get","/backend/history/get?amount=5&newest=true"); 
+        request.open("get","/backend/history/get?amount=5&newest=true");
+        request.onreadystatechange = function() { 
+            if (request.readyState === 4 && request.status === 200) {
+                var type = request.getResponseHeader("Content-Type");
+                if (type.match(/^text/)){ // Make sure response is text
+                var datastr = JSON.parse(request.responseText);
+                var len  = datastr.length;
 
-        request.onreadystatechange = function() { // Define event listener
-  // If the request is complete and was successful
-        if (request.readyState === 4 && request.status === 200) {
-        var type = request.getResponseHeader("Content-Type");
-        if (type.match(/^text/)){ // Make sure response is text
-		var datastr = JSON.parse(request.responseText);
-		var len  = datastr.length;
-		var str= "";
-		for (var i = 0; i < len; i++) {
-			var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'數量'+datastr[i].Amount+'</li>'+'</p>';
-            
-			newProduct=newProduct+content;
-			str+=content;
-		};
-		document.getElementById("TP").innerHTML=newProduct;
-      }
+                var str= "";
+                for (var i = 0; i < len; i++) {
+   
+                var content = 
+                    '<div id="div2">'+
+                    '<div id="div3">'+
+                    
+                    '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
+                    '</div>'+
+                    /*'<div id="div3">'+
+                    '<li>'+*/
+                    '<div id="div3">'+datastr[i].PdName+
+                    '</div>'+
+                    '<div id="div3">'+datastr[i].Price+
+                    '</div>'+
+                    '<div id="div3">'+datastr[i].Amount+
+                    '</div>'+
+                    /*'</li>'+
+                    '</div>'+*/
+                    '</div>'+
+                    '</div>'; 
+    //偵錯用  console.log(content);
+                    newProduct=newProduct+content;
+                 str+=content;
+                };
+
+                }
+            }
+        document.getElementById("TP").innerHTML=newProduct;
+        };
+        request.send(null);
+
     }
-  };
-request.send(null);
-
-}
     function switchMenu( theMainMenu, theSubMenu, theEvent ){
         var SubMenu = document.getElementById( theSubMenu );
         if( SubMenu.style.display == 'none' ){ // 顯示子選單
@@ -217,61 +233,7 @@ request.send(null);
             }
         }
     
-    function goToBuy(){
-        alert("已加入訂單");
-        
-        
-        var msg= "/backend/cart/geps";
-        
-        var msgsend = "/backend/order/add?";
-        var request=new XMLHttpRequest;
-        var datastr = "";
-        request.open("get","/backend/cart/geps"); //前面網址解決CORS
-        request.onreadystatechange = function() { 
-            
-            if (request.readyState === 4 && request.status === 200) {
-                
-                var type = request.getResponseHeader("Content-Type");
-                    if (type.match(/^text/)){ 
-                        datastr = JSON.parse(request.responseText);
-		                
-		            };
-		
-            }else{
-                alert("err in get response")
-            }
-        }
-        var value = new Array();
-        alert(datastr[0].Pdid);
-        
-        var prods=document.getElementsByName("test");
-        for (var i=0;i<prods.length;i++){
-            //alert(arr);
-            
-            if(prods[i].type == "checkbox"){
-                
-                if(prods[i].checked){
-                    alert("ddd");
-                    
-                    var pdid = datastr[i].Pdid;
-                    alert("c");
-                    var amount = datastr[i].Amount;
-                    alert("cc");
-                    var temp = msgsend;
-                    alert("dd");
-                    
-                    temp=temp+"pdid="+pdid;
-                    temp=temp+"&amount"+amount;
-                    request.open("get",temp); 
-                    request.send(null);
-                    alert("d");
-                }
-            }
-        }
-        alert("已加入訂單");
-        request.send(null);
-    }
-    
+   
     function total() {
         alert("xxx");
         var request=new XMLHttpRequest;
