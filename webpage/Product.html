@@ -28,6 +28,7 @@ request.open("get",msg);
     if (request.readyState === 4 && request.status === 200) {
       var type = request.getResponseHeader("Content-Type");
       if (type.match(/^text/)){ // Make sure response is text
+	        request.responseText='['+request.responseText+']';
 		var datastr = JSON.parse(request.responseText);
 		var len  = datastr.length;
 		var str= "";
