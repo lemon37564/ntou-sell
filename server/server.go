@@ -31,10 +31,14 @@ type Server struct {
 	Ms *backend.Message
 }
 
+type void struct {
+	// sizeof(void) = 0
+}
+
 var (
-	IPList    = make(map[string]int)
-	BlackList = make(map[string]bool)
-	Lock      sync.Mutex
+	IPList   = make(map[string]int)
+	BlockSet = make(map[string]void)
+	Lock     sync.Mutex
 )
 
 // Serve start all functions provided for user
@@ -91,14 +95,14 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 
 	ip := ser.getIP(r)
 
-	_, exi := BlackList[ip]
+	_, exi := BlockSet[ip]
 	if exi {
 		http.Error(w, "403 forbidden", http.StatusForbidden)
 		return false
 	}
 
-	Lock.Lock()
 	_, exi = IPList[ip]
+	Lock.Lock()
 	if exi {
 		IPList[ip]++
 	} else {
@@ -110,43 +114,36 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (ser *Server) refresh() {
-	timer := time.Now()
+	for loop := 0; ; time.Sleep(refreshTime) {
 
-	for loop := 0; ; time.Sleep(time.Second) {
-		if time.Since(timer) > refreshTime {
-			timer = time.Now()
-
-			// unban
-			if loop%4 == 0 {
-				for i := range BlackList {
-					delete(BlackList, i)
-				}
-			}
-
-			for i, v := range IPList {
-				if v > limitAccess {
-					(BlackList)[i] = true
-					log.Printf("ip adress %15s access %5d times in 30s, banned.\n", i, v)
-				} else {
-					log.Printf("ip adress %15s access %5d times in 30s\n", i, v)
-				}
-
-				delete(IPList, i)
-			}
-
-			loop++
+		// unban(3min)
+		if loop%6 == 0 {
+			// leave the old one to GC
+			BlockSet = make(map[string]void)
 		}
 
+		for i, v := range IPList {
+			if v > limitAccess {
+				BlockSet[i] = void{}
+				log.Printf("ip %15s access %5d times in 30s, banned.\n", i, v)
+			} else {
+				log.Printf("ip %15s access %5d times in 30s\n", i, v)
+			}
+		}
+
+		// leave the old one to GC
+		IPList = make(map[string]int)
+		loop++
 	}
 }
 
 func (ser *Server) getIP(r *http.Request) string {
-	IPAddress := r.Header.Get("X-Real-Ip")
-	if IPAddress == "" {
-		IPAddress = r.Header.Get("X-Forwarded-For")
+	ipAdress := r.Header.Get("X-Real-Ip")
+	if ipAdress == "" {
+		ipAdress = r.Header.Get("X-Forwarded-For")
 	}
-	if IPAddress == "" {
-		IPAddress = r.RemoteAddr
+	if ipAdress == "" {
+		ipAdress = r.RemoteAddr
 	}
-	return IPAddress
+	return ipAdress
 }
