@@ -316,7 +316,7 @@ request.send(null);
 		for (var i = 0; i < len; i++) {
            
 			var content = 
-               "dd";
+               '<div>'+"dd"+'</div>';
            
             //偵錯用  console.log(content);
 			newProduct=newProduct+content;
@@ -415,7 +415,7 @@ ctx.fillRect(300, 50, 600, 300);
     </div>
 
     
-    <button type="button" onclick="total()" style="margin-top:50px;width:80px;height:40px;background-color:gray;"><font size="5">總金額</button>
+    <button type="button" onclick="total()" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
     
     
      <button type="button" onclick="goToBuy()" style="margin-top:50px;width:80px;height:40px;background-color: gray;"><font size="5">結帳</button>
