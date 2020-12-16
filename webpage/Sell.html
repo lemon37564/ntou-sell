@@ -139,48 +139,7 @@ class.myButton:active {
 <script type="text/javascript">
     window.onload=ShowCart;
     
-    function ShowCart(){
-
-        var newProduct='';
-        var request=new XMLHttpRequest;
-        /*request.open("get","https://cors-anywhere.herokuapp.com/https://se-ssb.herokuapp.com/backend/cart/geps?uid=1");*/
-        request.open("get","/backend/cart/geps");
-        request.onreadystatechange = function() { 
-        if (request.readyState === 4 && request.status === 200) {
-        var type = request.getResponseHeader("Content-Type");
-        if (type.match(/^text/)){ // Make sure response is text
-		var datastr = JSON.parse(request.responseText);
-		var len  = datastr.length;
-        
-		var str= "";
-		for (var i = 0; i < len; i++) {
-           
-			var content = 
-                '<div id="div2">'+
-                '<div id="div3">'+
-                
-                '<input type="checkbox" id="box1" name="test" value="56">'+
-                '</div>'+
-                '<p id="div3">'+
-                '<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+
-                '</p>'+
-                '</div>'+
-                '</div>';
-           
-            //偵錯用  console.log(content);
-			newProduct=newProduct+content;
-			str+=content;
-		};
-		
-      }
-    }
     
-      
-    document.getElementById("NP").innerHTML=newProduct;
-  };
-request.send(null);
-
-}
     function switchMenu( theMainMenu, theSubMenu, theEvent ){
         var SubMenu = document.getElementById( theSubMenu );
         if( SubMenu.style.display == 'none' ){ // 顯示子選單
@@ -241,7 +200,7 @@ request.send(null);
         var initprice=document.getElementById("initprice");
         var dateline=document.getElementById("dateline");
         
-        
+        alert(pdname);
        // <!--這裡我先假設為輸入正確-->
         //name=...&price=...&description=...&amount=...&bid=...&date=...
         if(pdname.initprice!=''){//有誤
