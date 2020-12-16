@@ -218,17 +218,17 @@ function searchProduct(){
 							    count=count+1;
 							    console.log(count);
 					            console.log(imgURL);
-							    var newProduct2='';
+							    var searchResult2='';
 							    for(var j=0;j<len;j++){
 							        if(j<count){
-							            newProduct2=newProduct2+content1[j]+'img/'+imgURL[j]+content2[j];
+							            searchResult2=searchResult2+content1[j]+'img/'+imgURL[j]+content2[j];
 							        }
 								    if(j>=count){
-								        newProduct2=newProduct2+content1[j]+content2[j];
+								        searchResult2=searchResult2+content1[j]+content2[j];
 								    }
 							    }
-							    console.log(newProduct2);
-							    document.getElementById("NP").innerHTML=newProduct2;
+							    console.log(searchResult2);
+							    document.getElementById("NP").innerHTML=searchResult2;
 			    	        }
 			            }
 			            request2.send(null);
@@ -238,11 +238,11 @@ function searchProduct(){
 			        content1[i]='<tr><td><img src="';
 		            content2[i]='" width="135" height="135" style="margin-left:30px;" onclick="toProduct('+datastr[i].Pdid+')">&nbsp;&nbsp;Pdid: '+datastr[i].Pdid+'&nbsp;&nbsp;名稱：'+datastr[i].PdName+'&nbsp;&nbsp;價錢：'+datastr[i].Price+'</td></tr>';
 			        for(var k=0;k<=i;k++){
-					    newProduct=newProduct+content1[k]+content2[k];
+					    searchResult=searchResult+content1[k]+content2[k];
 					}
-					document.getElementById("NP").innerHTML=newProduct;
+					document.getElementById("NP").innerHTML=searchResult;
 		        };
-	            console.log(newProduct);
+	            console.log(searchResult);
             }
         }
     };
