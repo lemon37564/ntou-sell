@@ -423,8 +423,8 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
-	case "tal":
-		fmt.Fprint(w, ser.Ct.TotalCount(uid))
+	// case "tal":
+	// 	fmt.Fprint(w, ser.Ct.TotalCount(uid))
 
 	case "geps": //拿商品
 		fmt.Fprint(w, ser.Ct.GetProducts(uid))
