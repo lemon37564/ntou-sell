@@ -126,17 +126,19 @@ function dele(id){
     }
     }
     request.send(null);
-    /*var str = "/backend/history/add?pdid="+id;
-    request.open("get",str);
-    request.onreadystatechange = function() { 
-        if (request.readyState === 4 && request.status === 200) {
-        var type = request.getResponseHeader("Content-Type");
+
+    var request2=new XMLHttpRequest;
+    var str2 = "/backend/history/add?pdid="+id;
+    request2.open("get",str2);
+    request2.onreadystatechange = function() { 
+        if (request2.readyState === 4 && request2.status === 200) {
+        var type = request2.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
         
       }
     }
     }
-    request.send(null);*/
+    request2.send(null);
 
 }
 
