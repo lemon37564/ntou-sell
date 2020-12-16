@@ -33,7 +33,7 @@ request.open("get","backend/product/newest?amount=3");
 		for (var i = 0; i < len; i++) {
 			
 			
-			var msg2='img/get?pdid='+datastr[i].Pdid;
+			var msg2='backend/pics/get?pdid='+datastr[i].Pdid;
 			var imgURL='';
 			var request2=new XMLHttpRequest;
 			request2.open("get",msg2);
