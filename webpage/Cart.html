@@ -286,16 +286,14 @@ request.send(null);
        var len  = datastr.length;
        
        var str= "";
+       var mon=0;
        var prods=document.getElementsByName("test");
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
                    //str=str+'<div>'+datastr[i].Pdid+'</div>';
                    str=str+datastr[0].PdName;
-                   alert("str"+str);
-                   document.getElementById("fname").innerHTML=str;
-                   var content = 
-              '<div>'+datastr[i].PdName+" "+'</div>';
-              alert(document.getElementById("fname"));
+                   mon=mon+parseInt(str,10);
+                    alert(mon);
            }
            
           
