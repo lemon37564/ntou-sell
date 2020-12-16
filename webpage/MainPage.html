@@ -45,7 +45,7 @@ function ShowNewProduct(){
 					console.log(msg2);
 					var request2=new XMLHttpRequest;
 					request2.open("get",msg2[count]);
-					console.log(msg[count]);
+					console.log(msg2[count]);
 			        request2.onreadystatechange= function(){
 			            if(request2.readyState===4&&request2.status===200){
 						    console.log(request2.responseText);
