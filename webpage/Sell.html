@@ -228,61 +228,9 @@ request.send(null);
             }
         }
     
-    function goToBuy(){
-        alert("已加入訂單");
-        
-        
-        var msg= "/backend/cart/geps";
-        
-        var msgsend = "/backend/order/add?";
-        var request=new XMLHttpRequest;
-        var datastr = "";
-        request.open("get","/backend/cart/geps"); //前面網址解決CORS
-        request.onreadystatechange = function() { 
-            
-            if (request.readyState === 4 && request.status === 200) {
-                
-                var type = request.getResponseHeader("Content-Type");
-                    if (type.match(/^text/)){ 
-                        datastr = JSON.parse(request.responseText);
-		                
-		            };
-		
-            }else{
-                alert("err in get response")
-            }
-        }
-        var value = new Array();
-        alert(datastr[0].Pdid);
-        
-        var prods=document.getElementsByName("test");
-        for (var i=0;i<prods.length;i++){
-            //alert(arr);
-            
-            if(prods[i].type == "checkbox"){
-                
-                if(prods[i].checked){
-                    alert("ddd");
-                    
-                    var pdid = datastr[i].Pdid;
-                    alert("c");
-                    var amount = datastr[i].Amount;
-                    alert("cc");
-                    var temp = msgsend;
-                    alert("dd");
-                    
-                    temp=temp+"pdid="+pdid;
-                    temp=temp+"&amount"+amount;
-                    request.open("get",temp); 
-                    request.send(null);
-                    alert("d");
-                }
-            }
-        }
-        alert("已加入訂單");
-        request.send(null);
-    }
+    
     function submit(){
+        var temp = "";
         var msg="/backend/sell/set?";
         var pdname=document.getElementById("pdname");
         var pdpic=document.getElementById("pdpic");
@@ -295,39 +243,32 @@ request.send(null);
         
         
        // <!--這裡我先假設為輸入正確-->
-        
+        //name=...&price=...&description=...&amount=...&bid=...&date=...
         if(pdname.initprice!=''){//有誤
-        msg=msg+"pdname="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&bid="+"true"+"&date="+date+"&dateLine="+dateline
+        temp="name="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&bid="+"true"+"&date="+date;
+        }else{
+            temp="name="+pdname+"&price="+price+"&description="+desc+"&amount="+number+"&bid="+"false"+"&date="+date;
         }
         var request=new XMLHttpRequest;
-        request.open("get",msg); 
-        request.onreadystatechange = function() { // Define event       listener
-            // If the request is complete and was successful
+        request.open("post","backend/product/add");
+        request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        request.onreadystatechange = function() { // Define event listener
+            // If the request is compete and was successful
             if (request.readyState === 4 && request.status === 200) {
                 var type = request.getResponseHeader("Content-Type");
-                if (type.match(/^text/)){ // Make sure response is text
-		              var datastr = JSON.parse(request.responseText);
-		              
-		        }
+                //if (type.match(/^text/)){ // Make sure response is text
+                    if(request.responseText==="ok"){
+                        alert(request.responseText); 
+                       
+                    }else{
+                        alert("不ok");
+                    }
+      //}
             }
         };
-        request.send(null);
+        request.send(temp);
     }
-    function total() {
-        alert("xxx");
-        var request=new XMLHttpRequest;
-        request.open("get","/backend/cart/tal"); //前面網址解決CORS
-        request.onreadystatechange = function() { 
-        if (request.readyState === 4 && request.status === 200) {
-        var type = request.getResponseHeader("Content-Type");
-        if (type.match(/^text/)){ // Make sure response is text
-		var datastr = request.responseText;
-		
-        }
-        }   
-        document.getElementById("SHOWTOT").innerHTML="wtf";
-        };
-    }
+ 
 </script>
 
 </head>
@@ -358,17 +299,17 @@ request.send(null);
 <div class="border"><!--版面-->
     <h1 style="text-align: left;font-size:50px">販賣</h1>
     
-    <form  style="text-align: left">
+    <form  style="text-align: left;height: 50">
     <label style="font-size: 45px">Product Name:&nbsp;&nbsp;</label>
-    <input type="text" style="font-size:45px" id="pdname" name="pdname" value=""><br>
+    <input type="text" style="font-size:45px" id="pdname" name="pdname" value=""><br><br>
     <label style="font-size:45px">Product Picture:</label>
-    <input type="text" style="font-size:45px" id="pdpic" name="pdpic" value=""><br>
-    <label style="font-size:45px">Description:</label>
-    <input type="text" style="font-size:45px" id="desc" name="desc" value=""><br>
-    <label style="font-size:45px">Date:</label>
-    <input type="text" style="font-size:45px" id="date" name="date" value=""><br>
+    <input type="text" style="font-size:45px" id="pdpic" name="pdpic" value=""><br><br>
+    <label style="font-size:45px">Description:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input type="text" style="font-size:45px" id="desc" name="desc" value=""><br><br>
+    <label style="font-size:45px">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input type="text" style="font-size:45px" id="date" name="date" value=""><br><br>
         
-    <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>
+    <!--<button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>-->
     </form> 
     
     <div class="littbord1"><!--左下角框框-->
