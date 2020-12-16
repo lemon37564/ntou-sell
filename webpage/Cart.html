@@ -251,38 +251,37 @@ request.send(null);
         var datastr = "";
         var st = [];
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
-        request.onreadystatechange = function() { 
-
-            if (request.readyState === 4 && request.status === 200) {
-                
+        request.onreadystatechange = function() {
+            if (request.readyState === 4 && request.status === 200) { 
                 var type = request.getResponseHeader("Content-Type");
-                    if (type.match(/^text/)){ 
-                        datastr = JSON.parse(request.responseText);
-                        var prods=document.getElementsByName("test");
-                        var str = "";
-                        
-                        for (var i = 0; i < prods.length; i++) {
-                            if(prods[i].type == "checkbox"&&prods[i].checked == true){
-                                
+                if (type.match(/^text/)){ 
+                    datastr = JSON.parse(request.responseText);
+                    var prods=document.getElementsByName("test");
+                    var str = "";            
+                    for (var i = 0; i < prods.length; i++) {
+                        if(prods[i].type == "checkbox"&&prods[i].checked == true){        
                             str=str+datastr[i].Pdid;
                             var temp="";
-                            temp=("pdid="+str);
+                            temp="pdid="+str;
                             str=datastr[i].Amount;
                             temp=temp+("&amount="+str);
-                           
                             temp=msgsend+temp;
                              alert(temp);
                             request2.open("get",temp);
-                           
-                            
-                            }     
-                    };
-		            };
-		
-            }
-        }
-        //-------------------------------------
-        
+                            request2.onreadystatechange = function() { 
+                                if (request2.readyState === 4 && request2.status === 200) {
+                                    var type = request2.getResponseHeader("Content-Type");
+                                    if (type.match(/^text/)){ // Make sure response is text
+		                                
+                                    }
+                                }
+                            }
+                            request2.send(null);
+                        }
+                    }
+                }
+            }                  
+        } 
         alert("已加入訂單");
         request.send(null);
     }
