@@ -290,7 +290,6 @@ request.send(null);
        var prods=document.getElementsByName("test");
        for (var i = 0; i < len; i++) {
            if(prods[i].type == "checkbox"){
-                   //str=str+'<div>'+datastr[i].Pdid+'</div>';
                    str=str+datastr[0].Price;
                    var a = parseInt(str,10);
                    alert(a);
@@ -304,7 +303,7 @@ request.send(null);
    }
    
      
-   document.getElementById("money").innerHTML=newProduct;
+   document.getElementById("money").innerHTML=mon;
  };
 request.send(null);
    }
@@ -421,12 +420,13 @@ ctx.fillRect(300, 50, 600, 300);
 <div id="tobuy">
     <div id="div3">
         <h4 style="color:#3a8a9e">目前所選:</h4>
+        <h4 id="SHOWTOT" ><font size = "3">無</h4>
         
     </div>
     <div id="div3">  
-    <h4 id="fname">無</h4>   
-    <h4 id="SHOWTOT">無</h4>
-    <h4 id="money">無</h4>
+    
+    <h2 style="float:none">Total:</h2>>
+    <h2 id="money" style="float:none">無</h4>
     </div>
 
     
