@@ -1,3 +1,4 @@
+  
 ﻿<!DOCTYPE html>
 <html>
 <head>
@@ -30,8 +31,26 @@ request.open("get","backend/product/newest?amount=3");
 		var len  = datastr.length;
 		var str= "";
 		for (var i = 0; i < len; i++) {
-			var content1='<tr><td><img src="img/'+datastr[i].Pdid+'.jpg" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
-		        var content2='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
+			
+			
+			var msg2='img/get?pdid='+datastr[i].Pdid;
+			var imgURL='';
+			var request2=new XMLHttpRequest;
+			request2.open("get",msg2);
+			request2.onreadystatechange= function(){
+			    if(request2.readyState===4&&request2.status===200){
+				    imgURL=request2.responseText;
+				}
+			}
+			request2.send(null);
+			console.log(imgURL);
+			var content1='<tr><td><img src="img/'+imgURL+'" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
+			
+			
+			
+			
+			//var content1='<tr><td><img src="img/'+datastr[i].Pdid+'.jpg" width="100" height="100" onclick="toProduct('+datastr[i].Pdid+')">';
+		    var content2='Pdid: '+datastr[i].Pdid+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</td></tr>';
             //偵錯用  console.log(content);
 			newProduct=newProduct+content1+content2;
 		};
