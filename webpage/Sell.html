@@ -208,13 +208,13 @@ class.myButton:active {
        // <!--這裡我先假設為輸入正確-->
         //name=...&price=...&description=...&amount=...&bid=...&date=...
         if(initprice.value!=''){
-        temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value;
+        temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value+"&uploadefile="+"";
         }else{
-            temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"false"+"&date="+date.value;
+            temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"false"+"&date="+date.value+"&uploadefile="+"";
         }
         console.log(temp);
         var request=new XMLHttpRequest;
-        request.open("post","backend/product/add");
+        request.open("post","backend/product/postadd");
         request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         request.onreadystatechange = function() { // Define event listener
             // If the request is compete and was successful
