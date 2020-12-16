@@ -103,7 +103,6 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, UserHelp)
-		return
 
 	case "login":
 		uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
@@ -115,35 +114,32 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		} else {
 			fmt.Fprint(w, "登入失敗")
 		}
-		return
 
 	case "regist":
 		fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
-		return
-	}
 
-	uid, valid := sessionValid(w, r)
-	if valid {
-		switch path["key"] {
-		case "delete":
-			fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.Form["password"][0]))
+	default:
+		uid, valid := sessionValid(w, r)
+		if valid {
+			switch path["key"] {
+			case "delete":
+				fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.Form["password"][0]))
 
-		case "changePassword":
-			fmt.Fprint(w, ser.Ur.ChangePassword(uid, r.Form["oldPassword"][0], r.Form["newPassword"][0]))
+			case "changePassword":
+				fmt.Fprint(w, ser.Ur.ChangePassword(uid, r.Form["oldPassword"][0], r.Form["newPassword"][0]))
 
-		case "changeName":
-			fmt.Fprint(w, ser.Ur.ChangeName(uid, r.Form["newName"][0]))
+			case "changeName":
+				fmt.Fprint(w, ser.Ur.ChangeName(uid, r.Form["newName"][0]))
 
-		case "logout":
-			logout(w, r)
-			fmt.Fprintln(w, "已登出")
+			case "logout":
+				logout(w, r)
+				fmt.Fprintln(w, "已登出")
 
-		default:
-			http.NotFound(w, r)
+			default:
+				http.NotFound(w, r)
+			}
 		}
-		return
 	}
-
 }
 
 func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
