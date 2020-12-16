@@ -230,24 +230,7 @@ request.send(null);
 
         request2.open("post","/backend/order/add");
         request2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        request2.onreadystatechange = function() { // Define event listener
-        // If the request is compete and was successful
-        if (request2.readyState === 4 && request2.status === 200) {
-        var type = request2.getResponseHeader("Content-Type");
-        //if (type.match(/^text/)){ // Make sure response is text
-        if(request2.responseText=== "true" ){
-        alert("true"); 
         
-        }
-	    if(request2.responseText==="false"){
-        //alert(request.responseText); 
-            alert("false");
-        }
-     
-        }else {
-            alert("err");
-        }
-        };
        
 
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
@@ -271,6 +254,25 @@ request.send(null);
                             temp=temp+("&amount="+str);
                             alert(temp);
                             console.log(temp);
+                            
+                            equest2.onreadystatechange = function() { // Define event listener
+                            // If the request is compete and was successful
+                            if (request2.readyState === 4 && request2.status === 200) {
+                            var type = request2.getResponseHeader("Content-Type");
+                            //if (type.match(/^text/)){ // Make sure response is text
+                            if(request2.responseText=== "true" ){
+                            alert("true"); 
+        
+                            }
+	                        if(request2.responseText==="false"){
+                            //alert(request.responseText); 
+                            alert("false");
+                            }
+     
+                            }else {
+                            alert("err");
+                            }
+                            };
                             request2.send(temp); 
                             }     
                     };
