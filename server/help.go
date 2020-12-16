@@ -1,5 +1,6 @@
 package server
 
+// HelpPage is the backend APIs
 const HelpPage = `
 <html>
 	<H1>後端API</H1>
@@ -38,6 +39,7 @@ const HelpPage = `
 </html>
 `
 
+// UserHelp is API of user functions
 const UserHelp = `
 <html>
 	<h5>有關帳密的功能不應該使用get(安全性問題)，需要修正</h5>
@@ -69,7 +71,7 @@ const UserHelp = `
 		/backend/user/delete<br>
 		刪除帳號<br>
 		使用post<br>
-		參數: "account", "password"
+		參數: "password"
 		<br><br>
 	</p>
 	<p>
@@ -89,6 +91,7 @@ const UserHelp = `
 </html>
 `
 
+// ProductHelp is API of product functions
 const ProductHelp = `
 <html>
 	<p> 
@@ -152,6 +155,7 @@ const ProductHelp = `
 </html>
 `
 
+// HistoryHelp is API of history funcions
 const HistoryHelp = `
 <html>
 	<p> 
@@ -201,6 +205,7 @@ const HistoryHelp = `
 </html>
 `
 
+// OrderHelp is API of order functions
 const OrderHelp = `
 <html>
 	<p>
@@ -230,6 +235,7 @@ const OrderHelp = `
 </html>
 `
 
+// BidHelp is API of bid functions
 const BidHelp = `
 <html>
 	<p>
@@ -259,6 +265,7 @@ const BidHelp = `
 </html>
 `
 
+// CartHelp is API of cart functions
 const CartHelp = `
 <html>
 	<p>
@@ -304,6 +311,7 @@ const CartHelp = `
 </html>
 `
 
+// MessageHelp is API of message functions
 const MessageHelp = `
 <html>
 	<p>
@@ -333,6 +341,7 @@ const MessageHelp = `
 </html>
 `
 
+// PicHelp is API of picserver and pictrue functions
 const PicHelp = `
 <html>
 	<p>

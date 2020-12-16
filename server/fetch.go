@@ -97,41 +97,52 @@ func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	path := mux.Vars(r)
-	r.ParseForm()
+	uid, valid := sessionValid(w, r)
+	if valid {
+		path := mux.Vars(r)
+		r.ParseForm()
 
-	switch path["key"] {
-	case "help":
-		fmt.Fprint(w, UserHelp)
-	case "login":
+		switch path["key"] {
+		case "delete":
+			fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.Form["password"][0]))
 
-		uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
+		case "changePassword":
+			fmt.Fprint(w, ser.Ur.ChangePassword(r.Form["account"][0], r.Form["oldPassword"][0], r.Form["newPassword"][0]))
 
-		if valid {
-			// set session to maintain login condition
-			login(w, r, uid)
-			fmt.Fprintln(w, "登入成功!")
-		} else {
-			fmt.Fprint(w, "登入失敗")
+		case "changeName":
+			fmt.Fprint(w, ser.Ur.ChangeName(r.Form["account"][0], r.Form["newName"][0]))
+
+		case "logout":
+			logout(w, r)
+			fmt.Fprintln(w, "已登出")
+
+		default:
+			http.NotFound(w, r)
 		}
+	} else {
+		path := mux.Vars(r)
+		r.ParseForm()
+		switch path["key"] {
+		case "help":
+			fmt.Fprint(w, UserHelp)
 
-	case "delete":
-		fmt.Fprint(w, ser.Ur.DeleteUser(r.Form["account"][0], r.Form["password"][0]))
+		case "login":
+			uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
 
-	case "regist":
-		fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
+			if valid {
+				// set session to maintain login condition
+				login(w, r, uid)
+				fmt.Fprintln(w, "登入成功!")
+			} else {
+				fmt.Fprint(w, "登入失敗")
+			}
 
-	case "changePassword":
-		fmt.Fprint(w, ser.Ur.ChangePassword(r.Form["account"][0], r.Form["oldPassword"][0], r.Form["newPassword"][0]))
+		case "regist":
+			fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
 
-	case "changeName":
-		fmt.Fprint(w, ser.Ur.ChangeName(r.Form["account"][0], r.Form["newName"][0]))
-
-	case "logout":
-		logout(w, r)
-		fmt.Fprintln(w, "已登出")
-	default:
-		http.NotFound(w, r)
+		default:
+			http.NotFound(w, r)
+		}
 	}
 }
 
