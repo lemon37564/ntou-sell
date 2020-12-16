@@ -318,7 +318,7 @@ request.send(null);
             if(prods[i].type == "checkbox"){
                     //str=str+'<div>'+datastr[i].Pdid+'</div>';
                     var content = 
-               '<div>'+datastr[i].PdName+'</div>';
+               '<div>'+datastr[i].PdName&nbsp&nbsp;+'</div>';
             }
 			
            
@@ -412,11 +412,10 @@ ctx.fillRect(300, 50, 600, 300);
     
 <div id="tobuy">
     <div id="div3">
-        <h4 style="color:#3a8a9e">目前所選</h4>
+        <h4 style="color:#3a8a9e">目前所選:</h4>
+        <h4 id="SHOWTOT" >無</h4>
     </div>
-    <div id="div3">     
-    <h4 id="SHOWTOT">無</h4>
-    </div>
+    
 
     
     <button type="button" onclick="total()" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
