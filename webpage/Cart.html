@@ -23,15 +23,7 @@ div.tobuyup{
   height:130px;
 
 }
-div.tobuy{
-  margin-bottom: 0px;
-  margin-left:auto;
-  margin-right:auto;
-  background-color:rgb(13, 235, 235);
-  padding-left: 70px;
-  height:80px;
 
-}
 div.underborder{
    
   position: relative;
@@ -88,6 +80,14 @@ class.myButton:active {
     margin-left: 80px;
     color:aliceblue;
     font-size:30px
+}
+#tobuyup{
+        margin-bottom: 0px;
+        width:1000px;
+        height:80px;
+        background-color:rgb(152, 128, 66);
+        border-style :dotted;
+        border-color: #b8571e;
 }
 #tobuy{
         margin-bottom: 0px;
@@ -426,8 +426,13 @@ ctx.fillRect(300, 50, 600, 300);
 
   </div>
 <div id="tobuyup">
-    <h4 style="color:#3a8a9e">目前所選:</h4>
-        <h4 id="SHOWTOT" ><font size = "3">無</h4>
+    <div style="float:left">
+    <h4 style="color:#031a20;float:left;">目前所選:</h4>
+    </div>
+    <div style="float:left">
+        <h4 id="SHOWTOT" style="float:left;"><font size = "3">無</h4>
+    </div>
+       
 </div>
 <div id="tobuy">
     
