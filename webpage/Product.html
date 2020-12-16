@@ -13,16 +13,10 @@
 window.onload=ShowProduct;
 
 function ShowProduct(){
-
 //測試用 alert(localStorage.getItem("Pdid"));
-
 var msg="backend/product/get?pdid="+localStorage.getItem("Pdid");
 
-var pname='';
-var pdescription='';
-var pprice='';
-var pamount='';
-
+var productInfo='';
 
 var request=new XMLHttpRequest;
 //request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
@@ -34,38 +28,17 @@ request.open("get",msg);
     if (request.readyState === 4 && request.status === 200) {
       var type = request.getResponseHeader("Content-Type");
       if (type.match(/^text/)){ // Make sure response is text
-		alert(request.responseText)
-	        var datastr = JSON.parse(request.responseText);
+		var datastr = JSON.parse(request.responseText);
 		var len  = datastr.length;
-		console.log(len);
-	        
 		var str= "";
 		for (var i = 0; i < len; i++) {
-		    var content1='<p>'+datastr[i].PdName+'</p>';
-			var content2='<p>'+datastr[i].Description+'</p>';
-			var content3='<p>'+datastr[i].Price+'</p>';
-			var content4='<p>'+datastr[i].Amount+'</p>';
-			
-			pname=pname+content1;
-			pdescription=pdescription+content2;
-			pprice=pprice+content3;
-			pamount=pamount+content4;
-			
-		
+		var content = '<p>'+'<li><h4 onclick="toProduct('+datastr[i].Pdid+')">pdid:'+datastr[i].Pdid+'</h4>'+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
             //偵錯用  console.log(content);
+		var content = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr[i].PdName+'</h4></td></tr><tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:'+datastr[i].Description+'</h4></td></tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Price:'+datastr[i].Price+'</h4></td></tr><tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:'+datastr[i].Amount+'</h4></td></tr><tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
+			productInfo=productInfo+content;
 			str+=content;
-		
 		};
-		console.log(pname);
-		console.log(pdescription);
-		console.log(pprice);
-		console.log(pamount);
-		
-		
-	    document.getElementById("pdname").innerHTML=pname;
-		document.getElementById("pddescription").innerHTML=pdescription;
-		document.getElementById("pdprice").innerHTML=pprice;
-		document.getElementById("pdamount").innerHTML=pamount;
+		document.getElementById("NP").innerHTML=productInfo;
       }
     }
   };
@@ -228,12 +201,14 @@ function addToCart(){
   <div align="center">
   <table id="NP" style="background:rgba(243,241,241,0.6);" width="1000" height="700">
 	  <h2>Product</h2>
+	  <!--
 	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Picture:</h4></td></tr>
-	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Name:</h4><h4 id="pdname" style="display:inline;">_</h4></td></tr>
-	  <tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:</h4><h4 id="pddescription" style="display:inline;">_</h4></td></tr>
-	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Price:</h4><h4 id="pdprice" style="display:inline;">_</h4></td></tr>
-	  <tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:</h4><h4 id="pdamount" style="display:inline;">_</h4></td></tr>
-	  <tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="upload()">Add To Cart</button></td></tr>
+	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Name:</h4></td></tr>
+	  <tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:</h4></td></tr>
+	  <tr><td><h4 style="display:inline;margin-left:30px;">Product Price:</h4></td></tr>
+	  <tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:</h4></td></tr>
+	  <tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>
+	  -->
 	  <!--
 	  <tr><td><h4 style="display:inline;margin-left:30px;">Min Price:</h4><input id="minPrice"></td></tr>  
 	  <tr><td><h4 style="display:inline;margin-left:30px;">Time:</h4><input id="date"></td></tr>
