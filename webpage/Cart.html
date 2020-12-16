@@ -301,7 +301,7 @@ request.send(null);
            if(prods[i].type == "checkbox"){
                    str=str+datastr[0].Price;
                    mon = Number(str)+Number(mon);
-                   
+                   alert(mon);
                    
            }
            
@@ -333,7 +333,7 @@ request.send(null);
 		for (var i = 0; i < len; i++) {
             if(prods[i].type == "checkbox"){
                     //str=str+'<div>'+datastr[i].Pdid+'</div>';
-                    var content = '<div style="float:left">'+'<font size="10px">'+datastr[i].PdName+"   "+'</div>';
+                    var content = '<div style="float:left;margin-left:10px">'+'<font size="10px">'+datastr[i].PdName+'</div>';
             }
 			
            
@@ -429,7 +429,7 @@ ctx.fillRect(300, 50, 600, 300);
     <h4 style="color:#031a20;float:left;"><font size = "6px">目前所選:</h4>
     </div>
     <div style="float:left">
-        <h4 id="SHOWTOT" style="float:left;"><font size = "5px">無</h4>
+        <h4 id="SHOWTOT" style="float:left;height:50px"><font size = "6px">無</h4>
     </div>
        
 </div>
@@ -440,7 +440,7 @@ ctx.fillRect(300, 50, 600, 300);
     <h2 style="float:none;margin-left:0px;">Total:</h2>
     </div>
     <div style="float:left">
-    <h5 id="money" style="float:none;margin-left:0px;">無</h5>
+    <h3 id="money" style="float:none;margin-left:0px;">無</h3>
     </div>
    
 
