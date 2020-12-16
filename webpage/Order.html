@@ -121,11 +121,23 @@ function dele(id){
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
         alert("success to delete");
-		
+        window.location.href="Order.html";
       }
     }
     }
     request.send(null);
+    var str = "/backend/history/add?pdid="+id;
+    request.open("get",str);
+    request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+        
+      }
+    }
+    }
+    request.send(null);
+
 }
 
 //以下是搜尋商品的function，目前無圖片及連結
