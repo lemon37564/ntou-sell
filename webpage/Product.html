@@ -34,23 +34,26 @@ request.open("get",msg);
 		//for (var i = 0; i < len; i++) {
 		//var content = '<p>'+'<li><h4 onclick="toProduct('+datastr[i].Pdid+')">pdid:'+datastr[i].Pdid+'</h4>'+'名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
         //偵錯用  console.log(content);
-		    if(datastr.Bid==='false'){
+	        var Bid=datastr.Bid;
+		    if(Bid==='false'){
+			    alert('false');
 		        //var content = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr[i].PdName+'</h4></td></tr><tr><td><h4 id="pddescription" style="display:inline;margin-left:30px;">Product Description:'+datastr[i].Description+'</h4></td></tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Price:'+datastr[i].Price+'</h4></td></tr><tr><td><h4 id="pdamount" style="display:inline;margin-left:30px;">Amount:'+datastr[i].Amount+'</h4></td></tr><tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
 			    var content1='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
 				var content2='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Description+'</h4></td></tr>';
-				var content3='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Price+'</h4></td></tr>';
+				var content3='<li><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Price+'</h4></li>';
 				var content4='<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.Amount+'</h4></td></tr>';
 				var content5='<tr><td><button style="background:rgba(144,202,249,1);margin-left:75px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
 				
 				productInfo=productInfo+content1+content2+content3+content4+content5;
 			    str+=content;
 		    }
-		    else if(datastr.Bid==='true'){
+		    else if(Bid==='true'){
+			    alert('true');
 			    var content1 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
-				var content2 = '</tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Description:'+datastr.Description+'</h4></td></tr>';
-				var content3 = '</tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
-				var content4 = '</tr><tr><td><h4 style="display:inline;margin-left:30px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
-				var content5 = '</tr><tr><td><h4 style="display:inline;margin-left:30px;">Time:~'+datastr.Date+'</h4></td></tr>';
+				var content2 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Description:'+datastr.Description+'</h4></td></tr>';
+				var content3 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
+				var content4 = '<tr><td><h4 style="display:inline;margin-left:30px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
+				var content5 = '<tr><td><h4 style="display:inline;margin-left:30px;">Time:~'+datastr.Date+'</h4></td></tr>';
 				
 				
 				productInfo=productInfo+content1+content2+content3+content4+content5;
