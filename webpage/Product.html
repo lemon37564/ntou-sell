@@ -33,9 +33,9 @@ function ShowProduct(){
 		        if(Bid===false){
 			        console.log("ok1");
 			        var content1='<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
-				    var content2='<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.Description+'</h4></td></tr>';
-				    var content3='<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.Price+'</h4></td></tr>';
-				    var content4='<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.Amount+'</h4></td></tr>';
+				    var content2='<tr><td><h4 style="display:inline;margin-left:210px;">Product Description:'+datastr.Description+'</h4></td></tr>';
+				    var content3='<tr><td><h4 style="display:inline;margin-left:210px;">Product Evaluate:'+datastr.Price+'</h4></td></tr>';
+				    var content4='<tr><td><h4 style="display:inline;margin-left:210px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
 					var content5='<tr><td><h4 style="display:inline;margin-left:210px;">Evaluate:'+datastr.Eval+'</h4></td></tr>';
 					var content6='<tr><td><h4 style="display:inline;margin-left:210px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
 				    var content7='<tr><td><button style="background:rgba(144,202,249,1);margin-left:210px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
@@ -219,8 +219,9 @@ function addToCart(){
 	alert("in");
 	var str="/backend/cart/add?pdid=";
         str=str+localStorage.getItem("Pdid")+"&amount=1";
+		var request=new XMLHttpRequest;
         request.open("get",str);
-        alert(str);
+        
         request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
         var type = request.getResponseHeader("Content-Type");
