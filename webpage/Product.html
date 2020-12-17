@@ -216,6 +216,7 @@ function toMainPage(){
 
 
 function addToCart(){
+	alert("in");
 	var str="/backend/cart/add?pdid=";
         str=str+localStorage.getItem("Pdid")+"&amount=1";
         request.open("get",str);
