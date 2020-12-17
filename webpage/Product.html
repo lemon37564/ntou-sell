@@ -216,6 +216,20 @@ function toMainPage(){
 
 
 function addToCart(){
+	var str="/backend/cart/add?pdid=";
+        str=str+localStorage.getItem("Pdid")+"&amount=1";
+        request.open("get",str);
+        alert(str);
+        request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+			alert("add success");
+		
+      }
+    }
+    }
+    request.send(null);
 }
 
 function bid(){
