@@ -240,7 +240,7 @@ request.send(null);
        
     }
     function goToBuy(){
-        alert("已加入訂單");
+        
         
         
         var msg= "/backend/cart/geps";
@@ -266,7 +266,7 @@ request.send(null);
                             str=datastr[i].Amount;
                             temp=temp+("&amount="+str);
                             temp=msgsend+temp;
-                             alert(temp);
+                            
                             request2.open("get",temp);
                             request2.onreadystatechange = function() { 
                                 if (request2.readyState === 4 && request2.status === 200) {

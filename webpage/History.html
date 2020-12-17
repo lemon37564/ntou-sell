@@ -159,11 +159,11 @@ class.myButton:active {
                 var content = 
                     '<div id="div2">'+
                     
-                    '<div id="div3">'+datastr[i].PdName+
+                    '<div id="div3">'+'名稱'+datastr[i].PdName+
                     '</div>'+
-                    '<div id="div3">'+datastr[i].Price+
+                    '<div id="div3">'+'價格'+datastr[i].Price+
                     '</div>'+
-                    '<div id="div3">'+datastr[i].Amount+
+                    '<div id="div3">'+'數量'+datastr[i].Amount+
                     '</div>'+
                     '<div id="div3">'+
                     '<button type="button" onclick="" style="margin-left:90px;margin-top:10px;width:90px;height:40px;background-color:gray;">'+"刪除"+'</button>'+
@@ -244,6 +244,22 @@ class.myButton:active {
         document.getElementById("SHOWTOT").innerHTML="wtf";
         };
     }
+    function logout(){
+    localStorage.clear();
+    var logoutRequest=new XMLHttpRequest;
+    logoutRequest.open("get","backend/user/logout"); 
+    logoutRequest.onreadystatechange = function() { // Define event listener
+    // If the request is complete and was successful
+        if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
+            alert("帳號登出!");
+            window.location.href="index.html";
+	    }
+    }
+    logoutRequest.send(null);
+//alert("帳號登出!");
+//測試用 console.log(localStorage.getItem("account"));
+//window.location.href="index.html";
+    }
 </script>
 
 </head>
@@ -255,11 +271,11 @@ class.myButton:active {
         <ul id="SubMenu" class="sub-menu" style="display:none;">
 	    <h2 style="display:inline;">
         <li style="display:inline;"><a href="MainPage.html" target="_self">&nbsp;&nbsp;Main</a></li>
-        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Order</a></li>
-        <li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;History</a></li>
-		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Sell</a></li>
-		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Account</a></li>
-		<li style="display:inline;"><a href="" target="_self">&nbsp;&nbsp;Logout</a></li>
+        <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
+        <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
+		<li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
+		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
+		<li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
 		</h2
 		<br></br>
     </ul>
