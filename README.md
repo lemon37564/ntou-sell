@@ -4,7 +4,7 @@
 # Website
 https://ntou-sell.herokuapp.com
 
-# Requirements
+# Dependencies
 https://github.com/mattn/go-sqlite3 \
 https://github.com/gorilla/sessions \
 https://github.com/gorilla/mux
