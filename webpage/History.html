@@ -266,24 +266,35 @@ class.myButton:active {
 
 <body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
 
-<div style=background:rgba(57,73,172,0.8)>
-		<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
-        <ul id="SubMenu" class="sub-menu" style="display:none;">
-	    <h2 style="display:inline;">
-        <li style="display:inline;"><a href="MainPage.html" target="_self">&nbsp;&nbsp;Main</a></li>
-        <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
-        <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
-		<li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
-		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
-		<li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
-		</h2
-		<br></br>
-    </ul>
-		<font color="FFFFFF">
-			<h1 style="display:inline;">歷史紀錄&nbsp;&nbsp;</h1>
-		</font>
-		
-</div>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false
+          " aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            
+          <a class="navbar-brand" href="index.html"><h2>海大購物 <em>Shop</em></h2></a>
+          
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="index.html">Home
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li> 
+              <li class="nav-item">
+                <a class="nav-link" href="products.html">Our Products</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About Us</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="contact.html">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
 <div align=center><!--對其-->
 
 
