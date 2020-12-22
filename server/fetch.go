@@ -285,15 +285,6 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case "search":
-		val, exi := args["name"]
-
-		if exi {
-			fmt.Fprint(w, ser.Pd.SearchProductsByName(val[0]))
-		} else {
-			fmt.Fprint(w, "argument error")
-		}
-
-	case "filterSearch":
 		exist := make([]bool, 4)
 		var name, min, max, eval []string
 
@@ -312,6 +303,8 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			} else {
 				fmt.Fprint(w, "min price, max price or evaluation was not as interger")
 			}
+		} else if exist[0] {
+			fmt.Fprint(w, ser.Pd.SearchProductsByName(name[0]))
 		} else {
 			fmt.Fprint(w, "argument error")
 		}
