@@ -130,18 +130,16 @@ const ProductHelp = `
 	</p>
 	<p>
 		/backend/product/search?name=...<br>
-		查詢商品<br>
+		查詢商品(一般)<br>
 		e.g.查詢商品名中含有"ifone"的商品<br>
 		<a href=/backend/product/search?name=ifone>
 		/backend/product/search?name=ifone</a>
-		<br><br>
-	</p>
-	<p>
-		/backend/product/filterSearch?name=...&minprice=...&maxprice=...&eval=...<br>
-		查詢商品(過濾)<br>
+		<br>
+		查詢商品(過濾，須新增三個變數)<br>
+		/backend/product/search?name=...&minprice=...&maxprice=...&eval=...<br>
 		e.g.查詢商品名中含有"ifone"的商品，最低價格為10，最高價格為5000000，最低評價為0<br>
-		<a href=/backend/product/filterSearch?name=ifone&minprice=10&maxprice=5000000&eval=0>
-		/backend/product/filterSearch?name=ifone&minprice=10&maxprice=5000000&eval=0</a>
+		<a href=/backend/product/search?name=ifone&minprice=10&maxprice=5000000&eval=0>
+		/backend/product/search?name=ifone&minprice=10&maxprice=5000000&eval=0</a>
 		<br><br>
 	</p>
 </html>
