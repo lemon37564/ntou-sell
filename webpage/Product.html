@@ -224,14 +224,14 @@ function addToCart(){
     request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader("Content-Type");
-            if (type.match(/^text/)){ // Make sure response is text
+            if (request.responseText=='true'){ // Make sure response is text
     	        alert("加入購物車成功");
      	        window.location.href="MainPage.html";
             }
         }
-        else{
-	    alert("出錯了，加入購物車失敗");
-            window.location.href="MainPage.html";
+        else if(request.responseText=='false'){
+	    alert("加入購物車失敗，請確認購物車內是否已有重複商品。");
+            window.location.href="Cart.html";
 	}
     }
     request.send(null);
