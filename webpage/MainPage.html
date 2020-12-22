@@ -40,7 +40,7 @@ function ShowNewProduct(){
 			        //var request2=new XMLHttpRequest;
 			        //request2.open("get",msg2);
 				    //request2.send(null);
-					setTimeout(function(){
+					setInterval(function(){
 					    console.log(msg2);
 					    var request2=new XMLHttpRequest;
 					    request2.open("get",msg2[count2]);
@@ -68,7 +68,7 @@ function ShowNewProduct(){
 			    	        }
 			            }
 			            request2.send(null);
-					},600);
+					},300);
 					
 			        console.log(imgURL[i]);
 			        content1[i]='<tr><td><img src="';
@@ -194,7 +194,7 @@ function searchProduct(){
 	if(request.responseText=='null'){
 	    document.getElementById("NP").innerHTML='查無符合的商品!';
 	}
-	if(request.reponseText=='argument\serror'){
+	if(request.reponseText=='argument&nbsp;error'){
 	    document.getElementById("NP").innerHTML='查無符合的商品,請輸入正確的搜尋條件!';
 	}
     // If the request is complete and was successful
