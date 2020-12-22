@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"database/sql"
 	"encoding/json"
 	"log"
 	"se/database"
@@ -9,21 +8,17 @@ import (
 
 // Cart is a module that handle cart functions
 type Cart struct {
-	db *database.CartDB
+	fn *database.Data
 }
 
 // CartInit return cart module
-func CartInit(db *sql.DB) *Cart {
-	c := new(Cart)
-	c.db = database.CartDBInit(db)
-
-	return c
-
+func CartInit(data *database.Data) *Cart {
+	return &Cart{fn: data}
 }
 
 // AddProductToCart return true if add success
 func (c *Cart) AddProductToCart(uid, pdid, amount int) bool {
-	err := c.db.AddProductIntoCart(uid, pdid, amount)
+	err := c.fn.AddProductIntoCart(uid, pdid, amount)
 	if err != nil {
 		log.Println(err)
 		return false
@@ -33,7 +28,7 @@ func (c *Cart) AddProductToCart(uid, pdid, amount int) bool {
 
 // RemoveProduct remove product in the cart if exists. if there's no such product in the cart, return false
 func (c *Cart) RemoveProduct(id, pdid int) string {
-	err := c.db.DeleteProductFromCart(id, pdid)
+	err := c.fn.DeleteProductFromCart(id, pdid)
 	if err != nil {
 		log.Println(err)
 		return "fail to remove from cart"
@@ -43,7 +38,7 @@ func (c *Cart) RemoveProduct(id, pdid int) string {
 
 // ModifyAmount changes the amount of specific product. returns ture if success
 func (c *Cart) ModifyAmount(uid, pdid, amount int) bool {
-	err := c.db.UpdateAmount(uid, pdid, amount)
+	err := c.fn.UpdateCartAmount(uid, pdid, amount)
 	if err != nil {
 		log.Println(err)
 		return false
@@ -53,7 +48,7 @@ func (c *Cart) ModifyAmount(uid, pdid, amount int) bool {
 
 // GetProducts returns all the product in cart
 func (c Cart) GetProducts(uid int) string {
-	pds, _ := c.db.GetAllProductOfUser(uid)
+	pds, _ := c.fn.GetAllProductOfUser(uid)
 
 	res, err := json.Marshal(pds)
 	if err != nil {

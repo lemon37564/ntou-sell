@@ -2,24 +2,19 @@ package backend
 
 import (
 	"crypto/sha256"
-	"database/sql"
 	"encoding/base64"
-	"encoding/json"
 	"log"
 	"se/database"
 )
 
 // User is a module that handle users
 type User struct {
-	fn *database.UserDB
+	fn *database.Data
 }
 
 // UserInit return a user module
-func UserInit(db *sql.DB) *User {
-	u := new(User)
-	u.fn = database.UserDBInit(db)
-
-	return u
+func UserInit(data *database.Data) *User {
+	return &User{fn: data}
 }
 
 // Login return user id and is it valid to login
@@ -65,7 +60,7 @@ func (u *User) ChangePassword(uid int, oldPassword, newPassword string) string {
 		return "舊密碼錯誤"
 	}
 
-	err := u.fn.ChangePassword(account, newPassword)
+	err := u.fn.ChangeUserPassword(account, newPassword)
 	if err != nil {
 		log.Println(err)
 		return err.Error()
@@ -76,25 +71,13 @@ func (u *User) ChangePassword(uid int, oldPassword, newPassword string) string {
 
 // ChangeName changes user name
 func (u *User) ChangeName(uid int, newname string) string {
-	err := u.fn.ChangeName(uid, newname)
+	err := u.fn.ChangeUserName(uid, newname)
 	if err != nil {
 		log.Println(err)
 		return "failed"
 	}
 
 	return "ok"
-}
-
-// GetUserData return user data with account
-func (u *User) GetUserData(account string) string {
-	res, _ := json.Marshal(u.fn.GetDatasFromAccount(account))
-	return string(res)
-}
-
-// GetAllUserData return all users (debugging only)
-func (u *User) GetAllUserData() string {
-	res, _ := json.Marshal(u.fn.GetAllUser())
-	return string(res)
 }
 
 func sha256Hash(key string) string {

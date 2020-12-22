@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -10,14 +9,12 @@ import (
 
 // Bid type handle bids
 type Bid struct {
-	fn *database.BidDB
+	fn *database.Data
 }
 
 // BidInit return a Bid type which handle bids
-func BidInit(db *sql.DB) *Bid {
-	b := new(Bid)
-	b.fn = database.BidDataInit(db)
-	return b
+func BidInit(data *database.Data) *Bid {
+	return &Bid{fn: data}
 }
 
 //GetProductInfo 回傳商品資訊
@@ -44,7 +41,11 @@ func (b Bid) GetProductBidInfo(pdid int) string {
 // SetBidForBuyer 更新商品價格，目前競標者
 func (b *Bid) SetBidForBuyer(pdid, uid, money int) bool {
 	if money > b.fn.GetBidByID(pdid).NowMoney { // 取得競標價格
-		b.fn.NewBidderGet(pdid, uid, money)
+		if err := b.fn.WonBid(pdid, uid, money); err != nil {
+			log.Println(err)
+			return false
+		}
+
 		return true
 	}
 	return false

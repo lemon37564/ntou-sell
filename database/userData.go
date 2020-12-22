@@ -146,20 +146,20 @@ func (dt Data) Login(account, passwordHash string) (int, bool) {
 	return uid, cnt == 1
 }
 
-// ChangePassword updates passeword of a user by account
-func (dt Data) ChangePassword(account, newpass string) error {
+// ChangeUserPassword updates passeword of a user by account
+func (dt Data) ChangeUserPassword(account, newpass string) error {
 	_, err := dt.user.upPass.Exec(account, newpass)
 	return err
 }
 
-// ChangeName updates name of a user by account
-func (dt Data) ChangeName(uid int, newname string) error {
+// ChangeUserName updates name of a user by account
+func (dt Data) ChangeUserName(uid int, newname string) error {
 	_, err := dt.user.upName.Exec(uid, newname)
 	return err
 }
 
-// ChangeEval updates evaluation of a user by account and new eval
-func (dt Data) ChangeEval(account string, eval float64) error {
+// ChangeUserEval updates evaluation of a user by account and new eval
+func (dt Data) ChangeUserEval(account string, eval float64) error {
 	_, err := dt.user.upEval.Exec(account, eval)
 	return err
 }

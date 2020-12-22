@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"database/sql"
 	"encoding/json"
 	"log"
 	"se/database"
@@ -10,15 +9,12 @@ import (
 
 // Order is a module that handle orders
 type Order struct {
-	fn *database.OrderDB
+	fn *database.Data
 }
 
 // OrderInit return order module
-func OrderInit(db *sql.DB) *Order {
-	o := new(Order)
-	o.fn = database.OrderDBInit(db)
-
-	return o
+func OrderInit(data *database.Data) *Order {
+	return &Order{fn: data}
 }
 
 // GetOrders Return orders of a specific user
@@ -47,7 +43,7 @@ func (o *Order) AddOrder(uid, pdid, amount int) bool {
 
 // Delete order
 func (o *Order) Delete(uid, pdid int) bool {
-	err := o.fn.Delete(uid, pdid)
+	err := o.fn.DeleteOrder(uid, pdid)
 	if err != nil {
 		return false
 	}

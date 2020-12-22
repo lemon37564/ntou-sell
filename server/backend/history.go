@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"database/sql"
 	"encoding/json"
 	"se/database"
 	"strconv"
@@ -10,14 +9,12 @@ import (
 
 // History contains functions to use
 type History struct {
-	fn *database.HistoryDB
+	fn *database.Data
 }
 
 // HistoryInit return handler of History
-func HistoryInit(db *sql.DB) (h *History) {
-	h = new(History)
-	h.fn = database.HistoryDBInit(db)
-	return
+func HistoryInit(data *database.Data) *History {
+	return &History{fn: data}
 }
 
 // AddHistory add a history into user's record
@@ -32,7 +29,7 @@ func (h History) AddHistory(uid, pdid int) string {
 
 // GetHistory return all historys of a user whose uid is ?
 func (h History) GetHistory(uid int, amount int, newest bool) string {
-	pd := h.fn.Get(uid, amount, newest)
+	pd := h.fn.GetAllHistory(uid, amount, newest)
 
 	str, err := json.Marshal(pd)
 	if err != nil {
@@ -43,7 +40,7 @@ func (h History) GetHistory(uid int, amount int, newest bool) string {
 
 // Delete can delete a history user don't want to see
 func (h History) Delete(uid, pid int) string {
-	if err := h.fn.Delete(uid, pid); err != nil {
+	if err := h.fn.DeleteHistory(uid, pid); err != nil {
 		return err.Error()
 	}
 
@@ -60,7 +57,7 @@ func (h History) DeleteSpecific(uid int, pdid string) string {
 			return "query contains non-integer"
 		}
 
-		if err := h.fn.Delete(uid, sipd); err != nil {
+		if err := h.fn.DeleteHistory(uid, sipd); err != nil {
 			return err.Error()
 		}
 	}
@@ -70,7 +67,7 @@ func (h History) DeleteSpecific(uid int, pdid string) string {
 
 // DeleteAll deletes all history of a user
 func (h History) DeleteAll(uid int) string {
-	if err := h.fn.DeleteAll(uid); err != nil {
+	if err := h.fn.DeleteAllHistory(uid); err != nil {
 		return err.Error()
 	}
 

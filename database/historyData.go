@@ -109,20 +109,20 @@ func (dt Data) AddHistory(uid, pdid int) error {
 	return err
 }
 
-// Delete history with user id and product id
-func (dt Data) Delete(uid, pdid int) error {
+// DeleteHistory with user id and product id
+func (dt Data) DeleteHistory(uid, pdid int) error {
 	_, err := dt.history.del.Exec(uid, pdid)
 	return err
 }
 
-// DeleteAll deletes all history of a user by user id
-func (dt Data) DeleteAll(uid int) error {
+// DeleteAllHistory deletes all history of a user by user id
+func (dt Data) DeleteAllHistory(uid int) error {
 	_, err := dt.history.delAll.Query()
 	return err
 }
 
-// Get return all history of a user by id (descend order by time)
-func (dt Data) Get(uid int, amount int, newest bool) (all []Product) {
+// GetAllHistory return all history of a user by id (descend order by time)
+func (dt Data) GetAllHistory(uid int, amount int, newest bool) (all []Product) {
 	var (
 		rows  *sql.Rows
 		err   error

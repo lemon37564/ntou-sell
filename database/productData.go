@@ -151,14 +151,14 @@ func (dt Data) DeleteProduct(uid int, pdname string) error {
 	return err
 }
 
-// UpdateName with product id and new name
-func (dt Data) UpdateName(pdid int, name string) error {
+// UpdateProductName with product id and new name
+func (dt Data) UpdateProductName(pdid int, name string) error {
 	_, err := dt.product.upName.Exec(name, pdid)
 	return err
 }
 
-// UpdatePrice with prouct id and new price
-func (dt Data) UpdatePrice(pdid, price int) error {
+// UpdateProductPrice with prouct id and new price
+func (dt Data) UpdateProductPrice(pdid, price int) error {
 	_, err := dt.product.upPrc.Exec(price, pdid)
 	return err
 }
@@ -169,8 +169,8 @@ func (dt Data) UpdateProductAmount(pdid, amount int) error {
 	return err
 }
 
-// UpdateDescription with product id and new description
-func (dt Data) UpdateDescription(pdid int, description string) error {
+// UpdateProductDescription with product id and new description
+func (dt Data) UpdateProductDescription(pdid int, description string) error {
 	_, err := dt.product.upDes.Exec(description, pdid)
 	if err != nil {
 		log.Println(err)
@@ -179,14 +179,14 @@ func (dt Data) UpdateDescription(pdid int, description string) error {
 	return err
 }
 
-// UpdateEval with product id and new eval
-func (dt Data) UpdateEval(pdid int, eval float64) error {
+// UpdateProductEval with product id and new eval
+func (dt Data) UpdateProductEval(pdid int, eval float64) error {
 	_, err := dt.product.upEval.Exec(eval, pdid)
 	return err
 }
 
-// GetInfoFromPdID return info of specific product with product id
-func (dt Data) GetInfoFromPdID(pdid int) (pd Product) {
+// GetProductInfoFromPdID return info of specific product with product id
+func (dt Data) GetProductInfoFromPdID(pdid int) (pd Product) {
 	rows, err := dt.product.getInfo.Query(pdid)
 	if err != nil {
 		log.Println(err)
@@ -223,8 +223,8 @@ func (dt Data) NewestProduct(number int) (all []Product) {
 	return
 }
 
-// Search return product infos with searching keyword
-func (dt Data) Search(keyword string) (all []Product) {
+// SearchProduct return product infos with searching keyword
+func (dt Data) SearchProduct(keyword string) (all []Product) {
 	keyword = "%" + keyword + "%"
 
 	rows, err := dt.product.search.Query(keyword)
@@ -245,8 +245,8 @@ func (dt Data) Search(keyword string) (all []Product) {
 	return
 }
 
-// SearchWithFilter is an enhance search function with filter
-func (dt Data) SearchWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
+// SearchProductWithFilter is an enhance search function with filter
+func (dt Data) SearchProductWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
 	keyword = "%" + keyword + "%"
 
 	rows, err := dt.product.filter.Query(keyword, priceMin, priceMax, eval)

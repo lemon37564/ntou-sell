@@ -71,8 +71,8 @@ func (dt Data) DeleteProductFromCart(id, pdid int) error {
 	return err
 }
 
-// UpdateAmount changes amount of product in cart of a user
-func (dt Data) UpdateAmount(uid, pdid, newAmount int) error {
+// UpdateCartAmount changes amount of product in cart of a user
+func (dt Data) UpdateCartAmount(uid, pdid, newAmount int) error {
 	_, err := dt.cart.upAmt.Exec(newAmount, uid, pdid)
 	return err
 }

@@ -161,8 +161,8 @@ func (dt Data) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 	return Messages{ContactorName: dt.getName(remoteUID), Content: all}
 }
 
-// GetAll return all messages (debugging only)
-func (dt Data) GetAll() (all []MessID) {
+// GetAllMessages return all messages (debugging only)
+func (dt Data) GetAllMessages() (all []MessID) {
 
 	rows, err := dt.message.all.Query()
 	if err != nil {
