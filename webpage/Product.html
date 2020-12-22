@@ -239,7 +239,7 @@ function addToCart(){
 
 function bid(){
     var str="/backend/bid/set?pdid=";
-    str=str+localStorage.getItem("Pdid")+"&money="+getElementById("bidSet").value;
+    str=str+localStorage.getItem("Pdid")+"&money="+document.getElementById("bidSet").value;
     var request=new XMLHttpRequest;
     request.open("get",str);
         
