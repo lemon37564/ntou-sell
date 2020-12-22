@@ -13,7 +13,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
+func (ser Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
@@ -21,7 +21,7 @@ func (ser *Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, API)
 }
 
-func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
+func (ser Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
@@ -69,7 +69,7 @@ func (ser *Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
+func (ser Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
@@ -126,7 +126,7 @@ func (ser *Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
+func (ser Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
@@ -188,7 +188,7 @@ func (ser *Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
+func (ser Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
@@ -233,7 +233,7 @@ func (ser *Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
+func (ser Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
@@ -277,7 +277,7 @@ func (ser *Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
+func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
@@ -431,7 +431,7 @@ func (ser *Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser *Server) fetchUser(w http.ResponseWriter, r *http.Request) {
+func (ser Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}

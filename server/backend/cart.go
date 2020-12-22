@@ -63,22 +63,3 @@ func (c Cart) GetProducts(uid int) string {
 
 	return string(res)
 }
-
-// TotalCount returns how many different products in the cart
-// func (c *Cart) TotalCount(uid int) string {
-// 	if c.db.Total == 0 {
-// 		c.GetProducts(uid)
-// 	}
-
-// 	return strconv.Itoa(c.db.Total)
-// }
-
-// Debug func is only for debugging
-func (c *Cart) Debug() string {
-	str, err := json.Marshal(c.db.Debug())
-	if err != nil {
-		log.Println(err)
-	}
-
-	return string(str)
-}

@@ -26,7 +26,7 @@ type Server struct {
 }
 
 // Serve start all functions provided for user
-func (ser *Server) Serve() {
+func (ser Server) Serve() {
 	osys := runtime.GOOS
 	log.Println("system:", osys)
 
@@ -56,14 +56,14 @@ func (ser *Server) Serve() {
 	fs := http.FileServer(http.Dir("webpage"))
 	http.Handle("/", ser.middleware(fs))
 
-	go ser.refresh()
+	go refresh()
 
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
 
-func (ser *Server) middleware(h http.Handler) http.Handler {
+func (ser Server) middleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if !ser.validation(w, r) {
 			return
@@ -86,10 +86,10 @@ var (
 	blockLock sync.RWMutex
 )
 
-func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
+func (ser Server) validation(w http.ResponseWriter, r *http.Request) bool {
 	r.ParseForm()
 
-	ip := ser.getIP(r)
+	ip := getIP(r)
 
 	blockLock.RLock()
 	_, exi := blockSet[ip]
@@ -117,7 +117,7 @@ func (ser *Server) validation(w http.ResponseWriter, r *http.Request) bool {
 }
 
 // a thread refreshing the blockSet and ipList
-func (ser *Server) refresh() {
+func refresh() {
 	const (
 		limitAccess = 120
 		refreshTime = time.Second * 30
@@ -156,7 +156,7 @@ func (ser *Server) refresh() {
 	}
 }
 
-func (ser *Server) getIP(r *http.Request) string {
+func getIP(r *http.Request) string {
 	ipAdress := r.Header.Get("X-Real-Ip")
 	if ipAdress == "" {
 		ipAdress = r.Header.Get("X-Forwarded-For")
