@@ -73,9 +73,8 @@ func (ser *Server) middleware(h http.Handler) http.Handler {
 	})
 }
 
-type void struct {
-	// sizeof(void) = 0
-}
+// sizeof(void) = 0
+type void struct{}
 
 var (
 	ipList   = make(map[string]int)
