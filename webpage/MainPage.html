@@ -191,6 +191,9 @@ function searchProduct(){
 	var count2=0;
 	
     request.onreadystatechange = function() { // Define event listener
+	if(request.responseText=='null'||request.reponseText=='argument error'){
+	    document.getElementById("NP").innerHTML="查無符合的商品";
+	}
     // If the request is complete and was successful
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader("Content-Type");
