@@ -40,7 +40,10 @@ function ShowNewProduct(){
 			        //var request2=new XMLHttpRequest;
 			        //request2.open("get",msg2);
 				    //request2.send(null);
-					setInterval(function(){
+				
+				(function(x){
+					
+					setTimeout(function(){
 					    console.log(msg2);
 					    var request2=new XMLHttpRequest;
 					    request2.open("get",msg2[count2]);
@@ -69,6 +72,8 @@ function ShowNewProduct(){
 			            }
 			            request2.send(null);
 					},300);
+					
+				})(i);
 					
 			        console.log(imgURL[i]);
 			        content1[i]='<tr><td><img src="';
