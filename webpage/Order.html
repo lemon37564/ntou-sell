@@ -218,32 +218,35 @@ logoutRequest.send(null);
 </head>
 
 <body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
-  <div style="background:rgba(57,73,172,0.8);">
-    <div>
-	<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
-    <ul id="SubMenu" class="sub-menu" style="display:none;">
-	    <h2 color=#3366BB style="display:inline;">
-        <li style="display:inline;"><a href="Cart.html" target="_self">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
-        <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
-		<li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
-		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
-		<li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
-		</h2>
-		<br></br>
-    </ul>
-	
-    <font color="FFFFFF"><h1 style="display:inline;">海大拍賣&nbsp;&nbsp;</h1></font>
-    <!--已改用js處理<form id="search" action="https://ntou-sell.herokuapp.com/product/search" method="get" style="margin:0px;display:inline;"> <!--action接後端程式-->
-	  <font color="FFFFFF"><h3 style="display:inline;">
-	  關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
-	  最低價:<input id="minprice" type="text" name="minprice" value="" size="15" style=""> <!--輸入商品最低價-->
-	  最高價:<input id="maxprice" type="text" name="maxprice" value="" size="15" style=""> <!--輸入商品最高價-->
-	  評價:<input id="eval" type="text" name="eval" value="" size="15" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
-	  <button onclick="searchProduct()" >搜尋</button>
-	  </h3>
-	<!--</form>-->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="true
+      " aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        
+      <a class="navbar-brand" href="MainPage.html"><h2>海大購物 <em>Shop</em></h2></a>
+      
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="MainPage.html">Home
+              <span class="sr-only">(current)</span>
+            </a>
+          </li> 
+          <li class="nav-item">
+            <a class="nav-link" href="Cart.html">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Order.html">Order</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="Sell.html">Sell</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </nav>
   
   <div class = "border">
     <h2>Order</h2>
