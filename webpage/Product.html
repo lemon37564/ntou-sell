@@ -216,24 +216,29 @@ function toMainPage(){
 
 
 function addToCart(){
-	var str="/backend/cart/add?pdid=";
-        str=str+localStorage.getItem("Pdid")+"&amount=1";
-		var request=new XMLHttpRequest;
-        request.open("get",str);
+    var str="/backend/cart/add?pdid=";
+    str=str+localStorage.getItem("Pdid")+"&amount=1";
+    var request=new XMLHttpRequest;
+    request.open("get",str);
         
-        request.onreadystatechange = function() { 
+    request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
-        var type = request.getResponseHeader("Content-Type");
-        if (type.match(/^text/)){ // Make sure response is text
-			alert("add success");
-		
-      }
-    }
+            var type = request.getResponseHeader("Content-Type");
+            if (type.match(/^text/)){ // Make sure response is text
+    	        alert("加入購物車成功");
+     	        window.location.href="MainPage.html";
+            }
+        }
+        else{
+	    alert("出錯了，加入購物車失敗");
+            window.location.href="MainPage.html";
+	}
     }
     request.send(null);
 }
 
 function bid(){
+	
 }
 
 
