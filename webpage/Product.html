@@ -224,12 +224,12 @@ function addToCart(){
     request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader("Content-Type");
-            if (request.responseText===true){    //請記得加入回傳值的判斷
+            if (request.responseText=='true'){    //請記得加入回傳值的判斷
     	        alert("加入購物車成功");
      	        window.location.href="MainPage.html";
             }
         }
-        else if(request.responseText===false){
+        else if(request.responseText=='false'){
 	    alert("加入購物車失敗，請確認購物車內是否已有重複商品。");
             window.location.href="Cart.html";
 	}
@@ -246,12 +246,12 @@ function bid(){
     request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader("Content-Type");
-            if (request.responseText===true){    //請記得加入回傳值的判斷
+            if (request.responseText=='true'){    //請記得加入回傳值的判斷
     	        alert("加價成功");
      	        //window.location.href="MainPage.html";
             }
         }
-        else if(request.responseText===false){
+        else if(request.responseText=='false'){
 	    alert("加價失敗");
             //window.location.href="Cart.html";
 	}
