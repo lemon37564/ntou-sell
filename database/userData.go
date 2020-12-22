@@ -5,14 +5,15 @@ import (
 	"log"
 )
 
-const userTable = `CREATE TABLE IF NOT EXISTS user(
-						uid int NOT NULL,
-						account varchar(64) NOT NULL UNIQUE,
-						password_hash varchar(64) NOT NULL,
-						name varchar(64) NOT NULL,
-						eval float,
-						PRIMARY KEY(uid)
-					);`
+const userTable = `
+CREATE TABLE IF NOT EXISTS user(
+	uid int NOT NULL,
+	account varchar(64) NOT NULL UNIQUE,
+	password_hash varchar(64) NOT NULL,
+	name varchar(64) NOT NULL,
+	eval float,
+	PRIMARY KEY(uid)
+);`
 
 // User type contains data of single user
 type User struct {
@@ -23,90 +24,84 @@ type User struct {
 	Eval         float64
 }
 
-// UserDB contain functions to use
-type UserDB struct {
-	insert     *sql.Stmt
-	_delete    *sql.Stmt
-	updateName *sql.Stmt
-	updatePass *sql.Stmt
-	updateEval *sql.Stmt
-	maxID      *sql.Stmt
-	login      *sql.Stmt
-	getData    *sql.Stmt
-	getUID     *sql.Stmt
-	getAccount *sql.Stmt
-	allUser    *sql.Stmt
+type userStmt struct {
+	add     *sql.Stmt
+	del     *sql.Stmt
+	upName  *sql.Stmt
+	upPass  *sql.Stmt
+	upEval  *sql.Stmt
+	maxID   *sql.Stmt
+	login   *sql.Stmt
+	getData *sql.Stmt
+	getUID  *sql.Stmt
+	getAcnt *sql.Stmt
 }
 
-// UserDBInit initialize all functions in user database
-func UserDBInit(db *sql.DB) *UserDB {
+func userPrepare(db *sql.DB) *userStmt {
 	var err error
-	user := new(UserDB)
+	user := new(userStmt)
 
-	user.insert, err = db.Prepare("INSERT INTO user VALUES(?,?,?,?,?);")
-	if err != nil {
-		panic(err)
+	const (
+		add     = "INSERT INTO user VALUES(?,?,?,?,?);"
+		del     = "DELETE FROM user WHERE uid=? AND password_hash=?;"
+		upName  = "UPDATE user SET name=? WHERE uid=?"
+		upPass  = "UPDATE user SET password_hash=? WHERE account=?"
+		upEval  = "UPDATE user SET eval=? WHERE account=?"
+		maxID   = "SELECT MAX(uid) FROM user;"
+		login   = "SELECT uid FROM user WHERE account=? AND password_hash=? AND uid>0;"
+		getData = "SELECT * FROM user WHERE account=? AND uid>0;"
+		getUID  = "SELECT uid FROM user WHERE account=? AND uid>0;"
+		getAcnt = "SELECT account FROM user WHERE uid=?;"
+	)
+
+	if user.add, err = db.Prepare(add); err != nil {
+		log.Println(err)
 	}
 
-	user._delete, err = db.Prepare("DELETE FROM user WHERE uid=? AND password_hash=?;")
-	if err != nil {
-		panic(err)
+	if user.del, err = db.Prepare(del); err != nil {
+		log.Println(err)
 	}
 
-	user.updateName, err = db.Prepare("UPDATE user SET name=? WHERE uid=?")
-	if err != nil {
-		panic(err)
+	if user.upName, err = db.Prepare(upName); err != nil {
+		log.Println(err)
 	}
 
-	user.updatePass, err = db.Prepare("UPDATE user SET password_hash=? WHERE account=?")
-	if err != nil {
-		panic(err)
+	if user.upPass, err = db.Prepare(upPass); err != nil {
+		log.Println(err)
 	}
 
-	user.updateEval, err = db.Prepare("UPDATE user SET eval=? WHERE account=?")
-	if err != nil {
-		panic(err)
+	if user.upEval, err = db.Prepare(upEval); err != nil {
+		log.Println(err)
 	}
 
-	user.maxID, err = db.Prepare("SELECT MAX(UID) FROM user;")
-	if err != nil {
-		panic(err)
+	if user.maxID, err = db.Prepare(maxID); err != nil {
+		log.Println(err)
 	}
 
-	user.login, err = db.Prepare("SELECT uid FROM user WHERE account=? AND password_hash=? AND uid>0;")
-	if err != nil {
-		panic(err)
+	if user.login, err = db.Prepare(login); err != nil {
+		log.Println(err)
 	}
 
-	user.getData, err = db.Prepare("SELECT * FROM USER WHERE account=? AND uid>0;")
-	if err != nil {
-		panic(err)
+	if user.getData, err = db.Prepare(getData); err != nil {
+		log.Println(err)
 	}
 
-	user.getUID, err = db.Prepare("SELECT uid FROM USER WHERE account=? AND uid>0;")
-	if err != nil {
-		panic(err)
+	if user.getUID, err = db.Prepare(getUID); err != nil {
+		log.Println(err)
 	}
 
-	user.getAccount, err = db.Prepare("SELECT account FROM USER WHERE uid=?;")
-	if err != nil {
-		panic(err)
-	}
-
-	user.allUser, err = db.Prepare("SELECT * FROM USER WHERE uid>0;")
-	if err != nil {
-		panic(err)
+	if user.getAcnt, err = db.Prepare(getAcnt); err != nil {
+		log.Println(err)
 	}
 
 	return user
 }
 
 // AddNewUser is a function for registing a new account
-func (u *UserDB) AddNewUser(account, passwordHash, name string) error {
-
+func (dt Data) AddNewUser(account, passwordHash, name string) error {
 	var UID int
 
-	rows, err := u.maxID.Query()
+	rows, err := dt.user.maxID.Query()
 	if err != nil {
 		return err
 	}
@@ -120,21 +115,21 @@ func (u *UserDB) AddNewUser(account, passwordHash, name string) error {
 
 	UID++
 
-	_, err = u.insert.Exec(UID, account, passwordHash, name, 0.0)
+	_, err = dt.user.add.Exec(UID, account, passwordHash, name, 0.0)
 	return err
 }
 
 // DeleteUser delete data of specific user by account
-func (u *UserDB) DeleteUser(uid int, password string) error {
-	_, err := u._delete.Exec(uid, password)
+func (dt Data) DeleteUser(uid int, password string) error {
+	_, err := dt.user.del.Exec(uid, password)
 	return err
 }
 
 // Login return user id and boolean value to check if it is valid to log in with specific account and password hash
-func (u *UserDB) Login(account, passwordHash string) (int, bool) {
+func (dt Data) Login(account, passwordHash string) (int, bool) {
 	var cnt, uid int
 
-	rows, err := u.login.Query(account, passwordHash)
+	rows, err := dt.user.login.Query(account, passwordHash)
 	if err != nil {
 		panic(err)
 	}
@@ -152,27 +147,27 @@ func (u *UserDB) Login(account, passwordHash string) (int, bool) {
 }
 
 // ChangePassword updates passeword of a user by account
-func (u *UserDB) ChangePassword(account, newpass string) error {
-	_, err := u.updatePass.Exec(account, newpass)
+func (dt Data) ChangePassword(account, newpass string) error {
+	_, err := dt.user.upPass.Exec(account, newpass)
 	return err
 }
 
 // ChangeName updates name of a user by account
-func (u *UserDB) ChangeName(uid int, newname string) error {
-	_, err := u.updateName.Exec(uid, newname)
+func (dt Data) ChangeName(uid int, newname string) error {
+	_, err := dt.user.upName.Exec(uid, newname)
 	return err
 }
 
 // ChangeEval updates evaluation of a user by account and new eval
-func (u *UserDB) ChangeEval(account string, eval float64) error {
-	_, err := u.updateEval.Exec(account, eval)
+func (dt Data) ChangeEval(account string, eval float64) error {
+	_, err := dt.user.upEval.Exec(account, eval)
 	return err
 }
 
 // GetUIDFromAccount return user id by account
-func (u *UserDB) GetUIDFromAccount(account string) int {
+func (dt Data) GetUIDFromAccount(account string) int {
 	var id int
-	rows, err := u.getUID.Query(account)
+	rows, err := dt.user.getUID.Query(account)
 	if err != nil {
 		log.Println(err)
 		return -1
@@ -190,9 +185,9 @@ func (u *UserDB) GetUIDFromAccount(account string) int {
 }
 
 // GetAccountFromUID return account by user id
-func (u *UserDB) GetAccountFromUID(uid int) string {
+func (dt Data) GetAccountFromUID(uid int) string {
 	var account string
-	rows, err := u.getAccount.Query(uid)
+	rows, err := dt.user.getAcnt.Query(uid)
 	if err != nil {
 		log.Println(err)
 		return ""
@@ -207,42 +202,4 @@ func (u *UserDB) GetAccountFromUID(uid int) string {
 	}
 
 	return account
-}
-
-// GetDatasFromAccount return data of user, matching by account
-// it can also use for getting id of user from account
-func (u *UserDB) GetDatasFromAccount(account string) (us User) {
-	rows, err := u.getData.Query(account)
-	if err != nil {
-		log.Println(err)
-	}
-
-	for rows.Next() {
-		err = rows.Scan(&us.UID, &us.Account, &us.PasswordHash, &us.Name, &us.Eval)
-		if err != nil {
-			log.Println(err)
-		}
-	}
-
-	return
-}
-
-// GetAllUser return data of all user in the database
-func (u *UserDB) GetAllUser() (all []User) {
-	rows, err := u.allUser.Query()
-	if err != nil {
-		log.Println(err)
-	}
-
-	for rows.Next() {
-		user := *new(User)
-		err = rows.Scan(&user.UID, &user.Account, &user.PasswordHash, &user.Name, &user.Eval)
-		if err != nil {
-			log.Println(err)
-		}
-
-		all = append(all, user)
-	}
-
-	return
 }

@@ -7,16 +7,17 @@ import (
 )
 
 // rename order as orders (order is a keword in SQL)
-const ordersTable = `CREATE TABLE IF NOT EXISTS orders(
-						uid int NOT NULL,
-						pd_id int NOT NULL,
-						amount int,
-						state varchar(8),
-						order_date timestamp,
-						PRIMARY KEY(uid, pd_id),
-						FOREIGN KEY(uid) REFERENCES user,
-						FOREIGN KEY(pd_id) REFERENCES product
-					);`
+const ordersTable = `
+CREATE TABLE IF NOT EXISTS orders(
+	uid int NOT NULL,
+	pd_id int NOT NULL,
+	amount int,
+	state varchar(8),
+	order_date timestamp,
+	PRIMARY KEY(uid, pd_id),
+	FOREIGN KEY(uid) REFERENCES user,
+	FOREIGN KEY(pd_id) REFERENCES product
+);`
 
 // Order type store data of a single order
 type Order struct {
@@ -28,70 +29,71 @@ type Order struct {
 	Time   time.Time
 }
 
-// OrderDB contain funcions to use
-type OrderDB struct {
-	insert            *sql.Stmt
-	_delete           *sql.Stmt
-	updateAmount      *sql.Stmt
-	getall            *sql.Stmt
-	getOrder          *sql.Stmt
-	getPdNameAndPrice *sql.Stmt
+type orderStmt struct {
+	add      *sql.Stmt
+	del      *sql.Stmt
+	upAmt    *sql.Stmt
+	getAll   *sql.Stmt
+	getOrder *sql.Stmt
+	getPd    *sql.Stmt
 }
 
-// OrderDBInit prepare function for database using
-func OrderDBInit(db *sql.DB) *OrderDB {
+func orderPrepare(db *sql.DB) *orderStmt {
 	var err error
-	order := new(OrderDB)
+	order := new(orderStmt)
 
-	order.insert, err = db.Prepare("INSERT INTO orders VALUES(?,?,?,?,?);")
-	if err != nil {
-		panic(err)
+	const (
+		add      = "INSERT INTO orders VALUES(?,?,?,?,?);"
+		del      = "DELETE FROM orders WHERE uid=? AND pd_id=?;"
+		upAmt    = "UPDATE orders SET amount=? WHERE uid=? AND pd_id=?;"
+		getAll   = "SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? ORDER BY order_date DESC;"
+		getOrder = "SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? AND pd_id=?;"
+		getPd    = "SELECT product_name, price FROM product WHERE pd_id=? AND pd_id>0;"
+	)
+
+	if order.add, err = db.Prepare(add); err != nil {
+		log.Println(err)
 	}
 
-	order._delete, err = db.Prepare("DELETE FROM orders WHERE uid=? AND pd_id=?;")
-	if err != nil {
-		panic(err)
+	if order.del, err = db.Prepare(del); err != nil {
+		log.Println(err)
 	}
 
-	order.updateAmount, err = db.Prepare("UPDATE orders SET amount=? WHERE uid=? AND pd_id=?;")
-	if err != nil {
-		panic(err)
+	if order.upAmt, err = db.Prepare(upAmt); err != nil {
+		log.Println(err)
 	}
 
-	order.getall, err = db.Prepare("SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? ORDER BY order_date DESC;")
-	if err != nil {
-		panic(err)
+	if order.getAll, err = db.Prepare(getAll); err != nil {
+		log.Println(err)
 	}
 
-	order.getOrder, err = db.Prepare("SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? AND pd_id=?;")
-	if err != nil {
-		panic(err)
+	if order.getOrder, err = db.Prepare(getOrder); err != nil {
+		log.Println(err)
 	}
 
-	order.getPdNameAndPrice, err = db.Prepare("SELECT product_name, price FROM product WHERE pd_id=? AND pd_id>0;")
-	if err != nil {
-		panic(err)
+	if order.getPd, err = db.Prepare(getPd); err != nil {
+		log.Println(err)
 	}
 
 	return order
 }
 
 // AddOrder add order into order of specific user by user id
-func (o *OrderDB) AddOrder(uid, pdid, amount int, date time.Time) error {
+func (dt Data) AddOrder(uid, pdid, amount int, date time.Time) error {
 
-	_, err := o.insert.Exec(uid, pdid, amount, "unknown", date)
+	_, err := dt.order.add.Exec(uid, pdid, amount, "unknown", date)
 	return err
 }
 
-// Delete order by user id and product id
-func (o *OrderDB) Delete(uid, pdid int) error {
-	_, err := o._delete.Exec(uid, pdid)
+// DeleteOrder order by user id and product id
+func (dt Data) DeleteOrder(uid, pdid int) error {
+	_, err := dt.order.del.Exec(uid, pdid)
 	return err
 }
 
 // GetOrderByUIDAndPdid return order by user id and product id
-func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
-	rows, err := o.getOrder.Query(uid, pdid)
+func (dt Data) GetOrderByUIDAndPdid(uid, pdid int) Order {
+	rows, err := dt.order.getOrder.Query(uid, pdid)
 	if err != nil {
 		log.Println(err)
 		return Order{}
@@ -106,14 +108,14 @@ func (o *OrderDB) GetOrderByUIDAndPdid(uid, pdid int) Order {
 		}
 	}
 
-	od.PdName, od.Price = o.getPdNameAndPriceByPdID(pdid)
+	od.PdName, od.Price = dt.getPdNameAndPrice(pdid)
 
 	return od
 }
 
 // GetAllOrder return all order with type Order, need argument user id
-func (o *OrderDB) GetAllOrder(uid int) (ods []Order) {
-	rows, err := o.getall.Query(uid)
+func (dt Data) GetAllOrder(uid int) (ods []Order) {
+	rows, err := dt.order.getAll.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}
@@ -129,17 +131,17 @@ func (o *OrderDB) GetAllOrder(uid int) (ods []Order) {
 	}
 
 	for i, v := range ods {
-		ods[i].PdName, ods[i].Price = o.getPdNameAndPriceByPdID(v.Pdid)
+		ods[i].PdName, ods[i].Price = dt.getPdNameAndPrice(v.Pdid)
 	}
 
 	return
 }
 
-func (o *OrderDB) getPdNameAndPriceByPdID(pdid int) (string, int) {
+func (dt Data) getPdNameAndPrice(pdid int) (string, int) {
 	var name string
 	var price int
 
-	rows, err := o.getPdNameAndPrice.Query(pdid)
+	rows, err := dt.order.getPd.Query(pdid)
 	if err != nil {
 		log.Println(err)
 		return "", -1

@@ -5,25 +5,16 @@ import (
 	"log"
 )
 
-const messageTable = `CREATE TABLE IF NOT EXISTS message(
-						message_id int NOT NULL,
-						sender_uid int NOT NULL,
-						receiver_uid int NOT NULL,
-						text varchar(128) NOT NULL,
-						PRIMARY KEY(message_id),
-						FOREIGN KEY(sender_uid) REFERENCES user,
-						FOREIGN KEY(receiver_uid) REFERENCES user
-					);`
-
-// MessageDB contain funcions to use
-type MessageDB struct {
-	all          *sql.Stmt
-	add          *sql.Stmt
-	getnew       *sql.Stmt
-	getold       *sql.Stmt
-	maxid        *sql.Stmt
-	getNameByUID *sql.Stmt
-}
+const messageTable = `
+CREATE TABLE IF NOT EXISTS message(
+	message_id int NOT NULL,
+	sender_uid int NOT NULL,
+	receiver_uid int NOT NULL,
+	text varchar(128) NOT NULL,
+	PRIMARY KEY(message_id),
+	FOREIGN KEY(sender_uid) REFERENCES user,
+	FOREIGN KEY(receiver_uid) REFERENCES user
+);`
 
 // Messages struct contain all message with contactor name
 type Messages struct {
@@ -46,59 +37,70 @@ type MessID struct {
 	text        string
 }
 
-// MessageDBInit prepare function for database using
-func MessageDBInit(db *sql.DB) *MessageDB {
+type messageStmt struct {
+	all     *sql.Stmt
+	add     *sql.Stmt
+	getNew  *sql.Stmt
+	getOld  *sql.Stmt
+	maxID   *sql.Stmt
+	getName *sql.Stmt
+}
+
+func messagePrepare(db *sql.DB) *messageStmt {
 	var err error
-	message := new(MessageDB)
+	message := new(messageStmt)
 
-	message.all, err = db.Prepare("SELECT * FROM message;")
-	if err != nil {
-		panic(err)
+	const (
+		all    = "SELECT * FROM message;"
+		add    = "INSERT INTO message VALUES(?,?,?,?);"
+		getOld = `
+			SELECT text, sender_uid
+			FROM message
+			WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
+			ORDER BY message_id ASC;
+			`
+		getNew = `
+			SELECT text, sender_uid
+			FROM message
+			WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
+			ORDER BY message_id DESC;
+			`
+		maxID   = "SELECT max(message_id) FROM message;"
+		getName = "SELECT name FROM user WHERE uid=? AND uid>0;"
+	)
+
+	if message.all, err = db.Prepare(all); err != nil {
+		log.Println(err)
 	}
 
-	message.add, err = db.Prepare("INSERT INTO message VALUES(?,?,?,?);")
-	if err != nil {
-		panic(err)
+	if message.add, err = db.Prepare(add); err != nil {
+		log.Println(err)
 	}
 
-	message.getold, err = db.Prepare(`
-		SELECT text, sender_uid
-		FROM message
-		WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
-		ORDER BY message_id ASC;
-	`)
-	if err != nil {
-		panic(err)
+	if message.getOld, err = db.Prepare(getOld); err != nil {
+		log.Println(err)
 	}
 
-	message.getnew, err = db.Prepare(`
-		SELECT text, sender_uid
-		FROM message
-		WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
-		ORDER BY message_id DESC;
-	`)
-	if err != nil {
-		panic(err)
+	if message.getNew, err = db.Prepare(getNew); err != nil {
+		log.Println(err)
 	}
 
-	message.maxid, err = db.Prepare("SELECT max(message_id) FROM message;")
-	if err != nil {
-		panic(err)
+	if message.maxID, err = db.Prepare(maxID); err != nil {
+		log.Println(err)
 	}
 
-	message.getNameByUID, err = db.Prepare("SELECT name FROM user WHERE uid=? AND uid>0;")
-	if err != nil {
-		panic(err)
+	if message.getName, err = db.Prepare(getName); err != nil {
+		log.Println(err)
 	}
 
 	return message
 }
 
 // AddMessage record a new message between two users
-func (m *MessageDB) AddMessage(senderUID, receiverUID int, messageText string) error {
+func (dt Data) AddMessage(senderUID, receiverUID int, messageText string) error {
 	var mID int
 
-	rows, err := m.maxid.Query()
+	rows, err := dt.message.maxID.Query()
 	if err != nil {
 		return err
 	}
@@ -112,33 +114,33 @@ func (m *MessageDB) AddMessage(senderUID, receiverUID int, messageText string) e
 
 	mID++
 
-	_, err = m.add.Exec(mID, senderUID, receiverUID, messageText)
+	_, err = dt.message.add.Exec(mID, senderUID, receiverUID, messageText)
 	return err
 }
 
 // GetMessages return all messge between two users
-func (m *MessageDB) GetMessages(localUID, remoteUID int, ascend bool) Messages {
+func (dt Data) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 
 	var rows *sql.Rows
 	var err error
 
 	if ascend {
-		rows, err = m.getnew.Query(localUID, remoteUID, localUID, remoteUID)
-		if err != nil {
-			log.Println(err)
-			return Messages{}
-		}
+		rows, err = dt.message.getNew.Query(localUID, remoteUID, localUID, remoteUID)
 	} else {
-		rows, err = m.getold.Query(localUID, remoteUID, localUID, remoteUID)
-		if err != nil {
-			log.Println(err)
-			return Messages{}
-		}
+		rows, err = dt.message.getOld.Query(localUID, remoteUID, localUID, remoteUID)
 	}
 
-	var all []message
-	var ms message
-	var tmpID int
+	if err != nil {
+		log.Println(err)
+		return Messages{}
+	}
+
+	var (
+		all   []message
+		ms    message
+		tmpID int
+	)
+
 	for rows.Next() {
 		err = rows.Scan(&ms.Text, &tmpID)
 		if err != nil {
@@ -156,13 +158,13 @@ func (m *MessageDB) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 		all = append(all, ms)
 	}
 
-	return Messages{ContactorName: m.getName(remoteUID), Content: all}
+	return Messages{ContactorName: dt.getName(remoteUID), Content: all}
 }
 
 // GetAll return all messages (debugging only)
-func (m *MessageDB) GetAll() (all []MessID) {
+func (dt Data) GetAll() (all []MessID) {
 
-	rows, err := m.all.Query()
+	rows, err := dt.message.all.Query()
 	if err != nil {
 		log.Println(err)
 		return
@@ -182,9 +184,9 @@ func (m *MessageDB) GetAll() (all []MessID) {
 	return
 }
 
-func (m *MessageDB) getName(uid int) (name string) {
+func (dt Data) getName(uid int) (name string) {
 
-	rows, err := m.getNameByUID.Query(uid)
+	rows, err := dt.message.getName.Query(uid)
 	if err != nil {
 		log.Println(err)
 		return

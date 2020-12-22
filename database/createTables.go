@@ -29,7 +29,7 @@ func createTables() {
 
 func createUserTable(db *sql.DB) {
 	_, err := db.Exec(userTable)
-	tableLogger("user", err)
+	logger("user", err)
 
 	// insert one value into user in order to prevent max(uid) = null
 	db.Exec("INSERT INTO user VALUES(0, \"N/A\", \"N/A\", \"superuser\", 0.0);")
@@ -37,7 +37,7 @@ func createUserTable(db *sql.DB) {
 
 func createProductTable(db *sql.DB) {
 	_, err := db.Exec(productTable)
-	tableLogger("product", err)
+	logger("product", err)
 
 	// insert one value into product in order to prevent max(pd_id) = null
 	db.Exec("INSERT INTO product VALUES(0, \"N/A\", 0, \"N/A\", 0, 0.0, 0, false, \"2006-01-02\");")
@@ -45,17 +45,17 @@ func createProductTable(db *sql.DB) {
 
 func createBidTable(db *sql.DB) {
 	_, err := db.Exec(bidTable)
-	tableLogger("bid", err)
+	logger("bid", err)
 }
 
 func createCartTable(db *sql.DB) {
 	_, err := db.Exec(cartTable)
-	tableLogger("cart", err)
+	logger("cart", err)
 }
 
 func createHistoryTable(db *sql.DB) {
 	_, err := db.Exec(historyTable)
-	tableLogger("history", err)
+	logger("history", err)
 
 	// insert one value into history in order to prevent max(seq) = null
 	db.Exec("INSERT INTO history VALUES(0, 0, 0);")
@@ -63,18 +63,18 @@ func createHistoryTable(db *sql.DB) {
 
 func createOrderTable(db *sql.DB) {
 	_, err := db.Exec(ordersTable)
-	tableLogger("orders", err)
+	logger("orders", err)
 }
 
 func createMessageTable(db *sql.DB) {
 	_, err := db.Exec(messageTable)
-	tableLogger("message", err)
+	logger("message", err)
 
 	// insert one value into message in order to prevent max(mid) = null
 	db.Exec("INSERT INTO history VALUES(0, 0, 0, \"none\");")
 }
 
-func tableLogger(table string, err error) {
+func logger(table string, err error) {
 	if err != nil {
 		log.Fatalf("Error Creating Table (%s) -> %v\n", table, err)
 	}
