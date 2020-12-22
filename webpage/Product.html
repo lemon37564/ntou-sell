@@ -51,7 +51,7 @@ function ShowProduct(){
 					var content5 = '<tr><td><h4 style="display:inline;margin-left:210px;">Price:'+datastr.Price+'</h4></td></tr>';
 					var content6 = '<tr><td><h4 style="display:inline;margin-left:210px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
 				    var content7 = '<tr><td><h4 style="display:inline;margin-left:210px;">Time:~'+datastr.Date+'</h4></td></tr>';
-				    var content8 = '<tr><td><input id="bidSet" style="margin-left=100px;" name="money" size="15"><button style="background:rgba(144,202,249,1);width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
+				    var content8 = '<tr><td><input id="bidSet" style="display:inline;margin-left:210px;" name="money" size="35"><button style="background:rgba(144,202,249,1);width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
 				    productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7+content8;
 			    }
 				var request2=new XMLHttpRequest;
@@ -224,12 +224,12 @@ function addToCart(){
     request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader("Content-Type");
-            if (request.responseText=='true'){ // Make sure response is text
+            if (request.responseText===true){    //請記得加入回傳值的判斷
     	        alert("加入購物車成功");
      	        window.location.href="MainPage.html";
             }
         }
-        else if(request.responseText=='false'){
+        else if(request.responseText===false){
 	    alert("加入購物車失敗，請確認購物車內是否已有重複商品。");
             window.location.href="Cart.html";
 	}
