@@ -238,7 +238,25 @@ function addToCart(){
 }
 
 function bid(){
-	
+    var str="/backend/bid/set?pdid=";
+    str=str+localStorage.getItem("Pdid")+"&money="+getElementById("bidSet").value;
+    var request=new XMLHttpRequest;
+    request.open("get",str);
+        
+    request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader("Content-Type");
+            if (request.responseText===true){    //請記得加入回傳值的判斷
+    	        alert("加價成功");
+     	        //window.location.href="MainPage.html";
+            }
+        }
+        else if(request.responseText===false){
+	    alert("加價失敗");
+            //window.location.href="Cart.html";
+	}
+    }
+    request.send(null);
 }
 
 
