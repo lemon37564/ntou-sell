@@ -9,7 +9,7 @@
 <title>海大拍賣商品頁</title>
 
 <script type="text/javascript">
-
+//以下為載入商品資訊的function
 window.onload=ShowProduct;
 
 function ShowProduct(){
@@ -51,7 +51,7 @@ function ShowProduct(){
 					var content5 = '<tr><td><h4 style="display:inline;margin-left:210px;">Price:'+datastr.Price+'</h4></td></tr>';
 					var content6 = '<tr><td><h4 style="display:inline;margin-left:210px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
 				    var content7 = '<tr><td><h4 style="display:inline;margin-left:210px;">Time:~'+datastr.Date+'</h4></td></tr>';
-				    var content8 = '<tr><td><input id="bidSet" name="money" size="15"><button style="background:rgba(144,202,249,1);margin-left:75px;width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
+				    var content8 = '<tr><td><input id="bidSet" style="margin-left=100px;" name="money" size="15"><button style="background:rgba(144,202,249,1);width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
 				    productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7+content8;
 			    }
 				var request2=new XMLHttpRequest;
