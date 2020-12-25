@@ -6,8 +6,7 @@ import (
 )
 
 // TestInsert tests AddNewUser and AddNewProduct
-func TestInsert() {
-	dt := OpenAndInit()
+func TestInsert(dt *Data) {
 
 	err := dt.AddNewUser("1234", "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "測試用帳號")
 	if err != nil {

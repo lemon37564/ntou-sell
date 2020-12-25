@@ -61,25 +61,25 @@ func cartPrepare(db *sql.DB) *cartStmt {
 
 // AddProductIntoCart add product into cart with pdid and amount
 func (dt Data) AddProductIntoCart(uid, pdid, amount int) error {
-	_, err := dt.cart.add.Exec(uid, pdid, amount)
+	_, err := dt.Cart.add.Exec(uid, pdid, amount)
 	return err
 }
 
 // DeleteProductFromCart delete product from cart with product id
 func (dt Data) DeleteProductFromCart(id, pdid int) error {
-	_, err := dt.cart.del.Exec(id, pdid)
+	_, err := dt.Cart.del.Exec(id, pdid)
 	return err
 }
 
 // UpdateCartAmount changes amount of product in cart of a user
 func (dt Data) UpdateCartAmount(uid, pdid, newAmount int) error {
-	_, err := dt.cart.upAmt.Exec(newAmount, uid, pdid)
+	_, err := dt.Cart.upAmt.Exec(newAmount, uid, pdid)
 	return err
 }
 
 // GetAllProductOfUser return all product id and amount by user id
 func (dt Data) GetAllProductOfUser(uid int) (all []Product, totalPrice int) {
-	rows, err := dt.cart.get.Query(uid)
+	rows, err := dt.Cart.get.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}

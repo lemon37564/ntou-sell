@@ -100,7 +100,7 @@ func messagePrepare(db *sql.DB) *messageStmt {
 func (dt Data) AddMessage(senderUID, receiverUID int, messageText string) error {
 	var mID int
 
-	rows, err := dt.message.maxID.Query()
+	rows, err := dt.Message.maxID.Query()
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (dt Data) AddMessage(senderUID, receiverUID int, messageText string) error 
 
 	mID++
 
-	_, err = dt.message.add.Exec(mID, senderUID, receiverUID, messageText)
+	_, err = dt.Message.add.Exec(mID, senderUID, receiverUID, messageText)
 	return err
 }
 
@@ -125,9 +125,9 @@ func (dt Data) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 	var err error
 
 	if ascend {
-		rows, err = dt.message.getNew.Query(localUID, remoteUID, localUID, remoteUID)
+		rows, err = dt.Message.getNew.Query(localUID, remoteUID, localUID, remoteUID)
 	} else {
-		rows, err = dt.message.getOld.Query(localUID, remoteUID, localUID, remoteUID)
+		rows, err = dt.Message.getOld.Query(localUID, remoteUID, localUID, remoteUID)
 	}
 
 	if err != nil {
@@ -164,7 +164,7 @@ func (dt Data) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 // GetAllMessages return all messages (debugging only)
 func (dt Data) GetAllMessages() (all []MessID) {
 
-	rows, err := dt.message.all.Query()
+	rows, err := dt.Message.all.Query()
 	if err != nil {
 		log.Println(err)
 		return
@@ -186,7 +186,7 @@ func (dt Data) GetAllMessages() (all []MessID) {
 
 func (dt Data) getName(uid int) (name string) {
 
-	rows, err := dt.message.getName.Query(uid)
+	rows, err := dt.Message.getName.Query(uid)
 	if err != nil {
 		log.Println(err)
 		return

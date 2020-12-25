@@ -101,7 +101,7 @@ func userPrepare(db *sql.DB) *userStmt {
 func (dt Data) AddNewUser(account, passwordHash, name string) error {
 	var UID int
 
-	rows, err := dt.user.maxID.Query()
+	rows, err := dt.User.maxID.Query()
 	if err != nil {
 		return err
 	}
@@ -115,13 +115,13 @@ func (dt Data) AddNewUser(account, passwordHash, name string) error {
 
 	UID++
 
-	_, err = dt.user.add.Exec(UID, account, passwordHash, name, 0.0)
+	_, err = dt.User.add.Exec(UID, account, passwordHash, name, 0.0)
 	return err
 }
 
 // DeleteUser delete data of specific user by account
 func (dt Data) DeleteUser(uid int, password string) error {
-	_, err := dt.user.del.Exec(uid, password)
+	_, err := dt.User.del.Exec(uid, password)
 	return err
 }
 
@@ -129,7 +129,7 @@ func (dt Data) DeleteUser(uid int, password string) error {
 func (dt Data) Login(account, passwordHash string) (int, bool) {
 	var cnt, uid int
 
-	rows, err := dt.user.login.Query(account, passwordHash)
+	rows, err := dt.User.login.Query(account, passwordHash)
 	if err != nil {
 		panic(err)
 	}
@@ -148,26 +148,26 @@ func (dt Data) Login(account, passwordHash string) (int, bool) {
 
 // ChangeUserPassword updates passeword of a user by account
 func (dt Data) ChangeUserPassword(account, newpass string) error {
-	_, err := dt.user.upPass.Exec(account, newpass)
+	_, err := dt.User.upPass.Exec(account, newpass)
 	return err
 }
 
 // ChangeUserName updates name of a user by account
 func (dt Data) ChangeUserName(uid int, newname string) error {
-	_, err := dt.user.upName.Exec(uid, newname)
+	_, err := dt.User.upName.Exec(uid, newname)
 	return err
 }
 
 // ChangeUserEval updates evaluation of a user by account and new eval
 func (dt Data) ChangeUserEval(account string, eval float64) error {
-	_, err := dt.user.upEval.Exec(account, eval)
+	_, err := dt.User.upEval.Exec(account, eval)
 	return err
 }
 
 // GetUIDFromAccount return user id by account
 func (dt Data) GetUIDFromAccount(account string) int {
 	var id int
-	rows, err := dt.user.getUID.Query(account)
+	rows, err := dt.User.getUID.Query(account)
 	if err != nil {
 		log.Println(err)
 		return -1
@@ -187,7 +187,7 @@ func (dt Data) GetUIDFromAccount(account string) int {
 // GetAccountFromUID return account by user id
 func (dt Data) GetAccountFromUID(uid int) string {
 	var account string
-	rows, err := dt.user.getAcnt.Query(uid)
+	rows, err := dt.User.getAcnt.Query(uid)
 	if err != nil {
 		log.Println(err)
 		return ""

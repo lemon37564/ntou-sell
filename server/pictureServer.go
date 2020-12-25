@@ -25,7 +25,7 @@ func (ser Server) picHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch path["key"] {
 	case "help":
-		fmt.Fprint(w, PicHelp)
+		fmt.Fprint(w, PicAPI)
 	case "upload":
 		ser.picUpload(w, r, "test.jpg")
 	case "get":

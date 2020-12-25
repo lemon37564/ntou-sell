@@ -89,30 +89,30 @@ func bidPrepare(db *sql.DB) *bidStmt {
 
 // AddBid add new bid information into database
 func (dt Data) AddBid(pdid int, deadline time.Time, lowestMoney int, uid int) error {
-	_, err := dt.bid.add.Exec(pdid, deadline, nil, lowestMoney, uid)
+	_, err := dt.Bid.add.Exec(pdid, deadline, nil, lowestMoney, uid)
 	return err
 }
 
 // DeleteBid delete specific bid with pd_id
 func (dt Data) DeleteBid(pdid int) error {
-	_, err := dt.bid.del.Exec(pdid)
+	_, err := dt.Bid.del.Exec(pdid)
 	return err
 }
 
 // WonBid update bidder_id and money if anyone won the bid at a time
 func (dt Data) WonBid(pdid, bidderID, money int) error {
-	_, err := dt.bid.upUID.Exec(bidderID, pdid)
+	_, err := dt.Bid.upUID.Exec(bidderID, pdid)
 	if err != nil {
 		return err
 	}
 
-	_, err = dt.bid.upMon.Exec(money, pdid)
+	_, err = dt.Bid.upMon.Exec(money, pdid)
 	return err
 }
 
 // GetBidByID return informations by product id
 func (dt Data) GetBidByID(pdid int) (bid Bid) {
-	rows, err := dt.bid.getBid.Query(pdid)
+	rows, err := dt.Bid.getBid.Query(pdid)
 	if err != nil {
 		log.Println(err)
 	}
@@ -129,7 +129,7 @@ func (dt Data) GetBidByID(pdid int) (bid Bid) {
 
 // GetAllBidProducts return literally product info by pdid
 func (dt Data) GetAllBidProducts(pdid int) (pd Product) {
-	rows, err := dt.bid.getBid.Query(pdid)
+	rows, err := dt.Bid.getBid.Query(pdid)
 	if err != nil {
 		log.Println(err)
 	}
@@ -146,7 +146,7 @@ func (dt Data) GetAllBidProducts(pdid int) (pd Product) {
 
 // GetAllBid return all bid product informations
 func (dt Data) GetAllBid() (all []Bid) {
-	rows, err := dt.bid.getAll.Query()
+	rows, err := dt.Bid.getAll.Query()
 	if err != nil {
 		log.Println(err)
 	}

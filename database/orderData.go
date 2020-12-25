@@ -81,19 +81,19 @@ func orderPrepare(db *sql.DB) *orderStmt {
 // AddOrder add order into order of specific user by user id
 func (dt Data) AddOrder(uid, pdid, amount int, date time.Time) error {
 
-	_, err := dt.order.add.Exec(uid, pdid, amount, "unknown", date)
+	_, err := dt.Order.add.Exec(uid, pdid, amount, "unknown", date)
 	return err
 }
 
 // DeleteOrder order by user id and product id
 func (dt Data) DeleteOrder(uid, pdid int) error {
-	_, err := dt.order.del.Exec(uid, pdid)
+	_, err := dt.Order.del.Exec(uid, pdid)
 	return err
 }
 
 // GetOrderByUIDAndPdid return order by user id and product id
 func (dt Data) GetOrderByUIDAndPdid(uid, pdid int) Order {
-	rows, err := dt.order.getOrder.Query(uid, pdid)
+	rows, err := dt.Order.getOrder.Query(uid, pdid)
 	if err != nil {
 		log.Println(err)
 		return Order{}
@@ -115,7 +115,7 @@ func (dt Data) GetOrderByUIDAndPdid(uid, pdid int) Order {
 
 // GetAllOrder return all order with type Order, need argument user id
 func (dt Data) GetAllOrder(uid int) (ods []Order) {
-	rows, err := dt.order.getAll.Query(uid)
+	rows, err := dt.Order.getAll.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}
@@ -141,7 +141,7 @@ func (dt Data) getPdNameAndPrice(pdid int) (string, int) {
 	var name string
 	var price int
 
-	rows, err := dt.order.getPd.Query(pdid)
+	rows, err := dt.Order.getPd.Query(pdid)
 	if err != nil {
 		log.Println(err)
 		return "", -1

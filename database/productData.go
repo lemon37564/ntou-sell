@@ -127,7 +127,7 @@ func productPrepare(db *sql.DB) *productStmt {
 // AddProduct add single product with product name, price, description, amount, seller id, bid and date into database
 func (dt Data) AddProduct(name string, price int, description string, amount int, sellerUID int, bid bool, date time.Time) (int, error) {
 	var pdid int
-	rows, err := dt.product.maxPID.Query()
+	rows, err := dt.Product.maxPID.Query()
 	if err != nil {
 		log.Println(err)
 		return -1, err
@@ -141,37 +141,37 @@ func (dt Data) AddProduct(name string, price int, description string, amount int
 		}
 	}
 
-	_, err = dt.product.add.Exec(pdid+1, name, price, description, amount, 0.0, sellerUID, bid, date)
+	_, err = dt.Product.add.Exec(pdid+1, name, price, description, amount, 0.0, sellerUID, bid, date)
 	return pdid, err
 }
 
 // DeleteProduct with product id
 func (dt Data) DeleteProduct(uid int, pdname string) error {
-	_, err := dt.product.del.Exec(uid, pdname)
+	_, err := dt.Product.del.Exec(uid, pdname)
 	return err
 }
 
 // UpdateProductName with product id and new name
 func (dt Data) UpdateProductName(pdid int, name string) error {
-	_, err := dt.product.upName.Exec(name, pdid)
+	_, err := dt.Product.upName.Exec(name, pdid)
 	return err
 }
 
 // UpdateProductPrice with prouct id and new price
 func (dt Data) UpdateProductPrice(pdid, price int) error {
-	_, err := dt.product.upPrc.Exec(price, pdid)
+	_, err := dt.Product.upPrc.Exec(price, pdid)
 	return err
 }
 
 // UpdateProductAmount with prdouct id and new amount
 func (dt Data) UpdateProductAmount(pdid, amount int) error {
-	_, err := dt.product.upAmt.Exec(amount, pdid)
+	_, err := dt.Product.upAmt.Exec(amount, pdid)
 	return err
 }
 
 // UpdateProductDescription with product id and new description
 func (dt Data) UpdateProductDescription(pdid int, description string) error {
-	_, err := dt.product.upDes.Exec(description, pdid)
+	_, err := dt.Product.upDes.Exec(description, pdid)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -181,13 +181,13 @@ func (dt Data) UpdateProductDescription(pdid int, description string) error {
 
 // UpdateProductEval with product id and new eval
 func (dt Data) UpdateProductEval(pdid int, eval float64) error {
-	_, err := dt.product.upEval.Exec(eval, pdid)
+	_, err := dt.Product.upEval.Exec(eval, pdid)
 	return err
 }
 
 // GetProductInfoFromPdID return info of specific product with product id
 func (dt Data) GetProductInfoFromPdID(pdid int) (pd Product) {
-	rows, err := dt.product.getInfo.Query(pdid)
+	rows, err := dt.Product.getInfo.Query(pdid)
 	if err != nil {
 		log.Println(err)
 		return
@@ -205,7 +205,7 @@ func (dt Data) GetProductInfoFromPdID(pdid int) (pd Product) {
 
 // NewestProduct return newest number of products
 func (dt Data) NewestProduct(number int) (all []Product) {
-	rows, err := dt.product.newest.Query(number)
+	rows, err := dt.Product.newest.Query(number)
 	if err != nil {
 		log.Println(err)
 	}
@@ -227,7 +227,7 @@ func (dt Data) NewestProduct(number int) (all []Product) {
 func (dt Data) SearchProduct(keyword string) (all []Product) {
 	keyword = "%" + keyword + "%"
 
-	rows, err := dt.product.search.Query(keyword)
+	rows, err := dt.Product.search.Query(keyword)
 	if err != nil {
 		log.Println(err)
 	}
@@ -249,7 +249,7 @@ func (dt Data) SearchProduct(keyword string) (all []Product) {
 func (dt Data) SearchProductWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
 	keyword = "%" + keyword + "%"
 
-	rows, err := dt.product.filter.Query(keyword, priceMin, priceMax, eval)
+	rows, err := dt.Product.filter.Query(keyword, priceMin, priceMax, eval)
 	if err != nil {
 		log.Println(err)
 	}

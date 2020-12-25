@@ -81,13 +81,13 @@ func historyPrepare(db *sql.DB) *historyStmt {
 func (dt Data) AddHistory(uid, pdid int) error {
 	// do this is to prevent history duplicate (delete the old one and add a new one)
 	// then the new one will be close to the front.
-	_, err := dt.history.del.Exec(uid, pdid)
+	_, err := dt.History.del.Exec(uid, pdid)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	rows, err := dt.history.maxSeq.Query()
+	rows, err := dt.History.maxSeq.Query()
 	if err != nil {
 		log.Println(err)
 		return err
@@ -105,19 +105,19 @@ func (dt Data) AddHistory(uid, pdid int) error {
 
 	seq++
 
-	_, err = dt.history.add.Exec(uid, pdid, seq)
+	_, err = dt.History.add.Exec(uid, pdid, seq)
 	return err
 }
 
 // DeleteHistory with user id and product id
 func (dt Data) DeleteHistory(uid, pdid int) error {
-	_, err := dt.history.del.Exec(uid, pdid)
+	_, err := dt.History.del.Exec(uid, pdid)
 	return err
 }
 
 // DeleteAllHistory deletes all history of a user by user id
 func (dt Data) DeleteAllHistory(uid int) error {
-	_, err := dt.history.delAll.Query()
+	_, err := dt.History.delAll.Query()
 	return err
 }
 
@@ -131,9 +131,9 @@ func (dt Data) GetAllHistory(uid int, amount int, newest bool) (all []Product) {
 	)
 
 	if newest {
-		rows, err = dt.history.getNew.Query(uid, amount)
+		rows, err = dt.History.getNew.Query(uid, amount)
 	} else {
-		rows, err = dt.history.getOld.Query(uid, amount)
+		rows, err = dt.History.getOld.Query(uid, amount)
 	}
 
 	if err != nil {
@@ -160,7 +160,7 @@ func (dt Data) GetAllHistory(uid int, amount int, newest bool) (all []Product) {
 
 func (dt Data) getPdByPdid(pdid int) (pd Product) {
 
-	rows, err := dt.history.getPd.Query(pdid)
+	rows, err := dt.History.getPd.Query(pdid)
 	if err != nil {
 		log.Println(err)
 		return

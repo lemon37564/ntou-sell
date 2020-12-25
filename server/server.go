@@ -1,11 +1,11 @@
 package server
 
 import (
-	"database/sql"
 	"log"
 	"net/http"
 	"os"
 	"runtime"
+	"se/database"
 	"se/server/backend"
 	"sync"
 	"time"
@@ -15,7 +15,6 @@ import (
 
 // Server handle all services
 type Server struct {
-	DB *sql.DB
 	Ur *backend.User
 	Pd *backend.Product
 	Od *backend.Order
@@ -23,6 +22,19 @@ type Server struct {
 	Bd *backend.Bid
 	Ct *backend.Cart
 	Ms *backend.Message
+}
+
+func NewServer() *Server {
+	data := database.OpenAndInit()
+
+	return &Server{
+		Ur: backend.UserInit(data),
+		Pd: backend.ProductInit(data),
+		Od: backend.OrderInit(data),
+		Ht: backend.HistoryInit(data),
+		Bd: backend.BidInit(data),
+		Ct: backend.CartInit(data),
+		Ms: backend.MessageInit(data)}
 }
 
 // Serve start all functions provided for user
