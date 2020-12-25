@@ -341,59 +341,35 @@ class.myButton:active {
 <div class="border"><!--版面-->
     <h1 style="text-align: left;font-size:50px">販賣</h1>
     
-    <form  style="text-align: left;height: 50">
+    <form  style="text-align: left;height: 50" action="backend/product/postadd" method="post" enctype="multipart/form-data">
     <label style="font-size: 45px">Product Name:&nbsp;&nbsp;</label>
-    <input type="text" style="font-size:45px" id="pdname" name="pdname" value=""><br><br>
-    <label style="font-size:45px">Product Picture:</label>
-    <input type="text" style="font-size:45px" id="pdpic" name="pdpic" value=""><br><br>
+    <input type="text" style="font-size:45px" id="pdname" name="name" value=""><br><br>
+    <label style="font-size:45px">Product Price:</label>
+    <input type="text" style="font-size:45px" id="pdprice" name="price" value=""><br><br>
     <label style="font-size:45px">Description:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <input type="text" style="font-size:45px" id="desc" name="desc" value=""><br><br>
+    <input type="text" style="font-size:45px" id="desc" name="description" value=""><br><br>
+    <label style="font-size: 20px">Amount:</label>
+    <input type="text" style="font-size:20px" id="amount" name="amount" value=""><br> 
+    <label style="font-size: 20px">Bid:</label>  
+    <input type="checkbox" style="width:30px;height:30px;" id="box" name="bid" value="">
     <label style="font-size:45px">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <input type="text" style="font-size:45px" id="date" name="date" value=""><h1 style="margin-left:0px">ex:(2016-01-01)</h1>
-    </form> 
-    <form action="/backend/pics/upload" method="post" enctype="multipart/form-data">
-
-
-    <input type="file" id="progressbarTWInput" name="uploadfile" accept="image/gif, image/jpeg, image/png" />
-        <div class="divcss5">
-            <img id="preview_progressbarTW_img" src="#" />
-        </div>
-    
+    <input type="text" style="font-size:45px" id="date" name="date" value="">
+    <h1 style="margin-left:0px">ex:(2016-01-01)</h1>
+    <input type="file" id="progressbarTWInput" name="uploadfile" accept="image/gif, image/jpeg, image/png" />  
     <!--<input type="hidden" name="token" value="{{.}}"/>-->
     <input type="submit" value="upload" />
-        
-     
-     </form>
-     <input id="file" type="file" name="file"/>
-
-     <button id="upload">上傳檔案</button>
+    </form> 
    
-    <!--<button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>-->
-    
-    <div class="littbord1"><!--左下角框框-->
-       
-        <form style="text-align: left">
-            <label style="font-size: 20px">Price:   </label>
-        <input type="text" style="font-size:20px" id="price" name="price" value=""><br>
-        <label style="font-size: 20px">Number:</label>
-        <input type="text" style="font-size:20px" id="number" name="number" value=""><br>
 
-        <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submiit()">確定</button>
-        </form>
-      
+    
+    <div class="divcss5">
+        <img id="preview_progressbarTW_img" src="#" />
     </div>
-    <div class="littbord2"><!--右下角框框-->
-        <form style="text-align: left">
-        <label style="font-size: 20px">InitPrice:</label>
-       
-        <input type="text" style="font-size:20px" id="initprice" name="initprice" value=""><br>
-        <label style="font-size: 20px">DateLine:</label>
-        <input type="text" style="font-size:20px" id="dateline" name="dateline" value=""><br>
-            
-        <!--<input type="submit" style="font-size:20px" value="Submit">-->
-        <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submiit()">確定</button>
-        </form>
-    </div>
+    
+     
+    <!--<button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>-->
+   
+  
     <script>
     //toshow pic
 
