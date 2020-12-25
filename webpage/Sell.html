@@ -194,7 +194,49 @@ class.myButton:active {
             }
         }
     
-    
+        $(function () {
+
+            $("#upload").click(function(){
+
+                var formData = new FormData();
+
+                formData.append('file', $('#file')[0].files[0]);
+
+ 
+                $.ajax({
+
+                url: "/backend/pics/upload",
+
+                type: "POST",
+
+                data: formData,
+
+                /**
+
+                *必須false才會自動加上正確的Content-Type
+
+*/
+
+                contentType: false,
+
+                /**
+
+                * 必須false才會避開jQuery對 formdata 的預設處理
+
+                * XMLHttpRequest會對 formdata 進行正確的處理
+
+                */
+
+                processData: false,
+    success: function (data) {
+    alert("success");
+    },
+    error: function () {
+    alert("上傳失敗！");
+    }
+    });
+    })
+    });
     function submiit() {
         
         var temp = "";
@@ -328,7 +370,9 @@ class.myButton:active {
         
      
      </form>
-    
+     <input id="file" type="file" name="file"/>
+
+     <button id="upload">上傳檔案</button>
    
     <!--<button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>-->
     
