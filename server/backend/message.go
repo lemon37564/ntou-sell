@@ -1,21 +1,18 @@
 package backend
 
 import (
-	"database/sql"
 	"encoding/json"
 	"se/database"
 )
 
 // Message is a module that handle messages
 type Message struct {
-	fn *database.MessageDB
+	fn *database.Data
 }
 
 // MessageInit inits database
-func MessageInit(db *sql.DB) (m *Message) {
-	m = new(Message)
-	m.fn = database.MessageDBInit(db)
-	return
+func MessageInit(data *database.Data) (m *Message) {
+	return &Message{fn: data}
 }
 
 // AddMessage add single message between two users
@@ -51,7 +48,7 @@ func (m *Message) GetMessages(senderUID, recieverUID int, ascend bool) string {
 
 // GetAll return all messages(for debugging only)
 func (m *Message) GetAll() string {
-	ms := m.fn.GetAll()
+	ms := m.fn.GetAllMessages()
 
 	str, err := json.Marshal(ms)
 	if err != nil {

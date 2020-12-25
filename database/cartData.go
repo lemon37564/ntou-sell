@@ -5,14 +5,15 @@ import (
 	"log"
 )
 
-const cartTable = `CREATE TABLE IF NOT EXISTS cart(
-						uid int NOT NULL,
-						pd_id int NOT NULL,
-						amount int NOT NULL,
-						PRIMARY KEY(uid, pd_id),
-						FOREIGN KEY(uid) REFERENCES user
-						FOREIGN KEY(pd_id) REFERENCES product
-					);`
+const cartTable = `
+CREATE TABLE IF NOT EXISTS cart(
+	uid int NOT NULL,
+	pd_id int NOT NULL,
+	amount int NOT NULL,
+	PRIMARY KEY(uid, pd_id),
+	FOREIGN KEY(uid) REFERENCES user,
+	FOREIGN KEY(pd_id) REFERENCES product
+);`
 
 // Cart store data of single product in user's cart
 type Cart struct {
@@ -21,70 +22,64 @@ type Cart struct {
 	Amount int
 }
 
-// CartDB contain functions to use
-type CartDB struct {
-	insert     *sql.Stmt
-	_delete    *sql.Stmt
-	updateAmnt *sql.Stmt
-	getAll     *sql.Stmt
-	debug      *sql.Stmt
+type cartStmt struct {
+	add   *sql.Stmt
+	del   *sql.Stmt
+	upAmt *sql.Stmt
+	get   *sql.Stmt
 }
 
-// CartDBInit prepare functions for database using
-func CartDBInit(db *sql.DB) *CartDB {
+func cartPrepare(db *sql.DB) *cartStmt {
 	var err error
-	cart := new(CartDB)
+	cart := new(cartStmt)
 
-	cart.insert, err = db.Prepare("INSERT INTO cart VALUES(?,?,?);")
-	if err != nil {
-		panic(err)
+	const (
+		add   = "INSERT INTO cart VALUES(?,?,?);"
+		del   = "DELETE FROM cart WHERE uid=? AND pd_id=?;"
+		upAmt = "UPDATE cart SET amount=? WHERE uid=? AND pd_id=?;"
+		get   = "SELECT * FROM product WHERE pd_id IN (SELECT pd_id FROM cart WHERE uid=?);"
+	)
+
+	if cart.add, err = db.Prepare(add); err != nil {
+		log.Println(err)
 	}
 
-	cart._delete, err = db.Prepare("DELETE FROM cart WHERE uid=? AND pd_id=?;")
-	if err != nil {
-		panic(err)
+	if cart.del, err = db.Prepare(del); err != nil {
+		log.Println(err)
 	}
 
-	cart.updateAmnt, err = db.Prepare("UPDATE cart SET amount=? WHERE uid=? AND pd_id=?;")
-	if err != nil {
-		panic(err)
+	if cart.upAmt, err = db.Prepare(upAmt); err != nil {
+		log.Println(err)
 	}
 
-	cart.getAll, err = db.Prepare("SELECT * FROM product WHERE pd_id IN (SELECT pd_id FROM cart WHERE uid=?);")
-	if err != nil {
-		panic(err)
-	}
-
-	cart.debug, err = db.Prepare("SELECT * FROM cart;")
-	if err != nil {
-		panic(err)
+	if cart.get, err = db.Prepare(get); err != nil {
+		log.Println(err)
 	}
 
 	return cart
 }
 
 // AddProductIntoCart add product into cart with pdid and amount
-func (c *CartDB) AddProductIntoCart(uid, pdid, amount int) error {
-	_, err := c.insert.Exec(uid, pdid, amount)
+func (dt Data) AddProductIntoCart(uid, pdid, amount int) error {
+	_, err := dt.Cart.add.Exec(uid, pdid, amount)
 	return err
 }
 
 // DeleteProductFromCart delete product from cart with product id
-func (c *CartDB) DeleteProductFromCart(id, pdid int) error {
-	_, err := c._delete.Exec(id, pdid)
+func (dt Data) DeleteProductFromCart(id, pdid int) error {
+	_, err := dt.Cart.del.Exec(id, pdid)
 	return err
 }
 
-// UpdateAmount changes amount of product in cart of a user
-// need to pass user id, product id and new amount
-func (c *CartDB) UpdateAmount(uid, pdid, amount int) error {
-	_, err := c.updateAmnt.Exec(amount)
+// UpdateCartAmount changes amount of product in cart of a user
+func (dt Data) UpdateCartAmount(uid, pdid, newAmount int) error {
+	_, err := dt.Cart.upAmt.Exec(newAmount, uid, pdid)
 	return err
 }
 
 // GetAllProductOfUser return all product id and amount by user id
-func (c *CartDB) GetAllProductOfUser(uid int) (all []Product, totalPrice int) {
-	rows, err := c.getAll.Query(uid)
+func (dt Data) GetAllProductOfUser(uid int) (all []Product, totalPrice int) {
+	rows, err := dt.Cart.get.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}
@@ -106,27 +101,4 @@ func (c *CartDB) GetAllProductOfUser(uid int) (all []Product, totalPrice int) {
 	}
 
 	return all, total
-}
-
-// Debug ing
-func (c *CartDB) Debug() (all []Cart) {
-
-	rows, err := c.debug.Query()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	for rows.Next() {
-		var ca Cart
-		err = rows.Scan(&ca.UID, &ca.PdID, &ca.Amount)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
-		all = append(all, ca)
-	}
-
-	return
 }

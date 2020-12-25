@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -11,14 +10,12 @@ import (
 
 // Product is a module that handle products
 type Product struct {
-	fn *database.ProductDB
+	fn *database.Data
 }
 
 // ProductInit return product module
-func ProductInit(db *sql.DB) *Product {
-	p := new(Product)
-	p.fn = database.ProductDBInit(db)
-	return p
+func ProductInit(data *database.Data) *Product {
+	return &Product{fn: data}
 }
 
 // AddProduct adds a product with multiple parameters
@@ -28,7 +25,7 @@ func (p Product) AddProduct(pdname string, price int, description string, amount
 		return -1, "date invalid! (date format is like 2006-01-02)"
 	}
 
-	pdid, err := p.fn.AddNewProduct(pdname, price, description, amount, sellerUID, bid, dt)
+	pdid, err := p.fn.AddProduct(pdname, price, description, amount, sellerUID, bid, dt)
 	if err != nil {
 		if fmt.Sprint(err) == "NOT NULL constraint failed: product.seller_id" {
 			return -1, "沒有此使用者帳號!"
@@ -41,7 +38,7 @@ func (p Product) AddProduct(pdname string, price int, description string, amount
 // DeleteProduct deletes a product with seller_uid and product name
 // This may me cause some problem, need to fix
 func (p *Product) DeleteProduct(uid int, pdname string) string {
-	err := p.fn.Delete(uid, pdname)
+	err := p.fn.DeleteProduct(uid, pdname)
 	if err != nil {
 		return fmt.Sprint(err)
 	}
@@ -51,7 +48,7 @@ func (p *Product) DeleteProduct(uid int, pdname string) string {
 
 // ChangePrice changes price of a specific product with it's product id
 func (p *Product) ChangePrice(pdid, price int) string {
-	err := p.fn.UpdatePrice(pdid, price)
+	err := p.fn.UpdateProductPrice(pdid, price)
 	if err != nil {
 		return "Price cannot change"
 	}
@@ -61,7 +58,7 @@ func (p *Product) ChangePrice(pdid, price int) string {
 // ChangeAmount changes amount of a specific product with it's product id
 func (p *Product) ChangeAmount(pdid, amount int) string {
 
-	err := p.fn.UpdateAmount(pdid, amount)
+	err := p.fn.UpdateProductAmount(pdid, amount)
 	if err != nil {
 		return "Amount cannot change"
 	}
@@ -71,7 +68,7 @@ func (p *Product) ChangeAmount(pdid, amount int) string {
 // ChangeDescription changes description of a specific product with it's product id
 func (p *Product) ChangeDescription(pdid int, description string) string {
 
-	err := p.fn.UpdateDescription(pdid, description)
+	err := p.fn.UpdateProductDescription(pdid, description)
 	if err != nil {
 		return "Description cannot change"
 	}
@@ -80,7 +77,7 @@ func (p *Product) ChangeDescription(pdid int, description string) string {
 
 // SetEvaluation updates eval of a specific product with it's product id
 func (p *Product) SetEvaluation(pdid int, eval float64) string {
-	err := p.fn.UpdateEval(pdid, eval)
+	err := p.fn.UpdateProductEval(pdid, eval)
 	if err != nil {
 		return "Evaluation cannot change"
 	}
@@ -89,7 +86,7 @@ func (p *Product) SetEvaluation(pdid int, eval float64) string {
 
 // SearchProductsByName return products info in json
 func (p *Product) SearchProductsByName(name string) string {
-	pds := p.fn.Search(name)
+	pds := p.fn.SearchProduct(name)
 
 	res, err := json.Marshal(pds)
 	if err != nil {
@@ -102,24 +99,11 @@ func (p *Product) SearchProductsByName(name string) string {
 // EnhanceSearchProductsByName is a advanced function of normal search function
 // it can limit the maximum price, minimum price and evaluation
 func (p *Product) EnhanceSearchProductsByName(name string, minPrice, maxPrice, eval int) string {
-	pds := p.fn.SearchWithFilter(name, minPrice, maxPrice, eval)
+	pds := p.fn.SearchProductWithFilter(name, minPrice, maxPrice, eval)
 
 	res, err := json.Marshal(pds)
 	if err != nil {
 		log.Println(err)
-	}
-
-	return string(res)
-}
-
-// GetAll returns all product (debugging only)
-func (p *Product) GetAll() string {
-	pds := p.fn.All()
-
-	res, err := json.Marshal(pds)
-	if err != nil {
-		log.Println(err)
-		return err.Error()
 	}
 
 	return string(res)
@@ -138,7 +122,7 @@ func (p *Product) GetNewest(number int) string {
 // GetProductInfo return data of a product by it's id
 func (p *Product) GetProductInfo(pdid int) string {
 	//var orders string = ""
-	temp, err := json.Marshal(p.fn.GetInfoFromPdID(pdid))
+	temp, err := json.Marshal(p.fn.GetProductInfoFromPdID(pdid))
 	if err != nil {
 		log.Println(err)
 		return ""
