@@ -200,7 +200,7 @@ class.myButton:active {
         var temp = "";
         
         var pdname=document.getElementById("pdname");
-        var pdpic=document.getElementById("pdpic");
+        var pdpic=document.getElementById("progressbarTWInput");
         var desc=document.getElementById("desc");
         var date=document.getElementById("date");
         var price=document.getElementById("price");
@@ -212,9 +212,9 @@ class.myButton:active {
        // <!--這裡我先假設為輸入正確-->
         //name=...&price=...&description=...&amount=...&bid=...&date=...
         if(initprice.value!=''){
-        temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value+"&uploadefile="+"";
+        temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value+"&uploadefile="+pdpic;
         }else{
-            temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"false"+"&date="+date.value+"&uploadefile="+"";
+            temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"false"+"&date="+date.value+"&uploadefile="+pdpic;
         }
         console.log(temp);
         var request=new XMLHttpRequest;
@@ -312,7 +312,8 @@ class.myButton:active {
     <input type="text" style="font-size:45px" id="desc" name="desc" value=""><br><br>
     <label style="font-size:45px">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
     <input type="text" style="font-size:45px" id="date" name="date" value=""><h1 style="margin-left:0px">ex:(2016-01-01)</h1>
-    <!--<form action="/backend/pics/upload" method="post" enctype="multipart/form-data">
+    </form> 
+    <form action="/backend/pics/upload" method="post" enctype="multipart/form-data">
 
 
     <input type="file" id="progressbarTWInput" name="uploadfile" accept="image/gif, image/jpeg, image/png" />
@@ -325,15 +326,10 @@ class.myButton:active {
         
      
      </form>
-    -->
+    
    
     <!--<button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>-->
-    </form> 
-    <form enctype="multipart/form-data" action="/backend/pics/upload" method="post"><br>
-		<input type="file" name="uploadfile" /><br>
-		<input type="hidden" name="token" value="{{.}}"/><br>
-        <input type="submit" value="upload" /><br>
-    </form>
+    
     <div class="littbord1"><!--左下角框框-->
        
         <form style="text-align: left">
