@@ -312,7 +312,7 @@ class.myButton:active {
     <input type="text" style="font-size:45px" id="desc" name="desc" value=""><br><br>
     <label style="font-size:45px">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
     <input type="text" style="font-size:45px" id="date" name="date" value=""><h1 style="margin-left:0px">ex:(2016-01-01)</h1>
-    <form action="/backend/pics/upload" method="post" enctype="multipart/form-data">
+    <!--<form action="/backend/pics/upload" method="post" enctype="multipart/form-data">
 
 
     <input type="file" id="progressbarTWInput" name="uploadfile" accept="image/gif, image/jpeg, image/png" />
@@ -325,8 +325,11 @@ class.myButton:active {
         
      
      </form>
-        
-        
+    -->
+    <form enctype="multipart/form-data" action="/backend/pics/upload" method="post"><br>
+		<input type="file" name="uploadfile" /><br>
+		<input type="hidden" name="token" value="{{.}}"/><br>
+		<input type="submit" value="upload" /><br>
     <!--<button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>-->
     </form> 
     
