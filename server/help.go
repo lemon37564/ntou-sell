@@ -83,6 +83,8 @@ const ProductAPI = `
 	<p> 
 		/backend/product/urproduct<br>
 		列出自己販賣中的商品<br>
+		<a href=/backend/product/urproduct>
+		/backend/product/urproduct
 		<br><br>
 
 		/backend/product/newest?amount=...<br>
