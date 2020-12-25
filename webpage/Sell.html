@@ -307,10 +307,15 @@ class.myButton:active {
     <label style="font-size:45px">Description:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
     <input type="text" style="font-size:45px" id="desc" name="desc" value=""><br><br>
     <label style="font-size:45px">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    <form action="/somewhere/to/upload" enctype="multipart/form-data"><!--上傳圖片-->
-        <input name="progressbarTW_img" type="file" accept="image/gif, image/jpeg, image/png">
-    </form>
-        <input type="text" style="font-size:45px" id="date" name="date" value=""><h1 style="margin-left:0px">ex:(2016-01-01)</h1>
+    <input type="text" style="font-size:45px" id="date" name="date" value=""><h1 style="margin-left:0px">ex:(2016-01-01)</h1>
+    <form action="/somewhere/to/upload" enctype="multipart/form-data">
+
+        <input type="file" id="progressbarTWInput" accept="image/gif, image/jpeg, image/png"/ >
+     
+        <img id="preview_progressbarTW_img" src="#" />
+     
+     </form>
+        
         
     <!--<button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submit()">確定</button>-->
     </form> 
@@ -339,7 +344,36 @@ class.myButton:active {
         <button type="button" width="40px" height="40px" style="background-color:#3949AB;" onclick="submiit()">確定</button>
         </form>
     </div>
-    
+    <script>
+    //toshow pic
+
+        $("#progressbarTWInput").change(function(){
+        
+          readURL(this);
+        
+        });
+        
+         
+        
+        function readURL(input){
+        
+          if(input.files && input.files[0]){
+        
+            var reader = new FileReader();
+        
+            reader.onload = function (e) {
+        
+               $("#preview_progressbarTW_img").attr('src', e.target.result);
+        
+            }
+        
+            reader.readAsDataURL(input.files[0]);
+        
+          }
+        
+        }
+        
+        </script>
   
 
 </div>
