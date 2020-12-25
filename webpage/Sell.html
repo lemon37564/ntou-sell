@@ -212,7 +212,9 @@ class.myButton:active {
        // <!--這裡我先假設為輸入正確-->
         //name=...&price=...&description=...&amount=...&bid=...&date=...
         if(initprice.value!=''){
-        temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value+"&uploadefile="+pdpic;
+        Map f=;
+        temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value+"&uploadefile="+
+        ;
         }else{
             temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"false"+"&date="+date.value+"&uploadefile="+pdpic;
         }
@@ -321,7 +323,7 @@ class.myButton:active {
             <img id="preview_progressbarTW_img" src="#" />
         </div>
     
-    <input type="hidden" name="token" value="{{.}}"/>
+    <!--<input type="hidden" name="token" value="{{.}}"/>-->
     <input type="submit" value="upload" />
         
      
