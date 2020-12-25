@@ -1,16 +1,21 @@
 package backend
 
-// func TestUser(t *testing.T) {
-// 	db := database.Open()
-// 	defer db.Close()
+import (
+	"se/database"
+	"testing"
+)
 
-// 	u := UserInit(db)
+func TestUser(t *testing.T) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-// 	if u.Regist("second@gmail.com", "2581473692581456", "how how") != "ok" {
-// 		t.Error("cannot regist")
-// 	}
+	u := UserInit(data)
 
-// 	if _, ok := u.Login("second@gmail.com", "2581473692581456"); !ok {
-// 		t.Error("regist but cannot log in.")
-// 	}
-// }
+	if u.Regist("second@gmail.com", "2581473692581456", "how how") != "ok" {
+		t.Error("cannot regist")
+	}
+
+	if _, ok := u.Login("second@gmail.com", "2581473692581456"); !ok {
+		t.Error("regist but cannot log in.")
+	}
+}

@@ -1,14 +1,19 @@
 package backend
 
-// func TestHistory(t *testing.T) {
-// 	db := database.Open()
-// 	defer db.Close()
+import (
+	"se/database"
+	"testing"
+)
 
-// 	h := HistoryInit(db)
+func TestHistory(t *testing.T) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-// 	h.AddHistory(2, 2)
+	h := HistoryInit(data)
 
-// 	if res := h.GetHistory(2, 2, true); res == "null" {
-// 		t.Error("add history but cannot found")
-// 	}
-// }
+	h.AddHistory(2, 2)
+
+	if res := h.GetHistory(2, 2, true); res == "null" {
+		t.Error("add history but cannot found")
+	}
+}

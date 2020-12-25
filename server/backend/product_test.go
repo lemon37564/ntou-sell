@@ -1,14 +1,19 @@
 package backend
 
-// func TestPd(t *testing.T) {
-// 	db := database.Open()
-// 	defer db.Close()
+import (
+	"se/database"
+	"testing"
+)
 
-// 	p := ProductInit(db)
+func TestPd(t *testing.T) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-// 	p.AddProduct("test_product", 100, "wow", 5, 1, false, "2020-12-31")
+	p := ProductInit(data)
 
-// 	if res := p.SearchProductsByName("test_product"); res == "null" {
-// 		t.Error("add new product but cannot found")
-// 	}
-// }
+	p.AddProduct("test_product", 100, "wow", 5, 1, false, "2020-12-31")
+
+	if res := p.SearchProductsByName("test_product"); res == "null" {
+		t.Error("add new product but cannot found")
+	}
+}

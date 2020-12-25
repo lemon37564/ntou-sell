@@ -1,18 +1,23 @@
 package backend
 
-// func TestMs(t *testing.T) {
-// 	db := database.Open()
-// 	defer db.Close()
+import (
+	"se/database"
+	"testing"
+)
 
-// 	ms := MessageInit(db)
+func TestMs(t *testing.T) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-// 	ms.AddMessage(1, 2, "你好")
+	ms := MessageInit(data)
 
-// 	if ms.GetMessages(1, 2, true) == "null" {
-// 		t.Error("add new message but cannot found")
-// 	}
+	ms.AddMessage(1, 2, "你好")
 
-// 	if ms.AddMessage(1, 1, "123") == "ok" {
-// 		t.Error("message sent to yourself but system didn't forbid")
-// 	}
-// }
+	if ms.GetMessages(1, 2, true) == "null" {
+		t.Error("add new message but cannot found")
+	}
+
+	if ms.AddMessage(1, 1, "123") == "ok" {
+		t.Error("message sent to yourself but system didn't forbid")
+	}
+}

@@ -1,21 +1,27 @@
 package backend
 
-// func TestCart(t *testing.T) {
-// 	db := database.Open()
-// 	defer db.Close()
+import (
+	"se/database"
+	"testing"
+	"time"
+)
 
-// 	c := CartInit(db)
+func TestCart(t *testing.T) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-// 	uid := 1
-// 	pdid := 0
-// 	amount := 3
+	c := CartInit(data)
 
-// 	c.AddProductToCart(uid, pdid, amount)
+	uid := 1
+	pdid := 0
+	amount := 3
 
-// 	time.Sleep(time.Second)
+	c.AddProductToCart(uid, pdid, amount)
 
-// 	if c.GetProducts(uid) == "null" {
-// 		t.Error("add to cart but cannot found")
-// 	}
+	time.Sleep(time.Second)
 
-// }
+	if c.GetProducts(uid) == "null" {
+		t.Error("add to cart but cannot found")
+	}
+
+}

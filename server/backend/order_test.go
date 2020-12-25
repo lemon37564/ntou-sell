@@ -1,18 +1,23 @@
 package backend
 
-// func TestOrder(t *testing.T) {
-// 	db := database.Open()
-// 	defer db.Close()
+import (
+	"se/database"
+	"testing"
+)
 
-// 	uid := 0
-// 	pdid := 0
-// 	amount := 100000
+func TestOrder(t *testing.T) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-// 	o := OrderInit(db)
+	uid := 0
+	pdid := 0
+	amount := 100000
 
-// 	o.AddOrder(uid, pdid, amount)
+	o := OrderInit(data)
 
-// 	if res := o.GetOrders(uid); res == "null" {
-// 		t.Error("add order but cannot found")
-// 	}
-// }
+	o.AddOrder(uid, pdid, amount)
+
+	if res := o.GetOrders(uid); res == "null" {
+		t.Error("add order but cannot found")
+	}
+}
