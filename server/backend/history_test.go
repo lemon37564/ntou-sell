@@ -6,10 +6,10 @@ import (
 )
 
 func TestHistory(t *testing.T) {
-	db := database.Open()
-	defer db.Close()
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-	h := HistoryInit(db)
+	h := HistoryInit(data)
 
 	h.AddHistory(2, 2)
 

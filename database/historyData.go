@@ -6,68 +6,70 @@ import (
 )
 
 // seq is for ordering
-const historyTable = `CREATE TABLE IF NOT EXISTS history(
-						uid int NOT NULL,
-						pd_id int NOT NULL,
-						seq int NOT NULL,
-						PRIMARY KEY(uid, pd_id),
-						FOREIGN KEY(uid) REFERENCES user
-					);`
-
-// HistoryDB contain funcions to use
-type HistoryDB struct {
-	insert        *sql.Stmt
-	_delete       *sql.Stmt
-	delAll        *sql.Stmt
-	maxSeq        *sql.Stmt
-	getnew        *sql.Stmt
-	getold        *sql.Stmt
-	getPdFrompdid *sql.Stmt
-}
+const historyTable = `
+CREATE TABLE IF NOT EXISTS history(
+	uid int NOT NULL,
+	pd_id int NOT NULL,
+	seq int NOT NULL,
+	PRIMARY KEY(uid, pd_id),
+	FOREIGN KEY(uid) REFERENCES user
+);`
 
 // History contain product ids
 type History struct {
 	Pdid int
 }
 
-// HistoryDBInit prepare function for database using
-func HistoryDBInit(db *sql.DB) *HistoryDB {
+type historyStmt struct {
+	add    *sql.Stmt
+	del    *sql.Stmt
+	delAll *sql.Stmt
+	maxSeq *sql.Stmt
+	getNew *sql.Stmt
+	getOld *sql.Stmt
+	getPd  *sql.Stmt
+}
+
+func historyPrepare(db *sql.DB) *historyStmt {
 	var err error
-	history := new(HistoryDB)
+	history := new(historyStmt)
 
-	history.insert, err = db.Prepare("INSERT INTO history VALUES(?,?,?);")
-	if err != nil {
-		panic(err)
+	const (
+		add    = "INSERT INTO history VALUES(?,?,?);"
+		del    = "DELETE FROM history where uid=? AND pd_id=?;"
+		delAll = "DELETE FROM history WHERE uid=?;"
+		maxSeq = "SELECT max(seq) FROM history;"
+		getNew = "SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;"
+		getOld = "SELECT pd_id FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;"
+		getPd  = "SELECT * FROM product WHERE pd_id=?;"
+	)
+
+	if history.add, err = db.Prepare(add); err != nil {
+		log.Println(err)
 	}
 
-	history._delete, err = db.Prepare("DELETE FROM history where uid=? AND pd_id=?;")
-	if err != nil {
-		panic(err)
+	if history.del, err = db.Prepare(del); err != nil {
+		log.Println(err)
 	}
 
-	history.delAll, err = db.Prepare("DELETE FROM history WHERE uid=?;")
-	if err != nil {
-		panic(err)
+	if history.delAll, err = db.Prepare(delAll); err != nil {
+		log.Println(err)
 	}
 
-	history.maxSeq, err = db.Prepare("SELECT max(seq) FROM history;")
-	if err != nil {
-		panic(err)
+	if history.maxSeq, err = db.Prepare(maxSeq); err != nil {
+		log.Println(err)
 	}
 
-	history.getnew, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;")
-	if err != nil {
-		panic(err)
+	if history.getNew, err = db.Prepare(getNew); err != nil {
+		log.Println(err)
 	}
 
-	history.getold, err = db.Prepare("SELECT pd_id FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;")
-	if err != nil {
-		panic(err)
+	if history.getOld, err = db.Prepare(getOld); err != nil {
+		log.Println(err)
 	}
 
-	history.getPdFrompdid, err = db.Prepare("SELECT * FROM product WHERE pd_id=?;")
-	if err != nil {
-		panic(err)
+	if history.getPd, err = db.Prepare(getPd); err != nil {
+		log.Println(err)
 	}
 
 	return history
@@ -76,16 +78,16 @@ func HistoryDBInit(db *sql.DB) *HistoryDB {
 // AddHistory add a single record into database
 // return's an error
 // may encounter error when there's no history (beacuse max(seq) = null)
-func (h *HistoryDB) AddHistory(uid, pdid int) error {
+func (dt Data) AddHistory(uid, pdid int) error {
 	// do this is to prevent history duplicate (delete the old one and add a new one)
 	// then the new one will be close to the front.
-	_, err := h._delete.Exec(uid, pdid)
+	_, err := dt.History.del.Exec(uid, pdid)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	rows, err := h.maxSeq.Query()
+	rows, err := dt.History.maxSeq.Query()
 	if err != nil {
 		log.Println(err)
 		return err
@@ -103,45 +105,43 @@ func (h *HistoryDB) AddHistory(uid, pdid int) error {
 
 	seq++
 
-	_, err = h.insert.Exec(uid, pdid, seq)
+	_, err = dt.History.add.Exec(uid, pdid, seq)
 	return err
 }
 
-// Delete history with user id and product id
-func (h *HistoryDB) Delete(uid, pdid int) error {
-	_, err := h._delete.Exec(uid, pdid)
+// DeleteHistory with user id and product id
+func (dt Data) DeleteHistory(uid, pdid int) error {
+	_, err := dt.History.del.Exec(uid, pdid)
 	return err
 }
 
-// DeleteAll deletes all history of a user by user id
-func (h *HistoryDB) DeleteAll(uid int) error {
-	_, err := h.delAll.Query()
+// DeleteAllHistory deletes all history of a user by user id
+func (dt Data) DeleteAllHistory(uid int) error {
+	_, err := dt.History.delAll.Query()
 	return err
 }
 
-// Get return all history of a user by id (descend order by time)
-func (h *HistoryDB) Get(uid int, amount int, newest bool) (all []Product) {
-
-	var rows *sql.Rows
-	var err error
-	var pdids []int
+// GetAllHistory return all history of a user by id (descend order by time)
+func (dt Data) GetAllHistory(uid int, amount int, newest bool) (all []Product) {
+	var (
+		rows  *sql.Rows
+		err   error
+		pdids []int
+		id    int
+	)
 
 	if newest {
-		rows, err = h.getnew.Query(uid, amount)
-		if err != nil {
-			log.Println(err)
-			return
-		}
+		rows, err = dt.History.getNew.Query(uid, amount)
 	} else {
-		rows, err = h.getold.Query(uid, amount)
-		if err != nil {
-			log.Println(err)
-			return
-		}
+		rows, err = dt.History.getOld.Query(uid, amount)
+	}
+
+	if err != nil {
+		log.Println(err)
+		return
 	}
 
 	for rows.Next() {
-		var id int
 		err = rows.Scan(&id)
 		if err != nil {
 			log.Println(err)
@@ -152,15 +152,15 @@ func (h *HistoryDB) Get(uid int, amount int, newest bool) (all []Product) {
 	}
 
 	for _, v := range pdids {
-		all = append(all, h.getPdByPdid(v))
+		all = append(all, dt.getPdByPdid(v))
 	}
 
 	return
 }
 
-func (h *HistoryDB) getPdByPdid(pdid int) (pd Product) {
+func (dt Data) getPdByPdid(pdid int) (pd Product) {
 
-	rows, err := h.getPdFrompdid.Query(pdid)
+	rows, err := dt.History.getPd.Query(pdid)
 	if err != nil {
 		log.Println(err)
 		return

@@ -6,10 +6,10 @@ import (
 )
 
 func TestUser(t *testing.T) {
-	db := database.Open()
-	defer db.Close()
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-	u := UserInit(db)
+	u := UserInit(data)
 
 	if u.Regist("second@gmail.com", "2581473692581456", "how how") != "ok" {
 		t.Error("cannot regist")
@@ -19,9 +19,3 @@ func TestUser(t *testing.T) {
 		t.Error("regist but cannot log in.")
 	}
 }
-
-// func BenchmarkREG(b *testing.B) {
-// 	for i := 0; i < b.N; i++ {
-// 		Regist(fmt.Sprintf("%d@gmail.com", i), "56456456", "4d5f")
-// 	}
-// }

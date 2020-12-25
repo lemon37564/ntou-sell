@@ -11,14 +11,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
+func (ser Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	if !ser.validation(w, r) {
 		return
 	}
 
 	_, valid := sessionValid(w, r)
 	if !valid {
-		fmt.Fprint(w, "請先登入!")
 		return
 	}
 
@@ -26,7 +25,7 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 
 	switch path["key"] {
 	case "help":
-		fmt.Fprint(w, PicHelp)
+		fmt.Fprint(w, PicAPI)
 	case "upload":
 		ser.picUpload(w, r, "test.jpg")
 	case "get":
@@ -36,7 +35,7 @@ func (ser *Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname string) {
+func (ser Server) picUpload(w http.ResponseWriter, r *http.Request, picname string) {
 
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("uploadfile")
@@ -57,7 +56,7 @@ func (ser *Server) picUpload(w http.ResponseWriter, r *http.Request, picname str
 	io.Copy(f, file)
 }
 
-func (ser *Server) getPic(w http.ResponseWriter, r *http.Request) {
+func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 	// bad way, rewrite it later
 	psb := []string{".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico", ".bmp"}

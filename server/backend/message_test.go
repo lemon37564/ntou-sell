@@ -6,10 +6,10 @@ import (
 )
 
 func TestMs(t *testing.T) {
-	db := database.Open()
-	defer db.Close()
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-	ms := MessageInit(db)
+	ms := MessageInit(data)
 
 	ms.AddMessage(1, 2, "你好")
 

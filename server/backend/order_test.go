@@ -6,14 +6,14 @@ import (
 )
 
 func TestOrder(t *testing.T) {
-	db := database.Open()
-	defer db.Close()
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
 	uid := 0
 	pdid := 0
 	amount := 100000
 
-	o := OrderInit(db)
+	o := OrderInit(data)
 
 	o.AddOrder(uid, pdid, amount)
 

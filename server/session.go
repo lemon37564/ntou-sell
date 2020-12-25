@@ -58,5 +58,6 @@ func sessionValid(w http.ResponseWriter, r *http.Request) (int, bool) {
 		return isAuth, ok
 	}
 
+	http.Error(w, "請先登入!", http.StatusUnauthorized)
 	return -1, false
 }

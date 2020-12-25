@@ -7,10 +7,10 @@ import (
 )
 
 func TestCart(t *testing.T) {
-	db := database.Open()
-	defer db.Close()
+	data := database.OpenAndInit()
+	defer data.DBClose()
 
-	c := CartInit(db)
+	c := CartInit(data)
 
 	uid := 1
 	pdid := 0
