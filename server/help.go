@@ -81,8 +81,8 @@ const UserAPI = `
 const ProductAPI = `
 <html>
 	<p> 
-		/backend/product/all<br>
-		列出所有商品(此功能已關閉)<br>
+		/backend/product/urproduct<br>
+		列出自己販賣中的商品<br>
 		<br><br>
 
 		/backend/product/newest?amount=...<br>

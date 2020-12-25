@@ -47,6 +47,7 @@ type productStmt struct {
 	search  *sql.Stmt
 	filter  *sql.Stmt
 	getInfo *sql.Stmt
+	userPd  *sql.Stmt
 }
 
 func productPrepare(db *sql.DB) *productStmt {
@@ -71,6 +72,7 @@ func productPrepare(db *sql.DB) *productStmt {
 			ORDER BY pd_id DESC;
 			`
 		getInfo = "SELECT * FROM product WHERE pd_id=? AND pd_id>0;"
+		userPd  = "SELECT * FROM product WHERE seller_uid=?;"
 	)
 
 	if product.add, err = db.Prepare(add); err != nil {
@@ -118,6 +120,10 @@ func productPrepare(db *sql.DB) *productStmt {
 	}
 
 	if product.getInfo, err = db.Prepare(getInfo); err != nil {
+		log.Println(err)
+	}
+
+	if product.userPd, err = db.Prepare(userPd); err != nil {
 		log.Println(err)
 	}
 
@@ -250,6 +256,26 @@ func (dt Data) SearchProductWithFilter(keyword string, priceMin, priceMax, eval 
 	keyword = "%" + keyword + "%"
 
 	rows, err := dt.Product.filter.Query(keyword, priceMin, priceMax, eval)
+	if err != nil {
+		log.Println(err)
+	}
+
+	for rows.Next() {
+		var pd Product
+		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
+		if err != nil {
+			log.Println(err)
+		}
+
+		all = append(all, pd)
+	}
+
+	return
+}
+
+// GetSellerProduct list all product of a single seller
+func (dt Data) GetSellerProduct(uid int) (all []Product) {
+	rows, err := dt.Product.userPd.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}
