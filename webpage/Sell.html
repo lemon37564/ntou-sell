@@ -194,29 +194,22 @@ class.myButton:active {
             }
         }
     
-        $(function () {
+    $(function () {
 
-            $("#upload").click(function(){
+        $("#upload").click(function(){
 
-                var formData = new FormData();
+            var formData = new FormData();
 
-                formData.append('file', $('#file')[0].files[0]);
+            formData.append('file', $('#file')[0].files[0]);
 
  
-                $.ajax({
-
+            $.ajax({
                 url: "/backend/pics/upload",
-
                 type: "POST",
-
                 data: formData,
-
                 /**
-
                 *必須false才會自動加上正確的Content-Type
-
 */
-
                 contentType: false,
 
                 /**
@@ -254,6 +247,7 @@ class.myButton:active {
        // <!--這裡我先假設為輸入正確-->
         //name=...&price=...&description=...&amount=...&bid=...&date=...
         if(initprice.value!=''){
+        alert("ccccc");
         alert(pdpic);
         temp="name="+pdname.value+"&price="+price.value+"&description="+desc.value+"&amount="+number.value+"&bid="+"true"+"&date="+date.value+"&uploadefile="+
         pdpic;
