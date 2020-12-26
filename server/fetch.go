@@ -337,8 +337,8 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 
 	case "search":
 		name := args.Get("name")
-		min := args.Get("min")
-		max := args.Get("max")
+		min := args.Get("minprice")
+		max := args.Get("maxprice")
 		eval := args.Get("eval")
 
 		res, err := ser.Pd.SearchProducts(name, min, max, eval)
