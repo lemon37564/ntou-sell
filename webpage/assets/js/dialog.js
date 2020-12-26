@@ -1,4 +1,4 @@
-var me = {};
+/*var me = {};
 me.avatar = "https://lh6.googleusercontent.com/-lr2nyjhhjXw/AAAAAAAAAAI/AAAAAAAARmE/MdtfUmC0M4s/photo.jpg?sz=48";
 
 var you = {};
@@ -77,4 +77,4 @@ insertChat("you", "Hi, Pablo", 1500);
 insertChat("me", "What would you like to talk about today?", 3500);
 insertChat("you", "Tell me a joke",7000);
 insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
-insertChat("you", "LOL", 12000);
+insertChat("you", "LOL", 12000);*/
