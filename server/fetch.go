@@ -426,6 +426,9 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "argument error", http.StatusBadRequest)
 		}
 
+	case "urproduct":
+		fmt.Fprint(w, ser.Pd.GetSellerProduct(uid))
+
 	default:
 		http.NotFound(w, r)
 	}

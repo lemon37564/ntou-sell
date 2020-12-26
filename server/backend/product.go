@@ -130,3 +130,14 @@ func (p *Product) GetProductInfo(pdid int) string {
 
 	return string(temp)
 }
+
+// GetSellerProduct return all product of a seller
+func (p *Product) GetSellerProduct(uid int) string {
+	temp, err := json.Marshal(p.fn.GetSellerProduct(uid))
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+
+	return string(temp)
+}
