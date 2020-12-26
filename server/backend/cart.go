@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"se/database"
+	"strconv"
 )
 
 // Cart is a module that handle cart functions
@@ -17,33 +18,58 @@ func CartInit(data *database.Data) *Cart {
 }
 
 // AddProductToCart return true if add success
-func (c *Cart) AddProductToCart(uid, pdid, amount int) bool {
-	err := c.fn.AddProductIntoCart(uid, pdid, amount)
+func (c *Cart) AddProductToCart(uid int, rawPdid, rawAmount string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
+	if err != nil {
+		return "cannot convert " + rawPdid + " into integer", err
+	}
+
+	amount, err := strconv.Atoi(rawAmount)
+	if err != nil {
+		return "cannot convert " + rawAmount + " into integer", err
+	}
+
+	err = c.fn.AddProductIntoCart(uid, pdid, amount)
 	if err != nil {
 		log.Println(err)
-		return false
+		return "false", err
 	}
-	return true
+	return "true", nil
 }
 
 // RemoveProduct remove product in the cart if exists. if there's no such product in the cart, return false
-func (c *Cart) RemoveProduct(id, pdid int) string {
-	err := c.fn.DeleteProductFromCart(id, pdid)
+func (c *Cart) RemoveProduct(uid int, rawPdid string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
+	if err != nil {
+		return "cannot convert " + rawPdid + " into integer", err
+	}
+
+	err = c.fn.DeleteProductFromCart(uid, pdid)
 	if err != nil {
 		log.Println(err)
-		return "fail to remove from cart"
+		return "fail to remove from cart", err
 	}
-	return "Success"
+	return "Success", nil
 }
 
 // ModifyAmount changes the amount of specific product. returns ture if success
-func (c *Cart) ModifyAmount(uid, pdid, amount int) bool {
-	err := c.fn.UpdateCartAmount(uid, pdid, amount)
+func (c *Cart) ModifyAmount(uid int, rawPdid, rawAmount string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
+	if err != nil {
+		return "cannot convert " + rawPdid + " into integer", err
+	}
+
+	amount, err := strconv.Atoi(rawAmount)
+	if err != nil {
+		return "cannot convert " + rawAmount + " into integer", err
+	}
+
+	err = c.fn.UpdateCartAmount(uid, pdid, amount)
 	if err != nil {
 		log.Println(err)
-		return false
+		return "false", err
 	}
-	return true
+	return "true", err
 }
 
 // GetProducts returns all the product in cart

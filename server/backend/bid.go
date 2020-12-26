@@ -2,9 +2,9 @@ package backend
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"se/database"
+	"strconv"
 )
 
 // Bid type handle bids
@@ -17,46 +17,55 @@ func BidInit(data *database.Data) *Bid {
 	return &Bid{fn: data}
 }
 
-//GetProductInfo 回傳商品資訊
-func (b Bid) GetProductInfo(pdid int) string {
-
-	temp, err := json.Marshal(b.fn.GetAllBidProducts(pdid))
-	if err != nil {
-		log.Println(err)
-		return "fail to get Productinfo"
-	}
-	return string(temp)
-}
-
 //GetProductBidInfo 回傳商品目前競標商品資訊
-func (b Bid) GetProductBidInfo(pdid int) string {
-	temp, err := json.Marshal(b.fn.GetBidByID(pdid))
+func (b Bid) GetProductBidInfo(pdid string) (string, error) {
+	pid, err := strconv.Atoi(pdid)
+	if err != nil {
+		return "cannot convert " + pdid + " into integer", err
+	}
+	temp, err := json.Marshal(b.fn.GetBidByID(pid))
 	if err != nil {
 		log.Println(err)
-		return "fail to get Bidinfo"
+		return "fail to get Bidinfo", nil
 	}
-	return string(temp)
+	return string(temp), nil
 }
 
 // SetBidForBuyer 更新商品價格，目前競標者
-func (b *Bid) SetBidForBuyer(pdid, uid, money int) bool {
-	if money > b.fn.GetBidByID(pdid).NowMoney { // 取得競標價格
-		if err := b.fn.WonBid(pdid, uid, money); err != nil {
+func (b *Bid) SetBidForBuyer(uid int, pdid, money string) (string, error) {
+	pid, err := strconv.Atoi(pdid)
+	if err != nil {
+		return "cannot convert " + pdid + " into integer", err
+	}
+
+	price, err := strconv.Atoi(money)
+	if err != nil {
+		return "cannot convert " + money + " into integer", err
+	}
+
+	if price > b.fn.GetBidByID(pid).NowMoney { // 取得競標價格
+		if err := b.fn.WonBid(pid, uid, price); err != nil {
 			log.Println(err)
-			return false
+			return "WonBid failed", err
 		}
 
-		return true
+		return "ok", nil
 	}
-	return false
+
+	return "price not acceptable", nil
 }
 
 // DeleteBid 刪除競標
-func (b *Bid) DeleteBid(pdid int) string {
-	err := b.fn.DeleteBid(pdid)
+func (b *Bid) DeleteBid(pdid string) (string, error) {
+	pid, err := strconv.Atoi(pdid)
+	if err != nil {
+		return "cannot convert " + pdid + " into integer", err
+	}
+
+	err = b.fn.DeleteBid(pid)
 	if err != nil {
 		log.Println(err)
-		return fmt.Sprintf("%v", err)
+		return "failed", err
 	}
-	return "ok"
+	return "ok", nil
 }
