@@ -138,18 +138,16 @@ class.myButton:active {
 
 
 </style>
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="assets/css/fontawesome.css">
-<link rel="stylesheet" href="assets/css/templatemo-sixteen.css">
-<link rel="stylesheet" href="assets/css/owl.css">
-<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="assets/css/fontawesome.css">
+    <link rel="stylesheet" href="assets/css/templatemo-sixteen.css">
+    <link rel="stylesheet" href="assets/css/owl.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
    
-    
-    
     function switchMenu( theMainMenu, theSubMenu, theEvent ){
         var SubMenu = document.getElementById( theSubMenu );
         if( SubMenu.style.display == 'none' ){ // 顯示子選單
@@ -287,7 +285,7 @@ class.myButton:active {
               
               <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
-                  <li class="nav-item active">
+                  <li class="nav-item">
                     <a class="nav-link" href="History.html">History
                      
                     </a>
@@ -303,7 +301,7 @@ class.myButton:active {
                   <li class="nav-item">
                     <a class="nav-link" href="Order.html">Order</a>
                   </li>
-                  <li class="nav-item">
+                  <li class="nav-item active">
                     <a class="nav-link" href="Sell.html">Sell</a>
                   </li>
                 </ul>
@@ -381,7 +379,28 @@ class.myButton:active {
         </script>
        
        
-
+       <script src="jquery/jquery.min.js"></script>
+       <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+      
+      
+       <!-- Additional Scripts -->
+       <script src="assets/js/custom.js"></script>
+       <script src="assets/js/owl.js"></script>
+       <script src="assets/js/slick.js"></script>
+       <script src="assets/js/isotope.js"></script>
+       <script src="assets/js/accordions.js"></script>
+      
+      
+       <script language = "text/Javascript"> 
+         cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+         function clearField(t){                   //declaring the array outside of the
+         if(! cleared[t.id]){                      // function makes it static and global
+             cleared[t.id] = 1;  // you could use true and false, but that's more typing
+             t.value='';         // with more chance of typos
+             t.style.color='#fff';
+             }
+         }
+       </script>
 </div>
 </div> 
 </body>
