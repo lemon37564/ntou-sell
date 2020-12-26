@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"log"
 	"se/database"
+	"unicode"
 )
 
 // User is a module that handle users
@@ -25,6 +26,10 @@ func (u *User) Login(account, password string) (int, bool) {
 
 // Regist let user regist his own account
 func (u *User) Regist(account, password, name string) string {
+	if containCh(password) {
+		return "密碼不能為中文!"
+	}
+
 	hash := sha256Hash(password)
 
 	err := u.fn.AddNewUser(account, hash, name)
@@ -89,4 +94,14 @@ func sha256Hash(key string) string {
 
 	t := hasher.Sum(nil)
 	return base64.URLEncoding.EncodeToString(t)
+}
+
+func containCh(str string) bool {
+	for _, v := range str {
+		if unicode.Is(unicode.Han, v) {
+			return true
+		}
+	}
+
+	return false
 }
