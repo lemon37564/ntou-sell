@@ -138,7 +138,10 @@ class.myButton:active {
 
 
 </style>
-    
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/fontawesome.css">
+<link rel="stylesheet" href="assets/css/templatemo-sixteen.css">
+<link rel="stylesheet" href="assets/css/owl.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript">
    
@@ -194,42 +197,7 @@ class.myButton:active {
             }
         }
     
-    $(function () {
-
-        $("#upload").click(function(){
-
-            var formData = new FormData();
-
-            formData.append('file', $('#file')[0].files[0]);
-
- 
-            $.ajax({
-                url: "/backend/pics/upload",
-                type: "POST",
-                data: formData,
-                /**
-                *必須false才會自動加上正確的Content-Type
-*/
-                contentType: false,
-
-                /**
-
-                * 必須false才會避開jQuery對 formdata 的預設處理
-
-                * XMLHttpRequest會對 formdata 進行正確的處理
-
-                */
-
-                processData: false,
-    success: function (data) {
-    alert("success");
-    },
-    error: function () {
-    alert("上傳失敗！");
-    }
-    });
-    })
-    });
+    
     function submiit() {
         
         var temp = "";
@@ -276,20 +244,7 @@ class.myButton:active {
         };
         
         request.send(temp);
-        /*var str="/backend/product/add?";
-        str=str+temp;
-        request.open("get",str);
-        alert(str);
-        request.onreadystatechange = function() { 
-        if (request.readyState === 4 && request.status === 200) {
-        var type = request.getResponseHeader("Content-Type");
-        if (type.match(/^text/)){ // Make sure response is text
-		alert(str);
-		
-      }
-    }
-    }
-    request.send(null);*/
+        
     }
     function logout(){
     localStorage.clear();
@@ -310,31 +265,49 @@ class.myButton:active {
     //alert("帳號登出!");
     //測試用 console.log(localStorage.getItem("account"));
     //window.location.href="index.html";
-}
+    }
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
 
-<div style= "background:rgba(57,73,172,0.8)">
-		<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
-        <ul id="SubMenu" class="sub-menu" style="display:none;">
-	    <h2 style="display:inline;">
-        <li style="display:inline;"><a href="MainPage.html" target="_self">&nbsp;&nbsp;Main</a></li>
-        <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
-        <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
-		<li style="display:inline;"><a href="Cart.html" target="_self">&nbsp;&nbsp;Cart</a></li>
-		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
-		<li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
-		</h2
-		<br></br>
-    </ul>
-		<font color="FFFFFF">
-			<h1 style="display:inline;">販賣商品&nbsp;&nbsp;</h1>
-		</font>
-		
-</div>
+    <header class="">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false
+              " aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+                
+              <a class="navbar-brand" href="MainPage.html"><h2>海大購物 <em>Shop</em></h2></a>
+              
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="History.html">History
+                     
+                    </a>
+                  </li> 
+                  <li class="nav-item">
+                    <a class="nav-link" href="MainPage.html">Home
+                      <span class="sr-only">(current)</span>
+                    </a>
+                  </li> 
+                  <li class="nav-item">
+                    <a class="nav-link" href="Cart.html">Cart</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="Order.html">Order</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="Sell.html">Sell</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        </header>
 <div align=center><!--對其-->
 
 
@@ -353,7 +326,7 @@ class.myButton:active {
     <label style="font-size: 20px">Bid:</label>  
     <div style = "float: left;">
         <input type="checkbox" style="width:30px;height:30px;" id="box" name="bid" value="true">
-        <input type="checkbox" style="width:30px;height:30px;" id="box" name="bid" value="true">
+        <input type="checkbox" style="width:30px;height:30px;" id="box" name="bid" value="false">
     </div>
     <label style="font-size:45px">Date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
     <input type="text" style="font-size:45px" id="date" name="date" value="">
