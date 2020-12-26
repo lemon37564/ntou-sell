@@ -2,7 +2,6 @@ package backend
 
 import (
 	"encoding/json"
-	"log"
 	"se/database"
 	"strconv"
 )
@@ -25,7 +24,6 @@ func (b Bid) GetProductBidInfo(pdid string) (string, error) {
 	}
 	temp, err := json.Marshal(b.fn.GetBidByID(pid))
 	if err != nil {
-		log.Println(err)
 		return "fail to get Bidinfo", nil
 	}
 	return string(temp), nil
@@ -45,7 +43,6 @@ func (b *Bid) SetBidForBuyer(uid int, pdid, money string) (string, error) {
 
 	if price > b.fn.GetBidByID(pid).NowMoney { // 取得競標價格
 		if err := b.fn.WonBid(pid, uid, price); err != nil {
-			log.Println(err)
 			return "WonBid failed", err
 		}
 
@@ -64,7 +61,6 @@ func (b *Bid) DeleteBid(pdid string) (string, error) {
 
 	err = b.fn.DeleteBid(pid)
 	if err != nil {
-		log.Println(err)
 		return "failed", err
 	}
 	return "ok", nil

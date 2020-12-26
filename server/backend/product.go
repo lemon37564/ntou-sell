@@ -21,7 +21,19 @@ func ProductInit(data *database.Data) *Product {
 }
 
 // AddProduct adds a product with multiple parameters
-func (p Product) AddProduct(pdname string, price int, description string, amount int, sellerUID int, bid bool, date string) (int, error) {
+func (p Product) AddProduct(sellerUID int, pdname, rawPrice, description, rawAmount, rawBid, date string) (int, error) {
+	price, err := strconv.Atoi(rawPrice)
+	if err != nil {
+		return -1, err
+	}
+
+	amount, err := strconv.Atoi(rawAmount)
+	if err != nil {
+		return -1, err
+	}
+
+	bid := (rawBid == "true")
+
 	dt, err := time.Parse(TimeLayout, date)
 	if err != nil {
 		return -1, beError{text: "date invalid! (date format is like 2006-01-02)"}
