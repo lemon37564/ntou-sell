@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"se/database"
+	"strconv"
 	"time"
 )
 
@@ -32,21 +33,36 @@ func (o *Order) GetOrders(uid int) string {
 }
 
 // AddOrder adds a order of a specific user with product id and amount
-func (o *Order) AddOrder(uid, pdid, amount int) bool {
-	err := o.fn.AddOrder(uid, pdid, amount, time.Now())
+func (o *Order) AddOrder(uid int, rawPdid, rawAmount string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
-		return false
+		return "cannot convert " + rawPdid + " into integer", err
 	}
 
-	return true
+	amount, err := strconv.Atoi(rawAmount)
+	if err != nil {
+		return "cannot convert " + rawAmount + " into integer", err
+	}
+
+	err = o.fn.AddOrder(uid, pdid, amount, time.Now())
+	if err != nil {
+		return "false", err
+	}
+
+	return "true", nil
 }
 
 // Delete order
-func (o *Order) Delete(uid, pdid int) bool {
-	err := o.fn.DeleteOrder(uid, pdid)
+func (o *Order) Delete(uid int, rawPdid string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
-		return false
+		return "cannot convert " + rawPdid + " into integer", err
 	}
 
-	return true
+	err = o.fn.DeleteOrder(uid, pdid)
+	if err != nil {
+		return "false", err
+	}
+
+	return "true", nil
 }

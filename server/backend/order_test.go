@@ -10,8 +10,8 @@ func TestOrder(t *testing.T) {
 	defer data.DBClose()
 
 	uid := 0
-	pdid := 0
-	amount := 100000
+	pdid := "0"
+	amount := "100000"
 
 	o := OrderInit(data)
 

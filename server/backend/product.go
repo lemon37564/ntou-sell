@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"se/database"
+	"strconv"
 	"time"
 )
 
@@ -19,20 +21,32 @@ func ProductInit(data *database.Data) *Product {
 }
 
 // AddProduct adds a product with multiple parameters
-func (p Product) AddProduct(pdname string, price int, description string, amount int, sellerUID int, bid bool, date string) (int, string) {
+func (p Product) AddProduct(sellerUID int, pdname, rawPrice, description, rawAmount, rawBid, date string) (int, error) {
+	price, err := strconv.Atoi(rawPrice)
+	if err != nil {
+		return -1, err
+	}
+
+	amount, err := strconv.Atoi(rawAmount)
+	if err != nil {
+		return -1, err
+	}
+
+	bid := (rawBid == "true")
+
 	dt, err := time.Parse(TimeLayout, date)
 	if err != nil {
-		return -1, "date invalid! (date format is like 2006-01-02)"
+		return -1, beError{text: "date invalid! (date format is like 2006-01-02)"}
 	}
 
 	pdid, err := p.fn.AddProduct(pdname, price, description, amount, sellerUID, bid, dt)
 	if err != nil {
 		if fmt.Sprint(err) == "NOT NULL constraint failed: product.seller_id" {
-			return -1, "沒有此使用者帳號!"
+			return -1, beError{text: "沒有此使用者帳號!"}
 		}
-		return -1, fmt.Sprint(err)
+		return -1, err
 	}
-	return pdid, "ok"
+	return pdid, nil
 }
 
 // DeleteProduct deletes a product with seller_uid and product name
@@ -47,88 +61,146 @@ func (p *Product) DeleteProduct(uid int, pdname string) string {
 }
 
 // ChangePrice changes price of a specific product with it's product id
-func (p *Product) ChangePrice(pdid, price int) string {
-	err := p.fn.UpdateProductPrice(pdid, price)
+func (p *Product) ChangePrice(rawPdid, rawPrice string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
-		return "Price cannot change"
+		return "cannot convert " + rawPdid + " into integer", err
 	}
-	return "Price has been changed"
+
+	price, err := strconv.Atoi(rawPrice)
+	if err != nil {
+		return "cannot convert " + rawPrice + " into integer", err
+	}
+
+	err = p.fn.UpdateProductPrice(pdid, price)
+	if err != nil {
+		return "failed", err
+	}
+	return "Price has been changed", nil
 }
 
 // ChangeAmount changes amount of a specific product with it's product id
-func (p *Product) ChangeAmount(pdid, amount int) string {
-
-	err := p.fn.UpdateProductAmount(pdid, amount)
+func (p *Product) ChangeAmount(rawPdid, rawAmount string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
-		return "Amount cannot change"
+		return "cannot convert " + rawPdid + " into integer", err
 	}
-	return "Amount change success"
+
+	amount, err := strconv.Atoi(rawAmount)
+	if err != nil {
+		return "cannot convert " + rawAmount + " into integer", err
+	}
+
+	err = p.fn.UpdateProductAmount(pdid, amount)
+	if err != nil {
+		return "failed", err
+	}
+	return "ok", nil
 }
 
 // ChangeDescription changes description of a specific product with it's product id
-func (p *Product) ChangeDescription(pdid int, description string) string {
-
-	err := p.fn.UpdateProductDescription(pdid, description)
+func (p *Product) ChangeDescription(rawPdid, description string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
-		return "Description cannot change"
+		return "cannot convert " + rawPdid + " into integer", err
 	}
-	return "Description change success"
+
+	err = p.fn.UpdateProductDescription(pdid, description)
+	if err != nil {
+		return "failed", err
+	}
+	return "ok", nil
 }
 
 // SetEvaluation updates eval of a specific product with it's product id
-func (p *Product) SetEvaluation(pdid int, eval float64) string {
-	err := p.fn.UpdateProductEval(pdid, eval)
+func (p *Product) SetEvaluation(rawPdid, rawEval string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
-		return "Evaluation cannot change"
+		return "cannot convert " + rawPdid + " into integer", err
 	}
-	return "Evaluation change success"
+
+	eval, err := strconv.ParseFloat(rawEval, 64)
+	if err != nil {
+		return "cannot convert " + rawEval + " into float", err
+	}
+
+	err = p.fn.UpdateProductEval(pdid, eval)
+	if err != nil {
+		return "failed", err
+	}
+	return "ok", nil
 }
 
-// SearchProductsByName return products info in json
-func (p *Product) SearchProductsByName(name string) string {
-	pds := p.fn.SearchProduct(name)
-
-	res, err := json.Marshal(pds)
-	if err != nil {
-		return err.Error()
+// SearchProducts return products info in json
+func (p *Product) SearchProducts(name, rawMin, rawMax, rawEval string) (string, error) {
+	var (
+		min, max, eval int
+		err            error
+	)
+	if rawMin == "" {
+		min = 0
+	} else {
+		min, err = strconv.Atoi(rawMin)
+		if err != nil {
+			return "cannot convert " + rawMin + " into integer", err
+		}
 	}
 
-	return string(res)
-}
-
-// EnhanceSearchProductsByName is a advanced function of normal search function
-// it can limit the maximum price, minimum price and evaluation
-func (p *Product) EnhanceSearchProductsByName(name string, minPrice, maxPrice, eval int) string {
-	pds := p.fn.SearchProductWithFilter(name, minPrice, maxPrice, eval)
-
-	res, err := json.Marshal(pds)
-	if err != nil {
-		log.Println(err)
+	if rawMax == "" {
+		max = math.MaxInt64
+	} else {
+		max, err = strconv.Atoi(rawMax)
+		if err != nil {
+			return "cannot convert " + rawMax + " into integer", err
+		}
 	}
 
-	return string(res)
+	if rawEval == "" {
+		eval = 0.0
+	} else {
+		eval, err = strconv.Atoi(rawEval)
+		if err != nil {
+			return "cannot convert " + rawEval + " into integer", err
+		}
+	}
+
+	pds := p.fn.SearchProductWithFilter(name, min, max, eval)
+	res, err := json.Marshal(pds)
+	if err != nil {
+		return "failed", err
+	}
+
+	return string(res), nil
 }
 
 // GetNewest return the newest product(s) in the database
-func (p *Product) GetNewest(number int) string {
+func (p *Product) GetNewest(rawNumber string) (string, error) {
+	number, err := strconv.Atoi(rawNumber)
+	if err != nil {
+		return "cannot convert " + rawNumber + " into integer", err
+	}
+
 	temp, err := json.Marshal(p.fn.NewestProduct(number))
 	if err != nil {
-		log.Println(err)
-		return err.Error()
+		return "failed", err
 	}
-	return string(temp)
+	return string(temp), nil
 }
 
 // GetProductInfo return data of a product by it's id
-func (p *Product) GetProductInfo(pdid int) string {
-	//var orders string = ""
+func (p *Product) GetProductInfo(rawPdid string) (string, error) {
+	pdid, err := strconv.Atoi(rawPdid)
+	if err != nil {
+		return "cannot convert " + rawPdid + " into integer", err
+	}
+
 	temp, err := json.Marshal(p.fn.GetProductInfoFromPdID(pdid))
 	if err != nil {
 		log.Println(err)
-		return ""
+		return "failed", err
 	}
 
-	return string(temp)
+	return string(temp), nil
 }
 
 // GetSellerProduct return all product of a seller

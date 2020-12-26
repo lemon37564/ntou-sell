@@ -11,9 +11,9 @@ func TestHistory(t *testing.T) {
 
 	h := HistoryInit(data)
 
-	h.AddHistory(2, 2)
+	h.AddHistory(2, "2")
 
-	if res := h.GetHistory(2, 2, true); res == "null" {
+	if res, _ := h.GetHistory(2, "2", "true"); res == "null" {
 		t.Error("add history but cannot found")
 	}
 }

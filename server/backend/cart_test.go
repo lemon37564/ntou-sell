@@ -13,8 +13,8 @@ func TestCart(t *testing.T) {
 	c := CartInit(data)
 
 	uid := 1
-	pdid := 0
-	amount := 3
+	pdid := "0"
+	amount := "3"
 
 	c.AddProductToCart(uid, pdid, amount)
 

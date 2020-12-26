@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -39,30 +37,23 @@ func (ser Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, BidAPI)
 
 	case "get": //For single bid product
-		if pdid, err := strconv.Atoi(args["pdid"][0]); err == nil {
-			fmt.Fprint(w, ser.Bd.GetProductBidInfo(pdid))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		pdid := args.Get("pdid")
+
+		res, err := ser.Bd.GetProductBidInfo(pdid)
+		response(w, res, err)
 
 	case "set":
-		pdid, err := strconv.Atoi(args["pdid"][0])
-		money, err2 := strconv.Atoi(args["money"][0])
+		pdid := args.Get("pdid")
+		money := args.Get("money")
 
-		if err == nil && err2 == nil {
-			fmt.Fprint(w, ser.Bd.SetBidForBuyer(pdid, uid, money))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Bd.SetBidForBuyer(uid, pdid, money)
+		response(w, res, err)
 
 	case "delete":
-		pdid, err := strconv.Atoi(args["pdid"][0])
+		pdid := args.Get("pdid")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Bd.DeleteBid(pdid))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Bd.DeleteBid(pdid)
+		response(w, res, err)
 
 	default:
 		http.NotFound(w, r)
@@ -87,33 +78,24 @@ func (ser Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, CartAPI)
 
 	case "add": //For single product
-		pdid, err := strconv.Atoi(args["pdid"][0])
-		amount, err2 := strconv.Atoi(args["amount"][0])
+		pdid := args.Get("pdid")
+		amount := args.Get("amount")
 
-		if err == nil && err2 == nil {
-			fmt.Fprint(w, ser.Ct.AddProductToCart(uid, pdid, amount))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ct.AddProductToCart(uid, pdid, amount)
+		response(w, res, err)
 
 	case "remo":
-		pdid, err := strconv.Atoi(args["pdid"][0])
+		pdid := args.Get("pdid")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Ct.RemoveProduct(uid, pdid))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ct.RemoveProduct(uid, pdid)
+		response(w, res, err)
 
 	case "modf":
-		pdid, err := strconv.Atoi(args["pdid"][0])
-		amount, err2 := strconv.Atoi(args["amount"][0])
+		pdid := args.Get("pdid")
+		amount := args.Get("amount")
 
-		if err == nil && err2 == nil {
-			fmt.Fprint(w, ser.Ct.ModifyAmount(uid, pdid, amount))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ct.ModifyAmount(uid, pdid, amount)
+		response(w, res, err)
 
 	// case "tal":
 	// 	fmt.Fprint(w, ser.Ct.TotalCount(uid))
@@ -144,44 +126,31 @@ func (ser Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, HistoryAPI)
 
 	case "get":
-		amount, err := strconv.Atoi(args["amount"][0])
-		newest := (args["newest"][0] == "true")
+		amount := args.Get("amount")
+		newest := args.Get("newest")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Ht.GetHistory(uid, amount, newest))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ht.GetHistory(uid, amount, newest)
+		response(w, res, err)
 
 	case "delete":
-		pdid, err := strconv.Atoi(args["pdid"][0])
+		pdid := args.Get("pdid")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Ht.Delete(uid, pdid))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ht.Delete(uid, pdid)
+		response(w, res, err)
 
 	case "deleteall":
 		fmt.Fprint(w, ser.Ht.DeleteAll(uid))
 
 	case "deletespec":
-		pdids, exi := args["pdids"]
-
-		if exi {
-			fmt.Fprint(w, ser.Ht.DeleteSpecific(uid, pdids[0]))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		pdids := args.Get("pdids")
+		res, err := ser.Ht.DeleteSpecific(uid, pdids)
+		response(w, res, err)
 
 	case "add":
-		pdid, err := strconv.Atoi(args["pdid"][0])
+		pdid := args.Get("pdid")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Ht.AddHistory(uid, pdid))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ht.AddHistory(uid, pdid)
+		response(w, res, err)
 
 	default:
 		http.NotFound(w, r)
@@ -209,24 +178,18 @@ func (ser Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, ser.Ms.GetAll())
 
 	case "send":
-		ruid, err := strconv.Atoi(args["remoteUID"][0])
-		val2, exi := args["text"]
+		ruid := args.Get("remoteUID")
+		txt := args.Get("text")
 
-		if exi && err == nil {
-			fmt.Fprint(w, ser.Ms.AddMessage(uid, ruid, val2[0]))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ms.AddMessage(uid, ruid, txt)
+		response(w, res, err)
 
 	case "get":
-		ruid, err := strconv.Atoi(args["remoteUID"][0])
-		asc := (args["ascend"][0] == "true")
+		ruid := args.Get("remoteUID")
+		asc := args.Get("ascend")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Ms.GetMessages(uid, ruid, asc))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Ms.GetMessages(uid, ruid, asc)
+		response(w, res, err)
 
 	default:
 		http.NotFound(w, r)
@@ -254,22 +217,17 @@ func (ser Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, ser.Od.GetOrders(uid))
 
 	case "add":
-		pdid, err := strconv.Atoi(args["pdid"][0])
-		amount, err2 := strconv.Atoi(args["amount"][0])
+		pdid := args.Get("pdid")
+		amount := args.Get("amount")
 
-		if err == nil && err2 == nil {
-			fmt.Fprint(w, ser.Od.AddOrder(uid, pdid, amount))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Od.AddOrder(uid, pdid, amount)
+		response(w, res, err)
 
 	case "del":
-		pdid, err := strconv.Atoi(args["pdid"][0])
-		if err == nil {
-			fmt.Fprint(w, ser.Od.Delete(uid, pdid))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		pdid := args.Get("pdid")
+
+		res, err := ser.Od.Delete(uid, pdid)
+		response(w, res, err)
 
 	default:
 		http.NotFound(w, r)
@@ -292,7 +250,7 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		log.Println("receive post (product)")
 		if mux.Vars(r)["key"] == "postadd" {
 			var pdid int
-			var stat string
+			var stat error
 
 			r.ParseMultipartForm(32 << 20)
 
@@ -303,12 +261,11 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			bid := r.Form["bid"][0]
 			date := r.Form["date"][0]
 
-			p, err1 := strconv.Atoi(price)
-			a, err2 := strconv.Atoi(amount)
-			b := (bid == "true")
-
-			if err1 == nil && err2 == nil {
-				pdid, stat = ser.Pd.AddProduct(name, p, des, a, uid, b, date)
+			_, err := ser.Pd.AddProduct(uid, name, price, des, amount, bid, date)
+			if err == nil {
+				fmt.Fprint(w, "ok")
+			} else {
+				http.Error(w, "failed", http.StatusBadRequest)
 			}
 
 			fmt.Fprint(w, "ok")
@@ -346,85 +303,46 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, ProductAPI)
 
 	case "add":
-		exist := make([]bool, 6)
-		var name, price, des, amount, bid, date []string
+		name := args.Get("name")
+		price := args.Get("price")
+		des := args.Get("description")
+		amount := args.Get("amount")
+		bid := args.Get("bid")
+		date := args.Get("date")
 
-		name, exist[0] = args["name"]
-		price, exist[1] = args["price"]
-		des, exist[2] = args["description"]
-		amount, exist[3] = args["amount"]
-		bid, exist[4] = args["bid"]
-		date, exist[5] = args["date"]
-
-		p, err := strconv.Atoi(price[0])
-		a, err2 := strconv.Atoi(amount[0])
-		b := (bid[0] == "true")
-
-		if all(exist) && err == nil && err2 == nil {
-			_, stat := ser.Pd.AddProduct(name[0], p, des[0], a, uid, b, date[0])
-			fmt.Fprint(w, stat)
+		_, err := ser.Pd.AddProduct(uid, name, price, des, amount, bid, date)
+		if err == nil {
+			fmt.Fprint(w, "ok")
 		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
+			http.Error(w, "failed", http.StatusBadRequest)
 		}
 
 	case "get":
-		pdid, err := strconv.Atoi(args["pdid"][0])
+		pdid := args.Get("pdid")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Pd.GetProductInfo(pdid))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Pd.GetProductInfo(pdid)
+		response(w, res, err)
 
 	case "delete":
-		val, exi := args["pdname"]
+		val := args.Get("pdname")
 
-		if exi {
-			fmt.Fprint(w, ser.Pd.DeleteProduct(uid, val[0]))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res := ser.Pd.DeleteProduct(uid, val)
+		fmt.Fprint(w, res)
 
 	case "newest":
-		amount, err := strconv.Atoi(args["amount"][0])
+		amount := args.Get("amount")
 
-		if err == nil {
-			fmt.Fprint(w, ser.Pd.GetNewest(amount))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Pd.GetNewest(amount)
+		response(w, res, err)
 
 	case "search":
-		exist := make([]bool, 4)
-		var name, min, max, eval []string
+		name := args.Get("name")
+		min := args.Get("minprice")
+		max := args.Get("maxprice")
+		eval := args.Get("eval")
 
-		name, exist[0] = args["name"]
-		min, exist[1] = args["minprice"]
-		max, exist[2] = args["maxprice"]
-		eval, exist[3] = args["eval"]
-
-		mi, err1 := strconv.Atoi(min[0])
-		if err1 != nil {
-			mi = -1
-		}
-
-		ma, err2 := strconv.Atoi(max[0])
-		if err2 != nil {
-			ma = math.MaxInt64
-		}
-
-		ev, err3 := strconv.Atoi(eval[0])
-		if err3 != nil {
-			ev = 0
-		}
-
-		if exist[0] && (err1 != nil && err2 != nil && err3 != nil) {
-			fmt.Fprint(w, ser.Pd.SearchProductsByName(name[0]))
-		} else if exist[0] && (err1 == nil || err2 == nil || err3 == nil) {
-			fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name[0], mi, ma, ev))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		res, err := ser.Pd.SearchProducts(name, min, max, eval)
+		response(w, res, err)
 
 	case "urproduct":
 		fmt.Fprint(w, ser.Pd.GetSellerProduct(uid))
@@ -493,4 +411,13 @@ func all(bs []bool) bool {
 	}
 
 	return true
+}
+
+func response(w http.ResponseWriter, str string, err error) {
+	if err == nil {
+		fmt.Fprint(w, str)
+	} else {
+		log.Println(err)
+		http.Error(w, str, http.StatusBadRequest)
+	}
 }
