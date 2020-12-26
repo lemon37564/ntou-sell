@@ -84,16 +84,37 @@ func (p *Product) SetEvaluation(pdid int, eval float64) string {
 	return "Evaluation change success"
 }
 
-// SearchProductsByName return products info in json
-func (p *Product) SearchProductsByName(name string) string {
-	pds := p.fn.SearchProduct(name)
+// SearchProducts return products info in json
+func (p *Product) SearchProducts(args map[string]interface{}) string {
+	// var (
+	// 	name           string
+	// 	min, max, eval int
+	// 	exi            bool
+	// 	temp           interface{}
+	// 	err            error
+	// )
 
-	res, err := json.Marshal(pds)
-	if err != nil {
-		return err.Error()
-	}
+	// temp, exi = args["name"]
+	// if exi {
+	// 	name = temp.(string)
+	// }
 
-	return string(res)
+	// temp, exi = args["min"]
+	// if exi {
+	// 	min, err = strconv.Atoi(temp.(string))
+	// 	if err != nil {
+	// 		return ""
+	// 	}
+	// }
+
+	// pds := p.fn.SearchProduct(name)
+
+	// res, err := json.Marshal(pds)
+	// if err != nil {
+	// 	return err.Error()
+	// }
+
+	return "string(res)"
 }
 
 // EnhanceSearchProductsByName is a advanced function of normal search function

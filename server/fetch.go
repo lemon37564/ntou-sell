@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math"
 	"net/http"
 	"os"
 	"strconv"
@@ -395,36 +394,22 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case "search":
-		exist := make([]bool, 4)
-		var name, min, max, eval []string
+		n := parseArgs(args)
 
-		name, exist[0] = args["name"]
-		min, exist[1] = args["minprice"]
-		max, exist[2] = args["maxprice"]
-		eval, exist[3] = args["eval"]
+		name := n["name"].(string)
+		min := n["minprice"].(int)
+		max := n["maxprice"].(int)
+		eval := n["eval"].(int)
 
-		mi, err1 := strconv.Atoi(min[0])
-		if err1 != nil {
-			mi = -1
-		}
+		fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name, min, max, eval))
 
-		ma, err2 := strconv.Atoi(max[0])
-		if err2 != nil {
-			ma = math.MaxInt64
-		}
-
-		ev, err3 := strconv.Atoi(eval[0])
-		if err3 != nil {
-			ev = 0
-		}
-
-		if exist[0] && (err1 != nil && err2 != nil && err3 != nil) {
-			fmt.Fprint(w, ser.Pd.SearchProductsByName(name[0]))
-		} else if exist[0] && (err1 == nil || err2 == nil || err3 == nil) {
-			fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name[0], mi, ma, ev))
-		} else {
-			http.Error(w, "argument error", http.StatusBadRequest)
-		}
+		// if exist0 && (err1 != nil && err2 != nil && err3 != nil) {
+		// 	fmt.Fprint(w, ser.Pd.SearchProductsByName(name))
+		// } else if exist0 && (err1 == nil || err2 == nil || err3 == nil) {
+		// 	fmt.Fprint(w, ser.Pd.EnhanceSearchProductsByName(name, min, max, eval))
+		// } else {
+		// 	http.Error(w, "argument error", http.StatusBadRequest)
+		// }
 
 	case "urproduct":
 		fmt.Fprint(w, ser.Pd.GetSellerProduct(uid))
@@ -493,4 +478,14 @@ func all(bs []bool) bool {
 	}
 
 	return true
+}
+
+func parseArgs(orig map[string][]string) map[string]interface{} {
+	res := make(map[string]interface{})
+
+	for i, v := range orig {
+		res[i] = v[0]
+	}
+
+	return res
 }
