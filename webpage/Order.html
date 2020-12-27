@@ -305,11 +305,40 @@ insertChat("me", "What would you like to talk about today?", 3500);
 insertChat("you", "Tell me a joke",7000);
 insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
+function getmessg(){
+  var request=new XMLHttpRequest;
+  request.open("get","/backend/message/get?remoteUID=2&ascend=true");
+  request.onreadystatechange = function() {
+      if(request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if(type.match(/^text/)){
+          var datastr = JSON.parse(request.responseText);
+          var len = datastr.length;
+          alert(datastr[0].Status);
+        }
+      }
+  }
 
+}
 function sendmessg(){
   var dialo = document.getElementById("message");
   alert(dialo.value);
   insertChat("me",dialo.value,20000);
+  var content = "/backend/message/send?";
+  content=content+"remote="+"2"+"&text="+dialog;
+
+  var request=new XMLHttpRequest;
+  request.open("get",content);
+  request.onreadystatechange = function() { 
+      if (request.readyState === 4 && request.status === 200) {
+          var type = request.getResponseHeader("Content-Type");
+          alert("success");
+      }
+      else{
+        alert("not success");
+      }
+  };
+  request.send(null);
 }
 </script>
 
@@ -386,6 +415,7 @@ function sendmessg(){
             </div>
             <div style="padding:10px;">
                 <button type="button" onclick="sendmessg()">傳送</button>
+                <button type="button" onclick="getmessg()">接</button>
             </div>                
         </div>
     </div>
