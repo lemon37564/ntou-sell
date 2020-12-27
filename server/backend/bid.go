@@ -16,7 +16,7 @@ func BidInit(data *database.Data) *Bid {
 	return &Bid{fn: data}
 }
 
-//GetProductBidInfo 回傳商品目前競標商品資訊
+// GetProductBidInfo 回傳商品目前競標商品資訊
 func (b Bid) GetProductBidInfo(pdid string) (string, error) {
 	pid, err := strconv.Atoi(pdid)
 	if err != nil {
@@ -24,7 +24,7 @@ func (b Bid) GetProductBidInfo(pdid string) (string, error) {
 	}
 	temp, err := json.Marshal(b.fn.GetBidByID(pid))
 	if err != nil {
-		return "fail to get Bidinfo", nil
+		return "failed", err
 	}
 	return string(temp), nil
 }
@@ -43,7 +43,7 @@ func (b *Bid) SetBidForBuyer(uid int, pdid, money string) (string, error) {
 
 	if price > b.fn.GetBidByID(pid).NowMoney { // 取得競標價格
 		if err := b.fn.WonBid(pid, uid, price); err != nil {
-			return "WonBid failed", err
+			return "failed", err
 		}
 
 		return "ok", nil
