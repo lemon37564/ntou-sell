@@ -159,7 +159,7 @@ function addhis(id){
 //以下是搜尋商品的function，目前無圖片及連結
 
 $(document).ready(function(){
-  $("#rt").click(function(){
+  $("button").click(function(){
   $("#if").toggle();
   });
 });
@@ -193,7 +193,7 @@ request.open("get",msg);
       '</div>'+
       '<div id="div4">'+
       '<input type="button" style="font-size:4px;width:40px;height:30px;margin-right:10px;" id="box1" name="button2" value="更改">'+
-      ' <button type="button"  id="rt" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="">'+"說個話"+'</button>'+
+      ' <button type="button"  id="rt" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="getmessg('+datastr[i].SellerID+')">'+"說個話"+'</button>'+
       ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="addhis(this.id);dele(this.id);">'+"完成"+'</button>'+
       '</div>'+
       '</div>';
@@ -313,8 +313,8 @@ insertChat("you", "Tell me a joke",7000);
 insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
 
-function getmessg(){
-
+function getmessg(pdid){
+alert(pdid);
 var newProduct='';
 var request=new XMLHttpRequest;
 
@@ -400,7 +400,7 @@ function sendmessg(){
       </div>
     </div>
   </nav>
-  <div id="if">这是一个段落。</div>
+  
   <div class = "border">
     <h2>Order</h2>
     <div style="padding-left:20px">
@@ -422,7 +422,7 @@ function sendmessg(){
     
       </div>
       <!--below show dialog-->
-      <div id = "show">
+      <div id = "if">
       <div class="col-sm-3 col-sm-offset-4 frame" >
         <ul id="dia"></ul>
         <div>
