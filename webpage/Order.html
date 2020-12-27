@@ -186,7 +186,7 @@ request.open("get",msg);
       '</div>'+
       '<div id="div4">'+
       '<input type="button" style="font-size:4px;width:40px;height:30px;margin-right:10px;" id="box1" name="button2" value="更改">'+
-      ' <button type="button"  style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="">'+"說個話"+'</button>'
+      ' <button type="button"  style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="">'+"說個話"+'</button>'+
       ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="addhis(this.id);dele(this.id);">'+"完成"+'</button>'+
       '</div>'+
       '</div>';
@@ -419,7 +419,8 @@ function sendmessg(){
     
       </div>
       <!--below show dialog-->
-      <div class="col-sm-3 col-sm-offset-4 frame" id="show">
+      <div id = "show">
+      <div class="col-sm-3 col-sm-offset-4 frame" >
         <ul id="dia"></ul>
         <div>
             <div class="msj-rta macro">                        
@@ -437,7 +438,7 @@ function sendmessg(){
             </div>                
         </div>
     </div>
-    
+    </div>
     <script src="assets/js/dialog.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="jquery/jquery.min.js"></script>
