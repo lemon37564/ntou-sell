@@ -311,6 +311,7 @@ function getmessg(){
   var request2=new XMLHttpRequest;
   request2.open("get","backend/message/get?remoteUID=2&ascend=true");
   request2.onreadystatechange = function() {
+      alert("dddd");
       if(request2.readyState === 4 && request2.status === 200) {
         var type = request2.getResponseHeader("Content-Type");
         if(type.match(/^text/)){
