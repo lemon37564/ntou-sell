@@ -186,7 +186,7 @@ request.open("get",msg);
       '</div>'+
       '<div id="div4">'+
       '<input type="button" style="font-size:4px;width:40px;height:30px;margin-right:10px;" id="box1" name="button2" value="更改">'+
-      
+      ' <button type="button" id="show" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="">'+"說個話"+'</button>'
       ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="addhis(this.id);dele(this.id);">'+"完成"+'</button>'+
       '</div>'+
       '</div>';
@@ -202,7 +202,14 @@ request.send(null);
 
 }
 
-
+$(document).ready(function(){
+  $("#hide").click(function(){
+  $("#hide").hide();
+  });
+  $("#show").click(function(){
+  $("#show").show();
+  });
+});
 //logout的功能
 function logout(){
 localStorage.clear();
@@ -317,10 +324,14 @@ request.onreadystatechange = function() {
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
         var datastr = JSON.parse(request.responseText);
-        var len  = datastr.length;
-        alert("dd");
+        var len  = datastr.Content;
+        
         alert(datastr.Content[0].Status);
-        var str= "";
+        for(var i=0;i<len;i++){
+          if(datastr.Content[i].Status=="s")insertChat("me",datastr.Content[i].Text,0);
+          if(datastr.Content[i].Status=="r")insertChat("you",datastr.Content[i].Text,0);
+        }
+        
         
 
         }
@@ -411,7 +422,7 @@ function sendmessg(){
     
       </div>
       <!--below show dialog-->
-      <div class="col-sm-3 col-sm-offset-4 frame">
+      <div class="col-sm-3 col-sm-offset-4 frame" id="show">
         <ul id="dia"></ul>
         <div>
             <div class="msj-rta macro">                        
