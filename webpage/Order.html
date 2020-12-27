@@ -157,6 +157,13 @@ function addhis(id){
     request2.send(null);
 }
 //以下是搜尋商品的function，目前無圖片及連結
+
+$(document).ready(function(){
+  $("#rt").click(function(){
+  $("#if").toggle();
+  });
+});
+
 window.onload=getProductOrder;
 function getProductOrder(){
 
@@ -202,11 +209,7 @@ request.send(null);
 
 }
 
-$(document).ready(function(){
-  $("#rt").click(function(){
-  $("#if").toggle();
-  });
-});
+
 //logout的功能
 function logout(){
 localStorage.clear();
