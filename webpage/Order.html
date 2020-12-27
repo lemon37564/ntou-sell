@@ -305,7 +305,9 @@ insertChat("me", "What would you like to talk about today?", 3500);
 insertChat("you", "Tell me a joke",7000);
 insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
+
 function getmessg(){
+  alert("s");
   var request=new XMLHttpRequest;
   request.open("get","/backend/message/get?remoteUID=2&ascend=true");
   request.onreadystatechange = function() {
@@ -325,7 +327,7 @@ function sendmessg(){
   alert(dialo.value);
   insertChat("me",dialo.value,20000);
   var content = "/backend/message/send?";
-  content=content+"remote="+"2"+"&text="+dialog;
+  content=content+"remote="+"2"+"&text="+dialo;
 
   var request=new XMLHttpRequest;
   request.open("get",content);
