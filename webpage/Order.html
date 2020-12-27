@@ -306,6 +306,10 @@ insertChat("you", "Tell me a joke",7000);
 insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
 
+function sendmessg(){
+  var message= document.getElementById("message");
+  alert(message);
+}
 </script>
 
 
@@ -372,12 +376,12 @@ insertChat("you", "LOL", 12000);
         <div>
             <div class="msj-rta macro">                        
                 <div class="text text-r" style="background:whitesmoke !important">
-                    <input class="mytext" placeholder="Type a message"/>
+                    <input class="mytext" id="message" placeholder="Type a message"/>
                 </div> 
 
             </div>
             <div style="padding:10px;">
-                <span class="glyphicon glyphicon-share-alt"></span>
+                <button type="button" id="dd" onclick="sendmessg()">傳送</button>
             </div>                
         </div>
     </div>
