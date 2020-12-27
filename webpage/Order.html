@@ -307,26 +307,26 @@ insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
 
 function getmessg(){
-  alert("s");
-  var request2=new XMLHttpRequest;
-  request2.open("get","backend/message/get?remoteUID=2&ascend=true");
-  request2.onreadystatechange = function() {
-      alert("dddd");
-      if(request2.readyState === 4 && request2.status === 200) {
-        var type = request2.getResponseHeader("Content-Type");
-        if(type.match(/^text/)){
-          alert("ddd");
-          var datastr = JSON.parse(request2.responseText);
-          var len = datastr.length;
 
-          alert(datastr);
-          
+var newProduct='';
+var request=new XMLHttpRequest;
+
+request.open("get","/backend/message/get?remoteUID=2&ascend=true");
+request.onreadystatechange = function() { 
+    if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+        var datastr = JSON.parse(request.responseText);
+        var len  = datastr.length;
+        alert("dd");
+        var str= "";
+        
+
         }
-      }
-      else {
-        alert("err");
-      }
-  }
+    }
+document.getElementById("TP").innerHTML=newProduct;
+};
+request.send(null);
 
 }
 function sendmessg(){
