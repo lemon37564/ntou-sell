@@ -316,7 +316,8 @@ function getmessg(){
         if(type.match(/^text/)){
           var datastr = JSON.parse(request.responseText);
           var len = datastr.length;
-          alert(datastr[0].Status);
+          alert(datastr.Content[0].Status);
+          
         }
       }
   }
@@ -327,7 +328,7 @@ function sendmessg(){
   alert(dialo.value);
   insertChat("me",dialo.value,20000);
   var content = "/backend/message/send?";
-  content=content+"remote="+"2"+"&text="+dialo;
+  content=content+"remote="+"2"+"&text="+dialo.value;
 
   var request=new XMLHttpRequest;
   request.open("get",content);
