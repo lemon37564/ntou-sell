@@ -319,13 +319,13 @@ request.onreadystatechange = function() {
         var datastr = JSON.parse(request.responseText);
         var len  = datastr.length;
         alert("dd");
-        alert(datastr[0].Content);
+        alert(datastr.Content);
         var str= "";
         
 
         }
     }
-document.getElementById("TP").innerHTML=newProduct;
+
 };
 request.send(null);
 
