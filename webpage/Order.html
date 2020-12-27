@@ -319,7 +319,7 @@ request.onreadystatechange = function() {
         var datastr = JSON.parse(request.responseText);
         var len  = datastr.length;
         alert("dd");
-        alert(datastr.Content);
+        alert(datastr.Content[0].Status);
         var str= "";
         
 
