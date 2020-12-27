@@ -26,8 +26,12 @@ func (u *User) Login(account, password string) (int, bool) {
 
 // Regist let user regist his own account
 func (u *User) Regist(account, password, name string) string {
+	if containCh(account) {
+		return "帳號不能含有中文"
+	}
+
 	if containCh(password) {
-		return "密碼不能為中文!"
+		return "密碼不能為中文"
 	}
 
 	hash := sha256Hash(password)

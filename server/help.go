@@ -9,7 +9,7 @@ const API = `
     		<form action="/backend/user/login" method="post">
       			Account:<input type="text" name="account">
       			Password:<input type="password" name="password">
-      			<input type="submit" value="Submit">
+      			<input type="submit" value="登入">
     		</form>
   		</body>
 	<a href=/backend/user/logout>登出</a>
@@ -46,7 +46,7 @@ const UserAPI = `
 
 		/backend/user/login<br>
 		登入是否成功<br>
-		參數: "account", "password"
+		Form: "account", "password"
 		<br><br>
 
 		/backend/user/logout<br>
@@ -57,21 +57,21 @@ const UserAPI = `
 
 		/backend/user/regist<br>
 		註冊新帳號<br>
-		參數: "account", "password", "name"<br><br>
+		Form: "account", "password", "name"<br><br>
 
 		/backend/user/delete<br>
 		刪除帳號<br>
-		參數: "password"
+		Form: "password"
 		<br><br>
 
 		/backend/user/delete<br>
 		更換目前登入帳號的密碼<br>
-		參數: "oldPassword", "newPassword"
+		Form: "oldPassword", "newPassword"
 		<br><br>
 
 		/backend/user/delete<br>
 		更換目前登入帳號的使用者姓名(暱稱)<br>
-		參數: "newName"
+		Form: "newName"
 		<br><br>
 	</p>
 </html>
@@ -96,7 +96,7 @@ const ProductAPI = `
 		暫時新增的上傳商品(POST)
 		/backend/product/postadd<br>
 		新增商品以及圖片<br>
-		參數:<br>
+		Form:<br>
 		name<br>
 		price<br>
 		description<br>
