@@ -334,7 +334,7 @@ function sendmessg(){
   alert(dialo.value);
   insertChat("me",dialo.value,20000);
   var content = "/backend/message/send?";
-  content=content+"remote="+"2"+"&text="+dialo.value;
+  content=content+"remoteUID="+"2"+"&text="+dialo.value;
 
   var request=new XMLHttpRequest;
   request.open("get",content);
