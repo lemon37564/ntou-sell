@@ -403,16 +403,6 @@ func (ser Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func all(bs []bool) bool {
-	for _, v := range bs {
-		if !v {
-			return false
-		}
-	}
-
-	return true
-}
-
 func response(w http.ResponseWriter, str string, err error) {
 	if err == nil {
 		fmt.Fprint(w, str)
