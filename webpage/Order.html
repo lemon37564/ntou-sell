@@ -307,9 +307,9 @@ insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
 
 function sendmessg(){
-  var dialo = document.getElementById("message");
-  alert(dialo);
-  insertChat("me",dialo,20000);
+  var dialo = document.getElementById("mes");
+  alert(dialo.value);
+  insertChat("me",dialo.value,20000);
 }
 </script>
 
@@ -377,17 +377,19 @@ function sendmessg(){
         <div>
             <div class="msj-rta macro">                        
                 <div class="text text-r" style="background:whitesmoke !important">
-                    <input name="message" type="text" class="mytext" id="message"  placeholder="Type a message"/>
+                    
+                    <input name="message" type="text" class="mytext" id="mes"  name="message" placeholder="Type a message"/>
                     
 
                 </div> 
 
             </div>
             <div style="padding:10px;">
-                <button type="button" id="dd" onclick="sendmessg()">傳送</button>
+                <button type="button" onclick="sendmessg()">傳送</button>
             </div>                
         </div>
     </div>
+    
     <script src="assets/js/dialog.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="jquery/jquery.min.js"></script>
