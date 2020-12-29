@@ -28,7 +28,7 @@ function changePassword(){
     var params='oldPassword='+oldPassword.value+'&newPassword='+newPassword.value;
 	
 	var request=new XMLHttpRequest;
-	request.open("post","backend/user/delete");
+	request.open("post","backend/user/changePassword");
 	request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
   	request.onreadystatechange = function() { // Define event listener
   	    // If the request is compete and was successful

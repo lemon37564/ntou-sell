@@ -26,12 +26,20 @@ type Data struct {
 
 // OpenAndInit open database and return *Data
 func OpenAndInit() *Data {
-	createTables()
+
+	insert := false
+
+	_, err := os.Stat(file)
+	if err != nil {
+		insert = true
+	}
 
 	db, err := sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	createTables(db)
 
 	data := Data{
 		Db:      db,
@@ -43,7 +51,9 @@ func OpenAndInit() *Data {
 		Product: productPrepare(db),
 		User:    userPrepare(db)}
 
-	TestInsert(&data)
+	if insert {
+		TestInsert(&data)
+	}
 
 	return &data
 }
@@ -55,7 +65,7 @@ func (d Data) DBClose() {
 
 // RemoveAll : *FATAL* this command will remove whole database
 func RemoveAll() {
-	if err := os.RemoveAll(file); err != nil {
+	if err := os.Remove(file); err != nil {
 		log.Fatal(err)
 	}
 }

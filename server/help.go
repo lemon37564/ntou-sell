@@ -64,12 +64,12 @@ const UserAPI = `
 		Form: "password"
 		<br><br>
 
-		/backend/user/delete<br>
+		/backend/user/changePassword<br>
 		更換目前登入帳號的密碼<br>
 		Form: "oldPassword", "newPassword"
 		<br><br>
 
-		/backend/user/delete<br>
+		/backend/user/changeName<br>
 		更換目前登入帳號的使用者姓名(暱稱)<br>
 		Form: "newName"
 		<br><br>

@@ -6,15 +6,9 @@ import (
 	"time"
 )
 
-func createTables() {
+func createTables(db *sql.DB) {
 	log.Println("Initailizing database...")
 	start := time.Now()
-
-	db, err := sql.Open("sqlite3", file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
 
 	createUserTable(db)
 	createProductTable(db)

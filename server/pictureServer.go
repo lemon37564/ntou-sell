@@ -61,19 +61,18 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 	// bad way, rewrite it later
 	psb := []string{".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico", ".bmp"}
 
-	pdid, exi := args["pdid"]
-	if exi {
-		_, err := strconv.Atoi(pdid[0])
-		if err != nil {
-			fmt.Fprint(w, "pdid is not an integer")
-		}
+	pdid := args.Get("pdid")
+	_, err := strconv.Atoi(pdid)
+	if err != nil {
+		fmt.Fprint(w, "pdid is not an integer")
+		return
+	}
 
-		for _, v := range psb {
-			_, err := os.Stat("webpage/img/" + pdid[0] + v)
-			if err == nil {
-				fmt.Fprint(w, pdid[0]+v)
-				return
-			}
+	for _, v := range psb {
+		_, err := os.Stat("webpage/img/" + pdid + v)
+		if err == nil {
+			fmt.Fprint(w, pdid+v)
+			return
 		}
 	}
 
