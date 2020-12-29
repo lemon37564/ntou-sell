@@ -48,18 +48,31 @@ function ShowProduct(){
 					var bidTime=Date.parse(datastr.Date);
 					console.log(today);
 					console.log(bidTime);
-					if(today>bidTime){alert('過期');}
-					if(today<bidTime){alert('沒過期');}
-			        var content1 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
-				    var content2 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Description:'+datastr.Description+'</h4></td></tr>';
-				    var content3 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
-				    var content4 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
-					var content5 = '<tr><td><h4 style="display:inline;margin-left:210px;">Price:'+datastr.Price+'</h4></td></tr>';
-					var content6 = '<tr><td><h4 style="display:inline;margin-left:210px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
-				    var content7 = '<tr><td><h4 style="display:inline;margin-left:210px;">Time:~'+datastr.Date+'</h4></td></tr>';
-				    var content8 = '<tr><td><input id="bidSet" style="display:inline;margin-left:210px;" name="money" size="35"><button style="background:rgba(144,202,249,1);width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
-				    productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7+content8;
-			    }
+					if(today>bidTime){
+					    alert('競標時間已結束,因此無法出價但仍能查看商品資訊');
+						var content1 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
+				    	var content2 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Description:'+datastr.Description+'</h4></td></tr>';
+				    	var content3 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
+				    	var content4 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
+						var content5 = '<tr><td><h4 style="display:inline;margin-left:210px;">Price:'+datastr.Price+'</h4></td></tr>';
+						var content6 = '<tr><td><h4 style="display:inline;margin-left:210px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
+				    	var content7 = '<tr><td><h4 style="display:inline;margin-left:210px;">Time:~'+datastr.Date+'</h4></td></tr>';
+				    	//因過期而無法出價var content8 = '<tr><td><input id="bidSet" style="display:inline;margin-left:210px;" name="money" size="35"><button style="background:rgba(144,202,249,1);width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
+				    	productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7/*+content8*/;
+					}
+					if(today<bidTime){
+					    //alert('沒過期');
+			        	var content1 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
+				    	var content2 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Description:'+datastr.Description+'</h4></td></tr>';
+				    	var content3 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
+				    	var content4 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
+						var content5 = '<tr><td><h4 style="display:inline;margin-left:210px;">Price:'+datastr.Price+'</h4></td></tr>';
+						var content6 = '<tr><td><h4 style="display:inline;margin-left:210px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
+				    	var content7 = '<tr><td><h4 style="display:inline;margin-left:210px;">Time:~'+datastr.Date+'</h4></td></tr>';
+				    	var content8 = '<tr><td><input id="bidSet" style="display:inline;margin-left:210px;" name="money" size="35"><button style="background:rgba(144,202,249,1);width:100px;height:50px;font-size:30px;" onclick="bid()">Bid</button></td></tr>';
+				    	productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7+content8;
+			    	}
+				}
 				var request2=new XMLHttpRequest;
 				var msg2='backend/pics/get?pdid='+localStorage.getItem("Pdid");
 				request2.open("get",msg2);
