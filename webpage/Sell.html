@@ -321,12 +321,12 @@ class.myButton:active {
         </header>
 <div align=center><!--對其-->
 
-
+  <iframe name="hiddenFrame" class="hide"></iframe>
 <div class="border"><!--版面-->
     
     <div class="col-md-8">
         <div class="contact-form">
-          <form  id="contact" action="backend/product/postadd" method="post" enctype="multipart/form-data" onsubmit="return window.">
+          <form  target="hiddenFrame" id="contact" action="backend/product/postadd" method="post" enctype="multipart/form-data" >
             <div class="row">
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <fieldset><!--name-->
