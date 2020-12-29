@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -273,7 +274,7 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			subName := spt[len(spt)-1]
 
 			fmt.Fprint(w, handler.Header)
-			f, err := os.Create("webpage/img/" + fmt.Sprint(pdid) + "." + subName)
+			f, err := os.Create("webpage/img/" + strconv.Itoa(pdid) + "." + subName)
 			if err != nil {
 				log.Println("at creatingfile:", err)
 			}
