@@ -334,6 +334,7 @@ const PicAPI = `
 		<input type="hidden" name="token" value="{{.}}"/><br>
 		<input type="submit" value="upload" /><br>
 		<br><br>
+		</form>
 	
 		/backend/pics/changeBg<br>
 		更改背景圖片(用post)<br>
@@ -344,6 +345,7 @@ const PicAPI = `
 		<input type="hidden" name="token" value="{{.}}"/><br>
 		<input type="submit" value="upload" /><br>
 		<br><br>
+		</form>
 	</p>
 </html>
 `
