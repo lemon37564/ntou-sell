@@ -89,8 +89,9 @@ func (u *User) ChangeName(uid int, newname string) string {
 	return "ok"
 }
 
+const salt = "ntou-sell"
+
 func sha256Hash(key string) string {
-	salt := "ntou-sell"
 	key += salt
 
 	hasher := sha256.New()

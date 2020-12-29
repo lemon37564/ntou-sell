@@ -276,7 +276,7 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, handler.Header)
 			f, err := os.Create("webpage/img/" + strconv.Itoa(pdid) + "." + subName)
 			if err != nil {
-				log.Println("at creatingfile:", err)
+				log.Println("at creating file:", err)
 			}
 			defer f.Close()
 
