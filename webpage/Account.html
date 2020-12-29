@@ -13,8 +13,39 @@
 window.onload=ShowAccount;
 
 function ShowAccount(){
-    document.getElementById("currentTitle").innerHTML='Account Information';
-	document.getElementById("NP").innerHTML='<tr><td><h4 style="margin-left:300px;">Account:'+localStorage.getItem("account")+'</h4></td></tr><tr><td><h4 style="margin-left:300px;">Password:'+localStorage.getItem("password")+'</h4></td></tr>';
+    var msg='<tr><td><h4 style="margin-left:300px;">Account:'+localStorage.getItem("account")+'</h4></td></tr>';
+	// msg=msg+'<tr><td><h4 style="margin-left:300px;">Password:'+localStorage.getItem("password")+'</h4></td></tr>';  //顯示密碼
+    msg=msg+'<tr><td><h4 style="margin-left:300px;">原密碼:<input id="oldPassword" type="text" name="oldPassword" value="" size="25" style=""></h4></td></tr>'+'<tr><td><h4 style="margin-left:300px;">新密碼:<input id="newPassword" type="text" name="newPassword" value="" size="25" style=""></h4></td></tr>'+'<tr><td><button style="margin-left:420px;background:rgba(144,202,249,1);width:150px;height:50px;font-size:25px;" onclick="changePassword()" >更改密碼</button></td></tr>';
+	
+	document.getElementById("currentTitle").innerHTML='Account Information';
+	document.getElementById("NP").innerHTML=msg;
+
+}
+
+function changePassword(){
+    var oldPassword=document.getElementById("oldPassword");
+	var newPassword=document.getElementById("newPassword");
+    var params='oldPassword='+oldPassword.value+'&newPassword='+newPassword.value;
+	
+	var request=new XMLHttpRequest;
+	request.open("post","backend/user/delete");
+	request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  	request.onreadystatechange = function() { // Define event listener
+  	    // If the request is compete and was successful
+    	if (request.readyState === 4 && request.status === 200) {
+      		var type = request.getResponseHeader("Content-Type");
+        	if(request.responseText==="ok"){
+			    localStorage.setItem('password', newPassword.value); 
+        		alert('更改成功'); 
+        		window.location.href="Account.html";
+			}
+			else{
+        		alert(request.responseText); 
+        		window.location.href="Account.html";
+        	}
+    	}
+    };
+	request.send(params); //送出訊息
 }
 
 
