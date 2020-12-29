@@ -44,6 +44,12 @@ function ShowProduct(){
 		        }
 		        if(Bid===true){
 			        console.log('ok2');
+					var today=new Date();
+					var bidTime=Date.parse(datastr.Date);
+					console.log(today);
+					console.log(bidTime);
+					if(today>bidTime){alert('過期');}
+					if(today<bidTime){alert('沒過期');}
 			        var content1 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
 				    var content2 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Description:'+datastr.Description+'</h4></td></tr>';
 				    var content3 = '<tr><td><h4 style="display:inline;margin-left:210px;">Product Evaluate:'+datastr.Eval+'</h4></td></tr>';
