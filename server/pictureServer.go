@@ -82,7 +82,6 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
-
 	r.ParseMultipartForm(32 << 20)
 	file, _, err := r.FormFile("uploadfile")
 	if err != nil {
@@ -99,17 +98,6 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	io.Copy(f, file)
 	_, err = f.Read(data)
-	if err != nil {
-		log.Println(err)
-	}
-	f.Close()
-
-	f, err = os.Create("webpage/img/bg1.webp")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	_, err = f.Write(data)
 	if err != nil {
 		log.Println(err)
 	}
