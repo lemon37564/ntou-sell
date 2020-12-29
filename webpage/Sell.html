@@ -268,6 +268,17 @@ class.myButton:active {
     //測試用 console.log(localStorage.getItem("account"));
     //window.location.href="index.html";
     }
+    $(function() { 
+    $('#yourform').on('submit', function(e) { 
+     var data = $("#yourform :input").serialize(); 
+     $.ajax({ 
+      type: "POST", 
+      url: "Order.html", 
+      data: data, 
+     }); 
+     e.preventDefault(); 
+    }); 
+});
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -317,7 +328,7 @@ class.myButton:active {
     
     <div class="col-md-8">
         <div class="contact-form">
-          <form id="contact" action="backend/product/postadd" method="post" enctype="multipart/form-data">
+          <form id="youtrform" action="backend/product/postadd" method="post" enctype="multipart/form-data" onsubmit="return window.">
             <div class="row">
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <fieldset><!--name-->
