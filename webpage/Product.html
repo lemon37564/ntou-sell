@@ -275,13 +275,14 @@ function bid(){
             var type = request.getResponseHeader("Content-Type");
             if (request.responseText=='ok'){    //請記得加入回傳值的判斷
     	        alert("加價成功");
+				ShowProduct();
      	        //window.location.href="MainPage.html";
             }
+			else /*if(request.responseText=='false')*/{
+	            alert("加價失敗");
+                //window.location.href="Cart.html";
+	        }
         }
-        else /*if(request.responseText=='false')*/{
-	        alert("加價失敗");
-            //window.location.href="Cart.html";
-	    }
     }
     request.send(null);
 }
