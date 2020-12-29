@@ -218,6 +218,10 @@ function searchProduct(){
     request.send(null);
 }
 
+function toProduct(Pdid){
+    localStorage.setItem('Pdid', Pdid);
+    window.location.href="Product.html";
+}
 
 //logout的功能
 function logout(){
