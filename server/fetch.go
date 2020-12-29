@@ -245,21 +245,16 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// temp area
 	if r.Method == "POST" {
-		log.Println("receive post (product)")
 		if mux.Vars(r)["key"] == "postadd" {
-			var pdid int
-			var stat error
-
 			r.ParseMultipartForm(32 << 20)
 
-			name := r.Form["name"][0]
-			price := r.Form["price"][0]
-			des := r.Form["description"][0]
-			amount := r.Form["amount"][0]
-			bid := r.Form["bid"][0]
-			date := r.Form["date"][0]
+			name := r.FormValue("name")
+			price := r.FormValue("price")
+			des := r.FormValue("description")
+			amount := r.FormValue("amount")
+			bid := r.FormValue("bid")
+			date := r.FormValue("date")
 
 			pdid, err := ser.Pd.AddProduct(uid, name, price, des, amount, bid, date)
 			if err == nil {
@@ -268,12 +263,9 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "failed", http.StatusBadRequest)
 			}
 
-			fmt.Fprint(w, "ok")
-
 			file, handler, err := r.FormFile("uploadfile")
 			if err != nil {
 				log.Println("at upload file:", err)
-				return
 			}
 			defer file.Close()
 
@@ -284,16 +276,13 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			f, err := os.Create("webpage/img/" + fmt.Sprint(pdid) + "." + subName)
 			if err != nil {
 				log.Println("at creatingfile:", err)
-				return
 			}
 			defer f.Close()
 
 			io.Copy(f, file)
-			fmt.Fprint(w, "\n", stat)
 		}
 		return
 	}
-	// temp area
 
 	path := mux.Vars(r)
 	args := r.URL.Query()
@@ -301,21 +290,6 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 	switch path["key"] {
 	case "help":
 		fmt.Fprint(w, ProductAPI)
-
-	case "add":
-		name := args.Get("name")
-		price := args.Get("price")
-		des := args.Get("description")
-		amount := args.Get("amount")
-		bid := args.Get("bid")
-		date := args.Get("date")
-
-		_, err := ser.Pd.AddProduct(uid, name, price, des, amount, bid, date)
-		if err == nil {
-			fmt.Fprint(w, "ok")
-		} else {
-			http.Error(w, "failed", http.StatusBadRequest)
-		}
 
 	case "get":
 		pdid := args.Get("pdid")
@@ -366,7 +340,7 @@ func (ser Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, UserAPI)
 
 	case "login":
-		uid, valid := ser.Ur.Login(r.Form["account"][0], r.Form["password"][0])
+		uid, valid := ser.Ur.Login(r.FormValue("account"), r.FormValue("password"))
 
 		if valid {
 			// set session to maintain login condition
@@ -377,20 +351,20 @@ func (ser Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case "regist":
-		fmt.Fprint(w, ser.Ur.Regist(r.Form["account"][0], r.Form["password"][0], r.Form["name"][0]))
+		fmt.Fprint(w, ser.Ur.Regist(r.FormValue("account"), r.FormValue("password"), r.FormValue("name")))
 
 	default:
 		uid, valid := sessionValid(w, r)
 		if valid {
 			switch path["key"] {
 			case "delete":
-				fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.Form["password"][0]))
+				fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.FormValue("password")))
 
 			case "changePassword":
-				fmt.Fprint(w, ser.Ur.ChangePassword(uid, r.Form["oldPassword"][0], r.Form["newPassword"][0]))
+				fmt.Fprint(w, ser.Ur.ChangePassword(uid, r.FormValue("oldPassword"), r.FormValue("newPassword")))
 
 			case "changeName":
-				fmt.Fprint(w, ser.Ur.ChangeName(uid, r.Form["newName"][0]))
+				fmt.Fprint(w, ser.Ur.ChangeName(uid, r.FormValue("newName")))
 
 			case "logout":
 				logout(w, r)
