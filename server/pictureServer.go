@@ -91,7 +91,11 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	file2 := file
+	var data []byte
+	_, err = file.Read(data)
+	if err != nil {
+		log.Println(err)
+	}
 
 	fmt.Fprint(w, handler.Header)
 	f, err := os.Create("webpage/img/bg2.webp")
@@ -101,6 +105,11 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	defer f.Close()
 
+	_, err = f.Write(data)
+	if err != nil {
+		log.Println(err)
+	}
+
 	f2, err := os.Create("webpage/img/bg1.webp")
 	if err != nil {
 		log.Println(err)
@@ -108,12 +117,7 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	defer f2.Close()
 
-	_, err = io.Copy(f, file)
-	if err != nil {
-		log.Println(err)
-	}
-
-	_, err = io.Copy(f2, file2)
+	_, err = f2.Write(data)
 	if err != nil {
 		log.Println(err)
 	}
