@@ -106,6 +106,13 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	defer f2.Close()
 
-	io.Copy(f, file)
-	io.Copy(f2, file)
+	_, err = io.Copy(f, file)
+	if err != nil {
+		log.Println(err)
+	}
+
+	_, err = io.Copy(f2, file)
+	if err != nil {
+		log.Println(err)
+	}
 }
