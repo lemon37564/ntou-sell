@@ -356,12 +356,14 @@ class.myButton:active {
                 </fieldset>
               </div>
               <input type="file" id="progressbarTWInput" name="uploadfile" accept="image/gif, image/jpeg, image/png" />  
+              <input type="hidden" name="token" value="{{.}}"/>
+
               <div class="divcss5">
                    <img id="preview_progressbarTW_img" src="#" />
               </div>
               <div class="col-lg-12">
                 <fieldset>
-                  <button type="submit" id="form-submit" class="filled-button">Send Message</button>
+                  <button type="submit" id="form-submit" class="filled-button">建立</button>
                 </fieldset>
               </div>
             </div>
