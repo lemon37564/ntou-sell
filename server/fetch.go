@@ -261,7 +261,7 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			bid := r.Form["bid"][0]
 			date := r.Form["date"][0]
 
-			_, err := ser.Pd.AddProduct(uid, name, price, des, amount, bid, date)
+			pdid, err := ser.Pd.AddProduct(uid, name, price, des, amount, bid, date)
 			if err == nil {
 				fmt.Fprint(w, "ok")
 			} else {
@@ -281,7 +281,7 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			subName := spt[len(spt)-1]
 
 			fmt.Fprint(w, handler.Header)
-			f, err := os.Create("webpage/img/" + fmt.Sprint(pdid) + subName)
+			f, err := os.Create("webpage/img/" + fmt.Sprint(pdid) + "." + subName)
 			if err != nil {
 				log.Println("at creatingfile:", err)
 				return
