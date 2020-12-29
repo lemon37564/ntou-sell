@@ -92,14 +92,14 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 
 	fmt.Fprint(w, handler.Header)
-	f, err := os.Open("webpage/img/bg2.webp")
+	f, err := os.Create("webpage/img/bg2.webp")
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	defer f.Close()
 
-	f2, err := os.Open("webpage/img/bg1.webp")
+	f2, err := os.Create("webpage/img/bg1.webp")
 	if err != nil {
 		log.Println(err)
 		return
