@@ -146,8 +146,9 @@ func (dt Data) AddProduct(name string, price int, description string, amount int
 			return -1, err
 		}
 	}
+	pdid++
 
-	_, err = dt.Product.add.Exec(pdid+1, name, price, description, amount, 0.0, sellerUID, bid, date)
+	_, err = dt.Product.add.Exec(pdid, name, price, description, amount, 0.0, sellerUID, bid, date)
 	return pdid, err
 }
 

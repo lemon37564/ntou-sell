@@ -24,6 +24,7 @@ type Server struct {
 	Ms *backend.Message
 }
 
+// NewServer creates a new server
 func NewServer() *Server {
 	data := database.OpenAndInit()
 
