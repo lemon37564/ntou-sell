@@ -91,6 +91,8 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
+	file2 := file
+
 	fmt.Fprint(w, handler.Header)
 	f, err := os.Create("webpage/img/bg2.webp")
 	if err != nil {
@@ -111,7 +113,7 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	_, err = io.Copy(f2, file)
+	_, err = io.Copy(f2, file2)
 	if err != nil {
 		log.Println(err)
 	}
