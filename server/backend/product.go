@@ -26,10 +26,16 @@ func (p Product) AddProduct(sellerUID int, pdname, rawPrice, description, rawAmo
 	if err != nil {
 		return -1, err
 	}
+	if price < 1 {
+		return -1, newBeErr("price cannot smaller than 1")
+	}
 
 	amount, err := strconv.Atoi(rawAmount)
 	if err != nil {
 		return -1, err
+	}
+	if amount < 1 {
+		return -1, newBeErr("amount cannot smaller than 1")
 	}
 
 	bid := (rawBid == "true")
@@ -71,6 +77,9 @@ func (p *Product) ChangePrice(rawPdid, rawPrice string) (string, error) {
 	if err != nil {
 		return "cannot convert " + rawPrice + " into integer", err
 	}
+	if price < 1 {
+		return "price cannot smaller than 1", nil
+	}
 
 	err = p.fn.UpdateProductPrice(pdid, price)
 	if err != nil {
@@ -89,6 +98,9 @@ func (p *Product) ChangeAmount(rawPdid, rawAmount string) (string, error) {
 	amount, err := strconv.Atoi(rawAmount)
 	if err != nil {
 		return "cannot convert " + rawAmount + " into integer", err
+	}
+	if amount < 1 {
+		return "amount cannot smaller than 1", nil
 	}
 
 	err = p.fn.UpdateProductAmount(pdid, amount)
