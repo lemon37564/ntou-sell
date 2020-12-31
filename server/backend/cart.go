@@ -63,9 +63,6 @@ func (c *Cart) ModifyAmount(uid int, rawPdid, rawAmount string) (string, error) 
 	if err != nil {
 		return "cannot convert " + rawAmount + " into integer", err
 	}
-	if amount < 1 {
-		return "amount cannot smaller than 1", nil
-	}
 
 	err = c.fn.UpdateCartAmount(uid, pdid, amount)
 	if err != nil {

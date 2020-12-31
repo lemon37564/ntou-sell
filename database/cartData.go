@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS cart(
 	amount int NOT NULL,
 	PRIMARY KEY(uid, pd_id),
 	FOREIGN KEY(uid) REFERENCES user,
-	FOREIGN KEY(pd_id) REFERENCES product
+	FOREIGN KEY(pd_id) REFERENCES product,
+	CHECK (amount > 0)
 );`
 
 // Cart store data of single product in user's cart

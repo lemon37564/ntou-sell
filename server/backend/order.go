@@ -29,7 +29,6 @@ func (o *Order) GetOrders(uid int) string {
 	}
 
 	return string(res)
-
 }
 
 // AddOrder adds a order of a specific user with product id and amount

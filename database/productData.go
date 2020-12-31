@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS product(
 	bid bool,
 	date timestamp,
 	PRIMARY KEY(pd_id),
-	FOREIGN KEY(seller_uid) REFERENCES user
+	FOREIGN KEY(seller_uid) REFERENCES user,
+	CHECK (price > 0 AND amount > 0)
 );`
 
 // Product type store data of a single product

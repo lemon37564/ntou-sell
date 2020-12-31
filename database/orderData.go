@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS orders(
 	order_date timestamp,
 	PRIMARY KEY(uid, pd_id),
 	FOREIGN KEY(uid) REFERENCES user,
-	FOREIGN KEY(pd_id) REFERENCES product
+	FOREIGN KEY(pd_id) REFERENCES product,
+	CHECK (amount > 0)
 );`
 
 // Order type store data of a single order

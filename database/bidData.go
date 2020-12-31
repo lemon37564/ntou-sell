@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS bid(
 	seller_uid int NOT NULL,
 	PRIMARY KEY(pd_id),
 	FOREIGN KEY(seller_uid) REFERENCES user,
-	FOREIGN KEY(now_bidder_uid) REFERENCES user
+	FOREIGN KEY(now_bidder_uid) REFERENCES user,
+	CHECK (now_money > 0)
 );`
 
 // Bid struct store data of a single bid
