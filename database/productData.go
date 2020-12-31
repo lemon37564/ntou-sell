@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS product(
 	bid bool,
 	date timestamp,
 	PRIMARY KEY(pd_id),
-	FOREIGN KEY(seller_uid) REFERENCES user ON DELETE CASECADE,
+	FOREIGN KEY(seller_uid) REFERENCES user ON DELETE CASCADE,
 	CHECK (price > 0 AND amount > 0)
 );`
 
