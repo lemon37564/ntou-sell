@@ -69,7 +69,8 @@ func (u *User) ChangePassword(uid int, oldPassword, newPassword string) string {
 		return "舊密碼錯誤"
 	}
 
-	err := u.fn.ChangeUserPassword(account, newPassword)
+	hash := sha256Hash(newPassword)
+	err := u.fn.ChangeUserPassword(uid, hash)
 	if err != nil {
 		log.Println(err)
 		return err.Error()
