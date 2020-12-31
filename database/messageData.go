@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS message(
 	receiver_uid int NOT NULL,
 	text varchar(128) NOT NULL,
 	PRIMARY KEY(message_id),
-	FOREIGN KEY(sender_uid) REFERENCES user,
-	FOREIGN KEY(receiver_uid) REFERENCES user
+	FOREIGN KEY(sender_uid) REFERENCES user ON DELETE CASECADE,
+	FOREIGN KEY(receiver_uid) REFERENCES user ON DELETE CASECADE
 );`
 
 // Messages struct contain all message with contactor name
