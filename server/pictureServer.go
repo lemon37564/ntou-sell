@@ -78,7 +78,8 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Fprint(w, "not found")
+	fmt.Fprint(w, "none.webp")
+	log.Println("img not found")
 }
 
 func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
