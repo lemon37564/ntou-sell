@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS cart(
 	pd_id int NOT NULL,
 	amount int NOT NULL,
 	PRIMARY KEY(uid, pd_id),
-	FOREIGN KEY(uid) REFERENCES user,
-	FOREIGN KEY(pd_id) REFERENCES product
+	FOREIGN KEY(uid) REFERENCES user ON DELETE CASCADE,
+	FOREIGN KEY(pd_id) REFERENCES product ON DELETE CASCADE,
+	CHECK (amount > 0)
 );`
 
 // Cart store data of single product in user's cart

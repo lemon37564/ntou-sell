@@ -334,6 +334,18 @@ const PicAPI = `
 		<input type="hidden" name="token" value="{{.}}"/><br>
 		<input type="submit" value="upload" /><br>
 		<br><br>
+		</form>
+	
+		/backend/pics/changeBg<br>
+		更改背景圖片(用post)<br>
+
+		前端範例:<br>
+		<form enctype="multipart/form-data" action="/backend/pics/changeBg" method="post"><br>
+		<input type="file" name="uploadfile" /><br>
+		<input type="hidden" name="token" value="{{.}}"/><br>
+		<input type="submit" value="upload" /><br>
+		<br><br>
+		</form>
 	</p>
 </html>
 `

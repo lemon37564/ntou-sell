@@ -69,7 +69,8 @@ func (u *User) ChangePassword(uid int, oldPassword, newPassword string) string {
 		return "舊密碼錯誤"
 	}
 
-	err := u.fn.ChangeUserPassword(account, newPassword)
+	hash := sha256Hash(newPassword)
+	err := u.fn.ChangeUserPassword(uid, hash)
 	if err != nil {
 		log.Println(err)
 		return err.Error()
@@ -89,8 +90,9 @@ func (u *User) ChangeName(uid int, newname string) string {
 	return "ok"
 }
 
+const salt = "ntou-sell"
+
 func sha256Hash(key string) string {
-	salt := "ntou-sell"
 	key += salt
 
 	hasher := sha256.New()

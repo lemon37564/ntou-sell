@@ -45,7 +45,7 @@ func userPrepare(db *sql.DB) *userStmt {
 		add     = "INSERT INTO user VALUES(?,?,?,?,?);"
 		del     = "DELETE FROM user WHERE uid=? AND password_hash=?;"
 		upName  = "UPDATE user SET name=? WHERE uid=?"
-		upPass  = "UPDATE user SET password_hash=? WHERE account=?"
+		upPass  = "UPDATE user SET password_hash=? WHERE uid=?"
 		upEval  = "UPDATE user SET eval=? WHERE account=?"
 		maxID   = "SELECT MAX(uid) FROM user;"
 		login   = "SELECT uid FROM user WHERE account=? AND password_hash=? AND uid>0;"
@@ -146,15 +146,15 @@ func (dt Data) Login(account, passwordHash string) (int, bool) {
 	return uid, cnt == 1
 }
 
-// ChangeUserPassword updates passeword of a user by account
-func (dt Data) ChangeUserPassword(account, newpass string) error {
-	_, err := dt.User.upPass.Exec(account, newpass)
+// ChangeUserPassword updates passeword of a user by uid
+func (dt Data) ChangeUserPassword(uid int, newpass string) error {
+	_, err := dt.User.upPass.Exec(newpass, uid)
 	return err
 }
 
 // ChangeUserName updates name of a user by account
 func (dt Data) ChangeUserName(uid int, newname string) error {
-	_, err := dt.User.upName.Exec(uid, newname)
+	_, err := dt.User.upName.Exec(newname, uid)
 	return err
 }
 

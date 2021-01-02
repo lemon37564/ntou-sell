@@ -27,15 +27,17 @@ func (ser Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	case "help":
 		fmt.Fprint(w, PicAPI)
 	case "upload":
-		ser.picUpload(w, r, "test.jpg")
+		ser.picUpload(w, r)
 	case "get":
 		ser.getPic(w, r)
+	case "changeBg":
+		ser.changeBg(w, r)
 	default:
 		http.NotFound(w, r)
 	}
 }
 
-func (ser Server) picUpload(w http.ResponseWriter, r *http.Request, picname string) {
+func (ser Server) picUpload(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("uploadfile")
@@ -76,5 +78,31 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Fprint(w, "not found")
+	fmt.Fprint(w, "none.webp")
+	log.Println("img not found")
+}
+
+func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(32 << 20)
+	file, _, err := r.FormFile("uploadfile")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	defer file.Close()
+
+	var data []byte
+	f, err := os.Create("webpage/img/bg2.webp")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	io.Copy(f, file)
+	_, err = f.Read(data)
+	if err != nil {
+		log.Println(err)
+	}
+	f.Close()
+
+	fmt.Fprint(w, "ok")
 }

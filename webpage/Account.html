@@ -105,7 +105,13 @@ function searchProduct(){
 	var count2=0;
 	
     request.onreadystatechange = function() { // Define event listener
-    // If the request is complete and was successful
+	if(request.responseText=='null'){
+	    document.getElementById("NP").innerHTML='查無符合的商品!';
+	}
+	if(request.reponseText=='argument&nbsp;error'){
+	    document.getElementById("NP").innerHTML='查無符合的商品,請輸入正確的搜尋條件!';
+	}
+        // If the request is complete and was successful
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader("Content-Type");
             if (type.match(/^text/)){ // Make sure response is text
@@ -121,13 +127,14 @@ function searchProduct(){
 			        //var request2=new XMLHttpRequest;
 			        //request2.open("get",msg2);
 				    //request2.send(null);
-					setTimeout(function(){
-					    console.log(msg2);
-					    var request2=new XMLHttpRequest;
-					    request2.open("get",msg2[count2]);
-					    console.log(msg2[count2]);
-					    count2=count2+1;
-			            request2.onreadystatechange= function(){
+					(function(i){
+					        setTimeout(function(){
+					        console.log(msg2);
+					        var request2=new XMLHttpRequest;
+					        request2.open("get",msg2[count2]);
+					        console.log(msg2[count2]);
+					        count2=count2+1;
+			                request2.onreadystatechange= function(){
 			                if(request2.readyState===4&&request2.status===200){
 						        console.log(request2.responseText);
 			    	            imgURL[count]=request2.responseText;
@@ -149,7 +156,8 @@ function searchProduct(){
 			    	        }
 			            }
 			            request2.send(null);
-					},count*1000);
+					    },i*300);
+					})(i);
 					
 			        console.log(imgURL[i]);
 			        content1[i]='<tr><td><img src="';
@@ -166,7 +174,10 @@ function searchProduct(){
     request.send(null);
 }
 
-
+function toProduct(Pdid){
+    localStorage.setItem('Pdid', Pdid);
+    window.location.href="Product.html";
+}
 
 
 //logout的功能

@@ -7,6 +7,10 @@ type beError struct {
 	text string
 }
 
+func newBeErr(text string) beError {
+	return beError{text: text}
+}
+
 func (b beError) Error() string {
 	return b.text
 }
