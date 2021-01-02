@@ -314,10 +314,25 @@ insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
 
 function getmessg(pdid){
-alert(pdid);
-var newProduct='';
-var request=new XMLHttpRequest;
 
+
+var newProduct='';
+var UserId ="";
+var request=new XMLHttpRequest;
+var content="/backend/product/get?pdid=";
+coutent=content+pdid;
+request.open("get",content);
+request.onreadystatechange = function() {
+    if(request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if(type.match(/^text/)) {
+            var datastr = JSON.parse(request.responseText);
+            UserId=datastr.SellerID;
+            alert(UserId+"=Userid")
+        }
+    }
+}
+request.send(null);
 request.open("get","/backend/message/get?remoteUID=2&ascend=true");
 request.onreadystatechange = function() { 
     if (request.readyState === 4 && request.status === 200) {
