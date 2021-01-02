@@ -328,7 +328,7 @@ request.onreadystatechange = function() {
         var type = request.getResponseHeader("Content-Type");
         if(type.match(/^text/)) {
             var datastr = JSON.parse(request.responseText);
-            UserId=datastr.SellerID;
+            UserId=datastr[0].SellerID;
             alert(UserId+"=Userid")
         }
     }
