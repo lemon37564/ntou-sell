@@ -322,7 +322,7 @@ var UserId = "";
 
 var request = new XMLHttpRequest;
 var content="/backend/product/get?pdid=";
-coutent = content + pdid.value;
+coutent = content + Number(pdid);
 alert(content); 
 request.open("get",content);
 request.onreadystatechange = function() {
