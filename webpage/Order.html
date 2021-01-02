@@ -188,12 +188,12 @@ request.open("get",msg);
       '<div id="div2">'+
       '<div id="div3">'+
         
-      +datastr[i].Pdid+'&nbsp;&emsp;'+datastr[i].PdName+'&nbsp;&emsp;'+datastr[i].Price+'&nbsp;&emsp;'+datastr[i].Amount+'&nbsp;&emsp;'+datastr[i].Eval+
+      +datastr[i].Pdid+'&nbsp;&emsp;'+datastr[i].PdName+'&nbsp;&emsp;'+datastr[i].Price+'&nbsp;&emsp;'+datastr[i].Amount+'&nbsp;&emsp;'+
                 
       '</div>'+
       '<div id="div4">'+
       '<input type="button" style="font-size:4px;width:40px;height:30px;margin-right:10px;" id="box1" name="button2" value="更改">'+
-      ' <button type="button" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="getmessg('+datastr[i].SellerID+')">'+"說個話"+'</button>'+
+      ' <button type="button" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="getmessg('+datastr[i].Pdid+')">'+"說個話"+'</button>'+
       ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="addhis(this.id);dele(this.id);">'+"完成"+'</button>'+
       '</div>'+
       '</div>';
