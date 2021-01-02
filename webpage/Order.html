@@ -318,10 +318,12 @@ function getmessg(pdid){
 resetChat();
 alert(pdid);
 var newProduct='';
-var UserId ="";
-var request=new XMLHttpRequest;
+var UserId = "";
+
+var request = new XMLHttpRequest;
 var content="/backend/product/get?pdid=";
-coutent=content+pdid;
+coutent =content+pdid;
+alert(content);
 request.open("get",content);
 request.onreadystatechange = function() {
     if(request.readyState === 4 && request.status === 200) {
@@ -329,11 +331,12 @@ request.onreadystatechange = function() {
         if(type.match(/^text/)) {
             var datastr = JSON.parse(request.responseText);
             UserId=datastr[0].SellerID;
-            alert(UserId+"=Userid")
+            alert(UserId)
         }
     }
 }
 request.send(null);
+
 request.open("get","/backend/message/get?remoteUID=2&ascend=true");
 request.onreadystatechange = function() { 
     if (request.readyState === 4 && request.status === 200) {
