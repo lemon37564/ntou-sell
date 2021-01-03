@@ -6,6 +6,15 @@
 <!--css-->
 <link href="css/page.css" rel="stylesheet">
 
+<style>
+		.centerr {
+		display: block;
+		margin-left: auto;
+		margin-right: auto;
+		width: 50%;
+	  }
+</style>
+
 <title>海大拍賣商品頁</title>
 
 <script type="text/javascript">
@@ -13,7 +22,7 @@
 window.onload=ShowProduct;
 
 function ShowProduct(){
-    document.getElementById("currentTitle").innerHTML='Product Information';
+    document.getElementById("currentTitle").innerHTML='商品資訊';
     //測試用 alert(localStorage.getItem("Pdid"));
     var msg="backend/product/get?pdid="+localStorage.getItem("Pdid");
 
@@ -32,13 +41,13 @@ function ShowProduct(){
 		        console.log(Bid);
 		        if(Bid===false){
 			        console.log("ok1");
-			        var content1='<tr><td><h4 style="display:inline;margin-left:210px;">Product Name:'+datastr.PdName+'</h4></td></tr>';
-				    var content2='<tr><td><h4 style="display:inline;margin-left:210px;">Product Description:'+datastr.Description+'</h4></td></tr>';
-				    var content3='<tr><td><h4 style="display:inline;margin-left:210px;">Product Evaluate:'+datastr.Price+'</h4></td></tr>';
-				    var content4='<tr><td><h4 style="display:inline;margin-left:210px;">Product Amount:'+datastr.Amount+'</h4></td></tr>';
-					var content5='<tr><td><h4 style="display:inline;margin-left:210px;">Evaluate:'+datastr.Eval+'</h4></td></tr>';
-					var content6='<tr><td><h4 style="display:inline;margin-left:210px;">SellerID:'+datastr.SellerID+'</h4></td></tr>';
-				    var content7='<tr><td><button style="background:rgba(144,202,249,1);margin-left:210px;width:250px;height:80px;font-size:30px;" onclick="addToCart()">Add To Cart</button></td></tr>';
+			        var content1='<tr><td><h4 style="display:inline;margin-left:210px;">商品名稱:'+datastr.PdName+'</h4></td></tr>';
+				    var content2='<tr><td><h4 style="display:inline;margin-left:210px;">商品介紹:'+datastr.Description+'</h4></td></tr>';
+				    var content3='<tr><td><h4 style="display:inline;margin-left:210px;">商品價格:'+datastr.Price+'</h4></td></tr>';
+				    var content4='<tr><td><h4 style="display:inline;margin-left:210px;">剩餘數量:'+datastr.Amount+'</h4></td></tr>';
+					var content5='<tr><td><h4 style="display:inline;margin-left:210px;">商品評價:'+datastr.Eval+'</h4></td></tr>';
+					var content6='<tr><td><h4 style="display:inline;margin-left:210px;">賣家UID:'+datastr.SellerID+'</h4></td></tr>';
+				    var content7='<tr><td><button style="background:rgba(144,202,249,1);margin-left:210px;width:180px;height:60px;font-size:25px;" onclick="addToCart()">Add To Cart</button></td></tr>';
 				
 				    productInfo=productInfo+content1+content2+content3+content4+content5+content6+content7;
 		        }
@@ -78,8 +87,7 @@ function ShowProduct(){
 				request2.open("get",msg2);
 				request2.onreadystatechange=function(){
 				    if(request2.readyState===4&&request2.status===200){
-					    productInfo='<tr><td><img src="img/'+request2.responseText+'" style="display:inline;margin-left:240px;" width="200" height="200"></td></tr>'+productInfo;
-					    document.getElementById("NP").innerHTML=productInfo;
+						productInfo='<tr><td><img src="img/'+request2.responseText+'" style="display:inline;margin-left:220px;" width="300" height="300"></td></tr>'+productInfo;					    document.getElementById("NP").innerHTML=productInfo;
 					}
 				}
 				request2.send(null);
@@ -302,12 +310,12 @@ function bid(){
 	        <button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
             <ul id="SubMenu" class="sub-menu" style="display:none;">
 	        <h2 color=#3366BB style="display:inline;">
-            <li style="display:inline;"><a href="Cart.html" target="_self">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
-            <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
-            <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
-		    <li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
-		    <li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
-		    <li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
+            <li style="display:inline;"><a href="Cart.html" target="_self" style="text-decoration:none;color:rgb(30, 173, 216)">&nbsp;&nbsp;Cart</a></li>   <!--連結待補 target="_blank"在新視窗打開  ="_self"同一視窗 其他_parent _top-->
+            <li style="display:inline;"><a href="Order.html" target="_self" style="text-decoration:none;color:rgb(30, 173, 216)">&nbsp;&nbsp;Order</a></li>
+            <li style="display:inline;"><a href="History.html" target="_self" style="text-decoration:none;color:rgb(30, 173, 216)">&nbsp;&nbsp;History</a></li>
+		    <li style="display:inline;"><a href="Sell.html" target="_self" style="text-decoration:none;color:rgb(30, 173, 216)">&nbsp;&nbsp;Sell</a></li>
+		    <li style="display:inline;"><a href="Account.html" target="_self" style="text-decoration:none;color:rgb(30, 173, 216)">&nbsp;&nbsp;Account</a></li>
+		    <li style="display:inline;"><a onclick="logout()" style="text-decoration:none;color:rgb(30, 173, 216)">&nbsp;&nbsp;Logout</a></li>
 		    </h2>
 		    <br></br>
             </ul>
@@ -315,10 +323,10 @@ function bid(){
             <font color="FFFFFF"><h1 style="display:inline;" onclick="toMainPage()">海大拍賣&nbsp;&nbsp;</h1></font>
             <!--已改用js處理<form id="search" action="https://ntou-sell.herokuapp.com/product/search" method="get" style="margin:0px;display:inline;"> <!--action接後端程式-->
 	        <font color="FFFFFF"><h3 style="display:inline;">
-	        關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
-	        最低價:<input id="minprice" type="text" name="minprice" value="" size="15" style=""> <!--輸入商品最低價-->
-	        最高價:<input id="maxprice" type="text" name="maxprice" value="" size="15" style=""> <!--輸入商品最高價-->
-	        評價:<input id="eval" type="text" name="eval" value="" size="15" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
+				關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
+				最低價:<input id="minprice" type="text" name="minprice" value="" size="10" style=""> <!--輸入商品最低價-->
+				最高價:<input id="maxprice" type="text" name="maxprice" value="" size="10" style=""> <!--輸入商品最高價-->
+				評價:<input id="eval" type="text" name="eval" value="" size="3" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
 	        <button onclick="searchProduct()" >搜尋</button>
 	        </h3>
 	        <!--</form>-->

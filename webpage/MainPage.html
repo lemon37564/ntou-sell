@@ -13,7 +13,7 @@
 window.onload=ShowNewProduct;
 
 function ShowNewProduct(){
-    document.getElementById("currentTitle").innerHTML='New Product';
+    document.getElementById("currentTitle").innerHTML='最新商品';
     var newProduct='';
 
     var request=new XMLHttpRequest;
@@ -312,9 +312,9 @@ function toMainPage(){
             <!--已改用js處理<form id="search" action="https://ntou-sell.herokuapp.com/product/search" method="get" style="margin:0px;display:inline;"> <!--action接後端程式-->
 	        <font color="FFFFFF"><h3 style="display:inline;">
 	        關鍵字:<input id="name" type="text" name="name" value="" size="15" style=""> <!--輸入商品名字-->
-	        最低價:<input id="minprice" type="text" name="minprice" value="" size="15" style=""> <!--輸入商品最低價-->
-	        最高價:<input id="maxprice" type="text" name="maxprice" value="" size="15" style=""> <!--輸入商品最高價-->
-	        評價:<input id="eval" type="text" name="eval" value="" size="15" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
+	        最低價:<input id="minprice" type="text" name="minprice" value="" size="10" style=""> <!--輸入商品最低價-->
+	        最高價:<input id="maxprice" type="text" name="maxprice" value="" size="10" style=""> <!--輸入商品最高價-->
+	        評價:<input id="eval" type="text" name="eval" value="" size="3" style=""></font> <!--輸入商品評價(沒要選就輸入0)-->
 	        <button onclick="searchProduct()" >搜尋</button>
 	        </h3>
 	        <!--</form>-->
