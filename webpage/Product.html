@@ -281,11 +281,12 @@ function addToCart(){
     	        alert("加入購物車成功");
      	        window.location.href="MainPage.html";
             }
-            else /*if(request.responseText=='false')*/{
+            else if(request.responseText=='false\n'){
 	            alert("加入購物車失敗，請確認購物車內是否已有重複商品，或是商品已賣完。");
                 window.location.href="Cart.html";
 	        }
-		}else{
+		}
+		if(request.readyState!==4){
 		    alert("加入購物車失敗");
 		}
     }
