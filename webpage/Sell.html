@@ -148,6 +148,12 @@ class.myButton:active {
     <link rel="stylesheet" herf="assets/css/dialog.css">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+      function onSubmit(token) {
+        document.getElementById("demo-form").submit();
+      }
+    </script>
     <script type="text/javascript">
    
     function switchMenu( theMainMenu, theSubMenu, theEvent ){
@@ -375,7 +381,10 @@ class.myButton:active {
               </div>
               <div class="col-lg-12">
                 <fieldset>
-                  <button type="submit" id="form-submit" class="filled-button">建立</button>
+                  <button type="submit" id="form-submit" class="g-recaptcha" 
+                          data-sitekey="reCAPTCHA_site_key" 
+                          data-callback='onSubmit' 
+                          data-action='submit'>上架</button>
                 </fieldset>
               </div>
             </div>
