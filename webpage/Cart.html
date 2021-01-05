@@ -143,8 +143,7 @@ class.myButton:active {
                 
                 '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
                 '</div>'+
-                /*'<div id="div3">'+
-                '<li>'+*/
+                
                 '<div id="div3">'+datastr[i].PdName+
                 '</div>'+
                 '<div id="div3">'+datastr[i].Price+
@@ -247,7 +246,7 @@ request.send(null);
         
         var msgsend = "/backend/order/add?";
         var request=new XMLHttpRequest;
-        var request2 = new XMLHttpRequest;
+        //var request2 = new XMLHttpRequest;
         var datastr = "";
         var st = [];
         request.open("get","/backend/cart/geps"); //前面網址解決CORS
@@ -259,7 +258,9 @@ request.send(null);
                     var prods=document.getElementsByName("test");
                     var str = "";            
                     for (var i = 0; i < prods.length; i++) {
-                        if(prods[i].type == "checkbox"&&prods[i].checked == true){        
+                        if(prods[i].type == "checkbox"&&prods[i].checked == true){   
+                            //加入訂單
+                            var request2 = new XMLHttpRequest;     
                             str=str+datastr[i].Pdid;
                             var temp="";
                             temp="pdid="+str;
@@ -277,6 +278,24 @@ request.send(null);
                                 }
                             }
                             request2.send(null);
+                            //刪除購物車
+                            var request3 = new XMLHttpRequest;    
+                            str=""; 
+                            
+                            temp="/backend/cart/remo?pdid="+datastr[i].Pdid;
+                            
+                            request3.open("get",temp);
+                            request3.onreadystatechange = function() { 
+                                if (request2.readyState === 4 && request2.status === 200) {
+                                    var type = request2.getResponseHeader("Content-Type");
+                                    if (type.match(/^text/)){ // Make sure response is text
+		                                
+                                    }
+                                }
+                            }
+                            request3.send(null);
+                            window.location.href="Cart.html";
+
                             
                         }
                     }
