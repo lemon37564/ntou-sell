@@ -57,7 +57,7 @@ func productPrepare(db *sql.DB) *productStmt {
 
 	const (
 		add    = "INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);"
-		del    = "DELETE FROM product WHERE seller_uid=? AND product_name=?;"
+		del    = "DELETE FROM product WHERE seller_uid=? AND pd_id=?;"
 		upName = "UPDATE product SET product_name=? WHERE pd_id=?;"
 		upPrc  = "UPDATE product SET price=? WHERE pd_id=?;"
 		upAmt  = "UPDATE product SET amount=? WHERE pd_id=?;"
@@ -73,7 +73,7 @@ func productPrepare(db *sql.DB) *productStmt {
 			ORDER BY pd_id DESC;
 			`
 		getInfo = "SELECT * FROM product WHERE pd_id=? AND pd_id>0;"
-		userPd  = "SELECT * FROM product WHERE seller_uid=?;"
+		userPd  = "SELECT * FROM product WHERE seller_uid=? AND pd_id>0;"
 	)
 
 	if product.add, err = db.Prepare(add); err != nil {
@@ -154,8 +154,8 @@ func (dt Data) AddProduct(name string, price int, description string, amount int
 }
 
 // DeleteProduct with product id
-func (dt Data) DeleteProduct(uid int, pdname string) error {
-	_, err := dt.Product.del.Exec(uid, pdname)
+func (dt Data) DeleteProduct(uid int, pdid int) error {
+	_, err := dt.Product.del.Exec(uid, pdid)
 	return err
 }
 

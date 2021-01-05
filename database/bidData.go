@@ -30,8 +30,7 @@ type Bid struct {
 type bidStmt struct {
 	add    *sql.Stmt
 	del    *sql.Stmt
-	upUID  *sql.Stmt
-	upMon  *sql.Stmt
+	won    *sql.Stmt
 	upDL   *sql.Stmt
 	getAll *sql.Stmt
 	getBid *sql.Stmt
@@ -45,8 +44,7 @@ func bidPrepare(db *sql.DB) *bidStmt {
 	const (
 		add    = "INSERT INTO bid VALUES(?,?,?,?,?);"
 		del    = "DELETE FROM bid WHERE pd_id=?;"
-		upUID  = "UPDATE bid SET seller_uid=? WHERE pd_id=?;"
-		upMon  = "UPDATE bid SET now_money=? WHERE pd_id=?;"
+		won    = "UPDATE product SET price=? WHERE pd_id=?;"
 		upDL   = "UPDATE bid SET deadline=? WHERE pd_id=?;"
 		getAll = "SELECT deadline, now_bidder_uid, now_money, seller_uid FROM bid;"
 		getBid = "SELECT deadline, now_bidder_uid, now_money, seller_uid FROM bid WHERE pd_id=?;"
@@ -61,11 +59,7 @@ func bidPrepare(db *sql.DB) *bidStmt {
 		log.Println(err)
 	}
 
-	if bid.upUID, err = db.Prepare(upUID); err != nil {
-		log.Println(err)
-	}
-
-	if bid.upMon, err = db.Prepare(upMon); err != nil {
+	if bid.won, err = db.Prepare(won); err != nil {
 		log.Println(err)
 	}
 
@@ -101,13 +95,9 @@ func (dt Data) DeleteBid(pdid int) error {
 }
 
 // WonBid update bidder_id and money if anyone won the bid at a time
-func (dt Data) WonBid(pdid, bidderID, money int) error {
-	_, err := dt.Bid.upUID.Exec(bidderID, pdid)
-	if err != nil {
-		return err
-	}
+func (dt Data) WonBid(uid, pdid, money int) error {
+	_, err := dt.Bid.won.Exec(money, pdid)
 
-	_, err = dt.Bid.upMon.Exec(money, pdid)
 	return err
 }
 

@@ -51,8 +51,13 @@ func (p Product) AddProduct(sellerUID int, pdname, rawPrice, description, rawAmo
 
 // DeleteProduct deletes a product with seller_uid and product name
 // This may me cause some problem, need to fix
-func (p *Product) DeleteProduct(uid int, pdname string) string {
-	err := p.fn.DeleteProduct(uid, pdname)
+func (p *Product) DeleteProduct(uid int, rawPdid string) string {
+	pdid, err := strconv.Atoi(rawPdid)
+	if err != nil {
+		return "cannot convert " + rawPdid + " into integer"
+	}
+
+	err = p.fn.DeleteProduct(uid, pdid)
 	if err != nil {
 		return fmt.Sprint(err)
 	}

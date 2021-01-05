@@ -41,8 +41,9 @@ func (b *Bid) SetBidForBuyer(uid int, pdid, money string) (string, error) {
 		return "cannot convert " + money + " into integer", err
 	}
 
-	if price > b.fn.GetBidByID(pid).NowMoney { // 取得競標價格
-		if err := b.fn.WonBid(pid, uid, price); err != nil {
+	n := b.fn.GetProductInfoFromPdID(pid)
+	if price > n.Price { // 取得競標價格
+		if err := b.fn.WonBid(uid, pid, price); err != nil {
 			return "failed", err
 		}
 

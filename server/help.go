@@ -133,6 +133,13 @@ const ProductAPI = `
 		<a href=/backend/product/search?name=ifone&minprice=10&maxprice=5000000&eval=0>
 		/backend/product/search?name=ifone&minprice=10&maxprice=5000000&eval=0</a>
 		<br><br>
+
+		刪除自己的商品<br>
+		/backend/product/delete?pdid=...<br>
+		e.g.刪除自己pdid為1的商品<br>
+		<a href=/backend/product/delete?pdid=1>
+		/backend/product/delete?pdid=1</a>
+		<br><br>
 	</p>
 </html>
 `
