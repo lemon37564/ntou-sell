@@ -132,7 +132,7 @@ func (ser Server) validation(w http.ResponseWriter, r *http.Request) bool {
 // a thread refreshing the blockSet and ipList
 func refresh() {
 	const (
-		limitAccess = 120
+		limitAccess = 150
 		refreshTime = time.Second * 30
 	)
 

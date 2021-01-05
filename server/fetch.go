@@ -299,7 +299,7 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		response(w, res, err)
 
 	case "delete":
-		val := args.Get("pdname")
+		val := args.Get("pdid")
 
 		res := ser.Pd.DeleteProduct(uid, val)
 		fmt.Fprint(w, res)

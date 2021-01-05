@@ -27,7 +27,7 @@ div.border{
   position: relative;
   top: 100px;
   width: 1000px;
-  height: 830px;
+  height: auto;
   border-style: solid;
   border-width: 10px 4px 4px 4px;
   border-color:beige;
@@ -134,8 +134,8 @@ class.myButton:active {
 #div4{
         
 }
-.divcss5{ border:1px solid #000; width:300px; height:100px;overflow:hidden} 
-.divcss5 img{width:300px; height:100px} 
+.divcss5{ border:1px solid #000; width:auto; height:auto;overflow:hidden} 
+.divcss5 img{width:auto; height:auto} 
 
 
 </style>
@@ -148,6 +148,12 @@ class.myButton:active {
     <link rel="stylesheet" herf="assets/css/dialog.css">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script>
+      function onSubmit(token) {
+        document.getElementById("demo-form").submit();
+      }
+    </script>
     <script type="text/javascript">
    
     function switchMenu( theMainMenu, theSubMenu, theEvent ){
@@ -297,11 +303,6 @@ class.myButton:active {
               <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                   <li class="nav-item">
-                    <a class="nav-link" href="History.html">History
-                     
-                    </a>
-                  </li> 
-                  <li class="nav-item">
                     <a class="nav-link" href="MainPage.html">Home
                       <span class="sr-only">(current)</span>
                     </a>
@@ -312,6 +313,13 @@ class.myButton:active {
                   <li class="nav-item">
                     <a class="nav-link" href="Order.html">Order</a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="History.html">History
+                     
+                    </a>
+                  </li> 
+                  
+                  
                   <li class="nav-item active">
                     <a class="nav-link" href="Sell.html">Sell</a>
                   </li>
@@ -373,7 +381,10 @@ class.myButton:active {
               </div>
               <div class="col-lg-12">
                 <fieldset>
-                  <button type="submit" id="form-submit" class="filled-button">建立</button>
+                  <button type="submit" id="form-submit" class="filled-button" 
+                          data-sitekey="6Ld0yCEaAAAAAItIGvjrguG3uli7nohVp_zFLS7w" 
+                          data-callback='onSubmit' 
+                          data-action='submit'>上架</button>
                 </fieldset>
               </div>
             </div>
