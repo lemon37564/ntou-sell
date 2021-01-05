@@ -16,7 +16,7 @@ function ShowAccount(){
     var msg='<tr><td><h4 style="margin-left:300px;">Account:'+localStorage.getItem("account")+'</h4></td></tr>';
 	// msg=msg+'<tr><td><h4 style="margin-left:300px;">Password:'+localStorage.getItem("password")+'</h4></td></tr>';  //顯示密碼
     msg=msg+'<tr><td><h4 style="margin-left:300px;">原密碼:<input id="oldPassword" type="text" name="oldPassword" value="" size="25" style=""></h4></td></tr>'+'<tr><td><h4 style="margin-left:300px;">新密碼:<input id="newPassword" type="text" name="newPassword" value="" size="25" style=""></h4></td></tr>'+'<tr><td><button style="margin-left:420px;background:rgba(144,202,249,1);width:150px;height:50px;font-size:25px;" onclick="changePassword()" >更改密碼</button></td></tr>';
-	
+	msg=msg+'<tr><td><button style="margin-left:420px;background:rgba(144,202,249,1);width:150px;height:50px;font-size:25px;" onclick="yourProduct()">檢視拍賣的商品</td></tr>'
 	document.getElementById("currentTitle").innerHTML='Account Information';
 	document.getElementById("NP").innerHTML=msg;
 
@@ -47,6 +47,89 @@ function changePassword(){
     	}
     };
 	request.send(params); //送出訊息
+}
+
+//以下為顯示該帳號拍賣的商品的function，可以進行刪除商品的操作。
+function yourProduct(){
+    var yourProduct='';
+
+    var request=new XMLHttpRequest;
+    //request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/newest?amount=3"); //前面網址解決CORS
+
+    request.open("get","backend/product/urProduct"); 
+	var count=0;
+	var count2=0;
+    request.onreadystatechange = function() { // Define event listener
+    // If the request is complete and was successful
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader("Content-Type");
+            if (type.match(/^text/)){ // Make sure response is text
+		        var datastr = JSON.parse(request.responseText);
+		        var len  = datastr.length;
+				var imgURL= new Array(len);
+				var content1=new Array(len);
+				var content2=new Array(len);
+				var msg2=new Array(len);
+		        for (var i = 0; i < len; i++) {
+			        msg2[i]='backend/pics/get?pdid='+datastr[i].Pdid;
+				    console.log(msg2);
+				//要記得在搜尋請求中設置延遲以避免因網路問題導致圖片載入順序錯誤
+				(function(i){
+					
+					setTimeout(function(){
+					    console.log(msg2);
+					    var request2=new XMLHttpRequest;
+					    request2.open("get",msg2[count2]);
+					    console.log(msg2[count2]);
+					    count2=count2+1;
+			            request2.onreadystatechange= function(){
+			                if(request2.readyState===4&&request2.status===200){
+						        console.log(request2.responseText);
+			    	            imgURL[count]=request2.responseText;
+							    console.log(count);
+							    count=count+1;
+							    console.log(count);
+					            console.log(imgURL);
+							    var newProduct2='';
+							    for(var j=0;j<len;j++){
+							        if(j<count){
+							            newProduct2=newProduct2+content1[j]+'img/'+imgURL[j]+content2[j];
+							        }
+								    if(j>=count){
+								        newProduct2=newProduct2+content1[j]+content2[j];
+								    }
+							    }
+							    console.log(newProduct2);
+							    document.getElementById("NP").innerHTML=newProduct2;
+			    	        }
+			            }
+			            request2.send(null);
+					},i*300);
+					
+				})(i);
+					
+			        console.log(imgURL[i]);
+			        content1[i]='<tr><td><img src="';
+		            content2[i]='" width="135" height="135" style="margin-left:30px;" onclick="toProduct('+datastr[i].Pdid+')">&nbsp;&nbsp;Pdid: '+datastr[i].Pdid+'&nbsp;&nbsp;名稱：'+datastr[i].PdName+'&nbsp;&nbsp;價錢：'+datastr[i].Price+'&nbsp;&nbsp;<button onclick="deleteProduct('+datastr[i].Pdid+')">刪除該商品</button>'+'</td></tr>';
+			        for(var k=0;k<=i;k++){
+					    yourProduct=yourProduct+content1[k]+content2[k];
+					}
+					document.getElementById("NP").innerHTML=yourProduct;
+		        };
+	            console.log(yourProduct);
+            }
+        }
+    };
+    request.send(null);
+}
+
+function deleteProduct(Pdid){
+    var result=confirm('你確定要刪除該商品嗎?');
+	if(result){
+	    //向後端刪除商品的function發送請求
+	}else{
+	    //
+	}
 }
 
 
