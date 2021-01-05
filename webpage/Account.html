@@ -138,19 +138,12 @@ function deleteProduct(Pdid){
 					alert('刪除成功!'); 
 					window.location.reload();
 				}
-				else{
-        		    alert(request.responseText); 
-					window.location.href="Account.html";
-				}
-			}else{
-				alert(request.responseText);
-				window.location.reload();
 			}
         };
 	request.send(null);
-	}else{
-	    //
-	}
+	}/*else{
+		
+	}*/
 }
 
 
