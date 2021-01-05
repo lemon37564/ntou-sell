@@ -129,8 +129,8 @@ function hideMenu(){
     VisibleMenu = '';
 }
 
-
 //以下是搜尋商品的function
+
 function searchProduct(){
     document.getElementById("currentTitle").innerHTML='Search Result';
     var searchResult='';
@@ -140,16 +140,16 @@ function searchProduct(){
     var msg="backend/product/search?";
 
     var name=document.getElementById("name");
-    var min商品評價=document.getElementById("min商品評價");
-    var max商品評價=document.getElementById("max商品評價");
+    var minprice=document.getElementById("minprice");
+    var maxprice=document.getElementById("maxprice");
     var eval=document.getElementById("eval");
 
     if(name.value!=''){msg=msg+"name="+name.value};
-    if(name.value!=''&&min商品評價.value!=''){msg=msg+"&min商品評價="+min商品評價.value}
-	else if(min商品評價.value!=''){msg=msg+"min商品評價="+min商品評價.value};
-    if((name.value!=''||min商品評價.value!='')&&max商品評價.value!=''){msg=msg+"&max商品評價="+max商品評價.value}
-	else if(max商品評價.value!=''){msg=msg+"max商品評價="+max商品評價.value};
-    if((name.value!=''||min商品評價.value!=''||max商品評價.value!='')&&eval.value!=''){msg=msg+"&eval="+eval.value}
+    if(name.value!=''&&minprice.value!=''){msg=msg+"&minprice="+minprice.value}
+	else if(minprice.value!=''){msg=msg+"minprice="+minprice.value};
+    if((name.value!=''||minprice.value!='')&&maxprice.value!=''){msg=msg+"&maxprice="+maxprice.value}
+	else if(maxprice.value!=''){msg=msg+"maxprice="+maxprice.value};
+    if((name.value!=''||minprice.value!=''||maxprice.value!='')&&eval.value!=''){msg=msg+"&eval="+eval.value}
 	else if(eval.value!=''){msg=msg+"eval="+eval.value};
 	
     request.open("get",msg); 
@@ -213,7 +213,7 @@ function searchProduct(){
 					
 			        console.log(imgURL[i]);
 			        content1[i]='<tr><td><img src="';
-		            content2[i]='" width="135" height="135" style="margin-left:30px;" onclick="toProduct('+datastr[i].Pdid+')">&nbsp;&nbsp;Pdid: '+datastr[i].Pdid+'&nbsp;&nbsp;名稱：'+datastr[i].PdName+'&nbsp;&nbsp;價錢：'+datastr[i].商品評價+'</td></tr>';
+		            content2[i]='" width="135" height="135" style="margin-left:30px;" onclick="toProduct('+datastr[i].Pdid+')">&nbsp;&nbsp;Pdid: '+datastr[i].Pdid+'&nbsp;&nbsp;名稱：'+datastr[i].PdName+'&nbsp;&nbsp;價錢：'+datastr[i].Price+'</td></tr>';
 			        for(var k=0;k<=i;k++){
 					    searchResult=searchResult+content1[k]+content2[k];
 					}
