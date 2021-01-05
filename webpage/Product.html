@@ -269,7 +269,7 @@ function toMainPage(){
 
 
 function addToCart(){
-    var str="/backend/cart/add?pdid=";
+    var str="backend/cart/add?pdid=";
     str=str+localStorage.getItem("Pdid")+"&amount=1";
     var request=new XMLHttpRequest;
     request.open("get",str);
@@ -286,7 +286,7 @@ function addToCart(){
                 window.location.href="Cart.html";
 	        }
 		}
-		if(request.readyState!==4){
+		if(request.readyState!=4){
 		    alert("加入購物車失敗");
 		}
     }
