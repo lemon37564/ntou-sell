@@ -36,9 +36,6 @@ function ShowNewProduct(){
 		        for (var i = 0; i < len; i++) {
 			        msg2[i]='backend/pics/get?pdid='+datastr[i].Pdid;
 				    console.log(msg2);
-			        //var request2=new XMLHttpRequest;
-			        //request2.open("get",msg2);
-				    //request2.send(null);
 				//要記得在搜尋請求中設置延遲以避免因網路問題導致圖片載入順序錯誤
 				(function(i){
 					
@@ -89,10 +86,6 @@ function ShowNewProduct(){
     request.send(null);
 }
 
-function toProduct(Pdid){
-    localStorage.setItem('Pdid', Pdid);
-    window.location.href="Product.html";
-}
 
 //以下為userlist點開清單的顯示
 var VisibleMenu = ''; // 記錄目前顯示的子選單的 ID
@@ -124,50 +117,6 @@ function hideMenu(){
 
 
 //以下是搜尋商品的function
-/*
-function searchProduct(){
-
-    //var msg="https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/product/search?";
-
-    var msg="backend/product/search?";
-
-    var name=document.getElementById("name");
-    var minprice=document.getElementById("minprice");
-    var maxprice=document.getElementById("maxprice");
-    var eval=document.getElementById("eval");
-
-    if(name.value!=''){msg=msg+"name="+name.value};
-    if(minprice.value!=''){msg=msg+"&minprice="+minprice.value};
-    if(maxprice.value!=''){msg=msg+"&maxprice="+maxprice.value};
-    if(eval.value!=''){msg=msg+"&eval="+eval.value};
-
-    var searchResult='';
-
-    var request=new XMLHttpRequest;
-    request.open("get",msg); 
-
-    request.onreadystatechange = function() { // Define event listener
-    // If the request is complete and was successful
-        if (request.readyState === 4 && request.status === 200) {
-            var type = request.getResponseHeader("Content-Type");
-            if (type.match(/^text/)){ // Make sure response is text
-		        var datastr = JSON.parse(request.responseText);
-		        var len  = datastr.length;
-		        var str= "";
-		        for (var i = 0; i < len; i++) {
-			        var content = '<p>'+'<li>名稱：'+datastr[i].PdName+'價錢：'+datastr[i].Price+'</li>'+'</p>';
-                    //偵錯用  console.log(content);
-			        searchResult=searchResult+content;
-			        str+=content;
-		        };
-		        document.getElementById("NP").innerHTML=searchResult;
-            }
-        }
-    };
-    request.send(null);
-}
-*/
-
 
 function searchProduct(){
     document.getElementById("currentTitle").innerHTML='Search Result';
@@ -264,6 +213,10 @@ function searchProduct(){
     request.send(null);
 }
 
+function toProduct(Pdid){
+    localStorage.setItem('Pdid', Pdid);
+    window.location.href="Product.html";
+}
 
 //logout的功能
 function logout(){
