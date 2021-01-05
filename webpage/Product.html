@@ -26,6 +26,7 @@ function ShowProduct(){
 	//以下為當載入商品時，新增一項歷史紀錄
 	var addHistory=new XMLHttpRequest;
 	var msgHistory='backend/history/add?pdid='+localStorage.getItem("Pdid");
+	console.log(msgHistory);
     addHistory.open("get",msgHistory); 
 	
     addHistory.onreadystatechange = function() { // Define event listener
