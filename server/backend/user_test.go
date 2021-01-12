@@ -19,3 +19,14 @@ func TestUser(t *testing.T) {
 		t.Error("regist but cannot log in.")
 	}
 }
+
+func BenchmarkLogin(b *testing.B) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
+
+	u := UserInit(data)
+
+	for i := 0; i < b.N; i++ {
+		u.Login("1234", "1234")
+	}
+}

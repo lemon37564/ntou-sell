@@ -17,3 +17,14 @@ func TestPd(t *testing.T) {
 		t.Error("add new product but cannot found")
 	}
 }
+
+func BenchmarkSearch(b *testing.B) {
+	data := database.OpenAndInit()
+	defer data.DBClose()
+
+	p := ProductInit(data)
+
+	for i := 0; i < b.N; i++ {
+		p.SearchProducts("ifone", "0", "500000", "0")
+	}
+}
