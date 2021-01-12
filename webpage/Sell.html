@@ -196,17 +196,38 @@ class.myButton:active {
         document.getElementById("ff").innerHTML = "Paragraph changed.";
     }
     function addSell(){
-      alert(document.getElementById("name").innerHTML);
-      if(document.getElementById("name").innerHTML=="")alert("姓名不能空白!!\n");
-      if(document.getElementById("pdprice").innerHTML=="")alert("價錢不能空白!!\n");
-      if(document.getElementById("amount").innerHTML=="")alert("數量不能空白!!\n");
-      if(document.getElementById("date").innerHTML=="")alert("日期不能空白!!\n");
-      if(document.getElementById("desc").innerHTML=="")alert("介紹不能空白!!\n");
-      if(document.getElementById("box").innerHTML=="")alert("阿要不要競標拉!!\n");
-      if(document.getElementById("progressbarTWInput")=="")alert("圖片沒有是賣空氣喔!!\n");
+      var pdname=document.getElementById("pname");
+        var pdpic=document.getElementById("progressbarTWInput");
+        var desc=document.getElementById("pdesc");
+        var date=document.getElementById("pdate");
+        var price=document.getElementById("pdprice");
+        var number=document.getElementById("pamount");
+        
+        var boxx=document.getElementById("pbox");
+        if(!(pdname.value==""||desc.value==""||date.value==""||price.value==""||number.value==""||boxx.value=="")){
+          
+          alert("Success to add")
+          window.location.href="MainPage.html";
 
-      alert("success to add");
-      window.location.href="MainPage.html";
+        }/*alert(pdname.value)
+        alert(desc)
+        alert(date)
+        alert(price)
+        alert(number)*/
+      /*alert(document.getElementById("name").innerHTML)
+      if(document.getElementById("name").innerHTML=="")alert("姓名不能空白!!\n");
+      else if(document.getElementById("pdprice").innerHTML=="")alert("價錢不能空白!!\n");
+      else if(document.getElementById("amount").innerHTML=="")alert("數量不能空白!!\n");
+      else if(document.getElementById("date").innerHTML=="")alert("日期不能空白!!\n");
+      else if(document.getElementById("desc").innerHTML=="")alert("介紹不能空白!!\n");
+      else if(document.getElementById("box").innerHTML=="")alert("阿要不要競標拉!!\n");
+      else if(document.getElementById("progressbarTWInput")=="")alert("圖片沒有是賣空氣喔!!\n");
+
+      else {
+        alert("success to add");
+        window.location.href="MainPage.html";
+      }
+      */
     }
     
     
@@ -342,7 +363,7 @@ class.myButton:active {
             <div class="row">
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <fieldset><!--name-->
-                  <input name="name" type="text" class="form-control" id="name" placeholder="Product Name" required="">
+                  <input name="name" type="text" class="form-control" id="pname" placeholder="Product Name" required="">
                 </fieldset>
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12">
@@ -352,17 +373,17 @@ class.myButton:active {
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <fieldset><!--Amount-->
-                  <input name="amount" class="form-control" id="amount" placeholder="Amount" required="">
+                  <input name="amount" class="form-control" id="pamount" placeholder="Amount" required="">
                 </fieldset>
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <fieldset><!--Date-->
-                  <input name="date" class="form-control" id="date" placeholder="Date ex:(2016-01-01)" required="">
+                  <input name="date" class="form-control" id="pdate" placeholder="Date ex:(2016-01-01)" required="">
                 </fieldset>
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12">
                 <fieldset><!--descript-->
-                    <textarea name="description" type="text"  row="6" class="form-control" id="desc" placeholder="Description" required=""></textarea>
+                    <textarea name="description" type="text"  row="6" class="form-control" id="pdesc" placeholder="Description" required=""></textarea>
                 </fieldset>
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12">
@@ -370,9 +391,9 @@ class.myButton:active {
                     <div style = "align-content: flex-end">
                         <h >是否為競標&emsp;&emsp;&emsp;&emsp;</h>
                         <h>是</h>
-                        <input type="checkbox" style="width:30px;height:30px;" id="box" name="bid" value="true">
+                        <input type="checkbox" style="width:30px;height:30px;" id="pbox" name="bid" value="true">
                         <h>否</h>
-                        <input type="checkbox" style="width:30px;height:30px;" id="box" name="bid" value="false">
+                        <input type="checkbox" style="width:30px;height:30px;" id="pbox" name="bid" value="false">
                     </div>
                 </fieldset>
               </div>
