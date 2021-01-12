@@ -194,7 +194,7 @@ class.myButton:active {
                     '<div id="div3">'+datastr[i].Amount+
                     '</div>'+
                     '<div id="div4">'+
-                    '<button type="button" onclick="" style="margin-left:20px;margin-top:10px;width:90px;height:40px;background-color:gray;">'+"刪除"+'</button>'+
+                    '<button type="button" id="'+datastr[i].Pdid+'" onclick="deletehis(this.id)" style="margin-left:20px;margin-top:10px;width:90px;height:40px;background-color:gray;">'+"刪除"+'</button>'+
                     '</div>'+
                     
                     '</div>'; 
@@ -208,6 +208,22 @@ class.myButton:active {
         };
         request.send(null);
 
+    }
+    function deletehis(id){
+      alert(id);
+    var str = "/backend/history/delete?pdid="+id;
+    var request=new XMLHttpRequest;
+    request.open("get",str);
+    request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+        alert("success to delete");
+        window.location.href="History.html";
+      }
+    }
+    }
+    request.send(null);
     }
     function switchMenu( theMainMenu, theSubMenu, theEvent ){
         var SubMenu = document.getElementById( theSubMenu );
@@ -404,5 +420,5 @@ https://templatemo.com/tm-546-sixteen-clothing
    }
  </script>
 </body>
->>>>>>> 3ba229c54eb552ed9994c08eaaaf6af1b188177a
+
 </html> 

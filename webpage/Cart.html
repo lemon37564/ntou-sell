@@ -108,8 +108,8 @@ class.myButton:active {
         font-weight:bold;
         font-size:35px;
         color:rgb(6, 9, 17);
-        margin-left:50px;
-        margin-right:83px;
+        margin-left:20px;
+        margin-right:105px;
         /*width:20px;
         height:20px;*/
         
@@ -141,7 +141,7 @@ class.myButton:active {
 			var content = 
                 '<div id="div2">'+
                 '<div id="div3">'+
-                
+                ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:50px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="dele(this.id);">'+"刪除"+'</button>'+
                 '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
                 '</div>'+
                 
@@ -151,9 +151,7 @@ class.myButton:active {
                 '</div>'+
                 '<div id="div3">'+datastr[i].Amount+
                 '</div>'+
-                /*'</li>'+
-                '</div>'+*/
-                '</div>'+
+                
                 '</div>';
            
             //偵錯用  console.log(content);
@@ -170,6 +168,24 @@ class.myButton:active {
 request.send(null);
 
 }
+    function dele(id){
+        
+        var request3 = new XMLHttpRequest;    
+        str=""; 
+        temp="/backend/cart/remo?pdid="+id;
+                            
+        request3.open("get",temp);
+        request3.onreadystatechange = function() { 
+        if (request2.readyState === 4 && request2.status === 200) {
+                var type = request2.getResponseHeader("Content-Type");
+                    if (type.match(/^text/)){ // Make sure response is text   
+                                    }
+                                }
+                            }
+                            request3.send(null);
+                            window.location.href="Cart.html";
+
+    }
     function switchMenu( theMainMenu, theSubMenu, theEvent ){
         var SubMenu = document.getElementById( theSubMenu );
         if( SubMenu.style.display == 'none' ){ // 顯示子選單
