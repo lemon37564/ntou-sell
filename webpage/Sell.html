@@ -195,16 +195,10 @@ class.myButton:active {
     function fe(){
         document.getElementById("ff").innerHTML = "Paragraph changed.";
     }
-    function addall(){
-            
-            var prods=document.getElementsByName("test");
-            for (var i=0;i<prods.length;i++){
-                if(prods[i].type == "checkbox"){
-                prods[i].checked = true;
-            
-                }
-            }
-        }
+    function addSell(){
+      alert("success to add");
+      window.location.href="MainPage.html";
+    }
     
     
     function submiit() {
@@ -383,7 +377,7 @@ class.myButton:active {
                 <fieldset>
                   <button type="submit" id="form-submit" class="filled-button" 
                           data-sitekey="6Ld0yCEaAAAAAItIGvjrguG3uli7nohVp_zFLS7w" 
-                          data-callback='onSubmit' data-action='submit' onclick="history.back()">上架</button>
+                          data-callback='onSubmit' data-action='submit' onclick="addSell()">上架</button>
                 </fieldset>
               </div>
             </div>

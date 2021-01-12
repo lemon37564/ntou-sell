@@ -35,6 +35,13 @@ div.border{
   align: center;
   padding-top:50px;
 }
+div.borderup{
+    position:relative;
+    top:0px;
+    height:80px;
+    margin-left: 80px;
+    background-color: #3949AB;
+  }
 div.littbord1{
     float:left;
     position: relative;
@@ -98,7 +105,7 @@ class.myButton:active {
      margin-top: 5px;
     margin-bottom: 5px;
     margin-right: 60px;
-    margin-left: 80px;
+    margin-left: 55px;
     color:aliceblue;
     font-size:30px
 }
@@ -115,25 +122,45 @@ class.myButton:active {
     top: 20px;
     background-color:blanchedalmond;
     border:3px solid #000;
-    width:600px;
+    width:700px;
     height:80px;
-    padding-left: 80px;
+    padding-left: 10px;
     margin-left:40px;
     margin-top:20px;
     float:left;
+    
 }
 #div3{
         font-weight:bold;
         font-size:25px;
         color:rgb(15, 115, 51);
-        margin-top:20px;
+        background-color: rgb(82, 109, 189);
+        width:120px;
+        height:70px;
+        border-radius: 5px;
+        padding-top: 10px;
+        padding-left:30px;
+        margin-left: 5px;
+        margin-right:50px;
+
+        
     
-        margin-left:10px;
-        margin-right:20px;
+       
+        
         /*width:20px;
         height:20px;*/
         
     float:left;
+    word-break: break-all;
+}
+#div4{
+  font-weight:bold;
+        font-size:30px;
+        color:#3949AB;
+        height:30px;
+        margin-left:40px;
+        margin-top:10px;
+    float:left;  
 }
 </style>
     
@@ -159,14 +186,14 @@ class.myButton:active {
                 var content = 
                     '<div id="div2">'+
                     
-                    '<div id="div3">'+'名稱'+datastr[i].PdName+
+                    '<div id="div3">'+datastr[i].PdName+
                     '</div>'+
-                    '<div id="div3">'+'價格'+datastr[i].Price+
+                    '<div id="div3">'+datastr[i].Price+
                     '</div>'+
-                    '<div id="div3">'+'數量'+datastr[i].Amount+
+                    '<div id="div3">'+datastr[i].Amount+
                     '</div>'+
-                    '<div id="div3">'+
-                    '<button type="button" onclick="" style="margin-left:90px;margin-top:10px;width:90px;height:40px;background-color:gray;">'+"刪除"+'</button>'+
+                    '<div id="div4">'+
+                    '<button type="button" onclick="" style="margin-left:20px;margin-top:10px;width:90px;height:40px;background-color:gray;">'+"刪除"+'</button>'+
                     '</div>'+
                     
                     '</div>'; 
@@ -333,11 +360,18 @@ https://templatemo.com/tm-546-sixteen-clothing
 
 <div class="border"><!--版面-->
     <h1 style="text-align: left;font-size:50px">歷史紀錄</h1>
-    
+    <div style = "padding-left:5px;height:300px">
+      <div class= "borderup">
+        <div id="div1">名稱</div>
+        <div id="div1">價格</div>
+        <div id="div1">數量</div>
+
+      </div>
     <table id=TP style="background:rgba(243,241,241,0.6);align-content: center" width="700" height="600">
     <tr><td>
 	  </td></tr>
   </table>
+  </div>
   </div>
     
     
