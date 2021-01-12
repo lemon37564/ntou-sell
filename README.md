@@ -1,4 +1,4 @@
-# ntou-sell v0.0.1
+# ntou-sell v1.0.0
 [![Build Status](https://travis-ci.org/lemon37564/ntou-sell.svg?branch=main)](https://travis-ci.org/lemon37564/ntou-sell)
 
 # Website
