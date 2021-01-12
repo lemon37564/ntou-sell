@@ -18,6 +18,53 @@
 <title>海大拍賣商品頁</title>
 
 <script type="text/javascript">
+//加入購物車
+function addToCart(){
+    var str="backend/cart/add?pdid=";
+    str=str+localStorage.getItem("Pdid")+"&amount=1";
+    var request=new XMLHttpRequest;
+    request.open("get",str);
+        
+    request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+            if (request.responseText=='true'){    //請記得加入回傳值的判斷
+    	        alert("加入購物車成功");
+     	        window.location.href="MainPage.html";
+            }
+            else if(request.responseText=='false\n'){
+	            alert("加入購物車失敗，請確認購物車內是否已有重複商品，或是商品已賣完。");
+                window.location.href="Cart.html";
+	        }
+		}
+    }
+    request.send(null);
+}
+
+function bid(){
+    var str="/backend/bid/set?pdid=";
+    str=str+localStorage.getItem("Pdid")+"&money="+document.getElementById("bidSet").value;
+    var request=new XMLHttpRequest;
+    request.open("get",str);
+        
+    request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+            var type = request.getResponseHeader("Content-Type");
+            if (request.responseText=='ok'){    //請記得加入回傳值的判斷
+    	        alert("加價成功");
+				ShowProduct();
+     	        //window.location.href="MainPage.html";
+            }
+			else /*if(request.responseText=='false')*/{
+	            alert("加價失敗");
+                //window.location.href="Cart.html";
+	        }
+        }
+    }
+    request.send(null);
+}
+
+
+
 //以下為載入商品資訊的function
 window.onload=ShowProduct;
 
@@ -111,9 +158,6 @@ function ShowProduct(){
     };
     request.send(null);
 }
-
-
-
 
 //以下為userlist點開清單的顯示
 var VisibleMenu = ''; // 記錄目前顯示的子選單的 ID
@@ -268,53 +312,8 @@ function toMainPage(){
 }
 
 
-function addToCart(){
-    var str="backend/cart/add?pdid=";
-    str=str+localStorage.getItem("Pdid")+"&amount=1";
-    var request=new XMLHttpRequest;
-    request.open("get",str);
-        
-    request.onreadystatechange = function() { 
-        if (request.readyState === 4 && request.status === 200) {
-            if (request.responseText=='true'){    //請記得加入回傳值的判斷
-    	        alert("加入購物車成功");
-     	        window.location.href="MainPage.html";
-            }
-            else if(request.responseText=='false\n'){
-	            alert("加入購物車失敗，請確認購物車內是否已有重複商品，或是商品已賣完。");
-                window.location.href="Cart.html";
-	        }
-		}
-    }
-    request.send(null);
-}
-
-function bid(){
-    var str="/backend/bid/set?pdid=";
-    str=str+localStorage.getItem("Pdid")+"&money="+document.getElementById("bidSet").value;
-    var request=new XMLHttpRequest;
-    request.open("get",str);
-        
-    request.onreadystatechange = function() { 
-        if (request.readyState === 4 && request.status === 200) {
-            var type = request.getResponseHeader("Content-Type");
-            if (request.responseText=='ok'){    //請記得加入回傳值的判斷
-    	        alert("加價成功");
-				ShowProduct();
-     	        //window.location.href="MainPage.html";
-            }
-			else /*if(request.responseText=='false')*/{
-	            alert("加價失敗");
-                //window.location.href="Cart.html";
-	        }
-        }
-    }
-    request.send(null);
-}
-
 
 </script>
-
 </head>
 
 <body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
