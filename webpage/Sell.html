@@ -196,6 +196,15 @@ class.myButton:active {
         document.getElementById("ff").innerHTML = "Paragraph changed.";
     }
     function addSell(){
+      alert(document.getElementById("name").innerHTML);
+      if(document.getElementById("name").innerHTML=="")alert("姓名不能空白!!\n");
+      if(document.getElementById("pdprice").innerHTML=="")alert("價錢不能空白!!\n");
+      if(document.getElementById("amount").innerHTML=="")alert("數量不能空白!!\n");
+      if(document.getElementById("date").innerHTML=="")alert("日期不能空白!!\n");
+      if(document.getElementById("desc").innerHTML=="")alert("介紹不能空白!!\n");
+      if(document.getElementById("box").innerHTML=="")alert("阿要不要競標拉!!\n");
+      if(document.getElementById("progressbarTWInput")=="")alert("圖片沒有是賣空氣喔!!\n");
+
       alert("success to add");
       window.location.href="MainPage.html";
     }
