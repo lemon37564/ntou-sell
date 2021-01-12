@@ -127,9 +127,23 @@ function deleteProduct(Pdid){
     var result=confirm('你確定要刪除該商品嗎?');
 	if(result){
 	    //向後端刪除商品的function發送請求
-	}else{
-	    //
-	}
+		var request=new XMLHttpRequest;
+		var msgDelete="backend/product/delete?pdid="+Pdid;
+		console.log(msgDelete);//偵錯用
+	    request.open("get",msgDelete);
+  	    request.onreadystatechange = function() { // Define event listener
+  	        // If the request is complete and was successful
+			if (request.readyState === 4 && request.status === 200) {
+				if(request.responseText==="ok"){
+					alert('刪除成功!'); 
+					window.location.reload();
+				}
+			}
+        };
+	request.send(null);
+	}/*else{
+		
+	}*/
 }
 
 

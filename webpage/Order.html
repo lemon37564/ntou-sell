@@ -6,27 +6,38 @@
 <!--css-->
 <link href="css/page.css" rel="stylesheet">
 
-<title>海大拍賣訂單頁</title>
+<title>訂單</title>
 <style>
+  
   div.borderup{
     position:relative;
     top:0px;
     height:80px;
     background-color: #3949AB;
   }
+  div.conversa{
+    position: absolute;
+    width:800px;
+    height:450px;
+    float:left;
+    
+    margin-top: 300px;
+  }
+  
   div.border{
+    float:left;
     position:relative;
     top:100px;
     margin-left:380px;
     width:850px;
-    height:700px;
+    height:1200px;
    
     border-style:solid;
     border-width: 20px;
     border-color:blue;
 
     background-color:rgb(172, 70, 70);
-    padding-left:20px;
+    padding-left:5px;
     padding-top:20px;
     
   }
@@ -56,7 +67,8 @@
     border:3px solid #000;
     width:800px;
     height:100px;
-    padding-left: 10px;
+    border-radius: 5px;
+    padding-left: 5px;
     margin-left:0px;
     margin-top:10px;
     float:left;
@@ -65,11 +77,15 @@
     font-weight:bold;
         font-size:27px;
         color:#3949AB;
-        width:680px;
-        height:30px;
-        padding-left:40px; 
-        padding-right:75px;
+        background-color: rgb(21, 142, 55);
+        width:120px;
+        height:90px;
+        border-radius: 5px;
+        padding-top: 10px;
+        margin-left: 5px;
+        margin-right:20px;
        float:left;
+       word-break: break-all;
   }
   #div4{
     font-weight:bold;
@@ -80,49 +96,38 @@
         margin-top:10px;
     float:right;
   }
+  /*#div3-ali{
+    font-weight:bold;
+        font-size:27px;
+        color:#3949AB;
+        background-color: rgb(21, 142, 55);
+        width:60px;
+        height:90px;
+        padding-left:40px;
+        padding-right:75px;
+        padding-top: 10px;
+        margin-left: 5px;
+        margin-right:20px;
+       float:left;
+  }*/
 </style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
-
+<link rel="stylesheet" href="assets/css/dialog.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="assets/css/fontawesome.css">
 <link rel="stylesheet" href="assets/css/templatemo-sixteen.css">
 <link rel="stylesheet" href="assets/css/owl.css">
-<link rel="stylesheet" href="assets/css/dialog.css">
+
+<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
 <script type="text/javascript">
 
 
 //以下為userlist點開清單的顯示
-var VisibleMenu = ''; // 記錄目前顯示的子選單的 ID
 
-// 顯示或隱藏子選單
-function switchMenu( theMainMenu, theSubMenu, theEvent ){
-    var SubMenu = document.getElementById( theSubMenu );
-    if( SubMenu.style.display == 'none' ){ // 顯示子選單
-        SubMenu.style.minWidth = theMainMenu.clientWidth; // 讓子選單的最小寬度與主選單相同 (僅為了美觀)
-        SubMenu.style.display = 'inline';
-        hideMenu(); // 隱藏子選單
-        VisibleMenu = theSubMenu;
-    }
-    else{ // 隱藏子選單
-        if( theEvent != 'MouseOver' || VisibleMenu != theSubMenu ){
-            SubMenu.style.display = 'none';
-            VisibleMenu = '';
-        }
-    }
-}
-
-// 隱藏子選單
-function hideMenu(){
-    if( VisibleMenu != '' ){
-        document.getElementById( VisibleMenu ).style.display = 'none';
-    }
-    VisibleMenu = '';
-}
 function dele(id){
     alert(id);
     var str = "/backend/order/del?pdid="+id;
@@ -156,7 +161,7 @@ function addhis(id){
     }
     request2.send(null);
 }
-//以下是搜尋商品的function，目前無圖片及連結
+
 
 $(document).ready(function(){
   $("#showdia").click(function(){
@@ -184,13 +189,22 @@ request.open("get",msg);
     var searchResult="";
    // var strbutt=<button type="button" onclick="changeSta()" style="width:30px;height:20px">Change</button>
 		for (var i = 0; i < len; i++) {
+      
       var content = 
       '<div id="div2">'+
-      '<div id="div3">'+
-        
-      +datastr[i].Pdid+'&nbsp;&emsp;'+datastr[i].PdName+'&nbsp;&emsp;'+datastr[i].Price+'&nbsp;&emsp;'+datastr[i].Amount+'&nbsp;&emsp;'+
-                
+      '<div id="div3" >'+
+      +datastr[i].Pdid+    
       '</div>'+
+      '<div id="div3" >'+
+        datastr[i].PdName+
+      '</div>'+
+      '<div id="div3">'+
+      datastr[i].Price+
+      '</div>'+
+      '<div id="div3">'+
+      datastr[i].Amount+
+      '</div>'+
+      
       '<div id="div4">'+
       '<input type="button" style="font-size:4px;width:40px;height:30px;margin-right:10px;" id="box1" name="button2" value="更改">'+
       ' <button type="button" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;" onclick="getmessg('+datastr[i].Pdid+')">'+"說個話"+'</button>'+
@@ -314,39 +328,61 @@ insertChat("you", "Tell me a joke",7000);
 insertChat("me", "Spaceman: Computer! Computer! Do we bring battery?!", 9500);
 insertChat("you", "LOL", 12000);
 */
+var nowsellerid = "";
 function getmessg(pdid){
 resetChat();
-alert(pdid);
+
+var temp=false;
 var newProduct='';
 var UserId = "";
 
-var request = new XMLHttpRequest;
-var content="/backend/product/get?pdid=";
-coutent = content + Number(pdid);
-alert(content); 
-request.open("get",content);
-request.onreadystatechange = function() {
-    if(request.readyState === 4 && request.status === 200) {
-        var type = request.getResponseHeader("Content-Type");
+
+var request2 = new XMLHttpRequest;
+var content="/backend/product/get?pdid="+ pdid;
+//alert(pdid);
+
+//alert(content); 
+request2.open("get",content);
+request2.onreadystatechange = function() {
+    if(request2.readyState === 4 && request2.status === 200) {
+        var type = request2.getResponseHeader("Content-Type");
+        
         if(type.match(/^text/)) {
-            var datastr = JSON.parse(request.responseText);
-            UserId=datastr[0].SellerID;
-            alert(UserId)
+            var datastr = JSON.parse(request2.responseText);
+            UserId=datastr.SellerID;
+            //alert(("dd"+UserId));
+            getmessage2(UserId);
+            
+            nowsellerid=UserId;
         }
     }
 }
-request.send(null);
+/*https://ntou-sell.herokuapp.com/backend/message/get?remoteUID=2&ascend=true*/
+request2.send(null);
 
-request.open("get","/backend/message/get?remoteUID=2&ascend=true");
+
+
+
+}
+function getmessage2(UserId) {
+
+  var request = new XMLHttpRequest;
+  var content2 = "/backend/message/get?remoteUID=" + UserId + "&ascend=true";
+request.open("get",content2);
+
 request.onreadystatechange = function() { 
     if (request.readyState === 4 && request.status === 200) {
+        
         var type = request.getResponseHeader("Content-Type");
         if (type.match(/^text/)){ // Make sure response is text
         var datastr = JSON.parse(request.responseText);
-        var len  = datastr.Content;
+        if(datastr=="failed")alert("d");
         
-        alert(datastr.Content[0].Status);
-        for(var i=0;i<len;i++){
+        var len  = datastr.Content.length;
+        
+
+        for(var i=len-1;i>=0;i--){
+         
           if(datastr.Content[i].Status=="s")insertChat("me",datastr.Content[i].Text,0);
           if(datastr.Content[i].Status=="r")insertChat("you",datastr.Content[i].Text,0);
         }
@@ -358,14 +394,14 @@ request.onreadystatechange = function() {
 
 };
 request.send(null);
-
 }
 function sendmessg(){
+  var temp = nowsellerid;
   var dialo = document.getElementById("message");
-  alert(dialo.value);
-  insertChat("me",dialo.value,20000);
+  
+  insertChat("me",dialo.value,0);
   var content = "/backend/message/send?";
-  content=content+"remoteUID="+"2"+"&text="+dialo.value;
+  content=content+"remoteUID="+temp+"&text="+dialo.value;
 
   var request=new XMLHttpRequest;
   request.open("get",content);
@@ -375,12 +411,13 @@ function sendmessg(){
           alert("success");
       }
       else{
-        alert("not success");
+        
       }
   };
   request.send(null);
 }
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <link rel="stylesheet" href="assets/css/fontawesome.css">
 <link rel="stylesheet" href="assets/css/templatemo-sixteen.css">
@@ -388,21 +425,22 @@ function sendmessg(){
 
 </head>
 
-<body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="true
+<body style="background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
+  <header class="" >
+  <nav class="navbar navbar-expand-lg" >
+    <div class="container" style="height:60px">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false
       " aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         
       </button>
         
-      <a class="navbar-brand" href="MainPage.html"><h2>海大購物 <em>Shop</em></h2></a>
-      
+      <a class="navbar-brand" href="MainPage.html" ><h2>海大購物 <em>Shop</em></h2></a>
+      <a style="width:600px"></a>
       <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ml-auto" style="text-align:right;margin-bottom:0px;">
           <li class="nav-item">
-            <a class="nav-link" href="MainPage.html">Home
+            <a class="nav-link "  href="MainPage.html">Home
               <span class="sr-only">(current)</span>
             </a>
           </li> 
@@ -420,26 +458,31 @@ function sendmessg(){
           </li>
           
 
+
         </ul>
       </div>
     </div>
   </nav>
 </header>
+<<<<<<< HEAD
+
+=======
   
+>>>>>>> 983bece09b362c158e1a821a558623102abddc0c
   <div class = "border">
     <h2>Order</h2>
-    <div style="padding-left:20px">
-    <div class= "borderup">
-      <div id="div1">order id</div>
-      <div id="div1">Name</div>
-      <div id="div1">Price</div>
-      <div id="div1">數量</div>
-      <div id="div1">State</div>
-      <button id="showdia">顯示對話</button>
+    <div style="padding-left:5px;height:300px">
+      <div class= "borderup">
+        <div id="div1">order id</div>
+        <div id="div1">Name</div>
+        <div id="div1">Price</div>
+        <div id="div1">數量</div>
+        <div id="div1">State</div>
+        <button id="showdia">顯示對話</button>
       
-    </div>
-    <br>
-    <div style="margin-left:0px;">
+      </div>
+      <br>
+      <div style="margin-left:0px;">
       <table id=NP width="1000" height="800">
         <tr><td>
         </td></tr>
@@ -447,9 +490,12 @@ function sendmessg(){
       </table> 
     
       </div>
-      <!--below show dialog-->
-      <div id = "if">
-      <div class="col-sm-3 col-sm-offset-4 frame" >
+      
+    </div>
+    
+    <div class="conversa">
+    <div id = "if">
+      <div class="frame" >
         <ul id="dia"></ul>
         <div>
             <div class="msj-rta macro">                        
@@ -466,13 +512,33 @@ function sendmessg(){
                 <button type="button" onclick="getmessg()">接</button>
             </div>                
         </div>
+      </div>
     </div>
-    </div>
-    <script src="assets/js/dialog.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="jquery/jquery.min.js"></script>
     </div>
   
+ 
+  
+  
+  
+    <script src="jquery/jquery.min.js"></script>
+
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="assets/js/owl.js"></script>
+    <script src="assets/js/slick.js"></script>
+    <script src="assets/js/isotope.js"></script>
+    <script src="assets/js/accordions.js"></script>
+    <script language = "text/Javascript"> 
+      cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+      function clearField(t){                   //declaring the array outside of the
+      if(! cleared[t.id]){                      // function makes it static and global
+          cleared[t.id] = 1;  // you could use true and false, but that's more typing
+          t.value='';         // with more chance of typos
+          t.style.color='#fff';
+          }
+      }
+    </script>
+    
   </div>
 </body>
 

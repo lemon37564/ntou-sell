@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -369,4 +370,411 @@ https://templatemo.com/tm-546-sixteen-clothing
    }
  </script>
 </body>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+
+<style type="text/css">
+/*#DIV1{
+    width:200px;　
+    line-height:50px;　
+    padding:20px;
+    border:2px blue solid;
+    margin-right:10px;　
+
+}*/
+body {
+	background-color: powderblue;
+}
+div.tobuy{
+  margin-left:auto;
+  margin-right:auto;
+  background-color:azure;
+  padding-left: 70px;
+  height:100px;
+
+}
+div.border{
+   
+  position: relative;
+  top: 100px;
+  width: 850px;
+  height: 800px;
+  border-style:groove;
+  border-width: 50px 4px 4px 4px;
+  border-color:brown;
+  background-color:cadetblue;
+  align: center;
+  padding-top:50px;
+}
+div.borderup{
+    position:relative;
+    top:0px;
+    height:80px;
+    margin-left: 80px;
+    background-color: #3949AB;
+  }
+div.littbord1{
+    float:left;
+    position: relative;
+    margin-top:250px;
+    margin-left:20px;
+    width:300px;
+    height:150px;
+    border-style:solid;
+    border-color:burlywood;
+    background-color: powderblue;
+}
+div.littbord2{
+    float:left;
+    position: relative;
+    margin-top:250px;
+    margin-left:80px;
+    width:300px;
+    height:150px;
+    border-style:solid;
+    border-color:burlywood;
+    background-color: powderblue;
+}
+div.cart-title{/*上片的bar*/
+  position: relative;
+  top: 0px;
+  background-color:darkgoldenrod;
+  border:1px solid #000;
+  border-bottom-left-radius:30px;
+  border-bottom-right-radius: 30px;
+  width: 900px;
+  height: 50px; 
+}
+Class.mybutto {   /*total*/
+    
+	box-shadow: 3px 4px 0px 0px #899599;
+	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+	background-color:#ededed;
+	border-radius:15px;
+	border:1px solid #d6bcd6;
+	display:inline-block;
+	cursor:pointer;
+	color:#3a8a9e;
+	font-family:Arial;
+	font-size:17px;
+	padding:7px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #e1e2ed;
+    width:30px;
+    height:20px;
+}
+class.myButton:hover {
+	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+	background-color:#bab1ba;
+}
+class.myButton:active {
+	position:relative;
+	top:1px;
+}
+#div1{/*商品價個數量*/
+    float:left;
+     margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 60px;
+    margin-left: 55px;
+    color:aliceblue;
+    font-size:30px
+}
+#tobuy{
+        margin-bottom: 0px;
+        width:1000px;
+        height:120px;
+        background-color:darkgoldenrod;
+        border-style : solid;
+        border-color: #b8571e;
+    }
+#div2{/*for showing product*/
+    position: relative;
+    top: 20px;
+    background-color:blanchedalmond;
+    border:3px solid #000;
+    width:700px;
+    height:80px;
+    padding-left: 10px;
+    margin-left:40px;
+    margin-top:20px;
+    float:left;
+    
+}
+#div3{
+        font-weight:bold;
+        font-size:25px;
+        color:rgb(15, 115, 51);
+        background-color: rgb(82, 109, 189);
+        width:120px;
+        height:70px;
+        border-radius: 5px;
+        padding-top: 10px;
+        padding-left:30px;
+        margin-left: 5px;
+        margin-right:50px;
+
+        
+    
+       
+        
+        /*width:20px;
+        height:20px;*/
+        
+    float:left;
+    word-break: break-all;
+}
+#div4{
+  font-weight:bold;
+        font-size:30px;
+        color:#3949AB;
+        height:30px;
+        margin-left:40px;
+        margin-top:10px;
+    float:left;  
+}
+</style>
+    
+
+<script type="text/javascript">
+    window.onload=GetHistoryProducts;
+    function GetHistoryProducts(){
+
+        var newProduct='';
+        var request=new XMLHttpRequest;
+
+        request.open("get","/backend/history/get?amount=5&newest=true");
+        request.onreadystatechange = function() { 
+            if (request.readyState === 4 && request.status === 200) {
+                var type = request.getResponseHeader("Content-Type");
+                if (type.match(/^text/)){ // Make sure response is text
+                var datastr = JSON.parse(request.responseText);
+                var len  = datastr.length;
+
+                var str= "";
+                for (var i = 0; i < len; i++) {
+                
+                var content = 
+                    '<div id="div2">'+
+                    
+                    '<div id="div3">'+datastr[i].PdName+
+                    '</div>'+
+                    '<div id="div3">'+datastr[i].Price+
+                    '</div>'+
+                    '<div id="div3">'+datastr[i].Amount+
+                    '</div>'+
+                    '<div id="div4">'+
+                    '<button type="button" onclick="" style="margin-left:20px;margin-top:10px;width:90px;height:40px;background-color:gray;">'+"刪除"+'</button>'+
+                    '</div>'+
+                    
+                    '</div>'; 
+    //偵錯用  console.log(content);
+                    newProduct=newProduct+content;
+                };
+
+                }
+            }
+        document.getElementById("TP").innerHTML=newProduct;
+        };
+        request.send(null);
+
+    }
+    function switchMenu( theMainMenu, theSubMenu, theEvent ){
+        var SubMenu = document.getElementById( theSubMenu );
+        if( SubMenu.style.display == 'none' ){ // 顯示子選單
+            SubMenu.style.minWidth = theMainMenu.clientWidth; // 讓子選單的最小寬度與主選單相同 (僅為了美觀)
+            SubMenu.style.display = 'inline';
+            hideMenu(); // 隱藏子選單
+            VisibleMenu = theSubMenu;
+        }
+        else{ // 隱藏子選單
+            if( theEvent != 'MouseOver' || VisibleMenu != theSubMenu ){
+                SubMenu.style.display = 'none';
+                VisibleMenu = '';
+            }
+        }
+    }
+
+// 隱藏子選單
+    function hideMenu(){
+        if( VisibleMenu != '' ){
+            document.getElementById( VisibleMenu ).style.display = 'none';
+        }
+        VisibleMenu = '';
+    }
+    function getData(){
+            return 1
+    }
+    function myFunction() {
+      document.getElementById("demo").innerHTML = "Paragraph changed.";
+    }
+    function addall(){
+        return ff
+    }
+    function temp() {
+        var x= document.getElementsByID("temp1");
+      document.getElementById("d44d").innerHTML= x;
+    }
+    function addall(){
+            
+            var prods=document.getElementsByName("test");
+            for (var i=0;i<prods.length;i++){
+                if(prods[i].type == "checkbox"){
+                prods[i].checked = true;
+            
+                }
+            }
+        }
+    
+   
+    function total() {
+        alert("xxx");
+        var request=new XMLHttpRequest;
+        request.open("get","/backend/cart/tal"); //前面網址解決CORS
+        request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+		var datastr = request.responseText;
+		
+        }
+        }   
+        document.getElementById("SHOWTOT").innerHTML="wtf";
+        };
+    }
+    function logout(){
+    localStorage.clear();
+    var logoutRequest=new XMLHttpRequest;
+    logoutRequest.open("get","backend/user/logout"); 
+    logoutRequest.onreadystatechange = function() { // Define event listener
+    // If the request is complete and was successful
+        if (logoutRequest.readyState === 4 && logoutRequest.status === 200) {
+            alert("帳號登出!");
+            window.location.href="index.html";
+	    }
+    }
+    logoutRequest.send(null);
+//alert("帳號登出!");
+//測試用 console.log(localStorage.getItem("account"));
+//window.location.href="index.html";
+    }
+</script>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!--
+
+TemplateMo 546 Sixteen Clothing
+
+https://templatemo.com/tm-546-sixteen-clothing
+
+-->
+
+<link rel="stylesheet" href="assets/css/fontawesome.css">
+<link rel="stylesheet" href="assets/css/templatemo-sixteen.css">
+<link rel="stylesheet" href="assets/css/owl.css">
+
+  
+</head>
+
+<body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
+  <!--<div id="preloader">
+    <div class="jumper">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+  </div>-->
+    <header class="">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false
+          " aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+            
+          <a class="navbar-brand" href="MainPage.html"><h2>海大購物 <em>Shop</em></h2></a>
+          
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="MainPage.html">Home
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li> 
+              <li class="nav-item">
+                <a class="nav-link" href="Cart.html">Cart</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="Order.html">Order</a>
+              </li>
+              
+              <li class="nav-item active">
+                <a class="nav-link" href="History.html">History
+                 
+                </a>
+              </li> 
+              <li class="nav-item">
+                <a class="nav-link" href="Sell.html">Sell</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+<div align=center><!--對其-->
+
+
+<div class="border"><!--版面-->
+    <h1 style="text-align: left;font-size:50px">歷史紀錄</h1>
+    <div style = "padding-left:5px;height:300px">
+      <div class= "borderup">
+        <div id="div1">名稱</div>
+        <div id="div1">價格</div>
+        <div id="div1">數量</div>
+
+      </div>
+    <table id=TP style="background:rgba(243,241,241,0.6);align-content: center" width="700" height="600">
+    <tr><td>
+	  </td></tr>
+  </table>
+  </div>
+  </div>
+    
+    
+    
+  
+
+</div>
+ <!-- Bootstrap core JavaScript -->
+ <script src="jquery/jquery.min.js"></script>
+ <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+ <!-- Additional Scripts -->
+ <script src="assets/js/custom.js"></script>
+ <script src="assets/js/owl.js"></script>
+ <script src="assets/js/slick.js"></script>
+ <script src="assets/js/isotope.js"></script>
+ <script src="assets/js/accordions.js"></script>
+
+
+ <script language = "text/Javascript"> 
+   cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+   function clearField(t){                   //declaring the array outside of the
+   if(! cleared[t.id]){                      // function makes it static and global
+       cleared[t.id] = 1;  // you could use true and false, but that's more typing
+       t.value='';         // with more chance of typos
+       t.style.color='#fff';
+       }
+   }
+ </script>
+</body>
+>>>>>>> 3ba229c54eb552ed9994c08eaaaf6af1b188177a
 </html> 
