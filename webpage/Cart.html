@@ -1,3 +1,474 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html>
+<head>
+
+<style type="text/css">
+/*#DIV1{
+    width:200px;　
+    line-height:50px;　
+    padding:20px;
+    border:2px blue solid;
+    margin-right:10px;　
+
+}*/
+body {
+	background-color: powderblue;
+}
+
+
+div.underborder{
+   
+  position: relative;
+  top: 100px;
+  width: 1000px;
+  height: 1100px;
+  border-style: solid;
+  border-width: 10px 4px 4px 4px;
+  border-color: rgb(231, 142, 24);
+  background-color:#06821f;
+}
+
+div.cart-title{/*上片的bar*/
+  position: relative;
+  top: 0px;
+  background-color:darkgoldenrod;
+  border:1px solid #000;
+  border-bottom-left-radius:30px;
+  border-bottom-right-radius: 30px;
+  width: 900px;
+  height: 50px; 
+}
+Class.mybutto {   /*total*/
+    
+	box-shadow: 3px 4px 0px 0px #899599;
+	background:linear-gradient(to bottom, #ededed 5%, #bab1ba 100%);
+	background-color:#ededed;
+	border-radius:15px;
+	border:1px solid #d6bcd6;
+	display:inline-block;
+	cursor:pointer;
+	color:#3a8a9e;
+	font-family:Arial;
+	font-size:17px;
+	padding:7px 25px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #e1e2ed;
+    width:30px;
+    height:20px;
+}
+class.myButton:hover {
+	background:linear-gradient(to bottom, #bab1ba 5%, #ededed 100%);
+	background-color:#bab1ba;
+}
+class.myButton:active {
+	position:relative;
+	top:1px;
+}
+#div1{/*商品價個數量*/
+    float:left;
+     margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 60px;
+    margin-left: 80px;
+    color:aliceblue;
+    font-size:30px
+}
+#tobuyup{
+        
+        width:1000px;
+        height:80px;
+        background-color:rgb(152, 128, 66);
+        border-style :dotted;
+        border-color: #b8571e;
+}
+#tobuy{
+        margin-bottom: 0px;
+        width:1000px;
+        height:120px;
+        background-color:darkgoldenrod;
+        border-style : solid;
+        border-color: #b8571e;
+    }
+#div2{/*for showing product*/
+    position: relative;
+    top: 20px;
+    background-color:blanchedalmond;
+    border:3px solid #000;
+    width:800px;
+    height:80px;
+    padding-left: 80px;
+    margin-right:40px;
+    margin-top:20px;
+    font-size:30px;
+    font-weight:bold;
+    /*float:left;*/
+}
+#div3{
+        font-weight:bold;
+        font-size:35px;
+        color:rgb(6, 9, 17);
+        margin-left:50px;
+        margin-right:83px;
+        /*width:20px;
+        height:20px;*/
+        
+    float:left;
+}
+
+</style>
+    
+
+<script type="text/javascript">
+    window.onload=ShowCart;
+    
+    function ShowCart(){
+
+        var newProduct='';
+        var request=new XMLHttpRequest;
+        /*request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/backend/cart/geps?uid=1");*/
+        request.open("get","/backend/cart/geps");
+        request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+		var datastr = JSON.parse(request.responseText);
+		var len  = datastr.length;
+        
+		var str= "";
+		for (var i = 0; i < len; i++) {
+           
+			var content = 
+                '<div id="div2">'+
+                '<div id="div3">'+
+                
+                '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
+                '</div>'+
+                /*'<div id="div3">'+
+                '<li>'+*/
+                '<div id="div3">'+datastr[i].PdName+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Price+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Amount+
+                '</div>'+
+                /*'</li>'+
+                '</div>'+*/
+                '</div>'+
+                '</div>';
+           
+            //偵錯用  console.log(content);
+			newProduct=newProduct+content;
+			str+=content;
+		};
+		
+      }
+    }
+    
+      
+    document.getElementById("NP").innerHTML=newProduct;
+  };
+request.send(null);
+
+}
+    function switchMenu( theMainMenu, theSubMenu, theEvent ){
+        var SubMenu = document.getElementById( theSubMenu );
+        if( SubMenu.style.display == 'none' ){ // 顯示子選單
+            SubMenu.style.minWidth = theMainMenu.clientWidth; // 讓子選單的最小寬度與主選單相同 (僅為了美觀)
+            SubMenu.style.display = 'inline';
+            hideMenu(); // 隱藏子選單
+            VisibleMenu = theSubMenu;
+        }
+        else{ // 隱藏子選單
+            if( theEvent != 'MouseOver' || VisibleMenu != theSubMenu ){
+                SubMenu.style.display = 'none';
+                VisibleMenu = '';
+            }
+        }
+    }
+
+// 隱藏子選單
+    function hideMenu(){
+        if( VisibleMenu != '' ){
+            document.getElementById( VisibleMenu ).style.display = 'none';
+        }
+        VisibleMenu = '';
+    }
+    function getData(){
+            return 1
+    }
+    function myFunction() {
+      document.getElementById("demo").innerHTML = "Paragraph changed.";
+    }
+    function addall(){
+        return ff
+    }
+    function temp() {
+        var x= document.getElementsByID("temp1");
+      document.getElementById("d44d").innerHTML= x;
+    }
+    function addall(){
+            
+            var prods=document.getElementsByName("test");
+            for (var i=0;i<prods.length;i++){
+                if(prods[i].type == "checkbox"){
+                prods[i].checked = true;
+            
+                }
+            }
+        }
+    function test(){
+        var request2=new XMLHttpRequest;
+        request2.open("post","backend/user/login");
+        request2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        request2.onreadystatechange = function() { // Define event listener
+        // If the request is compete and was successful
+        if (request2.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        //if (type.match(/^text/)){ // Make sure response is text
+        if(request2.responseText==="登入成功!\n"){
+        alert(request2.responseText); 
+        
+        }
+	    if(request2.responseText==="登入失敗"){
+        //alert(request.responseText); 
+        
+        }
+      //}
+        }
+        };
+        request2.send("account=1234&password=1234");
+       
+    }
+    function goToBuy(){
+        
+        
+        
+        var msg= "/backend/cart/geps";
+        
+        var msgsend = "/backend/order/add?";
+        var request=new XMLHttpRequest;
+        var request2 = new XMLHttpRequest;
+        var datastr = "";
+        var st = [];
+        request.open("get","/backend/cart/geps"); //前面網址解決CORS
+        request.onreadystatechange = function() {
+            if (request.readyState === 4 && request.status === 200) { 
+                var type = request.getResponseHeader("Content-Type");
+                if (type.match(/^text/)){ 
+                    datastr = JSON.parse(request.responseText);
+                    var prods=document.getElementsByName("test");
+                    var str = "";            
+                    for (var i = 0; i < prods.length; i++) {
+                        if(prods[i].type == "checkbox"&&prods[i].checked == true){        
+                            str=str+datastr[i].Pdid;
+                            var temp="";
+                            temp="pdid="+str;
+                            str=datastr[i].Amount;
+                            temp=temp+("&amount="+str);
+                            temp=msgsend+temp;
+                            
+                            request2.open("get",temp);
+                            request2.onreadystatechange = function() { 
+                                if (request2.readyState === 4 && request2.status === 200) {
+                                    var type = request2.getResponseHeader("Content-Type");
+                                    if (type.match(/^text/)){ // Make sure response is text
+		                                
+                                    }
+                                }
+                            }
+                            request2.send(null);
+                            
+                        }
+                    }
+                }
+            }                  
+        } 
+        alert("已加入訂單");
+        request.send(null);
+
+    }
+    function totalmoney() {
+       
+       var newProduct='';
+       var request=new XMLHttpRequest;
+       /*request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/backend/cart/geps?uid=1");*/
+       request.open("get","/backend/cart/geps");
+       request.onreadystatechange = function() { 
+       if (request.readyState === 4 && request.status === 200) {
+       var type = request.getResponseHeader("Content-Type");
+       if (type.match(/^text/)){ // Make sure response is text
+       var datastr = JSON.parse(request.responseText);
+       var len  = datastr.length;
+       var content="";
+       var str= "";
+       var mon= Number(0);
+       var prods=document.getElementsByName("test");
+       for (var i = 0; i < len; i++) {
+           if(prods[i].type == "checkbox"&&prods[i].checked ==true){
+                   str=datastr[i].Price;
+                   var a = Number(str);
+                   mon = a+mon;
+                   if(i!=0){content = '<div style="float:left;margin-left:10px;font-size:20px;">'+','+datastr[i].PdName+'</div>';}
+                    else {content = '<div style="float:left;margin-left:8px;font-size:20px;">'+datastr[i].PdName+'</div>';}
+                   newProduct=newProduct+content;
+           }
+           
+       };
+       
+     }
+   }
+   
+   document.getElementById("SHOWTOT").innerHTML=newProduct;
+   document.getElementById("money").innerHTML=mon;
+ };
+request.send(null);
+   }
+    function total() {//目前所選
+       
+        var newProduct='';
+        var request=new XMLHttpRequest;
+        /*request.open("get","https://cors-anywhere.herokuapp.com/https://ntou-sell.herokuapp.com/backend/cart/geps?uid=1");*/
+        request.open("get","/backend/cart/geps");
+        request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+        var type = request.getResponseHeader("Content-Type");
+        if (type.match(/^text/)){ // Make sure response is text
+		var datastr = JSON.parse(request.responseText);
+		var len  = datastr.length;
+        
+        var str= "";
+        var prods=document.getElementsByName("test");
+		for (var i = 0; i < len; i++) {
+            if(prods[i].type == "checkbox"&& prods[i].checked == true){
+                   
+                    if(i!=0){var content = '<div style="float:left;margin-left:10px;font-size:20px;">'+','+datastr[i].PdName+'</div>';}
+                    else {var content = '<div style="float:left;margin-left:8px;font-size:20px;">'+datastr[i].PdName+'</div>';}
+            }
+			
+           
+            //偵錯用  console.log(content);
+			
+		};
+		
+      }
+    }
+    
+      
+    document.getElementById("SHOWTOT").innerHTML=newProduct;
+  };
+request.send(null);
+    }
+</script>
+
+
+</head>
+
+<body style="margin:0px; padding:0px; background:#fff url(img/bg2.webp) center center fixed no-repeat;background-size:cover; display:block;">
+
+<div style=background:rgba(57,73,172,0.8)>
+		<button type="button" width="40" height="40" style="background-color:#3949AB;" onclick="switchMenu( this, 'SubMenu' )"><img src="img/list.png" width="40" height="40"></button>
+        <ul id="SubMenu" class="sub-menu" style="display:none;">
+	    <h2 style="display:inline;">
+        <li style="display:inline;"><a href="MainPage.html" target="_self">&nbsp;&nbsp;Main</a></li>
+        <li style="display:inline;"><a href="Order.html" target="_self">&nbsp;&nbsp;Order</a></li>
+        <li style="display:inline;"><a href="History.html" target="_self">&nbsp;&nbsp;History</a></li>
+		<li style="display:inline;"><a href="Sell.html" target="_self">&nbsp;&nbsp;Sell</a></li>
+		<li style="display:inline;"><a href="Account.html" target="_self">&nbsp;&nbsp;Account</a></li>
+		 <li style="display:inline;"><a color=#3366BB onclick="logout()">&nbsp;&nbsp;Logout</a></li>
+		</h2
+		<br></br>
+    </ul>
+		<font color="FFFFFF">
+			<h1 style="display:inline;">購物車&nbsp;&nbsp;</h1>
+		</font>
+		
+</div>
+<div id="Div1" align=center>
+
+<!--<p id="demo">A Paragraph.</p>
+<p id="d44d">fff</p>
+    <button type="button" onclick="temp()">Click Me!</button>
+    <button type="button" onclick="myFunction()">Try it</button>
+<button type="button" onclick="document.write(5 + 6)">Try it</button>
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "#FF0000";
+ctx.fillRect(300, 50, 600, 300);
+</script>
+<script type="text/javascript">
+  function myFun(){
+   myTxt = document.myForm.myText;
+   alert("你輸入的值："+myTxt.value);
+  }
+ </script>
+ 
+ <form name="myForm">
+  <input type="text" name="myText" value="">
+  <input type="button" value="請點擊" onClick="myFun()">
+ </form>-->
+<div class="underborder">
+ <div class="cart-title">
+     
+     <div id="div1">
+         
+            <!--<input type="checkbox" name="subscribe" value="1"style="width:20px;height:20px;font-size:20px;color:black;" > -->
+         <button type="button" style="background-color:#3949AB;width:50px;height:30px;" onclick="addall()"><font size="3px">全選</button>
+     </div>
+
+     <div id="div1">產品</div>
+     <div id="div1">單價</div>
+     <div id="div1">數量</div>
+     
+ </div>
+    
+   <table height="10"></table>
+  <div align="center">
+  <table id=NP width="1000" height="800">
+	  <h2 style="font-size:40px;font-weight:bold;">商品內容</h2>
+      
+	  <tr><td>
+	  </td></tr>
+      
+  </table> 
+
+  </div>
+<div id="tobuyup">
+   
+    <div style="float:left">
+    <h2 style="float:none;margin-left:0px;">目前所選:</h2>
+    </div>
+    <div style="float:left">
+    <h3 id="SHOWTOT" style="float:none;margin-left:0px;margin-top:15px;font-size: 30px;height:10px;">無</h3>
+    </div>   
+</div>
+<div id="tobuy">
+    
+    
+    <div style="float:left">
+    <h2 style="float:none;margin-left:0px;">Total:</h2>
+    </div>
+    <div style="float:left">
+        <h3 id="money" style="float:none;margin-left:0px;margin-top:25px"><font size = "10px">無</font></h3>
+    </div>
+   
+
+    
+    <button type="button" onclick="totalmoney()" style="margin-top:50px;width:110px;height:40px;background-color:gray;"><font size="5">總金額</button>
+    
+    
+     <button type="button" onclick="goToBuy()" style="margin-top:50px;width:80px;height:40px;background-color: gray;"><font size="5">結帳</button>
+           <!-- <input class="checkout" type="button">-->    
+    
+    
+</div>
+
+</div>
+</div> 
+</body>
+</html> 
+=======
 <!DOCTYPE html>
 <html>
 <head>
@@ -486,3 +957,4 @@ ctx.fillRect(300, 50, 600, 300);
 </div> 
 </body>
 </html> 
+>>>>>>> 3ba229c54eb552ed9994c08eaaaf6af1b188177a
