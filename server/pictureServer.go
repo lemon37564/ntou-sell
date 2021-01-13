@@ -108,7 +108,7 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 
 	go func(t time.Time) {
 		for ; ; time.Sleep(time.Second) {
-			if time.Now().After(t) {
+			if time.Now().Add(time.Hour * 8).After(t) { // UTC+8
 				err := os.Remove("webpage/img/bg2.webp")
 				if err != nil {
 					log.Println(err)
