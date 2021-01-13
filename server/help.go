@@ -348,7 +348,7 @@ const PicAPI = `
 
 		前端範例:<br>
 		<form enctype="multipart/form-data" action="/backend/pics/changeBg" method="post"><br>
-		<input type="text" name="time">
+		time<input type="text" name="time"><br>
 		<input type="file" name="uploadfile" /><br>
 		<input type="hidden" name="token" value="{{.}}"/><br>
 		<input type="submit" value="upload" /><br>

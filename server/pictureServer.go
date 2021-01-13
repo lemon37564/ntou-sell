@@ -104,6 +104,7 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 
 	timeForm := r.FormValue("time")
 	t, _ := time.Parse("2000-01-01 12:12:12", timeForm)
+	fmt.Fprint(w, t)
 
 	go func(t time.Time, file multipart.File) {
 		for ; ; time.Sleep(time.Second) {
