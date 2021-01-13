@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -84,6 +86,7 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 
 func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	r.ParseMultipartForm(32 << 20)
+
 	file, _, err := r.FormFile("uploadfile")
 	if err != nil {
 		log.Println(err)
@@ -91,18 +94,27 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	var data []byte
-	f, err := os.Create("webpage/img/bg2.webp")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	io.Copy(f, file)
-	_, err = f.Read(data)
-	if err != nil {
-		log.Println(err)
-	}
-	f.Close()
+	timeForm := r.FormValue("time")
+	t, _ := time.Parse("2000-01-01 12:12:12", timeForm)
+
+	go func(t time.Time, file multipart.File) {
+		for ; ; time.Sleep(time.Second) {
+			if time.Now().After(t) {
+				var data []byte
+				f, err := os.Create("webpage/img/bg2.webp")
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				io.Copy(f, file)
+				_, err = f.Read(data)
+				if err != nil {
+					log.Println(err)
+				}
+				f.Close()
+			}
+		}
+	}(t, file)
 
 	fmt.Fprint(w, "ok")
 }
