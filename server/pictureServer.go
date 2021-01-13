@@ -94,24 +94,23 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
+	f, err := os.Create("webpage/img/temp.webp")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	io.Copy(f, file)
+	f.Close()
+
 	timeForm := r.FormValue("time")
 	t, _ := time.Parse("2000-01-01 12:12:12", timeForm)
 
 	go func(t time.Time, file multipart.File) {
 		for ; ; time.Sleep(time.Second) {
 			if time.Now().After(t) {
-				var data []byte
-				f, err := os.Create("webpage/img/bg2.webp")
-				if err != nil {
-					log.Println(err)
-					return
-				}
-				io.Copy(f, file)
-				_, err = f.Read(data)
-				if err != nil {
-					log.Println(err)
-				}
-				f.Close()
+				os.Remove("webpage/img/bg2.webp")
+				os.Rename("webpage/img/temp.webp", "webpage/img/bg2.webp")
+				return
 			}
 		}
 	}(t, file)
