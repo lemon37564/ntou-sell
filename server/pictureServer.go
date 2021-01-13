@@ -104,7 +104,7 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	timeForm := r.FormValue("time")
 	t, err := time.Parse("2006-01-02 15:04:05", timeForm)
 	fmt.Fprint(w, t, err)
-	log.Println("now:", time.Now(), "at:", t)
+	log.Println("now:", time.Now().Add(time.Hour*8), "at:", t)
 
 	go func(t time.Time) {
 		for ; ; time.Sleep(time.Second) {
