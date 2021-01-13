@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
@@ -106,15 +105,21 @@ func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
 	t, err := time.Parse("2006-01-02 15:04:05", timeForm)
 	fmt.Fprint(w, t, err)
 
-	go func(t time.Time, file multipart.File) {
+	go func(t time.Time) {
 		for ; ; time.Sleep(time.Second) {
 			if time.Now().After(t) {
-				os.Remove("webpage/img/bg2.webp")
-				os.Rename("webpage/img/temp.webp", "webpage/img/bg2.webp")
+				err := os.Remove("webpage/img/bg2.webp")
+				if err != nil {
+					log.Println(err)
+				}
+				err = os.Rename("webpage/img/temp.webp", "webpage/img/bg2.webp")
+				if err != nil {
+					log.Println(err)
+				}
 				return
 			}
 		}
-	}(t, file)
+	}(t)
 
-	fmt.Fprint(w, "ok")
+	fmt.Fprint(w, " ok")
 }
