@@ -3,7 +3,9 @@ package database
 import (
 	"database/sql"
 	"log"
+	"os"
 	"time"
+	"strconv"
 )
 
 const productTable = `
@@ -156,7 +158,17 @@ func (dt Data) AddProduct(name string, price int, description string, amount int
 // DeleteProduct with product id
 func (dt Data) DeleteProduct(uid int, pdid int) error {
 	_, err := dt.Product.del.Exec(uid, pdid)
-	return err
+	if err != nil {
+		return err
+	}
+	
+	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".png")
+	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".jpg")
+	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".gif")
+	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".jfif")
+	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".webp")
+	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".jpeg")
+	return nil
 }
 
 // UpdateProductName with product id and new name
