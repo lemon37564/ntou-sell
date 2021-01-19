@@ -25,10 +25,10 @@
   }
   
   div.border{
-    float:left;
+    
     position:relative;
     top:100px;
-    margin-left:380px;
+    
     width:850px;
     height:1200px;
    
@@ -127,6 +127,76 @@
 
 
 //以下為userlist點開清單的顯示
+function socket(){
+  
+  /*var mysocket = new WebSocket("/backend/message/send?","my-custom-protocol");
+mySocket.send("這是伺服器正迫切需要的文字！");*/
+            var temp = nowsellerid;
+            var dialo = document.getElementById("message");
+  
+            insertChat("me",dialo.value,0);
+             var content = "backend/message/send?";
+            //content=content+"remoteUID="+temp+"&text="+dialo.value;
+            //content="wss://8080/";
+            if ("WebSocket" in window)
+            {
+               alert("您的浏览器支持 WebSocket!!");
+               
+               // 打开一个 web socket
+               alert(content);
+               var ws = new WebSocket("wss://echo.websocket.org/");
+                
+               ws.onopen = function()
+               {
+                  // Web Socket 已连接上，使用 send() 方法发送数据
+                  ws.send("发送数据");
+                  alert("数据发送中...");
+               };
+                
+               ws.onmessage = function (evt) 
+               { 
+                  var received_msg = evt.data;
+                  alert("数据已接收...");
+               };
+                
+               ws.onclose = function()
+               { 
+                  // 关闭 websocket
+                  alert("连接已关闭..."); 
+               };
+            }
+            
+            else
+            {
+               // 浏览器不支持 WebSocket
+               alert("您的浏览器不支持 WebSocket!");
+            }
+}
+function sendmessg(){
+  var temp = nowsellerid;
+  var dialo = document.getElementById("message");
+  
+  insertChat("me",dialo.value,0);
+  var content = "/backend/message/send?";
+  content=content+"remoteUID="+temp+"&text="+dialo.value;
+
+  var request=new XMLHttpRequest;
+  request.open("get",content);
+  request.onreadystatechange = function() { 
+      if (request.readyState === 4 && request.status === 200) {
+          var type = request.getResponseHeader("Content-Type");
+          alert("success");
+      }
+      else{
+        
+      }
+  };
+  request.send(null);
+}
+
+
+
+
 
 function dele(id){
   
@@ -365,7 +435,7 @@ request2.send(null);
 
 }
 function getmessage2(UserId) {
-
+  alert(UserId)
   var request = new XMLHttpRequest;
   var content2 = "/backend/message/get?remoteUID=" + UserId + "&ascend=true";
 request.open("get",content2);
@@ -395,27 +465,7 @@ request.onreadystatechange = function() {
 };
 request.send(null);
 }
-function sendmessg(){
-  var temp = nowsellerid;
-  var dialo = document.getElementById("message");
-  
-  insertChat("me",dialo.value,0);
-  var content = "/backend/message/send?";
-  content=content+"remoteUID="+temp+"&text="+dialo.value;
 
-  var request=new XMLHttpRequest;
-  request.open("get",content);
-  request.onreadystatechange = function() { 
-      if (request.readyState === 4 && request.status === 200) {
-          var type = request.getResponseHeader("Content-Type");
-          alert("success");
-      }
-      else{
-        
-      }
-  };
-  request.send(null);
-}
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -447,15 +497,18 @@ function sendmessg(){
           <li class="nav-item">
             <a class="nav-link" href="Cart.html">Cart</a>
           </li>
-          <li class="nav-item">
-            <li class="nav-item active">
+          <li class="nav-item active">
               <a class="nav-link" href="Order.html">Order</a>
             </li>
+            <li class="nav-item">
             <a class="nav-link" href="History.html">History</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="Sell.html">Sell</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link"  onclick="logout()">Logout</a>
+            </li>
           
 
 
@@ -464,7 +517,8 @@ function sendmessg(){
     </div>
   </nav>
 </header>
-  
+<div align=center>
+
   <div class = "border">
     <h2>Order</h2>
     <div style="padding-left:5px;height:300px">
@@ -504,7 +558,7 @@ function sendmessg(){
 
             </div>
             <div style="padding:10px;">
-                <button type="button" onclick="sendmessg()">傳送</button>
+                <button type="button" onclick="socket()">傳送</button>
                 
             </div>                
         </div>
@@ -536,6 +590,9 @@ function sendmessg(){
     </script>
     
   </div>
+
+
+  
 </body>
 
 </html>
