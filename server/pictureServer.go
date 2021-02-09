@@ -6,7 +6,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -61,9 +63,6 @@ func (ser Server) picUpload(w http.ResponseWriter, r *http.Request) {
 
 func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
-	// bad way, rewrite it later
-	psb := []string{".jpg", ".jpeg", ".png", ".webp", ".gif", ".ico", ".bmp"}
-
 	pdid := args.Get("pdid")
 	_, err := strconv.Atoi(pdid)
 	if err != nil {
@@ -71,16 +70,15 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, v := range psb {
-		_, err := os.Stat("webpage/img/" + pdid + v)
-		if err == nil {
-			fmt.Fprint(w, pdid+v)
-			return
-		}
+	// find file name without knowing extention
+	name, err := filepath.Glob("webpage/img/" + pdid + ".*")
+	if len(name) > 0 {
+		splited := strings.Split(name[0], "/")
+		fmt.Fprint(w, splited[len(splited)-1])
+	} else {
+		fmt.Fprint(w, "none.webp")
+		log.Println("img not found")
 	}
-
-	fmt.Fprint(w, "none.webp")
-	log.Println("img not found")
 }
 
 func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
