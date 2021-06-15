@@ -24,22 +24,21 @@ type User struct {
 	Eval         float64
 }
 
-type userStmt struct {
-	add     *sql.Stmt
-	del     *sql.Stmt
-	upName  *sql.Stmt
-	upPass  *sql.Stmt
-	upEval  *sql.Stmt
-	maxID   *sql.Stmt
-	login   *sql.Stmt
-	getData *sql.Stmt
-	getUID  *sql.Stmt
-	getAcnt *sql.Stmt
-}
+var (
+	userAdd     *sql.Stmt
+	userDel     *sql.Stmt
+	userUpName  *sql.Stmt
+	userUpPass  *sql.Stmt
+	userUpEval  *sql.Stmt
+	userMaxID   *sql.Stmt
+	userLogin   *sql.Stmt
+	userGetData *sql.Stmt
+	userGetUID  *sql.Stmt
+	userGetAcnt *sql.Stmt
+)
 
-func userPrepare(db *sql.DB) *userStmt {
+func userPrepare(db *sql.DB) {
 	var err error
-	user := new(userStmt)
 
 	const (
 		add     = "INSERT INTO user VALUES(?,?,?,?,?);"
@@ -54,54 +53,52 @@ func userPrepare(db *sql.DB) *userStmt {
 		getAcnt = "SELECT account FROM user WHERE uid=?;"
 	)
 
-	if user.add, err = db.Prepare(add); err != nil {
+	if userAdd, err = db.Prepare(add); err != nil {
 		log.Println(err)
 	}
 
-	if user.del, err = db.Prepare(del); err != nil {
+	if userDel, err = db.Prepare(del); err != nil {
 		log.Println(err)
 	}
 
-	if user.upName, err = db.Prepare(upName); err != nil {
+	if userUpName, err = db.Prepare(upName); err != nil {
 		log.Println(err)
 	}
 
-	if user.upPass, err = db.Prepare(upPass); err != nil {
+	if userUpPass, err = db.Prepare(upPass); err != nil {
 		log.Println(err)
 	}
 
-	if user.upEval, err = db.Prepare(upEval); err != nil {
+	if userUpEval, err = db.Prepare(upEval); err != nil {
 		log.Println(err)
 	}
 
-	if user.maxID, err = db.Prepare(maxID); err != nil {
+	if userMaxID, err = db.Prepare(maxID); err != nil {
 		log.Println(err)
 	}
 
-	if user.login, err = db.Prepare(login); err != nil {
+	if userLogin, err = db.Prepare(login); err != nil {
 		log.Println(err)
 	}
 
-	if user.getData, err = db.Prepare(getData); err != nil {
+	if userGetData, err = db.Prepare(getData); err != nil {
 		log.Println(err)
 	}
 
-	if user.getUID, err = db.Prepare(getUID); err != nil {
+	if userGetUID, err = db.Prepare(getUID); err != nil {
 		log.Println(err)
 	}
 
-	if user.getAcnt, err = db.Prepare(getAcnt); err != nil {
+	if userGetAcnt, err = db.Prepare(getAcnt); err != nil {
 		log.Println(err)
 	}
-
-	return user
 }
 
 // AddNewUser is a function for registing a new account
-func (dt Data) AddNewUser(account, passwordHash, name string) error {
+func AddNewUser(account, passwordHash, name string) error {
 	var UID int
 
-	rows, err := dt.User.maxID.Query()
+	rows, err := userMaxID.Query()
 	if err != nil {
 		return err
 	}
@@ -115,21 +112,21 @@ func (dt Data) AddNewUser(account, passwordHash, name string) error {
 
 	UID++
 
-	_, err = dt.User.add.Exec(UID, account, passwordHash, name, 0.0)
+	_, err = userAdd.Exec(UID, account, passwordHash, name, 0.0)
 	return err
 }
 
 // DeleteUser delete data of specific user by account
-func (dt Data) DeleteUser(uid int, password string) error {
-	_, err := dt.User.del.Exec(uid, password)
+func DeleteUser(uid int, password string) error {
+	_, err := userDel.Exec(uid, password)
 	return err
 }
 
 // Login return user id and boolean value to check if it is valid to log in with specific account and password hash
-func (dt Data) Login(account, passwordHash string) (int, bool) {
+func Login(account, passwordHash string) (int, bool) {
 	var cnt, uid int
 
-	rows, err := dt.User.login.Query(account, passwordHash)
+	rows, err := userLogin.Query(account, passwordHash)
 	if err != nil {
 		panic(err)
 	}
@@ -147,27 +144,27 @@ func (dt Data) Login(account, passwordHash string) (int, bool) {
 }
 
 // ChangeUserPassword updates passeword of a user by uid
-func (dt Data) ChangeUserPassword(uid int, newpass string) error {
-	_, err := dt.User.upPass.Exec(newpass, uid)
+func ChangeUserPassword(uid int, newpass string) error {
+	_, err := userUpPass.Exec(newpass, uid)
 	return err
 }
 
 // ChangeUserName updates name of a user by account
-func (dt Data) ChangeUserName(uid int, newname string) error {
-	_, err := dt.User.upName.Exec(newname, uid)
+func ChangeUserName(uid int, newname string) error {
+	_, err := userUpName.Exec(newname, uid)
 	return err
 }
 
 // ChangeUserEval updates evaluation of a user by account and new eval
-func (dt Data) ChangeUserEval(account string, eval float64) error {
-	_, err := dt.User.upEval.Exec(account, eval)
+func ChangeUserEval(account string, eval float64) error {
+	_, err := userUpEval.Exec(account, eval)
 	return err
 }
 
 // GetUIDFromAccount return user id by account
-func (dt Data) GetUIDFromAccount(account string) int {
+func GetUIDFromAccount(account string) int {
 	var id int
-	rows, err := dt.User.getUID.Query(account)
+	rows, err := userGetUID.Query(account)
 	if err != nil {
 		log.Println(err)
 		return -1
@@ -185,9 +182,9 @@ func (dt Data) GetUIDFromAccount(account string) int {
 }
 
 // GetAccountFromUID return account by user id
-func (dt Data) GetAccountFromUID(uid int) string {
+func GetAccountFromUID(uid int) string {
 	var account string
-	rows, err := dt.User.getAcnt.Query(uid)
+	rows, err := userGetAcnt.Query(uid)
 	if err != nil {
 		log.Println(err)
 		return ""

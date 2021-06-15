@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"log"
 	"os"
-	"time"
 	"strconv"
+	"time"
 )
 
 const productTable = `
@@ -37,25 +37,24 @@ type Product struct {
 	Date        time.Time
 }
 
-type productStmt struct {
-	add     *sql.Stmt
-	del     *sql.Stmt
-	upName  *sql.Stmt
-	upPrc   *sql.Stmt
-	upAmt   *sql.Stmt
-	upDes   *sql.Stmt
-	upEval  *sql.Stmt
-	maxPID  *sql.Stmt
-	newest  *sql.Stmt
-	search  *sql.Stmt
-	filter  *sql.Stmt
-	getInfo *sql.Stmt
-	userPd  *sql.Stmt
-}
+var (
+	pdAdd     *sql.Stmt
+	pdDel     *sql.Stmt
+	pdUpName  *sql.Stmt
+	pdUpPrc   *sql.Stmt
+	pdUpAmt   *sql.Stmt
+	pdUpDes   *sql.Stmt
+	pdUpEval  *sql.Stmt
+	pdMaxPID  *sql.Stmt
+	pdNewest  *sql.Stmt
+	pdSearch  *sql.Stmt
+	pdFilter  *sql.Stmt
+	pdGetInfo *sql.Stmt
+	pdUserPd  *sql.Stmt
+)
 
-func productPrepare(db *sql.DB) *productStmt {
+func productPrepare(db *sql.DB) {
 	var err error
-	product := new(productStmt)
 
 	const (
 		add    = "INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);"
@@ -78,65 +77,63 @@ func productPrepare(db *sql.DB) *productStmt {
 		userPd  = "SELECT * FROM product WHERE seller_uid=? AND pd_id>0;"
 	)
 
-	if product.add, err = db.Prepare(add); err != nil {
+	if pdAdd, err = db.Prepare(add); err != nil {
 		log.Println(err)
 	}
 
-	if product.del, err = db.Prepare(del); err != nil {
+	if pdDel, err = db.Prepare(del); err != nil {
 		log.Println(err)
 	}
 
-	if product.upName, err = db.Prepare(upName); err != nil {
+	if pdUpName, err = db.Prepare(upName); err != nil {
 		log.Println(err)
 	}
 
-	if product.upPrc, err = db.Prepare(upPrc); err != nil {
+	if pdUpPrc, err = db.Prepare(upPrc); err != nil {
 		log.Println(err)
 	}
 
-	if product.upAmt, err = db.Prepare(upAmt); err != nil {
+	if pdUpAmt, err = db.Prepare(upAmt); err != nil {
 		log.Println(err)
 	}
 
-	if product.upDes, err = db.Prepare(upDes); err != nil {
+	if pdUpDes, err = db.Prepare(upDes); err != nil {
 		log.Println(err)
 	}
 
-	if product.upEval, err = db.Prepare(upEval); err != nil {
+	if pdUpEval, err = db.Prepare(upEval); err != nil {
 		log.Println(err)
 	}
 
-	if product.maxPID, err = db.Prepare(maxPID); err != nil {
+	if pdMaxPID, err = db.Prepare(maxPID); err != nil {
 		log.Println(err)
 	}
 
-	if product.newest, err = db.Prepare(newest); err != nil {
+	if pdNewest, err = db.Prepare(newest); err != nil {
 		log.Println(err)
 	}
 
-	if product.search, err = db.Prepare(search); err != nil {
+	if pdSearch, err = db.Prepare(search); err != nil {
 		log.Println(err)
 	}
 
-	if product.filter, err = db.Prepare(filter); err != nil {
+	if pdFilter, err = db.Prepare(filter); err != nil {
 		log.Println(err)
 	}
 
-	if product.getInfo, err = db.Prepare(getInfo); err != nil {
+	if pdGetInfo, err = db.Prepare(getInfo); err != nil {
 		log.Println(err)
 	}
 
-	if product.userPd, err = db.Prepare(userPd); err != nil {
+	if pdUserPd, err = db.Prepare(userPd); err != nil {
 		log.Println(err)
 	}
-
-	return product
 }
 
 // AddProduct add single product with product name, price, description, amount, seller id, bid and date into database
-func (dt Data) AddProduct(name string, price int, description string, amount int, sellerUID int, bid bool, date time.Time) (int, error) {
+func AddProduct(name string, price int, description string, amount int, sellerUID int, bid bool, date time.Time) (int, error) {
 	var pdid int
-	rows, err := dt.Product.maxPID.Query()
+	rows, err := pdMaxPID.Query()
 	if err != nil {
 		log.Println(err)
 		return -1, err
@@ -151,17 +148,17 @@ func (dt Data) AddProduct(name string, price int, description string, amount int
 	}
 	pdid++
 
-	_, err = dt.Product.add.Exec(pdid, name, price, description, amount, 0.0, sellerUID, bid, date)
+	_, err = pdAdd.Exec(pdid, name, price, description, amount, 0.0, sellerUID, bid, date)
 	return pdid, err
 }
 
 // DeleteProduct with product id
-func (dt Data) DeleteProduct(uid int, pdid int) error {
-	_, err := dt.Product.del.Exec(uid, pdid)
+func DeleteProduct(uid int, pdid int) error {
+	_, err := pdDel.Exec(uid, pdid)
 	if err != nil {
 		return err
 	}
-	
+
 	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".png")
 	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".jpg")
 	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".gif")
@@ -172,26 +169,26 @@ func (dt Data) DeleteProduct(uid int, pdid int) error {
 }
 
 // UpdateProductName with product id and new name
-func (dt Data) UpdateProductName(pdid int, name string) error {
-	_, err := dt.Product.upName.Exec(name, pdid)
+func UpdateProductName(pdid int, name string) error {
+	_, err := pdUpName.Exec(name, pdid)
 	return err
 }
 
 // UpdateProductPrice with prouct id and new price
-func (dt Data) UpdateProductPrice(pdid, price int) error {
-	_, err := dt.Product.upPrc.Exec(price, pdid)
+func UpdateProductPrice(pdid, price int) error {
+	_, err := pdUpPrc.Exec(price, pdid)
 	return err
 }
 
 // UpdateProductAmount with prdouct id and new amount
-func (dt Data) UpdateProductAmount(pdid, amount int) error {
-	_, err := dt.Product.upAmt.Exec(amount, pdid)
+func UpdateProductAmount(pdid, amount int) error {
+	_, err := pdUpAmt.Exec(amount, pdid)
 	return err
 }
 
 // UpdateProductDescription with product id and new description
-func (dt Data) UpdateProductDescription(pdid int, description string) error {
-	_, err := dt.Product.upDes.Exec(description, pdid)
+func UpdateProductDescription(pdid int, description string) error {
+	_, err := pdUpDes.Exec(description, pdid)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -200,14 +197,14 @@ func (dt Data) UpdateProductDescription(pdid int, description string) error {
 }
 
 // UpdateProductEval with product id and new eval
-func (dt Data) UpdateProductEval(pdid int, eval float64) error {
-	_, err := dt.Product.upEval.Exec(eval, pdid)
+func UpdateProductEval(pdid int, eval float64) error {
+	_, err := pdUpEval.Exec(eval, pdid)
 	return err
 }
 
 // GetProductInfoFromPdID return info of specific product with product id
-func (dt Data) GetProductInfoFromPdID(pdid int) (pd Product) {
-	rows, err := dt.Product.getInfo.Query(pdid)
+func GetProductInfoFromPdID(pdid int) (pd Product) {
+	rows, err := pdGetInfo.Query(pdid)
 	if err != nil {
 		log.Println(err)
 		return
@@ -224,8 +221,8 @@ func (dt Data) GetProductInfoFromPdID(pdid int) (pd Product) {
 }
 
 // NewestProduct return newest number of products
-func (dt Data) NewestProduct(number int) (all []Product) {
-	rows, err := dt.Product.newest.Query(number)
+func NewestProduct(number int) (all []Product) {
+	rows, err := pdNewest.Query(number)
 	if err != nil {
 		log.Println(err)
 	}
@@ -244,10 +241,10 @@ func (dt Data) NewestProduct(number int) (all []Product) {
 }
 
 // SearchProduct return product infos with searching keyword
-func (dt Data) SearchProduct(keyword string) (all []Product) {
+func SearchProduct(keyword string) (all []Product) {
 	keyword = "%" + keyword + "%"
 
-	rows, err := dt.Product.search.Query(keyword)
+	rows, err := pdSearch.Query(keyword)
 	if err != nil {
 		log.Println(err)
 	}
@@ -266,10 +263,10 @@ func (dt Data) SearchProduct(keyword string) (all []Product) {
 }
 
 // SearchProductWithFilter is an enhance search function with filter
-func (dt Data) SearchProductWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
+func SearchProductWithFilter(keyword string, priceMin, priceMax, eval int) (all []Product) {
 	keyword = "%" + keyword + "%"
 
-	rows, err := dt.Product.filter.Query(keyword, priceMin, priceMax, eval)
+	rows, err := pdFilter.Query(keyword, priceMin, priceMax, eval)
 	if err != nil {
 		log.Println(err)
 	}
@@ -288,8 +285,8 @@ func (dt Data) SearchProductWithFilter(keyword string, priceMin, priceMax, eval 
 }
 
 // GetSellerProduct list all product of a single seller
-func (dt Data) GetSellerProduct(uid int) (all []Product) {
-	rows, err := dt.Product.userPd.Query(uid)
+func GetSellerProduct(uid int) (all []Product) {
+	rows, err := pdUserPd.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}

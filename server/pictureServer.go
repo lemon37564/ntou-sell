@@ -14,8 +14,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (ser Server) picHandler(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func picHandler(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -30,17 +30,17 @@ func (ser Server) picHandler(w http.ResponseWriter, r *http.Request) {
 	case "help":
 		fmt.Fprint(w, PicAPI)
 	case "upload":
-		ser.picUpload(w, r)
+		picUpload(w, r)
 	case "get":
-		ser.getPic(w, r)
+		getPic(w, r)
 	case "changeBg":
-		ser.changeBg(w, r)
+		changeBg(w, r)
 	default:
 		http.NotFound(w, r)
 	}
 }
 
-func (ser Server) picUpload(w http.ResponseWriter, r *http.Request) {
+func picUpload(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("uploadfile")
@@ -61,7 +61,7 @@ func (ser Server) picUpload(w http.ResponseWriter, r *http.Request) {
 	io.Copy(f, file)
 }
 
-func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
+func getPic(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 	pdid := args.Get("pdid")
 	_, err := strconv.Atoi(pdid)
@@ -71,7 +71,7 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// find file name without knowing extention
-	name, err := filepath.Glob("webpage/img/" + pdid + ".*")
+	name, _ := filepath.Glob("webpage/img/" + pdid + ".*")
 	if len(name) > 0 {
 		splited := strings.Split(name[0], "/")
 		fmt.Fprint(w, splited[len(splited)-1])
@@ -81,7 +81,7 @@ func (ser Server) getPic(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser Server) changeBg(w http.ResponseWriter, r *http.Request) {
+func changeBg(w http.ResponseWriter, r *http.Request) {
 	//r.ParseMultipartForm(32 << 20)
 
 	file, _, err := r.FormFile("uploadfile")

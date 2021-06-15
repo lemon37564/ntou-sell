@@ -27,19 +27,18 @@ type Bid struct {
 	UID         int
 }
 
-type bidStmt struct {
-	add    *sql.Stmt
-	del    *sql.Stmt
-	won    *sql.Stmt
-	upDL   *sql.Stmt
-	getAll *sql.Stmt
-	getBid *sql.Stmt
-	getPd  *sql.Stmt
-}
+var (
+	bidAdd    *sql.Stmt
+	bidDel    *sql.Stmt
+	bidWon    *sql.Stmt
+	bidUpDL   *sql.Stmt
+	bidGetAll *sql.Stmt
+	bidGet    *sql.Stmt
+	bidGetPd  *sql.Stmt
+)
 
-func bidPrepare(db *sql.DB) *bidStmt {
+func bidPrepare(db *sql.DB) {
 	var err error
-	bid := new(bidStmt)
 
 	const (
 		add    = "INSERT INTO bid VALUES(?,?,?,?,?);"
@@ -51,59 +50,57 @@ func bidPrepare(db *sql.DB) *bidStmt {
 		getPd  = "SELECT * FROM bid WHERE pd_id=?;"
 	)
 
-	if bid.add, err = db.Prepare(add); err != nil {
+	if bidAdd, err = db.Prepare(add); err != nil {
 		log.Println(err)
 	}
 
-	if bid.del, err = db.Prepare(del); err != nil {
+	if bidDel, err = db.Prepare(del); err != nil {
 		log.Println(err)
 	}
 
-	if bid.won, err = db.Prepare(won); err != nil {
+	if bidWon, err = db.Prepare(won); err != nil {
 		log.Println(err)
 	}
 
-	if bid.upDL, err = db.Prepare(upDL); err != nil {
+	if bidUpDL, err = db.Prepare(upDL); err != nil {
 		log.Println(err)
 	}
 
-	if bid.getAll, err = db.Prepare(getAll); err != nil {
+	if bidGetAll, err = db.Prepare(getAll); err != nil {
 		log.Println(err)
 	}
 
-	if bid.getBid, err = db.Prepare(getBid); err != nil {
+	if bidGet, err = db.Prepare(getBid); err != nil {
 		log.Println(err)
 	}
 
-	if bid.getPd, err = db.Prepare(getPd); err != nil {
+	if bidGetPd, err = db.Prepare(getPd); err != nil {
 		log.Println(err)
 	}
-
-	return bid
 }
 
 // AddBid add new bid information into database
-func (dt Data) AddBid(pdid int, deadline time.Time, lowestMoney int, uid int) error {
-	_, err := dt.Bid.add.Exec(pdid, deadline, nil, lowestMoney, uid)
+func AddBid(pdid int, deadline time.Time, lowestMoney int, uid int) error {
+	_, err := bidAdd.Exec(pdid, deadline, nil, lowestMoney, uid)
 	return err
 }
 
 // DeleteBid delete specific bid with pd_id
-func (dt Data) DeleteBid(pdid int) error {
-	_, err := dt.Bid.del.Exec(pdid)
+func DeleteBid(pdid int) error {
+	_, err := bidDel.Exec(pdid)
 	return err
 }
 
 // WonBid update bidder_id and money if anyone won the bid at a time
-func (dt Data) WonBid(uid, pdid, money int) error {
-	_, err := dt.Bid.won.Exec(money, pdid)
+func WonBid(uid, pdid, money int) error {
+	_, err := bidWon.Exec(money, pdid)
 
 	return err
 }
 
 // GetBidByID return informations by product id
-func (dt Data) GetBidByID(pdid int) (bid Bid) {
-	rows, err := dt.Bid.getBid.Query(pdid)
+func GetBidByID(pdid int) (bid Bid) {
+	rows, err := bidGet.Query(pdid)
 	if err != nil {
 		log.Println(err)
 	}
@@ -119,8 +116,8 @@ func (dt Data) GetBidByID(pdid int) (bid Bid) {
 }
 
 // GetAllBidProducts return literally product info by pdid
-func (dt Data) GetAllBidProducts(pdid int) (pd Product) {
-	rows, err := dt.Bid.getBid.Query(pdid)
+func GetAllBidProducts(pdid int) (pd Product) {
+	rows, err := bidGet.Query(pdid)
 	if err != nil {
 		log.Println(err)
 	}
@@ -136,8 +133,8 @@ func (dt Data) GetAllBidProducts(pdid int) (pd Product) {
 }
 
 // GetAllBid return all bid product informations
-func (dt Data) GetAllBid() (all []Bid) {
-	rows, err := dt.Bid.getAll.Query()
+func GetAllBid() (all []Bid) {
+	rows, err := bidGetAll.Query()
 	if err != nil {
 		log.Println(err)
 	}

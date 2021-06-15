@@ -20,19 +20,18 @@ type History struct {
 	Pdid int
 }
 
-type historyStmt struct {
-	add    *sql.Stmt
-	del    *sql.Stmt
-	delAll *sql.Stmt
-	maxSeq *sql.Stmt
-	getNew *sql.Stmt
-	getOld *sql.Stmt
-	getPd  *sql.Stmt
-}
+var (
+	histAdd    *sql.Stmt
+	histDel    *sql.Stmt
+	histDelAll *sql.Stmt
+	histMaxSeq *sql.Stmt
+	histGetNew *sql.Stmt
+	histGetOld *sql.Stmt
+	histGetPd  *sql.Stmt
+)
 
-func historyPrepare(db *sql.DB) *historyStmt {
+func historyPrepare(db *sql.DB) {
 	var err error
-	history := new(historyStmt)
 
 	const (
 		add    = "INSERT INTO history VALUES(?,?,?);"
@@ -44,50 +43,48 @@ func historyPrepare(db *sql.DB) *historyStmt {
 		getPd  = "SELECT * FROM product WHERE pd_id=?;"
 	)
 
-	if history.add, err = db.Prepare(add); err != nil {
+	if histAdd, err = db.Prepare(add); err != nil {
 		log.Println(err)
 	}
 
-	if history.del, err = db.Prepare(del); err != nil {
+	if histDel, err = db.Prepare(del); err != nil {
 		log.Println(err)
 	}
 
-	if history.delAll, err = db.Prepare(delAll); err != nil {
+	if histDelAll, err = db.Prepare(delAll); err != nil {
 		log.Println(err)
 	}
 
-	if history.maxSeq, err = db.Prepare(maxSeq); err != nil {
+	if histMaxSeq, err = db.Prepare(maxSeq); err != nil {
 		log.Println(err)
 	}
 
-	if history.getNew, err = db.Prepare(getNew); err != nil {
+	if histGetNew, err = db.Prepare(getNew); err != nil {
 		log.Println(err)
 	}
 
-	if history.getOld, err = db.Prepare(getOld); err != nil {
+	if histGetOld, err = db.Prepare(getOld); err != nil {
 		log.Println(err)
 	}
 
-	if history.getPd, err = db.Prepare(getPd); err != nil {
+	if histGetPd, err = db.Prepare(getPd); err != nil {
 		log.Println(err)
 	}
-
-	return history
 }
 
 // AddHistory add a single record into database
 // return's an error
 // may encounter error when there's no history (beacuse max(seq) = null)
-func (dt Data) AddHistory(uid, pdid int) error {
+func AddHistory(uid, pdid int) error {
 	// do this is to prevent history duplicate (delete the old one and add a new one)
 	// then the new one will be close to the front.
-	_, err := dt.History.del.Exec(uid, pdid)
+	_, err := histDel.Exec(uid, pdid)
 	if err != nil {
 		log.Println(err)
 		return err
 	}
 
-	rows, err := dt.History.maxSeq.Query()
+	rows, err := histMaxSeq.Query()
 	if err != nil {
 		log.Println(err)
 		return err
@@ -105,24 +102,24 @@ func (dt Data) AddHistory(uid, pdid int) error {
 
 	seq++
 
-	_, err = dt.History.add.Exec(uid, pdid, seq)
+	_, err = histAdd.Exec(uid, pdid, seq)
 	return err
 }
 
 // DeleteHistory with user id and product id
-func (dt Data) DeleteHistory(uid, pdid int) error {
-	_, err := dt.History.del.Exec(uid, pdid)
+func DeleteHistory(uid, pdid int) error {
+	_, err := histDel.Exec(uid, pdid)
 	return err
 }
 
 // DeleteAllHistory deletes all history of a user by user id
-func (dt Data) DeleteAllHistory(uid int) error {
-	_, err := dt.History.delAll.Query()
+func DeleteAllHistory(uid int) error {
+	_, err := histDelAll.Query()
 	return err
 }
 
 // GetAllHistory return all history of a user by id (descend order by time)
-func (dt Data) GetAllHistory(uid int, amount int, newest bool) (all []Product) {
+func GetAllHistory(uid int, amount int, newest bool) (all []Product) {
 	var (
 		rows  *sql.Rows
 		err   error
@@ -131,9 +128,9 @@ func (dt Data) GetAllHistory(uid int, amount int, newest bool) (all []Product) {
 	)
 
 	if newest {
-		rows, err = dt.History.getNew.Query(uid, amount)
+		rows, err = histGetNew.Query(uid, amount)
 	} else {
-		rows, err = dt.History.getOld.Query(uid, amount)
+		rows, err = histGetOld.Query(uid, amount)
 	}
 
 	if err != nil {
@@ -152,15 +149,15 @@ func (dt Data) GetAllHistory(uid int, amount int, newest bool) (all []Product) {
 	}
 
 	for _, v := range pdids {
-		all = append(all, dt.getPdByPdid(v))
+		all = append(all, getPdByPdid(v))
 	}
 
 	return
 }
 
-func (dt Data) getPdByPdid(pdid int) (pd Product) {
+func getPdByPdid(pdid int) (pd Product) {
 
-	rows, err := dt.History.getPd.Query(pdid)
+	rows, err := histGetPd.Query(pdid)
 	if err != nil {
 		log.Println(err)
 		return

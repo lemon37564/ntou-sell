@@ -11,56 +11,33 @@ import (
 
 const file = "database.db"
 
-// Data is a struct to manipulate database
-type Data struct {
-	Db *sql.DB
+var DB *sql.DB
 
-	Bid     *bidStmt
-	Cart    *cartStmt
-	History *historyStmt
-	Message *messageStmt
-	Order   *orderStmt
-	Product *productStmt
-	User    *userStmt
-}
-
-// OpenAndInit open database and return *Data
-func OpenAndInit() *Data {
-
+func init() {
 	insert := false
-
 	_, err := os.Stat(file)
 	if err != nil {
 		insert = true
 	}
 
-	db, err := sql.Open("sqlite3", file)
+	DB, err := sql.Open("sqlite3", file)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	createTables(db)
+	createTables(DB)
 
-	data := Data{
-		Db:      db,
-		Bid:     bidPrepare(db),
-		Cart:    cartPrepare(db),
-		History: historyPrepare(db),
-		Message: messagePrepare(db),
-		Order:   orderPrepare(db),
-		Product: productPrepare(db),
-		User:    userPrepare(db)}
+	bidPrepare(DB)
+	cartPrepare(DB)
+	historyPrepare(DB)
+	messagePrepare(DB)
+	orderPrepare(DB)
+	productPrepare(DB)
+	userPrepare(DB)
 
 	if insert {
-		TestInsert(&data)
+		TestInsert()
 	}
-
-	return &data
-}
-
-// DBClose close the database file
-func (d Data) DBClose() {
-	d.Db.Close()
 }
 
 // RemoveAll : *FATAL* this command will remove whole database

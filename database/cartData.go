@@ -23,16 +23,15 @@ type Cart struct {
 	Amount int
 }
 
-type cartStmt struct {
-	add   *sql.Stmt
-	del   *sql.Stmt
-	upAmt *sql.Stmt
-	get   *sql.Stmt
-}
+var (
+	cartAdd   *sql.Stmt
+	cartDel   *sql.Stmt
+	cartUpAmt *sql.Stmt
+	cartGet   *sql.Stmt
+)
 
-func cartPrepare(db *sql.DB) *cartStmt {
+func cartPrepare(db *sql.DB) {
 	var err error
-	cart := new(cartStmt)
 
 	const (
 		add   = "INSERT INTO cart VALUES(?,?,?);"
@@ -41,46 +40,44 @@ func cartPrepare(db *sql.DB) *cartStmt {
 		get   = "SELECT * FROM product WHERE pd_id IN (SELECT pd_id FROM cart WHERE uid=?);"
 	)
 
-	if cart.add, err = db.Prepare(add); err != nil {
+	if cartAdd, err = db.Prepare(add); err != nil {
 		log.Println(err)
 	}
 
-	if cart.del, err = db.Prepare(del); err != nil {
+	if cartDel, err = db.Prepare(del); err != nil {
 		log.Println(err)
 	}
 
-	if cart.upAmt, err = db.Prepare(upAmt); err != nil {
+	if cartUpAmt, err = db.Prepare(upAmt); err != nil {
 		log.Println(err)
 	}
 
-	if cart.get, err = db.Prepare(get); err != nil {
+	if cartGet, err = db.Prepare(get); err != nil {
 		log.Println(err)
 	}
-
-	return cart
 }
 
 // AddProductIntoCart add product into cart with pdid and amount
-func (dt Data) AddProductIntoCart(uid, pdid, amount int) error {
-	_, err := dt.Cart.add.Exec(uid, pdid, amount)
+func AddProductIntoCart(uid, pdid, amount int) error {
+	_, err := cartAdd.Exec(uid, pdid, amount)
 	return err
 }
 
 // DeleteProductFromCart delete product from cart with product id
-func (dt Data) DeleteProductFromCart(id, pdid int) error {
-	_, err := dt.Cart.del.Exec(id, pdid)
+func DeleteProductFromCart(id, pdid int) error {
+	_, err := cartDel.Exec(id, pdid)
 	return err
 }
 
 // UpdateCartAmount changes amount of product in cart of a user
-func (dt Data) UpdateCartAmount(uid, pdid, newAmount int) error {
-	_, err := dt.Cart.upAmt.Exec(newAmount, uid, pdid)
+func UpdateCartAmount(uid, pdid, newAmount int) error {
+	_, err := cartUpAmt.Exec(newAmount, uid, pdid)
 	return err
 }
 
 // GetAllProductOfUser return all product id and amount by user id
-func (dt Data) GetAllProductOfUser(uid int) (all []Product, totalPrice int) {
-	rows, err := dt.Cart.get.Query(uid)
+func GetAllProductOfUser(uid int) (all []Product, totalPrice int) {
+	rows, err := cartGet.Query(uid)
 	if err != nil {
 		log.Println(err)
 	}

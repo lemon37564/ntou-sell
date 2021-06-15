@@ -6,22 +6,23 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"se/server/backend"
 	"strconv"
 	"strings"
 
 	"github.com/gorilla/mux"
 )
 
-func (ser Server) defaultFunc(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func defaultFunc(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
 	fmt.Fprintln(w, API)
 }
 
-func (ser Server) fetchBid(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func fetchBid(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -40,20 +41,20 @@ func (ser Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 	case "get": //For single bid product
 		pdid := args.Get("pdid")
 
-		res, err := ser.Bd.GetProductBidInfo(pdid)
+		res, err := backend.GetProductBidInfo(pdid)
 		response(w, res, err)
 
 	case "set":
 		pdid := args.Get("pdid")
 		money := args.Get("money")
 
-		res, err := ser.Bd.SetBidForBuyer(uid, pdid, money)
+		res, err := backend.SetBidForBuyer(uid, pdid, money)
 		response(w, res, err)
 
 	case "delete":
 		pdid := args.Get("pdid")
 
-		res, err := ser.Bd.DeleteBid(pdid)
+		res, err := backend.DeleteBid(pdid)
 		response(w, res, err)
 
 	default:
@@ -61,8 +62,8 @@ func (ser Server) fetchBid(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser Server) fetchCart(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func fetchCart(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -82,35 +83,35 @@ func (ser Server) fetchCart(w http.ResponseWriter, r *http.Request) {
 		pdid := args.Get("pdid")
 		amount := args.Get("amount")
 
-		res, err := ser.Ct.AddProductToCart(uid, pdid, amount)
+		res, err := backend.AddProductToCart(uid, pdid, amount)
 		response(w, res, err)
 
 	case "remo":
 		pdid := args.Get("pdid")
 
-		res, err := ser.Ct.RemoveProduct(uid, pdid)
+		res, err := backend.RemoveProduct(uid, pdid)
 		response(w, res, err)
 
 	case "modf":
 		pdid := args.Get("pdid")
 		amount := args.Get("amount")
 
-		res, err := ser.Ct.ModifyAmount(uid, pdid, amount)
+		res, err := backend.ModifyProductAmount(uid, pdid, amount)
 		response(w, res, err)
 
 	// case "tal":
-	// 	fmt.Fprint(w, ser.Ct.TotalCount(uid))
+	// 	fmt.Fprint(w, backend.TotalCount(uid))
 
 	case "geps": //拿商品
-		fmt.Fprint(w, ser.Ct.GetProducts(uid))
+		fmt.Fprint(w, backend.GetProducts(uid))
 
 	default:
 		http.NotFound(w, r)
 	}
 }
 
-func (ser Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func fetchHistory(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -130,27 +131,27 @@ func (ser Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 		amount := args.Get("amount")
 		newest := args.Get("newest")
 
-		res, err := ser.Ht.GetHistory(uid, amount, newest)
+		res, err := backend.GetHistory(uid, amount, newest)
 		response(w, res, err)
 
 	case "delete":
 		pdid := args.Get("pdid")
 
-		res, err := ser.Ht.Delete(uid, pdid)
+		res, err := backend.DeleteHistory(uid, pdid)
 		response(w, res, err)
 
 	case "deleteall":
-		fmt.Fprint(w, ser.Ht.DeleteAll(uid))
+		fmt.Fprint(w, backend.DeleteAllHistory(uid))
 
 	case "deletespec":
 		pdids := args.Get("pdids")
-		res, err := ser.Ht.DeleteSpecific(uid, pdids)
+		res, err := backend.DeleteSpecificHistory(uid, pdids)
 		response(w, res, err)
 
 	case "add":
 		pdid := args.Get("pdid")
 
-		res, err := ser.Ht.AddHistory(uid, pdid)
+		res, err := backend.AddHistory(uid, pdid)
 		response(w, res, err)
 
 	default:
@@ -158,8 +159,8 @@ func (ser Server) fetchHistory(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func fetchMessage(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -176,20 +177,20 @@ func (ser Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, MessageAPI)
 
 	case "all":
-		fmt.Fprint(w, ser.Ms.GetAll())
+		fmt.Fprint(w, backend.GetAllMessages())
 
 	case "send":
 		ruid := args.Get("remoteUID")
 		txt := args.Get("text")
 
-		res, err := ser.Ms.AddMessage(uid, ruid, txt)
+		res, err := backend.AddMessage(uid, ruid, txt)
 		response(w, res, err)
 
 	case "get":
 		ruid := args.Get("remoteUID")
 		asc := args.Get("ascend")
 
-		res, err := ser.Ms.GetMessages(uid, ruid, asc)
+		res, err := backend.GetMessages(uid, ruid, asc)
 		response(w, res, err)
 
 	default:
@@ -197,8 +198,8 @@ func (ser Server) fetchMessage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (ser Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func fetchOrder(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -215,19 +216,19 @@ func (ser Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, OrderAPI)
 
 	case "get":
-		fmt.Fprint(w, ser.Od.GetOrders(uid))
+		fmt.Fprint(w, backend.GetOrders(uid))
 
 	case "add":
 		pdid := args.Get("pdid")
 		amount := args.Get("amount")
 
-		res, err := ser.Od.AddOrder(uid, pdid, amount)
+		res, err := backend.AddOrder(uid, pdid, amount)
 		response(w, res, err)
 
 	case "del":
 		pdid := args.Get("pdid")
 
-		res, err := ser.Od.Delete(uid, pdid)
+		res, err := backend.DeleteOrder(uid, pdid)
 		response(w, res, err)
 
 	default:
@@ -236,8 +237,8 @@ func (ser Server) fetchOrder(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func fetchProduct(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -257,7 +258,7 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 			bid := r.FormValue("bid")
 			date := r.FormValue("date")
 
-			pdid, err := ser.Pd.AddProduct(uid, name, price, des, amount, bid, date)
+			pdid, err := backend.AddProduct(uid, name, price, des, amount, bid, date)
 			if err == nil {
 				fmt.Fprint(w, "ok")
 			} else {
@@ -295,19 +296,19 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 	case "get":
 		pdid := args.Get("pdid")
 
-		res, err := ser.Pd.GetProductInfo(pdid)
+		res, err := backend.GetProductInfo(pdid)
 		response(w, res, err)
 
 	case "delete":
 		val := args.Get("pdid")
 
-		res := ser.Pd.DeleteProduct(uid, val)
+		res := backend.DeleteProduct(uid, val)
 		fmt.Fprint(w, res)
 
 	case "newest":
 		amount := args.Get("amount")
 
-		res, err := ser.Pd.GetNewest(amount)
+		res, err := backend.GetNewestProduct(amount)
 		response(w, res, err)
 
 	case "search":
@@ -316,19 +317,19 @@ func (ser Server) fetchProduct(w http.ResponseWriter, r *http.Request) {
 		max := args.Get("maxprice")
 		eval := args.Get("eval")
 
-		res, err := ser.Pd.SearchProducts(name, min, max, eval)
+		res, err := backend.SearchProducts(name, min, max, eval)
 		response(w, res, err)
 
 	case "urproduct":
-		fmt.Fprint(w, ser.Pd.GetSellerProduct(uid))
+		fmt.Fprint(w, backend.GetSellerProduct(uid))
 
 	default:
 		http.NotFound(w, r)
 	}
 }
 
-func (ser Server) fetchUser(w http.ResponseWriter, r *http.Request) {
-	if !ser.validation(w, r) {
+func fetchUser(w http.ResponseWriter, r *http.Request) {
+	if !validation(w, r) {
 		return
 	}
 
@@ -341,7 +342,7 @@ func (ser Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, UserAPI)
 
 	case "login":
-		uid, valid := ser.Ur.Login(r.FormValue("account"), r.FormValue("password"))
+		uid, valid := backend.Login(r.FormValue("account"), r.FormValue("password"))
 
 		if valid {
 			// set session to maintain login condition
@@ -352,20 +353,20 @@ func (ser Server) fetchUser(w http.ResponseWriter, r *http.Request) {
 		}
 
 	case "regist":
-		fmt.Fprint(w, ser.Ur.Regist(r.FormValue("account"), r.FormValue("password"), r.FormValue("name")))
+		fmt.Fprint(w, backend.Regist(r.FormValue("account"), r.FormValue("password"), r.FormValue("name")))
 
 	default:
 		uid, valid := sessionValid(w, r)
 		if valid {
 			switch path["key"] {
 			case "delete":
-				fmt.Fprint(w, ser.Ur.DeleteUser(uid, r.FormValue("password")))
+				fmt.Fprint(w, backend.DeleteUser(uid, r.FormValue("password")))
 
 			case "changePassword":
-				fmt.Fprint(w, ser.Ur.ChangePassword(uid, r.FormValue("oldPassword"), r.FormValue("newPassword")))
+				fmt.Fprint(w, backend.ChangePassword(uid, r.FormValue("oldPassword"), r.FormValue("newPassword")))
 
 			case "changeName":
-				fmt.Fprint(w, ser.Ur.ChangeName(uid, r.FormValue("newName")))
+				fmt.Fprint(w, backend.ChangeName(uid, r.FormValue("newName")))
 
 			case "logout":
 				logout(w, r)

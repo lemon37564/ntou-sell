@@ -10,18 +10,8 @@ import (
 	"time"
 )
 
-// Product is a module that handle products
-type Product struct {
-	fn *database.Data
-}
-
-// ProductInit return product module
-func ProductInit(data *database.Data) *Product {
-	return &Product{fn: data}
-}
-
 // AddProduct adds a product with multiple parameters
-func (p Product) AddProduct(sellerUID int, pdname, rawPrice, description, rawAmount, rawBid, date string) (int, error) {
+func AddProduct(sellerUID int, pdname, rawPrice, description, rawAmount, rawBid, date string) (int, error) {
 	price, err := strconv.Atoi(rawPrice)
 	if err != nil {
 		return -1, err
@@ -39,7 +29,7 @@ func (p Product) AddProduct(sellerUID int, pdname, rawPrice, description, rawAmo
 		return -1, beError{text: "date invalid! (date format is like 2006-01-02)"}
 	}
 
-	pdid, err := p.fn.AddProduct(pdname, price, description, amount, sellerUID, bid, dt)
+	pdid, err := database.AddProduct(pdname, price, description, amount, sellerUID, bid, dt)
 	if err != nil {
 		if fmt.Sprint(err) == "NOT NULL constraint failed: product.seller_id" {
 			return -1, beError{text: "沒有此使用者帳號!"}
@@ -51,13 +41,13 @@ func (p Product) AddProduct(sellerUID int, pdname, rawPrice, description, rawAmo
 
 // DeleteProduct deletes a product with seller_uid and product name
 // This may me cause some problem, need to fix
-func (p *Product) DeleteProduct(uid int, rawPdid string) string {
+func DeleteProduct(uid int, rawPdid string) string {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer"
 	}
 
-	err = p.fn.DeleteProduct(uid, pdid)
+	err = database.DeleteProduct(uid, pdid)
 	if err != nil {
 		return fmt.Sprint(err)
 	}
@@ -66,7 +56,7 @@ func (p *Product) DeleteProduct(uid int, rawPdid string) string {
 }
 
 // ChangePrice changes price of a specific product with it's product id
-func (p *Product) ChangePrice(rawPdid, rawPrice string) (string, error) {
+func ChangePrice(rawPdid, rawPrice string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
@@ -77,7 +67,7 @@ func (p *Product) ChangePrice(rawPdid, rawPrice string) (string, error) {
 		return "cannot convert " + rawPrice + " into integer", err
 	}
 
-	err = p.fn.UpdateProductPrice(pdid, price)
+	err = database.UpdateProductPrice(pdid, price)
 	if err != nil {
 		return "failed", err
 	}
@@ -85,7 +75,7 @@ func (p *Product) ChangePrice(rawPdid, rawPrice string) (string, error) {
 }
 
 // ChangeAmount changes amount of a specific product with it's product id
-func (p *Product) ChangeAmount(rawPdid, rawAmount string) (string, error) {
+func ChangeAmount(rawPdid, rawAmount string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
@@ -96,7 +86,7 @@ func (p *Product) ChangeAmount(rawPdid, rawAmount string) (string, error) {
 		return "cannot convert " + rawAmount + " into integer", err
 	}
 
-	err = p.fn.UpdateProductAmount(pdid, amount)
+	err = database.UpdateProductAmount(pdid, amount)
 	if err != nil {
 		return "failed", err
 	}
@@ -104,13 +94,13 @@ func (p *Product) ChangeAmount(rawPdid, rawAmount string) (string, error) {
 }
 
 // ChangeDescription changes description of a specific product with it's product id
-func (p *Product) ChangeDescription(rawPdid, description string) (string, error) {
+func ChangeDescription(rawPdid, description string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
 	}
 
-	err = p.fn.UpdateProductDescription(pdid, description)
+	err = database.UpdateProductDescription(pdid, description)
 	if err != nil {
 		return "failed", err
 	}
@@ -118,7 +108,7 @@ func (p *Product) ChangeDescription(rawPdid, description string) (string, error)
 }
 
 // SetEvaluation updates eval of a specific product with it's product id
-func (p *Product) SetEvaluation(rawPdid, rawEval string) (string, error) {
+func SetEvaluation(rawPdid, rawEval string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
@@ -129,7 +119,7 @@ func (p *Product) SetEvaluation(rawPdid, rawEval string) (string, error) {
 		return "cannot convert " + rawEval + " into float", err
 	}
 
-	err = p.fn.UpdateProductEval(pdid, eval)
+	err = database.UpdateProductEval(pdid, eval)
 	if err != nil {
 		return "failed", err
 	}
@@ -137,7 +127,7 @@ func (p *Product) SetEvaluation(rawPdid, rawEval string) (string, error) {
 }
 
 // SearchProducts return products info in json
-func (p *Product) SearchProducts(name, rawMin, rawMax, rawEval string) (string, error) {
+func SearchProducts(name, rawMin, rawMax, rawEval string) (string, error) {
 	var (
 		min, max, eval int
 		err            error
@@ -169,7 +159,7 @@ func (p *Product) SearchProducts(name, rawMin, rawMax, rawEval string) (string, 
 		}
 	}
 
-	pds := p.fn.SearchProductWithFilter(name, min, max, eval)
+	pds := database.SearchProductWithFilter(name, min, max, eval)
 	res, err := json.Marshal(pds)
 	if err != nil {
 		return "failed", err
@@ -179,13 +169,13 @@ func (p *Product) SearchProducts(name, rawMin, rawMax, rawEval string) (string, 
 }
 
 // GetNewest return the newest product(s) in the database
-func (p *Product) GetNewest(rawNumber string) (string, error) {
+func GetNewestProduct(rawNumber string) (string, error) {
 	number, err := strconv.Atoi(rawNumber)
 	if err != nil {
 		return "cannot convert " + rawNumber + " into integer", err
 	}
 
-	temp, err := json.Marshal(p.fn.NewestProduct(number))
+	temp, err := json.Marshal(database.NewestProduct(number))
 	if err != nil {
 		return "failed", err
 	}
@@ -193,13 +183,13 @@ func (p *Product) GetNewest(rawNumber string) (string, error) {
 }
 
 // GetProductInfo return data of a product by it's id
-func (p *Product) GetProductInfo(rawPdid string) (string, error) {
+func GetProductInfo(rawPdid string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
 	}
 
-	temp, err := json.Marshal(p.fn.GetProductInfoFromPdID(pdid))
+	temp, err := json.Marshal(database.GetProductInfoFromPdID(pdid))
 	if err != nil {
 		log.Println(err)
 		return "failed", err
@@ -209,8 +199,8 @@ func (p *Product) GetProductInfo(rawPdid string) (string, error) {
 }
 
 // GetSellerProduct return all product of a seller
-func (p *Product) GetSellerProduct(uid int) string {
-	temp, err := json.Marshal(p.fn.GetSellerProduct(uid))
+func GetSellerProduct(uid int) string {
+	temp, err := json.Marshal(database.GetSellerProduct(uid))
 	if err != nil {
 		log.Println(err)
 		return ""

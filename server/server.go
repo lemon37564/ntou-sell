@@ -4,41 +4,13 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"se/database"
-	"se/server/backend"
 	"sync"
 	"time"
 
 	"github.com/gorilla/mux"
 )
 
-// Server handle all services
-type Server struct {
-	Ur *backend.User
-	Pd *backend.Product
-	Od *backend.Order
-	Ht *backend.History
-	Bd *backend.Bid
-	Ct *backend.Cart
-	Ms *backend.Message
-}
-
-// NewServer creates a new server
-func NewServer() *Server {
-	data := database.OpenAndInit()
-
-	return &Server{
-		Ur: backend.UserInit(data),
-		Pd: backend.ProductInit(data),
-		Od: backend.OrderInit(data),
-		Ht: backend.HistoryInit(data),
-		Bd: backend.BidInit(data),
-		Ct: backend.CartInit(data),
-		Ms: backend.MessageInit(data)}
-}
-
-// Serve start all functions provided for user
-func (ser Server) Serve() {
+func Serve() {
 	port := os.Getenv("PORT")
 
 	// when test on localhost
@@ -49,21 +21,21 @@ func (ser Server) Serve() {
 
 	r := mux.NewRouter()
 
-	r.HandleFunc("/backend/{key}", ser.defaultFunc)
-	r.HandleFunc("/backend/bid/{key}", ser.fetchBid)
-	r.HandleFunc("/backend/cart/{key}", ser.fetchCart)
-	r.HandleFunc("/backend/history/{key}", ser.fetchHistory)
-	r.HandleFunc("/backend/order/{key}", ser.fetchOrder)
-	r.HandleFunc("/backend/product/{key}", ser.fetchProduct)
-	r.HandleFunc("/backend/user/{key}", ser.fetchUser)
-	r.HandleFunc("/backend/message/{key}", ser.fetchMessage)
+	r.HandleFunc("/backend/{key}", defaultFunc)
+	r.HandleFunc("/backend/bid/{key}", fetchBid)
+	r.HandleFunc("/backend/cart/{key}", fetchCart)
+	r.HandleFunc("/backend/history/{key}", fetchHistory)
+	r.HandleFunc("/backend/order/{key}", fetchOrder)
+	r.HandleFunc("/backend/product/{key}", fetchProduct)
+	r.HandleFunc("/backend/user/{key}", fetchUser)
+	r.HandleFunc("/backend/message/{key}", fetchMessage)
 
-	r.HandleFunc("/backend/pics/{key}", ser.picHandler)
+	r.HandleFunc("/backend/pics/{key}", picHandler)
 
 	http.Handle("/backend/", r)
 
 	fs := http.FileServer(http.Dir("webpage"))
-	http.Handle("/", ser.middleware(fs))
+	http.Handle("/", middleware(fs))
 
 	go refresh()
 
@@ -72,9 +44,9 @@ func (ser Server) Serve() {
 	}
 }
 
-func (ser Server) middleware(h http.Handler) http.Handler {
+func middleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !ser.validation(w, r) {
+		if !validation(w, r) {
 			return
 		}
 
@@ -95,7 +67,7 @@ var (
 	blockLock sync.RWMutex
 )
 
-func (ser Server) validation(w http.ResponseWriter, r *http.Request) bool {
+func validation(w http.ResponseWriter, r *http.Request) bool {
 	r.ParseForm()
 
 	ip := getIP(r)

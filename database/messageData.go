@@ -37,18 +37,17 @@ type MessID struct {
 	text        string
 }
 
-type messageStmt struct {
-	all     *sql.Stmt
-	add     *sql.Stmt
-	getNew  *sql.Stmt
-	getOld  *sql.Stmt
-	maxID   *sql.Stmt
-	getName *sql.Stmt
-}
+var (
+	msgAll     *sql.Stmt
+	msgAdd     *sql.Stmt
+	msgGetNew  *sql.Stmt
+	msgGetOld  *sql.Stmt
+	msgMaxID   *sql.Stmt
+	msgGetName *sql.Stmt
+)
 
-func messagePrepare(db *sql.DB) *messageStmt {
+func messagePrepare(db *sql.DB) {
 	var err error
-	message := new(messageStmt)
 
 	const (
 		all    = "SELECT * FROM message;"
@@ -69,38 +68,36 @@ func messagePrepare(db *sql.DB) *messageStmt {
 		getName = "SELECT name FROM user WHERE uid=? AND uid>0;"
 	)
 
-	if message.all, err = db.Prepare(all); err != nil {
+	if msgAll, err = db.Prepare(all); err != nil {
 		log.Println(err)
 	}
 
-	if message.add, err = db.Prepare(add); err != nil {
+	if msgAdd, err = db.Prepare(add); err != nil {
 		log.Println(err)
 	}
 
-	if message.getOld, err = db.Prepare(getOld); err != nil {
+	if msgGetOld, err = db.Prepare(getOld); err != nil {
 		log.Println(err)
 	}
 
-	if message.getNew, err = db.Prepare(getNew); err != nil {
+	if msgGetNew, err = db.Prepare(getNew); err != nil {
 		log.Println(err)
 	}
 
-	if message.maxID, err = db.Prepare(maxID); err != nil {
+	if msgMaxID, err = db.Prepare(maxID); err != nil {
 		log.Println(err)
 	}
 
-	if message.getName, err = db.Prepare(getName); err != nil {
+	if msgGetName, err = db.Prepare(getName); err != nil {
 		log.Println(err)
 	}
-
-	return message
 }
 
 // AddMessage record a new message between two users
-func (dt Data) AddMessage(senderUID, receiverUID int, messageText string) error {
+func AddMessage(senderUID, receiverUID int, messageText string) error {
 	var mID int
 
-	rows, err := dt.Message.maxID.Query()
+	rows, err := msgMaxID.Query()
 	if err != nil {
 		return err
 	}
@@ -114,20 +111,20 @@ func (dt Data) AddMessage(senderUID, receiverUID int, messageText string) error 
 
 	mID++
 
-	_, err = dt.Message.add.Exec(mID, senderUID, receiverUID, messageText)
+	_, err = msgAdd.Exec(mID, senderUID, receiverUID, messageText)
 	return err
 }
 
 // GetMessages return all messge between two users
-func (dt Data) GetMessages(localUID, remoteUID int, ascend bool) Messages {
+func GetMessages(localUID, remoteUID int, ascend bool) Messages {
 
 	var rows *sql.Rows
 	var err error
 
 	if ascend {
-		rows, err = dt.Message.getNew.Query(localUID, remoteUID, localUID, remoteUID)
+		rows, err = msgGetNew.Query(localUID, remoteUID, localUID, remoteUID)
 	} else {
-		rows, err = dt.Message.getOld.Query(localUID, remoteUID, localUID, remoteUID)
+		rows, err = msgGetOld.Query(localUID, remoteUID, localUID, remoteUID)
 	}
 
 	if err != nil {
@@ -158,13 +155,13 @@ func (dt Data) GetMessages(localUID, remoteUID int, ascend bool) Messages {
 		all = append(all, ms)
 	}
 
-	return Messages{ContactorName: dt.getName(remoteUID), Content: all}
+	return Messages{ContactorName: getName(remoteUID), Content: all}
 }
 
 // GetAllMessages return all messages (debugging only)
-func (dt Data) GetAllMessages() (all []MessID) {
+func GetAllMessages() (all []MessID) {
 
-	rows, err := dt.Message.all.Query()
+	rows, err := msgAll.Query()
 	if err != nil {
 		log.Println(err)
 		return
@@ -184,9 +181,9 @@ func (dt Data) GetAllMessages() (all []MessID) {
 	return
 }
 
-func (dt Data) getName(uid int) (name string) {
+func getName(uid int) (name string) {
 
-	rows, err := dt.Message.getName.Query(uid)
+	rows, err := msgGetName.Query(uid)
 	if err != nil {
 		log.Println(err)
 		return

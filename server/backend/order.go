@@ -8,20 +8,10 @@ import (
 	"time"
 )
 
-// Order is a module that handle orders
-type Order struct {
-	fn *database.Data
-}
-
-// OrderInit return order module
-func OrderInit(data *database.Data) *Order {
-	return &Order{fn: data}
-}
-
 // GetOrders Return orders of a specific user
-func (o *Order) GetOrders(uid int) string {
+func GetOrders(uid int) string {
 	//var orders string = ""
-	pds := o.fn.GetAllOrder(uid)
+	pds := database.GetAllOrder(uid)
 	res, err := json.Marshal(pds)
 	if err != nil {
 		log.Println(err)
@@ -32,7 +22,7 @@ func (o *Order) GetOrders(uid int) string {
 }
 
 // AddOrder adds a order of a specific user with product id and amount
-func (o *Order) AddOrder(uid int, rawPdid, rawAmount string) (string, error) {
+func AddOrder(uid int, rawPdid, rawAmount string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
@@ -43,7 +33,7 @@ func (o *Order) AddOrder(uid int, rawPdid, rawAmount string) (string, error) {
 		return "cannot convert " + rawAmount + " into integer", err
 	}
 
-	err = o.fn.AddOrder(uid, pdid, amount, time.Now())
+	err = database.AddOrder(uid, pdid, amount, time.Now())
 	if err != nil {
 		return "false", err
 	}
@@ -52,13 +42,13 @@ func (o *Order) AddOrder(uid int, rawPdid, rawAmount string) (string, error) {
 }
 
 // Delete order
-func (o *Order) Delete(uid int, rawPdid string) (string, error) {
+func DeleteOrder(uid int, rawPdid string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
 	}
 
-	err = o.fn.DeleteOrder(uid, pdid)
+	err = database.DeleteOrder(uid, pdid)
 	if err != nil {
 		return "false", err
 	}

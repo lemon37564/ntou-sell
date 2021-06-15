@@ -8,24 +8,14 @@ import (
 	"unicode"
 )
 
-// User is a module that handle users
-type User struct {
-	fn *database.Data
-}
-
-// UserInit return a user module
-func UserInit(data *database.Data) *User {
-	return &User{fn: data}
-}
-
 // Login return user id and is it valid to login
-func (u *User) Login(account, password string) (int, bool) {
+func Login(account, password string) (int, bool) {
 	hash := sha256Hash(password)
-	return u.fn.Login(account, hash)
+	return database.Login(account, hash)
 }
 
 // Regist let user regist his own account
-func (u *User) Regist(account, password, name string) string {
+func Regist(account, password, name string) string {
 	if containCh(account) {
 		return "帳號不能含有中文"
 	}
@@ -36,7 +26,7 @@ func (u *User) Regist(account, password, name string) string {
 
 	hash := sha256Hash(password)
 
-	err := u.fn.AddNewUser(account, hash, name)
+	err := database.AddNewUser(account, hash, name)
 	if err != nil {
 		log.Println(err)
 		if err.Error() == "UNIQUE constraint failed: user.account" {
@@ -49,8 +39,8 @@ func (u *User) Regist(account, password, name string) string {
 }
 
 // DeleteUser simple delete his account
-func (u *User) DeleteUser(uid int, password string) string {
-	err := u.fn.DeleteUser(uid, password)
+func DeleteUser(uid int, password string) string {
+	err := database.DeleteUser(uid, password)
 	if err != nil {
 		log.Println(err)
 		return err.Error()
@@ -60,17 +50,17 @@ func (u *User) DeleteUser(uid int, password string) string {
 }
 
 // ChangePassword changes user's password
-func (u *User) ChangePassword(uid int, oldPassword, newPassword string) string {
+func ChangePassword(uid int, oldPassword, newPassword string) string {
 
-	account := u.fn.GetAccountFromUID(uid)
+	account := database.GetAccountFromUID(uid)
 
-	_, ok := u.Login(account, oldPassword)
+	_, ok := database.Login(account, oldPassword)
 	if !ok {
 		return "舊密碼錯誤"
 	}
 
 	hash := sha256Hash(newPassword)
-	err := u.fn.ChangeUserPassword(uid, hash)
+	err := database.ChangeUserPassword(uid, hash)
 	if err != nil {
 		log.Println(err)
 		return err.Error()
@@ -80,8 +70,8 @@ func (u *User) ChangePassword(uid int, oldPassword, newPassword string) string {
 }
 
 // ChangeName changes user name
-func (u *User) ChangeName(uid int, newname string) string {
-	err := u.fn.ChangeUserName(uid, newname)
+func ChangeName(uid int, newname string) string {
+	err := database.ChangeUserName(uid, newname)
 	if err != nil {
 		log.Println(err)
 		return "failed"

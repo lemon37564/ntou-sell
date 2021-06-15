@@ -6,23 +6,13 @@ import (
 	"strconv"
 )
 
-// Bid type handle bids
-type Bid struct {
-	fn *database.Data
-}
-
-// BidInit return a Bid type which handle bids
-func BidInit(data *database.Data) *Bid {
-	return &Bid{fn: data}
-}
-
 // GetProductBidInfo 回傳商品目前競標商品資訊
-func (b Bid) GetProductBidInfo(pdid string) (string, error) {
+func GetProductBidInfo(pdid string) (string, error) {
 	pid, err := strconv.Atoi(pdid)
 	if err != nil {
 		return "cannot convert " + pdid + " into integer", err
 	}
-	temp, err := json.Marshal(b.fn.GetBidByID(pid))
+	temp, err := json.Marshal(database.GetBidByID(pid))
 	if err != nil {
 		return "failed", err
 	}
@@ -30,7 +20,7 @@ func (b Bid) GetProductBidInfo(pdid string) (string, error) {
 }
 
 // SetBidForBuyer 更新商品價格，目前競標者
-func (b *Bid) SetBidForBuyer(uid int, pdid, money string) (string, error) {
+func SetBidForBuyer(uid int, pdid, money string) (string, error) {
 	pid, err := strconv.Atoi(pdid)
 	if err != nil {
 		return "cannot convert " + pdid + " into integer", err
@@ -41,9 +31,9 @@ func (b *Bid) SetBidForBuyer(uid int, pdid, money string) (string, error) {
 		return "cannot convert " + money + " into integer", err
 	}
 
-	n := b.fn.GetProductInfoFromPdID(pid)
+	n := database.GetProductInfoFromPdID(pid)
 	if price > n.Price { // 取得競標價格
-		if err := b.fn.WonBid(uid, pid, price); err != nil {
+		if err := database.WonBid(uid, pid, price); err != nil {
 			return "failed", err
 		}
 
@@ -54,13 +44,13 @@ func (b *Bid) SetBidForBuyer(uid int, pdid, money string) (string, error) {
 }
 
 // DeleteBid 刪除競標
-func (b *Bid) DeleteBid(pdid string) (string, error) {
+func DeleteBid(pdid string) (string, error) {
 	pid, err := strconv.Atoi(pdid)
 	if err != nil {
 		return "cannot convert " + pdid + " into integer", err
 	}
 
-	err = b.fn.DeleteBid(pid)
+	err = database.DeleteBid(pid)
 	if err != nil {
 		return "failed", err
 	}

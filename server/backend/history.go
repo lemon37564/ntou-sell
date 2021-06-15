@@ -7,24 +7,14 @@ import (
 	"strings"
 )
 
-// History contains functions to use
-type History struct {
-	fn *database.Data
-}
-
-// HistoryInit return handler of History
-func HistoryInit(data *database.Data) *History {
-	return &History{fn: data}
-}
-
 // AddHistory add a history into user's record
-func (h History) AddHistory(uid int, rawPdid string) (string, error) {
+func AddHistory(uid int, rawPdid string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
 	}
 
-	err = h.fn.AddHistory(uid, pdid)
+	err = database.AddHistory(uid, pdid)
 	if err != nil {
 		return "failed", err
 	}
@@ -33,13 +23,13 @@ func (h History) AddHistory(uid int, rawPdid string) (string, error) {
 }
 
 // GetHistory return all historys of a user whose uid is ?
-func (h History) GetHistory(uid int, rawAmount, newest string) (string, error) {
+func GetHistory(uid int, rawAmount, newest string) (string, error) {
 	amount, err := strconv.Atoi(rawAmount)
 	if err != nil {
 		return "cannot convert " + rawAmount + " into integer", err
 	}
 
-	pd := h.fn.GetAllHistory(uid, amount, newest == "true")
+	pd := database.GetAllHistory(uid, amount, newest == "true")
 	str, err := json.Marshal(pd)
 	if err != nil {
 		return "failed", err
@@ -48,13 +38,13 @@ func (h History) GetHistory(uid int, rawAmount, newest string) (string, error) {
 }
 
 // Delete can delete a history user don't want to see
-func (h History) Delete(uid int, rawPdid string) (string, error) {
+func DeleteHistory(uid int, rawPdid string) (string, error) {
 	pdid, err := strconv.Atoi(rawPdid)
 	if err != nil {
 		return "cannot convert " + rawPdid + " into integer", err
 	}
 
-	if err = h.fn.DeleteHistory(uid, pdid); err != nil {
+	if err = database.DeleteHistory(uid, pdid); err != nil {
 		return "failed", err
 	}
 
@@ -62,7 +52,7 @@ func (h History) Delete(uid int, rawPdid string) (string, error) {
 }
 
 // DeleteSpecific delete multiple historys
-func (h History) DeleteSpecific(uid int, pdid string) (string, error) {
+func DeleteSpecificHistory(uid int, pdid string) (string, error) {
 	pdids := strings.Split(pdid, ",")
 
 	for _, v := range pdids {
@@ -71,7 +61,7 @@ func (h History) DeleteSpecific(uid int, pdid string) (string, error) {
 			return "query contains non-integer", err
 		}
 
-		if err := h.fn.DeleteHistory(uid, sipd); err != nil {
+		if err := database.DeleteHistory(uid, sipd); err != nil {
 			return "failed", err
 		}
 	}
@@ -80,8 +70,8 @@ func (h History) DeleteSpecific(uid int, pdid string) (string, error) {
 }
 
 // DeleteAll deletes all history of a user
-func (h History) DeleteAll(uid int) string {
-	if err := h.fn.DeleteAllHistory(uid); err != nil {
+func DeleteAllHistory(uid int) string {
+	if err := database.DeleteAllHistory(uid); err != nil {
 		return err.Error()
 	}
 
