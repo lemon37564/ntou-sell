@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -99,26 +98,14 @@ func changeBg(w http.ResponseWriter, r *http.Request) {
 	io.Copy(f, file)
 	f.Close()
 
-	timeForm := r.FormValue("time")
-	t, err := time.Parse("2006-01-02 15:04:05", timeForm)
-	fmt.Fprint(w, t, err)
-	log.Println("now:", time.Now().Add(time.Hour*8), "at:", t)
-
-	go func(t time.Time) {
-		for ; ; time.Sleep(time.Second) {
-			if time.Now().Add(time.Hour * 8).After(t) { // UTC+8
-				err := os.Remove("webpage/img/bg2.webp")
-				if err != nil {
-					log.Println(err)
-				}
-				err = os.Rename("webpage/img/temp.webp", "webpage/img/bg2.webp")
-				if err != nil {
-					log.Println(err)
-				}
-				return
-			}
-		}
-	}(t)
+	err = os.Remove("webpage/img/bg2.webp")
+	if err != nil {
+		log.Println(err)
+	}
+	err = os.Rename("webpage/img/temp.webp", "webpage/img/bg2.webp")
+	if err != nil {
+		log.Println(err)
+	}
 
 	fmt.Fprint(w, " ok")
 }

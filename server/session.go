@@ -8,7 +8,7 @@ import (
 
 const (
 	// CookieName represents the name of cookie
-	CookieName = "SESSID"
+	CookieName = "NTOU-SELL-ID"
 )
 
 var store = sessions.NewCookieStore([]byte(CookieName))

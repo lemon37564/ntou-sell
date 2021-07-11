@@ -5,7 +5,6 @@ import (
 	"encoding/base64"
 	"log"
 	"se/database"
-	"unicode"
 )
 
 // Login return user id and is it valid to login
@@ -16,14 +15,6 @@ func Login(account, password string) (int, bool) {
 
 // Regist let user regist his own account
 func Regist(account, password, name string) string {
-	if containCh(account) {
-		return "帳號不能含有中文"
-	}
-
-	if containCh(password) {
-		return "密碼不能為中文"
-	}
-
 	hash := sha256Hash(password)
 
 	err := database.AddNewUser(account, hash, name)
@@ -90,14 +81,4 @@ func sha256Hash(key string) string {
 
 	t := hasher.Sum(nil)
 	return base64.URLEncoding.EncodeToString(t)
-}
-
-func containCh(str string) bool {
-	for _, v := range str {
-		if unicode.Is(unicode.Han, v) {
-			return true
-		}
-	}
-
-	return false
 }
