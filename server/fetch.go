@@ -99,9 +99,6 @@ func fetchCart(w http.ResponseWriter, r *http.Request) {
 		res, err := backend.ModifyProductAmount(uid, pdid, amount)
 		response(w, res, err)
 
-	// case "tal":
-	// 	fmt.Fprint(w, backend.TotalCount(uid))
-
 	case "geps": //拿商品
 		fmt.Fprint(w, backend.GetProducts(uid))
 
