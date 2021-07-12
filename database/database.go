@@ -14,10 +14,9 @@ const file = "database.db"
 var DB *sql.DB
 
 func init() {
-	insert := false
 	_, err := os.Stat(file)
 	if err != nil {
-		insert = true
+		log.Println("no database file founded.")
 	}
 
 	DB, err := sql.Open("sqlite3", file)
@@ -35,9 +34,7 @@ func init() {
 	productPrepare(DB)
 	userPrepare(DB)
 
-	if insert {
-		TestInsert()
-	}
+	TestInsert()
 }
 
 // RemoveAll : *FATAL* this command will remove whole database

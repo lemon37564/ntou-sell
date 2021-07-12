@@ -3,8 +3,6 @@ package database
 import (
 	"database/sql"
 	"log"
-	"os"
-	"strconv"
 	"time"
 )
 
@@ -159,12 +157,6 @@ func DeleteProduct(uid int, pdid int) error {
 		return err
 	}
 
-	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".png")
-	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".jpg")
-	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".gif")
-	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".jfif")
-	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".webp")
-	os.Remove("webpage/img/" + strconv.Itoa(pdid) + ".jpeg")
 	return nil
 }
 
