@@ -94,7 +94,6 @@ func DeleteBid(pdid int) error {
 // WonBid update bidder_id and money if anyone won the bid at a time
 func WonBid(uid, pdid, money int) error {
 	_, err := bidWon.Exec(money, pdid)
-
 	return err
 }
 

@@ -102,16 +102,14 @@ func AddMessage(senderUID, receiverUID int, messageText string) error {
 		return err
 	}
 
-	for rows.Next() {
+	if rows.Next() {
 		err = rows.Scan(&mID)
 		if err != nil {
 			mID = 0
 		}
 	}
 
-	mID++
-
-	_, err = msgAdd.Exec(mID, senderUID, receiverUID, messageText)
+	_, err = msgAdd.Exec(mID+1, senderUID, receiverUID, messageText)
 	return err
 }
 

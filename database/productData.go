@@ -137,27 +137,22 @@ func AddProduct(name string, price int, description string, amount int, sellerUI
 		return -1, err
 	}
 
-	for rows.Next() {
+	if rows.Next() {
 		err = rows.Scan(&pdid)
 		if err != nil {
 			log.Println(err)
 			return -1, err
 		}
 	}
-	pdid++
 
-	_, err = pdAdd.Exec(pdid, name, price, description, amount, 0.0, sellerUID, bid, date)
+	_, err = pdAdd.Exec(pdid+1, name, price, description, amount, 0.0, sellerUID, bid, date)
 	return pdid, err
 }
 
 // DeleteProduct with product id
 func DeleteProduct(uid int, pdid int) error {
 	_, err := pdDel.Exec(uid, pdid)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 // UpdateProductName with product id and new name
@@ -181,10 +176,6 @@ func UpdateProductAmount(pdid, amount int) error {
 // UpdateProductDescription with product id and new description
 func UpdateProductDescription(pdid int, description string) error {
 	_, err := pdUpDes.Exec(description, pdid)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
 	return err
 }
 

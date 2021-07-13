@@ -91,7 +91,7 @@ func AddHistory(uid, pdid int) error {
 	}
 
 	var seq int
-	for rows.Next() {
+	if rows.Next() {
 		err = rows.Scan(&seq)
 		if err != nil {
 			log.Println(err)
@@ -100,9 +100,7 @@ func AddHistory(uid, pdid int) error {
 		}
 	}
 
-	seq++
-
-	_, err = histAdd.Exec(uid, pdid, seq)
+	_, err = histAdd.Exec(uid, pdid, seq+1)
 	return err
 }
 

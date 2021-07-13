@@ -96,23 +96,21 @@ func userPrepare(db *sql.DB) {
 
 // AddNewUser is a function for registing a new account
 func AddNewUser(account, passwordHash, name string) error {
-	var UID int
+	var uid int
 
 	rows, err := userMaxID.Query()
 	if err != nil {
 		return err
 	}
 
-	for rows.Next() {
-		err = rows.Scan(&UID)
+	if rows.Next() {
+		err = rows.Scan(&uid)
 		if err != nil {
 			return err
 		}
 	}
 
-	UID++
-
-	_, err = userAdd.Exec(UID, account, passwordHash, name, 0.0)
+	_, err = userAdd.Exec(uid+1, account, passwordHash, name, 0.0)
 	return err
 }
 
@@ -124,23 +122,21 @@ func DeleteUser(uid int, password string) error {
 
 // Login return user id and boolean value to check if it is valid to log in with specific account and password hash
 func Login(account, passwordHash string) (int, bool) {
-	var cnt, uid int
+	var uid int
 
 	rows, err := userLogin.Query(account, passwordHash)
 	if err != nil {
 		panic(err)
 	}
 
-	for rows.Next() {
+	if rows.Next() {
 		err = rows.Scan(&uid)
 		if err != nil {
 			panic(err)
 		}
-		cnt++
+		return uid, true
 	}
-
-	// match only one account and password_hash
-	return uid, cnt == 1
+	return -1, false
 }
 
 // ChangeUserPassword updates passeword of a user by uid
