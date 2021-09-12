@@ -106,6 +106,7 @@ func GetOrderByUIDAndPdid(uid, pdid int) Order {
 		}
 	}
 
+	rows.Close()
 	od.PdName, od.Price = getPdNameAndPrice(pdid)
 
 	return od
@@ -127,6 +128,7 @@ func GetAllOrder(uid int) (ods []Order) {
 
 		ods = append(ods, tmp)
 	}
+	rows.Close()
 
 	for i, v := range ods {
 		ods[i].PdName, ods[i].Price = getPdNameAndPrice(v.Pdid)
@@ -145,6 +147,7 @@ func getPdNameAndPrice(pdid int) (string, int) {
 		return "", -1
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		err = rows.Scan(&name, &price)
 		if err != nil {

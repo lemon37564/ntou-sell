@@ -110,6 +110,7 @@ func AddNewUser(account, passwordHash, name string) error {
 		}
 	}
 
+	rows.Close()
 	_, err = userAdd.Exec(uid+1, account, passwordHash, name, 0.0)
 	return err
 }
@@ -129,6 +130,7 @@ func Login(account, passwordHash string) (int, bool) {
 		panic(err)
 	}
 
+	defer rows.Close()
 	if rows.Next() {
 		err = rows.Scan(&uid)
 		if err != nil {
@@ -166,6 +168,7 @@ func GetUIDFromAccount(account string) int {
 		return -1
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		err = rows.Scan(&id)
 		if err != nil {
@@ -186,6 +189,7 @@ func GetAccountFromUID(uid int) string {
 		return ""
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		err = rows.Scan(&account)
 		if err != nil {

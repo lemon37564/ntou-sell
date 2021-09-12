@@ -10,7 +10,7 @@ func TestInsert() {
 
 	err := AddNewUser("1234", "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "測試用帳號")
 	if err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	err = AddNewUser("abcd", "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "除錯人員ABC")

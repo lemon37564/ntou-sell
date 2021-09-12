@@ -82,6 +82,7 @@ func GetAllProductOfUser(uid int) (all []Product, totalPrice int) {
 		log.Println(err)
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)

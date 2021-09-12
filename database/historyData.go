@@ -99,6 +99,7 @@ func AddHistory(uid, pdid int) error {
 			seq = 0
 		}
 	}
+	rows.Close()
 
 	_, err = histAdd.Exec(uid, pdid, seq+1)
 	return err
@@ -145,6 +146,7 @@ func GetAllHistory(uid int, amount int, newest bool) (all []Product) {
 
 		pdids = append(pdids, id)
 	}
+	rows.Close()
 
 	for _, v := range pdids {
 		all = append(all, getPdByPdid(v))
@@ -161,6 +163,7 @@ func getPdByPdid(pdid int) (pd Product) {
 		return
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {

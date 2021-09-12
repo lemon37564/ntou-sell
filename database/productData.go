@@ -145,6 +145,7 @@ func AddProduct(name string, price int, description string, amount int, sellerUI
 		}
 	}
 
+	rows.Close()
 	_, err = pdAdd.Exec(pdid+1, name, price, description, amount, 0.0, sellerUID, bid, date)
 	return pdid, err
 }
@@ -193,6 +194,7 @@ func GetProductInfoFromPdID(pdid int) (pd Product) {
 		return
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
 		if err != nil {
@@ -210,6 +212,7 @@ func NewestProduct(number int) (all []Product) {
 		log.Println(err)
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
@@ -232,6 +235,7 @@ func SearchProduct(keyword string) (all []Product) {
 		log.Println(err)
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
@@ -254,6 +258,7 @@ func SearchProductWithFilter(keyword string, priceMin, priceMax, eval int) (all 
 		log.Println(err)
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)
@@ -274,6 +279,7 @@ func GetSellerProduct(uid int) (all []Product) {
 		log.Println(err)
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		var pd Product
 		err = rows.Scan(&pd.Pdid, &pd.PdName, &pd.Price, &pd.Description, &pd.Amount, &pd.Eval, &pd.SellerID, &pd.Bid, &pd.Date)

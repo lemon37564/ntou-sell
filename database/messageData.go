@@ -108,6 +108,7 @@ func AddMessage(senderUID, receiverUID int, messageText string) error {
 			mID = 0
 		}
 	}
+	rows.Close()
 
 	_, err = msgAdd.Exec(mID+1, senderUID, receiverUID, messageText)
 	return err
@@ -152,6 +153,7 @@ func GetMessages(localUID, remoteUID int, ascend bool) Messages {
 
 		all = append(all, ms)
 	}
+	rows.Close()
 
 	return Messages{ContactorName: getName(remoteUID), Content: all}
 }
@@ -165,6 +167,7 @@ func GetAllMessages() (all []MessID) {
 		return
 	}
 
+	defer rows.Close()
 	var mess MessID
 	for rows.Next() {
 		err = rows.Scan(&mess.messageID, &mess.senderUID, &mess.receiverUID, &mess.text)
@@ -187,6 +190,7 @@ func getName(uid int) (name string) {
 		return
 	}
 
+	defer rows.Close()
 	for rows.Next() {
 		err = rows.Scan(&name)
 		if err != nil {
