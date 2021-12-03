@@ -20,7 +20,6 @@ type leader struct {
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.WriteHeader(http.StatusOK)
 
 	if r.Method == "POST" {
 		if mux.Vars(r)["key"] == "post" {
@@ -33,6 +32,7 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 
 			_, err = backend.AddLeader(tmp.Name, tmp.SelfPoint, tmp.EnemyPoint, tmp.Strength)
 			if err == nil {
+				w.WriteHeader(http.StatusOK)
 				fmt.Fprint(w, "ok")
 			} else {
 				http.Error(w, "failed", http.StatusBadRequest)
