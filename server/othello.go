@@ -21,6 +21,8 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		if mux.Vars(r)["key"] == "post" {
 
+			w.Header().Set("Access-Control-Allow-Origin", "true")
+
 			decoder := json.NewDecoder(r.Body)
 			var tmp leader
 			err := decoder.Decode(&tmp)
