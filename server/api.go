@@ -15,6 +15,13 @@ const API = `
 	<a href=/backend/user/logout>登出</a>
 	<br>
 	</H4>
+
+	<form action="/backend/leaderboard/post" method="post">
+		name:<input type="text" name="name">
+		point:<input type="number" name="point">
+		strength:<input type="number" name="strength">
+		<input type="submit" value="Send">
+	</form>
 	
 	<a href=/backend/user/help>關於使用者的功能...</a><br><br>
 

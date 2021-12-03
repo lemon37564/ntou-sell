@@ -17,6 +17,8 @@ func createTables(db *sql.DB) {
 	createHistoryTable(db)
 	createOrderTable(db)
 	createMessageTable(db)
+	_, err := db.Exec(leaderBoardTable)
+	logger("leaderboard", err)
 
 	log.Println("All Table was successfully Created. Time:", time.Since(start))
 }

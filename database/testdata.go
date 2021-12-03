@@ -2,18 +2,30 @@ package database
 
 import (
 	"log"
+	"math/rand"
 	"time"
 )
 
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+
+func RandStringRunes(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
+}
+
 // TestInsert tests AddNewUser and AddNewProduct
 func TestInsert() {
+	rand.Seed(time.Now().UnixNano())
 
-	err := AddNewUser("1234", "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "測試用帳號")
+	err := AddNewUser(RandStringRunes(6), "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "測試用帳號")
 	if err != nil {
 		panic(err)
 	}
 
-	err = AddNewUser("abcd", "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "除錯人員ABC")
+	err = AddNewUser(RandStringRunes(6), "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "除錯人員ABC")
 	if err != nil {
 		log.Println(err)
 	}

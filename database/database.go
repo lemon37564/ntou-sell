@@ -33,6 +33,7 @@ func init() {
 	orderPrepare(DB)
 	productPrepare(DB)
 	userPrepare(DB)
+	leaderBoardPrepare(DB)
 
 	TestInsert()
 }
