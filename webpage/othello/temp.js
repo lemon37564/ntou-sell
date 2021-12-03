@@ -19,7 +19,7 @@ function start(){
 	aboutGameButton.addEventListener("click",showAboutGame,false);
 	
 	
-	//getRank();
+	getRank();
 	var gameBackGroundMusic = document.getElementById("Test_Audio");
 	
 	//background music;
@@ -83,14 +83,14 @@ function getRank(){
     var request=new XMLHttpRequest;
         
     //request.open("get","/backend/leaderboard/get");
-	request.open("get","/backend/leaderboard/get");
+	request.open("get","https://ntou-sell.herokuapp.com/backend/leaderboard/get");
     request.onreadystatechange = function() { 
         if (request.readyState === 4 && request.status === 200) {
 			var type = request.getResponseHeader("Content-Type");
 			if (type.match(/^text/)){ // Make sure response is text
 				var datastr = JSON.parse(request.responseText);
 				var len  = datastr.length;
-        
+				console.log(datastr);
 				var str= "";
 		    /*for (var i = 0; i < len; i++) {
            
@@ -159,7 +159,7 @@ function showGame(){
 	var showAboutGameSen = document.getElementById("aboutGameBoard");
 	iframe.setAttribute("style","display:block;width:72vw;height:40.5vw; border: none;box-sizing: border-box;border-radius: 7px;");
 	showBoard.setAttribute("style","display:none;");
-	showAboutGameSen.setAttribute("style","display:block");
+	showAboutGameSen.setAttribute("style","display:none;");
 	
 }
 function showRank(){
