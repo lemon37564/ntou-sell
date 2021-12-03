@@ -37,7 +37,52 @@ function start(){
 arr= [];
 
 function getRank(){
-	arr= [ {"rank":1,"name":"Dino","score":64}, 
+	console.log("getting info");
+
+    
+    var request=new XMLHttpRequest;
+        
+    //request.open("get","/backend/leaderboard/get");
+	request.open("get","/backend/leaderboard/get");
+    request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+			var type = request.getResponseHeader("Content-Type");
+			if (type.match(/^text/)){ // Make sure response is text
+				var datastr = JSON.parse(request.responseText);
+				var len  = datastr.length;
+        
+		var str= "";
+		console.log("fff");
+		/*for (var i = 0; i < len; i++) {
+           
+			var content = 
+                '<div id="div2">'+
+                '<div style= "float:left">'+
+                ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;border-radius: 5px;" onclick="dele(this.id);">'+"刪除"+'</button>'+
+                '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
+                '</div>'+
+                
+                '<div id="div3">'+datastr[i].PdName+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Price+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Amount+
+                '</div>'+
+                
+                '</div>';
+           
+            //偵錯用  console.log(content);
+			newProduct=newProduct+content;
+			str+=content;
+		};*/
+			}
+		}
+   
+	}
+	request.send(null);
+
+
+	/*arr= [ {"rank":1,"name":"Dino","score":64}, 
 		   {"rank":2,"name":"Jim","score":54} ,
 		   {"rank":3,"name":"Dino","score":64}, 
 		   {"rank":4,"name":"Jim","score":54} ,
@@ -49,7 +94,7 @@ function getRank(){
 		   {"rank":5,"name":"Dino","score":64},
 		   {"rank":5,"name":"Dino","score":64},
 		   {"rank":5,"name":"Dino","score":64}
-		   ];
+		   ];*/
 
 }
 function showAboutGame(){
@@ -77,11 +122,13 @@ function showGame(){
 function showRank(){
 	
 	
+	
+	
 	var showBoard = document.getElementById("rankboard");
 	iframe.setAttribute("style","display:none;");
 	showBoard.setAttribute("style","display:block;");
-	var temp ="";
-	temp+="<table class='tableShow'>";
+	
+	/*temp+="<table class='tableShow'>";
 	temp+="<thead><tr><th>Rank</th><th>Name</th><th>Score</th></thead>";
 	temp+="<tbody>";
 	for(var i=0;i<arr.length;i++){
@@ -98,8 +145,66 @@ function showRank(){
 	console.log(temp);
 	
 	showBoard.innerHTML = temp;
+	*/
+	
+	/////////////////////////////以下物動////////////////////////////////
+	var temp ="";
+	temp+="<div id='accordion1' style='float:left;width:33%;'>";
+	temp+="<div class='card' style='background-color: darkgreen;z-index: 10;'>";
+    temp+="<div class='card-header'>";
+    temp+="<a class='card-link' data-toggle='collapse' href='#colBoard1'>";
+    temp+="<span class='introuduceTitle' id = 'collapsebo1'>遊戲介紹<span>";
+	temp+="</a>";
+    temp+="</div>";
+    temp+="<div id='colBoard1' class='collapse' data-parent='#accordion1'>";
+    temp+="<div class='card-body'>";
+    temp+="<h1><strong>在</strong></h1>";
+	
+	temp+="很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶";
+    
+	temp+="</div>";
+    temp+="</div>";
+    temp+="</div>";
+	temp+="</div>";
+	temp+="<div id='accordion2' style='float:left;width:33%;'>";
+	temp+="<div class='card' style='background-color: darkgreen;z-index: 10;'>";
+    temp+="<div class='card-header'>";
+    temp+="<a class='card-link' data-toggle='collapse' href='#colBoard2'>";
+    temp+="<span class='introuduceTitle' id = 'collapsebo'>遊戲介紹<span>";
+	temp+="</a>";
+    temp+="</div>";
+    temp+="<div id='colBoard2' class='collapse' data-parent='#accordion2'>";
+    temp+="<div class='card-body'>";
+    temp+="<h1><strong>在</strong></h1>";
+	
+	temp+="很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶";
+    
+	temp+="</div>";
+    temp+="</div>";
+    temp+="</div>";
+	temp+="</div>";
+	temp+="<div id='accordion3' style='float:left;width:33%;'>";
+	temp+="<div class='card' style='background-color: darkgreen;z-index: 10;'>";
+    temp+="<div class='card-header'>";
+    temp+="<a class='card-link' data-toggle='collapse' href='#colBoard3'>";
+    temp+="<span class='introuduceTitle' id = 'collapsebo'>遊戲介紹<span>";
+	temp+="</a>";
+    temp+="</div>";
+    temp+="<div id='colBoard3' class='collapse' data-parent='#accordion3'>";
+    temp+="<div class='card-body'>";
+    temp+="<h1><strong>在</strong></h1>";
+	
+	temp+="很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶";
+    
+	temp+="</div>";
+    temp+="</div>";
+    temp+="</div>";
+	temp+="</div>";
+	showBoard.innerHTML = temp;
+	console.log(temp);
 	
 }
+
 
 function fadeIn(el, duration) {
 
@@ -125,7 +230,7 @@ function load(loadId,duration){
 	
 	
 	function next2(){
-		if(prepare++ > 20 ){
+		if(prepare++ > 25 ){
 			console.log("loading finish");
 			var con = document.getElementById("container");
 			con.setAttribute("style","display:none");

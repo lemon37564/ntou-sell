@@ -4,29 +4,20 @@ body {
 
 }
 
-.rightBoardBackground {
-	background-image: url("board.jpg");
-	width:100%;
-	height:500px;
-	background-size:360px 500px;
-	
-	/*position:absolute;*/
-	top:150px;
-	/*background-repeat:no-repeat;*/
-	
-}
 .rightBoardBackground2 {
 	background-image: url("board2.jpg");
 	width:72vw;
 	height:40.5vw;
-	background-size:1000px 500px;
+	
+	background-size:72vw 40.5vw;
 	
 	/*position:absolute;*/
 	top:150px;
 	background-repeat:no-repeat;
 	z-index:3;
 	padding-left:60px;
-	padding-top:30px;
+	padding-right:60px;
+	padding-top:50px;
 	
 	/*animation-duration: 3s;
   animation-name: slidein;*/
