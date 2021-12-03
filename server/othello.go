@@ -19,7 +19,7 @@ type leader struct {
 
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Access-Control-Allow-Origin", "true")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	if r.Method == "POST" {
 		if mux.Vars(r)["key"] == "post" {
