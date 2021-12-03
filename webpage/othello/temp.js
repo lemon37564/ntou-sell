@@ -8,7 +8,9 @@ function start(){
 	var collapse1 = document.getElementById("collapse1");
 	var collapse2 = document.getElementById("collapse2");
 	var collapse3 = document.getElementById("collapse3");
-
+	var showAboutGameSen = document.getElementById("aboutGameBoard");
+	var con = document.getElementById("container");
+			
 	var rankMusic = new Audio("rankMusic.mp3");
 	var clickMusic = new Audio("clickMusic.mp3");
 	
@@ -106,7 +108,7 @@ function getRank(){
                 '<div id="div3">'+datastr[i].Amount+
                 '</div>'+
                 
-                '</div>';
+                '</div>';
            
             //偵錯用  console.log(content);
 			newProduct=newProduct+content;
@@ -135,36 +137,42 @@ function getRank(){
 
 }
 function showAboutGame(){
-	
-	var showAboutGameSen = document.getElementById("aboutGame");
+	var con = document.getElementById("container");
+	var showBoard = document.getElementById("rankboard");
+	var showAboutGameSen = document.getElementById("aboutGameBoard");
+	showBoard.setAttribute("style","display:none;");
+	showAboutGameSen.setAttribute("style","display:block");
+	iframe.setAttribute("style","display:none");
+	con.setAttribute("style","display:none");
 	var sen = "";
 	sen+="<h1 style='font-size:60px;text-align:center;'>關於作者</h1><br><br>";
 	sen+="<h3> 沈彥昭 : 遊戲製作</h3><br>";
 	sen+="<h3> 李佳勳 : 前端製作</h3><br><br><br>";
 	sen+="<h3> 遊戲設計介紹:........................</h3>";
+	showAboutGameSen.innerHTML = sen;
 	
 	
 }
 function showGame(){
-	//const gameBackGroundMusic = new Audio("gameBackGroundMusic.mp3");
-	//var gameBackGroundMusic = document.getElementById("Test_Audio");
-	//gameBackGroundMusic.muted = false;
 	
-	
-	//gameBackGroundMusic.play();
 	var showBoard = document.getElementById("rankboard");
+	var showAboutGameSen = document.getElementById("aboutGameBoard");
 	iframe.setAttribute("style","display:block;width:72vw;height:40.5vw; border: none;box-sizing: border-box;border-radius: 7px;");
 	showBoard.setAttribute("style","display:none;");
+	showAboutGameSen.setAttribute("style","display:block");
+	
 }
 function showRank(){
 	
 	
 	
-	
+	var con = document.getElementById("container");
 	var showBoard = document.getElementById("rankboard");
+	var showAboutGameSen = document.getElementById("aboutGameBoard");
 	iframe.setAttribute("style","display:none;");
 	showBoard.setAttribute("style","display:block;");
-	
+	showAboutGameSen.setAttribute("style","display:none");
+	con.setAttribute("style","display:none");
 	var rankEasyShow = document.getElementById("rankEasy");
 	var rankEasy = "";
 	
@@ -234,20 +242,6 @@ function load(loadId,duration){
 	next2();
 
 }
-/*
-window.onload = function(){
-             setInterval("toggleSound()",100);
-        }
-
-    function toggleSound() {
-                var music = document.getElementById("Test_Audio");//獲取ID  
-                    
-                if (music.paused) { //判讀是否播放  
-                    music.paused=false;
-                    music.play(); //沒有就播放 
-                }    
-        }
-*/
 
 window.addEventListener("load",start,false);
 
