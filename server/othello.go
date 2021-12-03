@@ -18,11 +18,11 @@ type leader struct {
 }
 
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Set("Access-Control-Allow-Origin", "true")
+
 	if r.Method == "POST" {
 		if mux.Vars(r)["key"] == "post" {
-
-			w.Header().Set("Access-Control-Allow-Origin", "true")
-
 			decoder := json.NewDecoder(r.Body)
 			var tmp leader
 			err := decoder.Decode(&tmp)
