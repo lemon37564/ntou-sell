@@ -1,23 +1,33 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"se/server/backend"
 
 	"github.com/gorilla/mux"
 )
 
+type leader struct {
+	Name     string `json:"name"`
+	Point    string `json:"point"`
+	Strength string `json:"strength`
+}
+
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		if mux.Vars(r)["key"] == "post" {
-			r.ParseMultipartForm(32 << 20)
 
-			name := r.FormValue("name")
-			point := r.FormValue("point")
-			strength := r.FormValue("strength")
+			decoder := json.NewDecoder(r.Body)
+			var tmp leader
+			err := decoder.Decode(&tmp)
+			if err != nil {
+				log.Println(err)
+			}
 
-			_, err := backend.AddLeader(name, point, strength)
+			_, err = backend.AddLeader(tmp.Name, tmp.Point, tmp.Strength)
 			if err == nil {
 				fmt.Fprint(w, "ok")
 			} else {
