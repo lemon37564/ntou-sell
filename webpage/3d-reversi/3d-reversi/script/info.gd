@@ -5,11 +5,6 @@ func _ready():
 	self.hide()
 	self.rect_scale = Vector2(0, 0)
 
-func _input(event):
-	if event.is_action_pressed("key_i"):
-		self.visible = !self.visible
-		$Ok.grab_focus()
-
 func _on_InfoBtn_pressed():
 	$Fold.play("unfold")
 
