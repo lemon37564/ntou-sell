@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"se/server/ai"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -20,9 +21,9 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 		if str_lv == "0" {
 			level = ai.LV_ONE
 		} else if str_lv == "1" {
-			level = ai.LV_THREE
+			level = ai.LV_TWO
 		} else {
-			level = ai.LV_FIVE
+			level = ai.LV_THREE
 		}
 
 		color := args.Get("color")
@@ -35,14 +36,22 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 		board := args.Get("board")
 		fmt.Println(str_lv, color, board)
 
-		res, err := server_ai.Move(board)
+		start := time.Now()
+
+		res, detail, err := server_ai.Move(board)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintf(w, "00, err:%v", err)
 			return
 		}
 		x := res[0] - 'A'
 		y := res[1] - 'a'
-		fmt.Fprint(w, int(x), int(y))
+
+		duration := time.Since(start)
+		if duration < time.Millisecond*200 {
+			time.Sleep(time.Millisecond*200 - duration)
+		}
+
+		fmt.Fprintf(w, "%d%d, value: %s, time: %v", int(y), int(x), detail, duration)
 	}
 
 }

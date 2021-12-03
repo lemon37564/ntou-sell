@@ -12,6 +12,4 @@ const (
 	LV_ONE Level = iota
 	LV_TWO
 	LV_THREE
-	LV_FOUR
-	LV_FIVE
 )

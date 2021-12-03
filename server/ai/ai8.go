@@ -50,14 +50,15 @@ func NewAI8(cl color, lv Level) *AI8 {
 	return &ai
 }
 
-func (ai *AI8) Move(input string) (string, error) {
+func (ai *AI8) Move(input string) (res string, detail string, err error) {
 	c := make(chan string)
 	go ai.move(input, c)
-	res := <-c
+	res = <-c
 	if len(res) > 3 {
-		return "", fmt.Errorf(res)
+		return "", "", fmt.Errorf(res)
 	}
-	return res, nil
+	detail = <-c
+	return res, detail, nil
 }
 
 func (ai *AI8) move(input string, c chan string) {
@@ -78,23 +79,31 @@ func (ai *AI8) move(input string, c chan string) {
 		c <- fmt.Sprintf("cannot put: %v, builtin ai %v", bestPoint, ai.color)
 	}
 	c <- bestPoint.String()
+	c <- ai.getValue(best)
 }
 
 func (ai AI8) Close() {}
 
-func (ai AI8) printValue(best node) {
+func (ai AI8) getValue(best node) string {
 	if ai.phase == 1 {
 		finValue := float64(best.value) / float64(ai.totalValue) * float64(SIZE8*SIZE8)
-		fmt.Printf("built-in AI: {depth: %d, nodes: %d, value: %+.2f}\n", ai.reachedDepth, ai.nodes, finValue)
+		return fmt.Sprintf("{depth: %d, nodes: %d, value: %+.2f}", ai.reachedDepth, ai.nodes, finValue)
 	} else {
 		finValue := best.value
-		fmt.Printf("built-in AI: {depth: %d, nodes: %d, value: %+d}\n", ai.reachedDepth, ai.nodes, finValue)
+		return fmt.Sprintf("{depth: %d, nodes: %d, value: %+d}", ai.reachedDepth, ai.nodes, finValue)
 	}
 }
 
 func (ai *AI8) setPhase(bd bboard8) {
 	emptyCount := bd.emptyCount()
-	phase2 := PHASE2DEPTH8 + (ai.level-4)*4 // level
+	var phase2 int // level
+	if ai.level == int(LV_ONE) {
+		phase2 = 10
+	} else if ai.level == int(LV_TWO) {
+		phase2 = 14
+	} else if ai.level == int(LV_THREE) {
+		phase2 = PHASE2DEPTH8
+	}
 	if emptyCount > phase2 {
 		ai.phase = 1
 	} else {
@@ -104,7 +113,13 @@ func (ai *AI8) setPhase(bd bboard8) {
 
 func (ai *AI8) setDepth() {
 	if ai.phase == 1 {
-		ai.depth = PHASE1DEPTH8 + (ai.level-4)*2
+		if ai.level == int(LV_ONE) {
+			ai.depth = 4
+		} else if ai.level == int(LV_TWO) {
+			ai.depth = 8
+		} else {
+			ai.depth = PHASE1DEPTH8
+		}
 
 		if ai.depth <= 0 {
 			ai.depth = 1
