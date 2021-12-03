@@ -7,18 +7,23 @@ import (
 	"time"
 )
 
-func AddLeader(name string, point string, str string) (string, error) {
-	point_int, err := strconv.Atoi(point)
+func AddLeader(name string, selfPoint string, enemyPoint string, str string) (string, error) {
+	selfPointInt, err := strconv.Atoi(selfPoint)
 	if err != nil {
-		return "cannot convert " + point + " into integer", err
+		return "cannot convert " + selfPoint + " into integer", err
 	}
 
-	strength_int, err := strconv.Atoi(str)
+	enemyPointInt, err := strconv.Atoi(enemyPoint)
+	if err != nil {
+		return "cannot convert " + enemyPoint + " into integer", err
+	}
+
+	strengthInt, err := strconv.Atoi(str)
 	if err != nil {
 		return "cannot conver " + str + " into integer", err
 	}
 
-	err = database.AddLeader(name, point_int, strength_int, time.Now())
+	err = database.AddLeader(name, selfPointInt, enemyPointInt, strengthInt, time.Now())
 	if err != nil {
 		return "failed", err
 	}
