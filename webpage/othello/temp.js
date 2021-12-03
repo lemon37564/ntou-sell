@@ -17,7 +17,7 @@ function start(){
 	aboutGameButton.addEventListener("click",showAboutGame,false);
 	
 	
-	getRank();
+	//getRank();
 	var gameBackGroundMusic = document.getElementById("Test_Audio");
 	
 	//background music;
@@ -34,7 +34,45 @@ function start(){
 	
 	load(loadId,500);
 }
-arr= [];
+arrRankEasy= [ {"rank":1,"name":"Dino","score":64}, 
+		   {"rank":2,"name":"Jim","score":54} ,
+		   {"rank":3,"name":"Dino","score":64}, 
+		   {"rank":4,"name":"Jim","score":54} ,
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64}
+		   ];
+arrRankMiddle=[ {"rank":1,"name":"Dino","score":64}, 
+		   {"rank":2,"name":"Jim","score":54} ,
+		   {"rank":3,"name":"Dino","score":64}, 
+		   {"rank":4,"name":"Jim","score":54} ,
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64}
+		   ];;
+arrRankHard=[ {"rank":1,"name":"Dino","score":64}, 
+		   {"rank":2,"name":"Jim","score":54} ,
+		   {"rank":3,"name":"Dino","score":64}, 
+		   {"rank":4,"name":"Jim","score":54} ,
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64},
+		   {"rank":5,"name":"Dino","score":64}
+		   ];;
 
 function getRank(){
 	console.log("getting info");
@@ -51,9 +89,8 @@ function getRank(){
 				var datastr = JSON.parse(request.responseText);
 				var len  = datastr.length;
         
-		var str= "";
-		console.log("fff");
-		/*for (var i = 0; i < len; i++) {
+				var str= "";
+		    /*for (var i = 0; i < len; i++) {
            
 			var content = 
                 '<div id="div2">'+
@@ -69,7 +106,7 @@ function getRank(){
                 '<div id="div3">'+datastr[i].Amount+
                 '</div>'+
                 
-                '</div>';
+                '</div>';
            
             //偵錯用  console.log(content);
 			newProduct=newProduct+content;
@@ -128,80 +165,25 @@ function showRank(){
 	iframe.setAttribute("style","display:none;");
 	showBoard.setAttribute("style","display:block;");
 	
-	/*temp+="<table class='tableShow'>";
-	temp+="<thead><tr><th>Rank</th><th>Name</th><th>Score</th></thead>";
-	temp+="<tbody>";
-	for(var i=0;i<arr.length;i++){
-		temp+=("<tr class='"+"success"+"'>");
-		temp+="<td>"+arr[i].rank+"</td>";
-		temp+="<td>"+arr[i].name+"</td>";
+	var rankEasyShow = document.getElementById("rankEasy");
+	var rankEasy = "";
+	
+	rankEasy+="<table class='tableShow'>";
+	rankEasy+="<thead><tr><th>Rank</th><th>Name</th><th>Score</th></thead>";
+	rankEasy+="<tbody>";
+	for(var i=0;i<arrRankEasy.length;i++){
+		rankEasy+=("<tr class='"+"success"+"'>");
+		rankEasy+="<td>"+arrRankEasy[i].rank+"</td>";
+		rankEasy+="<td>"+arrRankEasy[i].name+"</td>";
         
         
-        temp+="<td>"+arr[i].score+"</td>"
-      temp+="</tr>"
+        rankEasy+="<td>"+arrRankEasy[i].score+"</td>"
+        rankEasy+="</tr>"
 	
 	}
-	temp+="</tbody>";
-	console.log(temp);
-	
-	showBoard.innerHTML = temp;
-	*/
-	
-	/////////////////////////////以下物動////////////////////////////////
-	var temp ="";
-	temp+="<div id='accordion1' style='float:left;width:33%;'>";
-	temp+="<div class='card' style='background-color: darkgreen;z-index: 10;'>";
-    temp+="<div class='card-header'>";
-    temp+="<a class='card-link' data-toggle='collapse' href='#colBoard1'>";
-    temp+="<span class='introuduceTitle' id = 'collapsebo1'>遊戲介紹<span>";
-	temp+="</a>";
-    temp+="</div>";
-    temp+="<div id='colBoard1' class='collapse' data-parent='#accordion1'>";
-    temp+="<div class='card-body'>";
-    temp+="<h1><strong>在</strong></h1>";
-	
-	temp+="很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶";
-    
-	temp+="</div>";
-    temp+="</div>";
-    temp+="</div>";
-	temp+="</div>";
-	temp+="<div id='accordion2' style='float:left;width:33%;'>";
-	temp+="<div class='card' style='background-color: darkgreen;z-index: 10;'>";
-    temp+="<div class='card-header'>";
-    temp+="<a class='card-link' data-toggle='collapse' href='#colBoard2'>";
-    temp+="<span class='introuduceTitle' id = 'collapsebo'>遊戲介紹<span>";
-	temp+="</a>";
-    temp+="</div>";
-    temp+="<div id='colBoard2' class='collapse' data-parent='#accordion2'>";
-    temp+="<div class='card-body'>";
-    temp+="<h1><strong>在</strong></h1>";
-	
-	temp+="很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶";
-    
-	temp+="</div>";
-    temp+="</div>";
-    temp+="</div>";
-	temp+="</div>";
-	temp+="<div id='accordion3' style='float:left;width:33%;'>";
-	temp+="<div class='card' style='background-color: darkgreen;z-index: 10;'>";
-    temp+="<div class='card-header'>";
-    temp+="<a class='card-link' data-toggle='collapse' href='#colBoard3'>";
-    temp+="<span class='introuduceTitle' id = 'collapsebo'>遊戲介紹<span>";
-	temp+="</a>";
-    temp+="</div>";
-    temp+="<div id='colBoard3' class='collapse' data-parent='#accordion3'>";
-    temp+="<div class='card-body'>";
-    temp+="<h1><strong>在</strong></h1>";
-	
-	temp+="很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶在很久很久以前，有一個老爺爺跟老奶奶";
-    
-	temp+="</div>";
-    temp+="</div>";
-    temp+="</div>";
-	temp+="</div>";
-	showBoard.innerHTML = temp;
-	console.log(temp);
+	rankEasy+="</tbody>";
+	rankEasyShow.innerHTML = rankEasy;
+	console.log(rankEasy);
 	
 }
 
