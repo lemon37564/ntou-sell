@@ -11,9 +11,10 @@ import (
 )
 
 type leader struct {
-	Name     string `json:"name"`
-	Point    string `json:"point"`
-	Strength string `json:"strength`
+	Name       string `json:"name"`
+	SelfPoint  string `json:"self_point"`
+	EnemyPoint string `json:"enemy_point"`
+	Strength   string `json:"strength`
 }
 
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
@@ -27,7 +28,7 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 			}
 
-			_, err = backend.AddLeader(tmp.Name, tmp.Point, tmp.Strength)
+			_, err = backend.AddLeader(tmp.Name, tmp.SelfPoint, tmp.EnemyPoint, tmp.Strength)
 			if err == nil {
 				fmt.Fprint(w, "ok")
 			} else {
