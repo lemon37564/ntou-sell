@@ -15,6 +15,8 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)
 	args := r.URL.Query()
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	if path["key"] == "move" {
 		var level ai.Level
 		str_lv := args.Get("level")
