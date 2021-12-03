@@ -37,8 +37,52 @@ function start(){
 arr= [];
 
 function getRank(){
-	
-	arr= [ {"rank":1,"name":"Dino","score":64}, 
+	console.log("getting info");
+
+    
+    var request=new XMLHttpRequest;
+        
+    //request.open("get","/backend/leaderboard/get");
+	request.open("get","/backend/leaderboard/get");
+    request.onreadystatechange = function() { 
+        if (request.readyState === 4 && request.status === 200) {
+			var type = request.getResponseHeader("Content-Type");
+			if (type.match(/^text/)){ // Make sure response is text
+				var datastr = JSON.parse(request.responseText);
+				var len  = datastr.length;
+        
+		var str= "";
+		console.log("fff");
+		/*for (var i = 0; i < len; i++) {
+           
+			var content = 
+                '<div id="div2">'+
+                '<div style= "float:left">'+
+                ' <button type="button" id="'+datastr[i].Pdid+'" style="width:40px;height:30px;font-size:10px;background-color:#3949AB;margin-right:10px;border-radius: 5px;" onclick="dele(this.id);">'+"刪除"+'</button>'+
+                '<input type="checkbox" style="width:30px;height:30px;" id="box1" name="test" value="56">'+
+                '</div>'+
+                
+                '<div id="div3">'+datastr[i].PdName+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Price+
+                '</div>'+
+                '<div id="div3">'+datastr[i].Amount+
+                '</div>'+
+                
+                '</div>';
+           
+            //偵錯用  console.log(content);
+			newProduct=newProduct+content;
+			str+=content;
+		};*/
+			}
+		}
+   
+	}
+	request.send(null);
+
+
+	/*arr= [ {"rank":1,"name":"Dino","score":64}, 
 		   {"rank":2,"name":"Jim","score":54} ,
 		   {"rank":3,"name":"Dino","score":64}, 
 		   {"rank":4,"name":"Jim","score":54} ,
@@ -50,7 +94,7 @@ function getRank(){
 		   {"rank":5,"name":"Dino","score":64},
 		   {"rank":5,"name":"Dino","score":64},
 		   {"rank":5,"name":"Dino","score":64}
-		   ];
+		   ];*/
 
 }
 function showAboutGame(){
