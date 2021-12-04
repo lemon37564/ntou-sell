@@ -38,11 +38,11 @@ func leaderBoardPrepare(db *sql.DB) {
 	)
 
 	if leadAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if leadGet, err = db.Prepare(get); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

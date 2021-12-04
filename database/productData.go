@@ -76,55 +76,55 @@ func productPrepare(db *sql.DB) {
 	)
 
 	if pdAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdDel, err = db.Prepare(del); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdUpName, err = db.Prepare(upName); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdUpPrc, err = db.Prepare(upPrc); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdUpAmt, err = db.Prepare(upAmt); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdUpDes, err = db.Prepare(upDes); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdUpEval, err = db.Prepare(upEval); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdMaxPID, err = db.Prepare(maxPID); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdNewest, err = db.Prepare(newest); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdSearch, err = db.Prepare(search); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdFilter, err = db.Prepare(filter); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdGetInfo, err = db.Prepare(getInfo); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if pdUserPd, err = db.Prepare(userPd); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

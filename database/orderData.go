@@ -52,27 +52,27 @@ func orderPrepare(db *sql.DB) {
 	)
 
 	if ordAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if ordDel, err = db.Prepare(del); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if ordUpAmt, err = db.Prepare(upAmt); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if ordGetAll, err = db.Prepare(getAll); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if ordGetOrder, err = db.Prepare(getOrder); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if ordGetPd, err = db.Prepare(getPd); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

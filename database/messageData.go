@@ -69,27 +69,27 @@ func messagePrepare(db *sql.DB) {
 	)
 
 	if msgAll, err = db.Prepare(all); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if msgAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if msgGetOld, err = db.Prepare(getOld); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if msgGetNew, err = db.Prepare(getNew); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if msgMaxID, err = db.Prepare(maxID); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if msgGetName, err = db.Prepare(getName); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

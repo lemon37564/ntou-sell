@@ -51,31 +51,31 @@ func bidPrepare(db *sql.DB) {
 	)
 
 	if bidAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if bidDel, err = db.Prepare(del); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if bidWon, err = db.Prepare(won); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if bidUpDL, err = db.Prepare(upDL); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if bidGetAll, err = db.Prepare(getAll); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if bidGet, err = db.Prepare(getBid); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if bidGetPd, err = db.Prepare(getPd); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

@@ -41,19 +41,19 @@ func cartPrepare(db *sql.DB) {
 	)
 
 	if cartAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if cartDel, err = db.Prepare(del); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if cartUpAmt, err = db.Prepare(upAmt); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if cartGet, err = db.Prepare(get); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

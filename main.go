@@ -1,8 +1,6 @@
 package main
 
-import (
-	"se/server"
-)
+import "se/server"
 
 func main() {
 	server.Serve()

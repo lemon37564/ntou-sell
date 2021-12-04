@@ -1,7 +1,10 @@
 package server
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"log"
 	"net/http"
 	"se/server/backend"
 
@@ -28,6 +31,17 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		selfPoint := args.Get("self_point")
 		enemyPoint := args.Get("enemy_point")
 		strength := args.Get("strength")
+		verification := args.Get("verification")
+
+		sum := sha256.Sum256([]byte("wp1101-final-0076D053-00771053" + name + selfPoint + enemyPoint + strength + "reversi3D"))
+		output := hex.EncodeToString(sum[:])
+
+		if verification != output {
+			log.Println("verification not accepted, score disposed")
+			http.Error(w, "verfication failed", http.StatusNotAcceptable)
+			return
+		}
+		log.Println("verification accepted, score have been uploaded")
 
 		_, err := backend.AddLeader(name, selfPoint, enemyPoint, strength)
 		if err == nil {

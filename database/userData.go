@@ -54,43 +54,43 @@ func userPrepare(db *sql.DB) {
 	)
 
 	if userAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userDel, err = db.Prepare(del); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userUpName, err = db.Prepare(upName); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userUpPass, err = db.Prepare(upPass); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userUpEval, err = db.Prepare(upEval); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userMaxID, err = db.Prepare(maxID); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userLogin, err = db.Prepare(login); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userGetData, err = db.Prepare(getData); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userGetUID, err = db.Prepare(getUID); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if userGetAcnt, err = db.Prepare(getAcnt); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

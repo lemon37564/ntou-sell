@@ -44,31 +44,31 @@ func historyPrepare(db *sql.DB) {
 	)
 
 	if histAdd, err = db.Prepare(add); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if histDel, err = db.Prepare(del); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if histDelAll, err = db.Prepare(delAll); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if histMaxSeq, err = db.Prepare(maxSeq); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if histGetNew, err = db.Prepare(getNew); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if histGetOld, err = db.Prepare(getOld); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 
 	if histGetPd, err = db.Prepare(getPd); err != nil {
-		log.Println(err)
+		panic(err)
 	}
 }
 

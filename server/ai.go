@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"se/server/ai"
 	"time"
@@ -36,7 +37,7 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 		}
 
 		board := args.Get("board")
-		fmt.Println(str_lv, color, board)
+		log.Println(str_lv, color, board)
 
 		start := time.Now()
 
