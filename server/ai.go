@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"se/server/ai"
 	"time"
@@ -39,6 +40,7 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 			if value == "" {
 				http.Error(w, "not done yet", http.StatusBadRequest)
 			} else {
+				log.Println("cache hit")
 				fmt.Fprint(w, value)
 			}
 			return
