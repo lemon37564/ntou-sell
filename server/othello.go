@@ -10,11 +10,12 @@ import (
 	"net/http"
 	"se/server/backend"
 	"sync"
+	"time"
 
 	"github.com/gorilla/mux"
 )
 
-var authKeys = make(map[string]struct{})
+var authKeys = make(map[string]time.Time)
 var authLock sync.RWMutex
 
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
@@ -35,7 +36,8 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		const secret = "wp1101-final-0076D053-00771053"
 		hashed := sha256.Sum256([]byte(keyStr + secret))
 		authLock.Lock()
-		authKeys[hex.EncodeToString(hashed[:])] = struct{}{}
+		cleanExpiredKeys()
+		authKeys[hex.EncodeToString(hashed[:])] = time.Now()
 		authLock.Unlock()
 	case "get":
 		leaders, err := backend.GetLeaders()
@@ -52,6 +54,7 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		verification := args.Get("verification")
 
 		authLock.Lock()
+		cleanExpiredKeys()
 		_, exist := authKeys[verification]
 		if exist {
 			delete(authKeys, verification)
@@ -74,5 +77,13 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		}
 	default:
 		http.NotFound(w, r)
+	}
+}
+
+func cleanExpiredKeys() {
+	for key, t := range authKeys {
+		if time.Since(t) > time.Second*5 {
+			delete(authKeys, key)
+		}
 	}
 }
