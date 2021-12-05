@@ -40,7 +40,7 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 			if value == "" {
 				http.Error(w, "not done yet", http.StatusBadRequest)
 			} else {
-				log.Println("cache hit")
+				log.Println("cache hit, cache length:", len(cache))
 				fmt.Fprint(w, value)
 			}
 			return
