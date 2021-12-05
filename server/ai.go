@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"se/server/ai"
 	"time"
@@ -10,7 +9,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type request struct {
+	board string
+	color string
+	level string
+}
+
 var server_ai *ai.AI8
+var cache map[request]string = make(map[request]string)
 
 func ai_move(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)
@@ -20,7 +26,24 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 
 	if path["key"] == "move" {
 		var level ai.Level
+		start := time.Now()
+
 		str_lv := args.Get("level")
+		color := args.Get("color")
+		board := args.Get("board")
+
+		value, exist := cache[request{board, color, str_lv}]
+
+		if exist {
+			// requested but still computing
+			if value == "" {
+				http.Error(w, "not done yet", http.StatusBadRequest)
+			} else {
+				fmt.Fprint(w, value)
+			}
+			return
+		}
+
 		if str_lv == "0" {
 			level = ai.LV_ONE
 		} else if str_lv == "1" {
@@ -29,17 +52,13 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 			level = ai.LV_THREE
 		}
 
-		color := args.Get("color")
 		if color == "black" {
 			server_ai = ai.NewAI8(ai.BLACK, level)
 		} else {
 			server_ai = ai.NewAI8(ai.WHITE, level)
 		}
 
-		board := args.Get("board")
-		log.Println(str_lv, color, board)
-
-		start := time.Now()
+		cache[request{board, color, str_lv}] = ""
 
 		res, detail, err := server_ai.Move(board)
 		if err != nil {
@@ -50,10 +69,11 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 		y := res[1] - 'a'
 
 		duration := time.Since(start)
-		if duration < time.Millisecond*200 {
-			time.Sleep(time.Millisecond*200 - duration)
+		if duration < time.Millisecond*300 {
+			time.Sleep(time.Millisecond*300 - duration)
 		}
 
+		cache[request{board, color, str_lv}] = fmt.Sprintf("%d%d, value: %s, time: %v", int(y), int(x), detail, duration)
 		fmt.Fprintf(w, "%d%d, value: %s, time: %v", int(y), int(x), detail, duration)
 	}
 
