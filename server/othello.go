@@ -1,15 +1,21 @@
 package server
 
 import (
+	"crypto/rand"
 	"crypto/sha256"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"log"
 	"net/http"
 	"se/server/backend"
+	"sync"
 
 	"github.com/gorilla/mux"
 )
+
+var authKeys = make(map[string]struct{})
+var authLock sync.RWMutex
 
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 
@@ -19,6 +25,18 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 	args := r.URL.Query()
 
 	switch path["key"] {
+	case "genKey":
+		key := make([]byte, 32)
+		rand.Read(key)
+		keyStr := base64.URLEncoding.EncodeToString(key)
+
+		fmt.Fprint(w, keyStr)
+
+		const secret = "wp1101-final-0076D053-00771053"
+		hashed := sha256.Sum256([]byte(keyStr + secret))
+		authLock.Lock()
+		authKeys[hex.EncodeToString(hashed[:])] = struct{}{}
+		authLock.Unlock()
 	case "get":
 		leaders, err := backend.GetLeaders()
 		if err != nil {
@@ -33,10 +51,14 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		strength := args.Get("strength")
 		verification := args.Get("verification")
 
-		sum := sha256.Sum256([]byte("wp1101-final-0076D053-00771053" + name + selfPoint + enemyPoint + strength + "reversi3D"))
-		output := hex.EncodeToString(sum[:])
+		authLock.Lock()
+		_, exist := authKeys[verification]
+		if exist {
+			delete(authKeys, verification)
+		}
+		authLock.Unlock()
 
-		if verification != output {
+		if !exist {
 			log.Println("verification not accepted, score disposed")
 			http.Error(w, "verfication failed", http.StatusNotAcceptable)
 			return

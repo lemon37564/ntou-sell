@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"se/server/ai"
+	"sync"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -18,6 +19,7 @@ type request struct {
 
 var server_ai *ai.AI8
 var cache map[request]string = make(map[request]string)
+var cacheLock sync.RWMutex
 
 func ai_move(w http.ResponseWriter, r *http.Request) {
 	path := mux.Vars(r)
@@ -33,7 +35,9 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 		color := args.Get("color")
 		board := args.Get("board")
 
+		cacheLock.RLock()
 		value, exist := cache[request{board, color, str_lv}]
+		cacheLock.RUnlock()
 
 		if exist {
 			// requested but still computing
@@ -41,6 +45,7 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "not done yet", http.StatusBadRequest)
 			} else {
 				log.Println("cache hit, cache length:", len(cache))
+				value += fmt.Sprintf(", time:%v", time.Since(start))
 				fmt.Fprint(w, value)
 			}
 			return
@@ -60,7 +65,9 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 			server_ai = ai.NewAI8(ai.WHITE, level)
 		}
 
+		cacheLock.Lock()
 		cache[request{board, color, str_lv}] = ""
+		cacheLock.Unlock()
 
 		res, detail, err := server_ai.Move(board)
 		if err != nil {
@@ -75,7 +82,9 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 			time.Sleep(time.Millisecond*300 - duration)
 		}
 
-		cache[request{board, color, str_lv}] = fmt.Sprintf("%d%d, value: %s, time: %v", int(y), int(x), detail, duration)
+		cacheLock.Lock()
+		cache[request{board, color, str_lv}] = fmt.Sprintf("%d%d, value: %s", int(y), int(x), detail)
+		cacheLock.Unlock()
 		fmt.Fprintf(w, "%d%d, value: %s, time: %v", int(y), int(x), detail, duration)
 	}
 
