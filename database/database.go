@@ -66,7 +66,7 @@ func createUserTable(db *sql.DB) {
 	logger("user", err)
 
 	// insert one value into user in order to prevent max(uid) = null
-	_, err = db.Exec("INSERT INTO user VALUES(0, \"N/A\", \"N/A\", \"superuser\", 0.0);")
+	_, err = db.Exec("INSERT INTO userDB VALUES(0, \"N/A\", \"N/A\", \"superuser\", 0.0);")
 	logger("insert first user", err)
 }
 
