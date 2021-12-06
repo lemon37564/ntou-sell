@@ -2,13 +2,11 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 	"time"
 
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"github.com/joho/godotenv"
 )
 
 const file = "database.db"
@@ -16,15 +14,11 @@ const file = "database.db"
 var db *sql.DB
 
 func init() {
-	e := godotenv.Load()
-	if e != nil {
-		fmt.Print(e)
-	}
-
+	var err error
 	// retrieve the url
 	dbURL := os.Getenv("DATABASE_URL")
 	// connect to the db
-	db, err := sql.Open("postgres", dbURL)
+	db, err = sql.Open("postgres", dbURL)
 	if err != nil {
 		panic(err)
 	}
