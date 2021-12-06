@@ -1,39 +1,53 @@
 package database
 
 import (
-	"database/sql"
+	"fmt"
 	"log"
 	"os"
 
-	// import go-sqlit3 for the sql driver
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/joho/godotenv"
 )
 
 const file = "database.db"
 
-var DB *sql.DB
+var db *gorm.DB
 
 func init() {
-	_, err := os.Stat(file)
-	if err != nil {
-		log.Println("no database file founded.")
+	e := godotenv.Load()
+	if e != nil {
+		fmt.Print(e)
 	}
 
-	DB, err := sql.Open("sqlite3", file)
+	//透過 Getenv 來讀取 .env
+	username := os.Getenv("db_user")
+	password := os.Getenv("db_pass")
+	dbName := os.Getenv("db_name")
+	dbHost := os.Getenv("db_host")
+
+	//連結 db
+	dbUri := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", dbHost, username, dbName, password)
+	fmt.Println(dbUri)
+
+	//錯誤攔截與建立連接
+	conn, err := gorm.Open("postgres", dbUri)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Print(err)
 	}
 
-	createTables(DB)
+	db = conn
 
-	bidPrepare(DB)
-	cartPrepare(DB)
-	historyPrepare(DB)
-	messagePrepare(DB)
-	orderPrepare(DB)
-	productPrepare(DB)
-	userPrepare(DB)
-	leaderBoardPrepare(DB)
+	createTables(db.DB())
+
+	bidPrepare(db.DB())
+	cartPrepare(db.DB())
+	historyPrepare(db.DB())
+	messagePrepare(db.DB())
+	orderPrepare(db.DB())
+	productPrepare(db.DB())
+	userPrepare(db.DB())
+	leaderBoardPrepare(db.DB())
 
 	TestInsert()
 }
