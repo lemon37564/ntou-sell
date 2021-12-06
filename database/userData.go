@@ -6,7 +6,7 @@ import (
 )
 
 const userTable = `
-CREATE TABLE IF NOT EXISTS user(
+CREATE TABLE IF NOT EXISTS userDB(
 	uid int NOT NULL,
 	account varchar(32) NOT NULL UNIQUE,
 	password_hash varchar(32) NOT NULL,
@@ -41,16 +41,16 @@ func userPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add     = "INSERT INTO user VALUES(?,?,?,?,?);"
-		del     = "DELETE FROM user WHERE uid=? AND password_hash=?;"
-		upName  = "UPDATE user SET name=? WHERE uid=?"
-		upPass  = "UPDATE user SET password_hash=? WHERE uid=?"
-		upEval  = "UPDATE user SET eval=? WHERE account=?"
-		maxID   = "SELECT MAX(uid) FROM user;"
-		login   = "SELECT uid FROM user WHERE account=? AND password_hash=? AND uid>0;"
-		getData = "SELECT * FROM user WHERE account=? AND uid>0;"
-		getUID  = "SELECT uid FROM user WHERE account=? AND uid>0;"
-		getAcnt = "SELECT account FROM user WHERE uid=?;"
+		add     = "INSERT INTO userDB VALUES(?,?,?,?,?);"
+		del     = "DELETE FROM userDB WHERE uid=? AND password_hash=?;"
+		upName  = "UPDATE userDB SET name=? WHERE uid=?"
+		upPass  = "UPDATE userDB SET password_hash=? WHERE uid=?"
+		upEval  = "UPDATE userDB SET eval=? WHERE account=?"
+		maxID   = "SELECT MAX(uid) FROM userDB;"
+		login   = "SELECT uid FROM userDB WHERE account=? AND password_hash=? AND uid>0;"
+		getData = "SELECT * FROM userDB WHERE account=? AND uid>0;"
+		getUID  = "SELECT uid FROM userDB WHERE account=? AND uid>0;"
+		getAcnt = "SELECT account FROM userDB WHERE uid=?;"
 	)
 
 	if userAdd, err = db.Prepare(add); err != nil {
