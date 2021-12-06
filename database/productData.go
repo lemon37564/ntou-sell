@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS product(
 	pd_id int NOT NULL,
 	product_name varchar(64) NOT NULL,
 	price int NOT NULL,
-	description varchar(256),
+	description text,
 	amount int NOT NULL,
 	eval float,
 	seller_uid int NOT NULL,

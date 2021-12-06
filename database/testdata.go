@@ -20,12 +20,12 @@ func RandStringRunes(n int) string {
 func TestInsert() {
 	rand.Seed(time.Now().UnixNano())
 
-	err := AddNewUser(RandStringRunes(6), "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "測試用帳號")
+	err := AddNewUser(RandStringRunes(6), "DinaSXJlIqL7-PJx5S1D0=", "測試用帳號")
 	if err != nil {
 		panic(err)
 	}
 
-	err = AddNewUser(RandStringRunes(6), "DinaSXJlIqL7-PmiEJBJmbhijzeJhSHiqyD5Jx5S1D0=", "除錯人員ABC")
+	err = AddNewUser(RandStringRunes(6), "DinaSjzeJhSHiqyD5Jx5S1D0=", "除錯人員ABC")
 	if err != nil {
 		panic(err)
 	}
