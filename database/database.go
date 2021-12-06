@@ -1,18 +1,18 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
 )
 
 const file = "database.db"
 
-var db *gorm.DB
+var db *sql.DB
 
 func init() {
 	e := godotenv.Load()
@@ -20,34 +20,24 @@ func init() {
 		fmt.Print(e)
 	}
 
-	//透過 Getenv 來讀取 .env
-	username := os.Getenv("db_user")
-	password := os.Getenv("db_pass")
-	dbName := os.Getenv("db_name")
-	dbHost := os.Getenv("db_host")
-
-	//連結 db
-	dbUri := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", dbHost, username, dbName, password)
-	fmt.Println(dbUri)
-
-	//錯誤攔截與建立連接
-	conn, err := gorm.Open("postgres", dbUri)
+	// retrieve the url
+	dbURL := os.Getenv("DATABASE_URL")
+	// connect to the db
+	db, err := sql.Open("postgres", dbURL)
 	if err != nil {
-		fmt.Print(err)
+		panic(err)
 	}
 
-	db = conn
+	createTables(db)
 
-	createTables(db.DB())
-
-	bidPrepare(db.DB())
-	cartPrepare(db.DB())
-	historyPrepare(db.DB())
-	messagePrepare(db.DB())
-	orderPrepare(db.DB())
-	productPrepare(db.DB())
-	userPrepare(db.DB())
-	leaderBoardPrepare(db.DB())
+	bidPrepare(db)
+	cartPrepare(db)
+	historyPrepare(db)
+	messagePrepare(db)
+	orderPrepare(db)
+	productPrepare(db)
+	userPrepare(db)
+	leaderBoardPrepare(db)
 
 	TestInsert()
 }
