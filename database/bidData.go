@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS bid(
 	now_money int NOT NULL,
 	seller_uid int NOT NULL,
 	PRIMARY KEY(pd_id),
-	FOREIGN KEY(seller_uid) REFERENCES user ON DELETE CASCADE,
-	FOREIGN KEY(now_bidder_uid) REFERENCES user ON DELETE CASCADE,
+	FOREIGN KEY(seller_uid) REFERENCES userDB ON DELETE CASCADE,
+	FOREIGN KEY(now_bidder_uid) REFERENCES userDB ON DELETE CASCADE,
 	CHECK (now_money > 0)
 );`
 

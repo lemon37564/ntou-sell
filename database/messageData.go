@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS message(
 	receiver_uid int NOT NULL,
 	text varchar(128) NOT NULL,
 	PRIMARY KEY(message_id),
-	FOREIGN KEY(sender_uid) REFERENCES user ON DELETE CASCADE,
-	FOREIGN KEY(receiver_uid) REFERENCES user ON DELETE CASCADE
+	FOREIGN KEY(sender_uid) REFERENCES userDB ON DELETE CASCADE,
+	FOREIGN KEY(receiver_uid) REFERENCES userDB ON DELETE CASCADE
 );`
 
 // Messages struct contain all message with contactor name
@@ -65,7 +65,7 @@ func messagePrepare(db *sql.DB) {
 			ORDER BY message_id DESC;
 			`
 		maxID   = "SELECT max(message_id) FROM message;"
-		getName = "SELECT name FROM user WHERE uid=? AND uid>0;"
+		getName = "SELECT name FROM userDB WHERE uid=? AND uid>0;"
 	)
 
 	if msgAll, err = db.Prepare(all); err != nil {

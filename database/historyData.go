@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS history(
 	pd_id int NOT NULL,
 	seq int NOT NULL,
 	PRIMARY KEY(uid, pd_id),
-	FOREIGN KEY(uid) REFERENCES user ON DELETE CASCADE
+	FOREIGN KEY(uid) REFERENCES userDB ON DELETE CASCADE
 );`
 
 // History contain product ids

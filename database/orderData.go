@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS orders(
 	state varchar(8),
 	order_date timestamp,
 	PRIMARY KEY(uid, pd_id),
-	FOREIGN KEY(uid) REFERENCES user ON DELETE CASCADE,
+	FOREIGN KEY(uid) REFERENCES userDB ON DELETE CASCADE,
 	FOREIGN KEY(pd_id) REFERENCES product ON DELETE CASCADE,
 	CHECK (amount > 0)
 );`
