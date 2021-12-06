@@ -25,7 +25,7 @@ func TestInsert() {
 		panic(err)
 	}
 
-	err = AddNewUser(RandStringRunes(6), "DinaSjzeJhSHiqyD5Jx5S1D0=", "除錯人員ABC")
+	err = AddNewUser(RandStringRunes(6), "DinaSjzeJhHiqyD5Jx5S1D0=", "除錯人員ABC")
 	if err != nil {
 		panic(err)
 	}
@@ -45,17 +45,17 @@ func TestInsert() {
 		panic(err)
 	}
 
-	_, err = AddProduct("雜牌耳機", 100, "夜市貨", 16, 2, false, time.Now())
+	_, err = AddProduct("雜牌耳機", 100, "夜市貨", 16, 1, false, time.Now())
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = AddProduct("雜牌手錶", 200, "夜市貨", 8, 3, false, time.Now())
+	_, err = AddProduct("雜牌手錶", 200, "夜市貨", 8, 1, false, time.Now())
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = AddProduct("雜牌鞋子", 700, "夜市貨", 12, 1, false, time.Now())
+	_, err = AddProduct("雜牌鞋子", 700, "夜市貨", 12, 2, false, time.Now())
 	if err != nil {
 		panic(err)
 	}
