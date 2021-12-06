@@ -34,6 +34,23 @@ func init() {
 	userPrepare(db)
 	leaderBoardPrepare(db)
 
+	// insert one value into user in order to prevent max(uid) = null
+	_, err = userAdd.Exec(0, "test", "test", "superuser", 0.0)
+	logger("insert first user", err)
+
+	// insert one value into product in order to prevent max(pd_id) = null
+	t, _ := time.Parse("2006-01-02", "2006-01-02")
+	_, err = pdAdd.Exec(0, "test", 1, "test", 1, 0.0, 0, false, t)
+	logger("insert first product", err)
+
+	// insert one value into history in order to prevent max(seq) = null
+	_, err = histAdd.Exec(0, 0, 0)
+	logger("insert first history", err)
+
+	// insert one value into message in order to prevent max(mid) = null
+	_, err = msgAdd.Exec(0, 0, 0, "null")
+	logger("insert first message", err)
+
 	TestInsert()
 }
 
@@ -64,20 +81,11 @@ func createTables(db *sql.DB) {
 func createUserTable(db *sql.DB) {
 	_, err := db.Exec(userTable)
 	logger("user", err)
-
-	// insert one value into user in order to prevent max(uid) = null
-	_, err = userAdd.Exec(0, "test", "test", "superuser", 0.0)
-	logger("insert first user", err)
 }
 
 func createProductTable(db *sql.DB) {
 	_, err := db.Exec(productTable)
 	logger("product", err)
-
-	// insert one value into product in order to prevent max(pd_id) = null
-	t, _ := time.Parse("2006-01-02", "2006-01-02")
-	_, err = pdAdd.Exec(0, "test", 1, "test", 1, 0.0, 0, false, t)
-	logger("insert first product", err)
 }
 
 func createBidTable(db *sql.DB) {
@@ -93,10 +101,6 @@ func createCartTable(db *sql.DB) {
 func createHistoryTable(db *sql.DB) {
 	_, err := db.Exec(historyTable)
 	logger("history", err)
-
-	// insert one value into history in order to prevent max(seq) = null
-	_, err = histAdd.Exec(0, 0, 0)
-	logger("insert first history", err)
 }
 
 func createOrderTable(db *sql.DB) {
@@ -107,10 +111,6 @@ func createOrderTable(db *sql.DB) {
 func createMessageTable(db *sql.DB) {
 	_, err := db.Exec(messageTable)
 	logger("message", err)
-
-	// insert one value into message in order to prevent max(mid) = null
-	_, err = msgAdd.Exec(0, 0, 0, "null")
-	logger("insert first message", err)
 }
 
 func logger(table string, err error) {
