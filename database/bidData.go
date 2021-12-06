@@ -41,7 +41,7 @@ func bidPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add    = "INSERT INTO bid VALUES(?,?,?,?,?);"
+		add    = "INSERT INTO bid VALUES($1,$2,$3,$4,$5);"
 		del    = "DELETE FROM bid WHERE pd_id=?;"
 		won    = "UPDATE product SET price=? WHERE pd_id=?;"
 		upDL   = "UPDATE bid SET deadline=? WHERE pd_id=?;"
