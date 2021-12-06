@@ -55,7 +55,7 @@ func productPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add    = "INSERT INTO product VALUES($1,$2,$3,$4,$5,$6,$7,%8,$9);"
+		add    = "INSERT INTO product VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9);"
 		del    = "DELETE FROM product WHERE seller_uid=$1 AND pd_id=$2;"
 		upName = "UPDATE product SET product_name=$1 WHERE pd_id=$2;"
 		upPrc  = "UPDATE product SET price=$1 WHERE pd_id=$2;"
