@@ -42,12 +42,12 @@ func bidPrepare(db *sql.DB) {
 
 	const (
 		add    = "INSERT INTO bid VALUES($1,$2,$3,$4,$5);"
-		del    = "DELETE FROM bid WHERE pd_id=?;"
-		won    = "UPDATE product SET price=? WHERE pd_id=?;"
-		upDL   = "UPDATE bid SET deadline=? WHERE pd_id=?;"
+		del    = "DELETE FROM bid WHERE pd_id=$1;"
+		won    = "UPDATE product SET price=$1 WHERE pd_id=$2;"
+		upDL   = "UPDATE bid SET deadline=$1 WHERE pd_id=$2;"
 		getAll = "SELECT deadline, now_bidder_uid, now_money, seller_uid FROM bid;"
-		getBid = "SELECT deadline, now_bidder_uid, now_money, seller_uid FROM bid WHERE pd_id=?;"
-		getPd  = "SELECT * FROM bid WHERE pd_id=?;"
+		getBid = "SELECT deadline, now_bidder_uid, now_money, seller_uid FROM bid WHERE pd_id=$1;"
+		getPd  = "SELECT * FROM bid WHERE pd_id=$1;"
 	)
 
 	if bidAdd, err = db.Prepare(add); err != nil {

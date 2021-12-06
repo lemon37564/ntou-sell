@@ -43,12 +43,12 @@ func orderPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add      = "INSERT INTO orders VALUES(?,?,?,?,?);"
-		del      = "DELETE FROM orders WHERE uid=? AND pd_id=?;"
-		upAmt    = "UPDATE orders SET amount=? WHERE uid=? AND pd_id=?;"
-		getAll   = "SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? ORDER BY order_date DESC;"
-		getOrder = "SELECT pd_id, amount, state, order_date FROM orders WHERE uid=? AND pd_id=?;"
-		getPd    = "SELECT product_name, price FROM product WHERE pd_id=? AND pd_id>0;"
+		add      = "INSERT INTO orders VALUES($1,$2,$3,$4,$5);"
+		del      = "DELETE FROM orders WHERE uid=$1 AND pd_id=$2;"
+		upAmt    = "UPDATE orders SET amount=$1 WHERE uid=$2 AND pd_id=$3;"
+		getAll   = "SELECT pd_id, amount, state, order_date FROM orders WHERE uid=$1 ORDER BY order_date DESC;"
+		getOrder = "SELECT pd_id, amount, state, order_date FROM orders WHERE uid=$1 AND pd_id=$2;"
+		getPd    = "SELECT product_name, price FROM product WHERE pd_id=$1 AND pd_id>0;"
 	)
 
 	if ordAdd, err = db.Prepare(add); err != nil {

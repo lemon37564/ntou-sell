@@ -41,16 +41,16 @@ func userPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add     = "INSERT INTO userDB VALUES(?,?,?,?,?);"
-		del     = "DELETE FROM userDB WHERE uid=? AND password_hash=?;"
-		upName  = "UPDATE userDB SET name=? WHERE uid=?"
-		upPass  = "UPDATE userDB SET password_hash=? WHERE uid=?"
-		upEval  = "UPDATE userDB SET eval=? WHERE account=?"
+		add     = "INSERT INTO userDB VALUES($1,$2,$3,$4,$5);"
+		del     = "DELETE FROM userDB WHERE uid=$1 AND password_hash=$2;"
+		upName  = "UPDATE userDB SET name=$1 WHERE uid=$2"
+		upPass  = "UPDATE userDB SET password_hash=$1 WHERE uid=$2"
+		upEval  = "UPDATE userDB SET eval=$1 WHERE account=$2"
 		maxID   = "SELECT MAX(uid) FROM userDB;"
-		login   = "SELECT uid FROM userDB WHERE account=? AND password_hash=? AND uid>0;"
-		getData = "SELECT * FROM userDB WHERE account=? AND uid>0;"
-		getUID  = "SELECT uid FROM userDB WHERE account=? AND uid>0;"
-		getAcnt = "SELECT account FROM userDB WHERE uid=?;"
+		login   = "SELECT uid FROM userDB WHERE account=$1 AND password_hash=$2 AND uid>0;"
+		getData = "SELECT * FROM userDB WHERE account=$1 AND uid>0;"
+		getUID  = "SELECT uid FROM userDB WHERE account=$1 AND uid>0;"
+		getAcnt = "SELECT account FROM userDB WHERE uid=$1;"
 	)
 
 	if userAdd, err = db.Prepare(add); err != nil {

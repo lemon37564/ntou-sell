@@ -51,21 +51,21 @@ func messagePrepare(db *sql.DB) {
 
 	const (
 		all    = "SELECT * FROM message;"
-		add    = "INSERT INTO message VALUES(?,?,?,?);"
+		add    = "INSERT INTO message VALUES($1,$2,$3,$4);"
 		getOld = `
 			SELECT text, sender_uid
 			FROM message
-			WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
+			WHERE (sender_uid=$1 AND receiver_uid=$2) OR (receiver_uid=$3 AND sender_uid=$4)
 			ORDER BY message_id ASC;
 			`
 		getNew = `
 			SELECT text, sender_uid
 			FROM message
-			WHERE (sender_uid=? AND receiver_uid=?) OR (receiver_uid=? AND sender_uid=?)
+			WHERE (sender_uid=$1 AND receiver_uid=$2) OR (receiver_uid=$3 AND sender_uid=$4)
 			ORDER BY message_id DESC;
 			`
 		maxID   = "SELECT max(message_id) FROM message;"
-		getName = "SELECT name FROM userDB WHERE uid=? AND uid>0;"
+		getName = "SELECT name FROM userDB WHERE uid=$1 AND uid>0;"
 	)
 
 	if msgAll, err = db.Prepare(all); err != nil {

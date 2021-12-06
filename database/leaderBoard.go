@@ -33,7 +33,7 @@ func leaderBoardPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add = "INSERT INTO leaderboard VALUES(?,?,?,?,?);"
+		add = "INSERT INTO leaderboard VALUES($1,$2,$3,$4,$5);"
 		get = "SELECT * FROM leaderboard;"
 	)
 

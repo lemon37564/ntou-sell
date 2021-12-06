@@ -34,13 +34,13 @@ func historyPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add    = "INSERT INTO history VALUES(?,?,?);"
-		del    = "DELETE FROM history where uid=? AND pd_id=?;"
-		delAll = "DELETE FROM history WHERE uid=?;"
+		add    = "INSERT INTO history VALUES($1,$2,$3);"
+		del    = "DELETE FROM history where uid=$1 AND pd_id=$2;"
+		delAll = "DELETE FROM history WHERE uid=$1;"
 		maxSeq = "SELECT max(seq) FROM history;"
-		getNew = "SELECT pd_id FROM history WHERE uid=? ORDER BY seq DESC LIMIT ?;"
-		getOld = "SELECT pd_id FROM history WHERE uid=? ORDER BY seq ASC LIMIT ?;"
-		getPd  = "SELECT * FROM product WHERE pd_id=?;"
+		getNew = "SELECT pd_id FROM history WHERE uid=$1 ORDER BY seq DESC LIMIT $2;"
+		getOld = "SELECT pd_id FROM history WHERE uid=$1 ORDER BY seq ASC LIMIT $2;"
+		getPd  = "SELECT * FROM product WHERE pd_id=$1;"
 	)
 
 	if histAdd, err = db.Prepare(add); err != nil {

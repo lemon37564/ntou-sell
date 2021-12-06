@@ -34,10 +34,10 @@ func cartPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add   = "INSERT INTO cart VALUES(?,?,?);"
-		del   = "DELETE FROM cart WHERE uid=? AND pd_id=?;"
-		upAmt = "UPDATE cart SET amount=? WHERE uid=? AND pd_id=?;"
-		get   = "SELECT * FROM product WHERE pd_id IN (SELECT pd_id FROM cart WHERE uid=?);"
+		add   = "INSERT INTO cart VALUES($1,$2,$3);"
+		del   = "DELETE FROM cart WHERE uid=$1 AND pd_id=$2;"
+		upAmt = "UPDATE cart SET amount=$1 WHERE uid=$2 AND pd_id=$3;"
+		get   = "SELECT * FROM product WHERE pd_id IN (SELECT pd_id FROM cart WHERE uid=$1);"
 	)
 
 	if cartAdd, err = db.Prepare(add); err != nil {

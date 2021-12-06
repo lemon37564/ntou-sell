@@ -55,24 +55,24 @@ func productPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add    = "INSERT INTO product VALUES(?,?,?,?,?,?,?,?,?);"
-		del    = "DELETE FROM product WHERE seller_uid=? AND pd_id=?;"
-		upName = "UPDATE product SET product_name=? WHERE pd_id=?;"
-		upPrc  = "UPDATE product SET price=? WHERE pd_id=?;"
-		upAmt  = "UPDATE product SET amount=? WHERE pd_id=?;"
-		upDes  = "UPDATE product SET description=? WHERE pd_id=?;"
-		upEval = "UPDATE product SET eval=? WHERE pd_id=?;"
+		add    = "INSERT INTO product VALUES($1,$2,$3,$4,$5,$6,$7,%8,$9);"
+		del    = "DELETE FROM product WHERE seller_uid=$1 AND pd_id=$2;"
+		upName = "UPDATE product SET product_name=$1 WHERE pd_id=$2;"
+		upPrc  = "UPDATE product SET price=$1 WHERE pd_id=$2;"
+		upAmt  = "UPDATE product SET amount=$1 WHERE pd_id=$2;"
+		upDes  = "UPDATE product SET description=$1 WHERE pd_id=$2;"
+		upEval = "UPDATE product SET eval=$1 WHERE pd_id=$2;"
 		maxPID = "SELECT MAX(pd_id) FROM product;"
-		newest = "SELECT * FROM product ORDER BY pd_id DESC LIMIT ?;"
-		search = "SELECT * FROM product WHERE product_name LIKE ? AND pd_id>0 ORDER BY pd_id DESC;"
+		newest = "SELECT * FROM product ORDER BY pd_id DESC LIMIT $1;"
+		search = "SELECT * FROM product WHERE product_name LIKE $1 AND pd_id>0 ORDER BY pd_id DESC;"
 		filter = `
 			SELECT *
 			FROM product
-			WHERE product_name LIKE ? AND price>=? AND price<=? AND eval>=? AND pd_id>0
+			WHERE product_name LIKE $1 AND price>=$2 AND price<=$3 AND eval>=$4 AND pd_id>0
 			ORDER BY pd_id DESC;
 			`
-		getInfo = "SELECT * FROM product WHERE pd_id=? AND pd_id>0;"
-		userPd  = "SELECT * FROM product WHERE seller_uid=? AND pd_id>0;"
+		getInfo = "SELECT * FROM product WHERE pd_id=$1 AND pd_id>0;"
+		userPd  = "SELECT * FROM product WHERE seller_uid=$1 AND pd_id>0;"
 	)
 
 	if pdAdd, err = db.Prepare(add); err != nil {
