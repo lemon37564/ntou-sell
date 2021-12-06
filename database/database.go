@@ -36,20 +36,16 @@ func init() {
 
 	// insert one value into user in order to prevent max(uid) = null
 	_, err = userAdd.Exec(0, "test", "test", "superuser", 0.0)
-	logger("insert first user", err)
 
 	// insert one value into product in order to prevent max(pd_id) = null
 	t, _ := time.Parse("2006-01-02", "2006-01-02")
 	_, err = pdAdd.Exec(0, "test", 1, "test", 1, 0.0, 0, false, t)
-	logger("insert first product", err)
 
 	// insert one value into history in order to prevent max(seq) = null
 	_, err = histAdd.Exec(0, 0, 0)
-	logger("insert first history", err)
 
 	// insert one value into message in order to prevent max(mid) = null
 	_, err = msgAdd.Exec(0, 0, 0, "null")
-	logger("insert first message", err)
 
 	TestInsert()
 }
