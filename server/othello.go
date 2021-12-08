@@ -5,10 +5,13 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"se/server/backend"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -17,6 +20,13 @@ import (
 
 var authKeys = make(map[string]time.Time)
 var authLock sync.RWMutex
+
+type player struct {
+	Name       string `json:"name"`
+	SelfPoint  string `json:"self_point"`
+	EnemyPoint string `json:"enemy_point"`
+	Strength   string `json:"strength"`
+}
 
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 
@@ -47,11 +57,29 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, leaders)
 		}
 	case "add":
-		name := args.Get("name")
-		selfPoint := args.Get("self_point")
-		enemyPoint := args.Get("enemy_point")
-		strength := args.Get("strength")
+		value := args.Get("v")
 		verification := args.Get("verification")
+
+		// 123-45-31-90... -> ["123", "45", "31", "90", ...]
+		valueArr := strings.Split(value, "-")
+		var byteArr []byte
+		for v := range valueArr {
+			vByte, err := strconv.Atoi(valueArr[v])
+			if err != nil {
+				http.Error(w, "failed", http.StatusBadRequest)
+				return
+			}
+			byteArr = append(byteArr, byte(vByte))
+		}
+		// [123, 45, 31, 90, ...]
+
+		p := player{}
+		err := json.Unmarshal(byteArr, &p)
+		if err != nil {
+			http.Error(w, "failed", http.StatusBadRequest)
+			return
+		}
+		log.Println(p)
 
 		authLock.Lock()
 		cleanExpiredKeys()
@@ -68,7 +96,7 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Println("verification accepted, score have been uploaded")
 
-		_, err := backend.AddLeader(name, selfPoint, enemyPoint, strength)
+		_, err = backend.AddLeader(p.Name, p.SelfPoint, p.EnemyPoint, p.Strength)
 		if err == nil {
 			w.WriteHeader(http.StatusOK)
 			fmt.Fprint(w, "ok")
