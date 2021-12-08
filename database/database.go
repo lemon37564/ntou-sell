@@ -23,6 +23,8 @@ func init() {
 		panic(err)
 	}
 
+	db.Exec("DROP DATABASE userDB; DROP DATABASE product")
+
 	createTables(db)
 
 	bidPrepare(db)
