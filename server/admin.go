@@ -35,7 +35,7 @@ func adminDB(w http.ResponseWriter, r *http.Request) {
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
 				} else {
-					fmt.Fprint(w, "ok", err)
+					fmt.Fprint(w, "ok")
 				}
 			} else {
 				http.Error(w, "failed", http.StatusUnauthorized)
