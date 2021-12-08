@@ -23,7 +23,8 @@ func init() {
 		panic(err)
 	}
 
-	db.Exec("DROP TABLE userDB; DROP TABLE product;")
+	_, err = db.Exec("DROP TABLE userDB; DROP TABLE product;")
+	log.Println(err)
 
 	createTables(db)
 
