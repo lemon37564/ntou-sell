@@ -8,9 +8,9 @@ import (
 const userTable = `
 CREATE TABLE IF NOT EXISTS userDB(
 	uid int NOT NULL,
-	account varchar(32) NOT NULL UNIQUE,
-	password_hash varchar(64) NOT NULL,
-	name varchar(32) NOT NULL,
+	account varchar(128) NOT NULL UNIQUE,
+	password_hash varchar(128) NOT NULL,
+	name varchar(128) NOT NULL,
 	eval float,
 	PRIMARY KEY(uid)
 );`
