@@ -18,6 +18,8 @@ func RandStringRunes(n int) string {
 
 // TestInsert tests AddNewUser and AddNewProduct
 func TestInsert() {
+	return
+
 	rand.Seed(time.Now().UnixNano())
 
 	err := AddNewUser(RandStringRunes(6), "DinaSXJlIqL7-PJx5S1D0=", "測試用帳號")

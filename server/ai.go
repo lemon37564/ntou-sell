@@ -47,6 +47,10 @@ func ai_move(w http.ResponseWriter, r *http.Request) {
 				log.Println("cache hit, cache length:", len(cache))
 				value += fmt.Sprintf(", time:%v", time.Since(start))
 				fmt.Fprint(w, value)
+
+				if len(cache) > 10000 {
+					cache = make(map[request]string)
+				}
 			}
 			return
 		}
