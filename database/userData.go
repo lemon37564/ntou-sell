@@ -9,7 +9,7 @@ const userTable = `
 CREATE TABLE IF NOT EXISTS userDB(
 	uid int NOT NULL,
 	account varchar(32) NOT NULL UNIQUE,
-	password_hash varchar(32) NOT NULL,
+	password_hash varchar(64) NOT NULL,
 	name varchar(32) NOT NULL,
 	eval float,
 	PRIMARY KEY(uid)
