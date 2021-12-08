@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS bid(
 	pd_id int NOT NULL,
 	deadline timestamp NOT NULL,
 	now_bidder_uid int NOT NULL,
-	now_money int NOT NULL,
+	now_money bigint NOT NULL,
 	seller_uid int NOT NULL,
 	PRIMARY KEY(pd_id),
 	FOREIGN KEY(seller_uid) REFERENCES userDB ON DELETE CASCADE,

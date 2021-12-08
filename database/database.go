@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -22,6 +23,9 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	_, err = db.Exec("DROP TABLE cart; DROP TABLE orders; DROP TABLE product;")
+	fmt.Println(err)
 
 	createTables(db)
 
