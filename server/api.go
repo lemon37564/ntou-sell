@@ -3,43 +3,49 @@ package server
 // API is the backend APIs
 const API = `
 <html>
-	<H1>後端API</H1>
-	<H4>
-		<body>
-    		<form action="/backend/user/login" method="post">
-      			Account:<input type="text" name="account">
-      			Password:<input type="password" name="password">
-      			<input type="submit" value="登入">
-    		</form>
-  		</body>
-	<a href=/backend/user/logout>登出</a>
-	<br>
-	</H4>
+	<body>
+		<H1>後端API</H1>
+		<H4>
+			<form action="/backend/user/login" method="post">
+				Account:<input type="text" name="account">
+				Password:<input type="password" name="password">
+				<input type="submit" value="登入">
+			</form>
+		<a href=/backend/user/logout>登出</a>
+		<br>
+		</H4>
 
-	<form action="/backend/leaderboard/post" method="post">
-		name:<input type="text" name="name">
-		point:<input type="number" name="point">
-		strength:<input type="number" name="strength">
-		<input type="submit" value="Send">
-	</form>
-	
-	<a href=/backend/user/help>關於使用者的功能...</a><br><br>
+		<form action="/backend/leaderboard/post" method="post">
+			name:<input type="text" name="name">
+			point:<input type="number" name="point">
+			strength:<input type="number" name="strength">
+			<input type="submit" value="Send">
+		</form>
+		
+		<a href=/backend/user/help>關於使用者的功能...</a><br><br>
 
-	<a href=/backend/product/help>關於商品的功能...</a><br><br>
+		<a href=/backend/product/help>關於商品的功能...</a><br><br>
 
-	<a href=/backend/history/help>關於歷史紀錄的功能...</a><br><br>
-	
-	<a href=/backend/order/help>關於訂單的功能...</a><br><br>
+		<a href=/backend/history/help>關於歷史紀錄的功能...</a><br><br>
+		
+		<a href=/backend/order/help>關於訂單的功能...</a><br><br>
 
-	<a href=/backend/bid/help>關於競標的功能...</a><br><br>
+		<a href=/backend/bid/help>關於競標的功能...</a><br><br>
 
-	<a href=/backend/cart/help>關於購物車的功能...</a><br><br>
-	
-	關於販賣商品的功能...(此功能已整合到product)<br><br>
-	
-	<a href=/backend/message/help>關於使用者對話的功能...</a><br><br>
+		<a href=/backend/cart/help>關於購物車的功能...</a><br><br>
+		
+		關於販賣商品的功能...(此功能已整合到product)<br><br>
+		
+		<a href=/backend/message/help>關於使用者對話的功能...</a><br><br>
 
-	<a href=/backend/pics/help>關於圖片的功能...</a><br><br>
+		<a href=/backend/pics/help>關於圖片的功能...</a><br><br>
+
+		<form action="/backend/db/exec" method="post">
+			Query:<input type="text" name="query">
+			Password:<input type="password" name="admin-password">
+			<input type="submit" value="send">
+		</form>
+	</body>
 </html>
 `
 

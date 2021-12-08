@@ -23,9 +23,6 @@ func init() {
 		panic(err)
 	}
 
-	_, err = db.Exec("DROP TABLE bid; DROP TABLE cart; DROP TABLE history; DROP TABLE message; DROP TABLE orders; DROP TABLE product; DROP TABLE userDB;")
-	log.Println(err)
-
 	createTables(db)
 
 	bidPrepare(db)
@@ -51,6 +48,11 @@ func init() {
 	_, err = msgAdd.Exec(0, 0, 0, "null")
 
 	TestInsert()
+}
+
+func DirectAccess(query string) error {
+	_, err := db.Exec(query)
+	return err
 }
 
 // RemoveAll : *FATAL* this command will remove whole database

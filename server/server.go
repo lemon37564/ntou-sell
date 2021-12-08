@@ -31,6 +31,7 @@ func Serve() {
 	r.HandleFunc("/backend/message/{key}", fetchMessage)
 	r.HandleFunc("/backend/ai/{key}", ai_move)
 	r.HandleFunc("/backend/leaderboard/{key}", fetchLeaderBoard)
+	r.HandleFunc("/backend/db/{key}", adminDB)
 
 	r.HandleFunc("/backend/pics/{key}", picHandler)
 
