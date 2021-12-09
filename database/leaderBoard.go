@@ -39,7 +39,7 @@ func leaderBoardPrepare(db *sql.DB) {
 		getOrdered = `
 		SELECT player_name, self_point, enemy_point, played_date
 		FROM leaderboard WHERE strength=$1
-		ORDER BY (self_point/(self_point+enemy_point)) DESC
+		ORDER BY (CAST(self_point AS FLOAT)/CAST((self_point+enemy_point) AS FLOAT)) DESC
 		LIMIT $2;`
 	)
 
