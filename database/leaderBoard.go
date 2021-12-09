@@ -36,7 +36,7 @@ func leaderBoardPrepare(db *sql.DB) {
 	const (
 		add        = "INSERT INTO leaderboard VALUES($1,$2,$3,$4,$5);"
 		getRaw     = "SELECT * FROM leaderboard;"
-		getOrdered = "SELECT player_name, self_point, enemy_point, game_date FROM leaderboard WHERE strength=$1 ORDER BY (self_point/(self_point+enemy_point)) DESC LIMIT $2;"
+		getOrdered = "SELECT player_name, self_point, enemy_point, played_date FROM leaderboard WHERE strength=$1 ORDER BY (self_point/(self_point+enemy_point)) DESC LIMIT $2;"
 	)
 
 	if leadAdd, err = db.Prepare(add); err != nil {
