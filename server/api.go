@@ -41,7 +41,7 @@ const API = `
 		<a href=/backend/pics/help>關於圖片的功能...</a><br><br>
 
 		<form action="/backend/db/exec" method="post">
-			Query:<input type="text" name="query">
+			Query:<textarea rows="40" cols="10" name="query"></textarea>
 			Password:<input type="password" name="admin-password">
 			<input type="submit" value="send">
 		</form>
