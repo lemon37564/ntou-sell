@@ -59,12 +59,14 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 	case "get":
 		strength := args.Get("strength")
 		amount := args.Get("amount")
+		t := time.Now()
 		leaders, err := backend.GetLeadersOrdered(strength, amount)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "error", http.StatusInternalServerError)
 		} else {
 			fmt.Fprint(w, leaders)
+			log.Printf("query spent: %v\n", time.Since(t))
 		}
 	case "add":
 		value := args.Get("v")
