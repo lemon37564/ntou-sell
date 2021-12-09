@@ -61,6 +61,7 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		amount := args.Get("amount")
 		leaders, err := backend.GetLeadersOrdered(strength, amount)
 		if err != nil {
+			log.Println(err)
 			http.Error(w, "error", http.StatusInternalServerError)
 		} else {
 			fmt.Fprint(w, leaders)
