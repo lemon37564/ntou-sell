@@ -31,8 +31,27 @@ func AddLeader(name string, selfPoint string, enemyPoint string, str string) (st
 	return "", nil
 }
 
-func GetLeaders() (string, error) {
-	pd := database.GetLeader()
+func GetLeadersRaw() (string, error) {
+	pd := database.GetLeaderRaw()
+	str, err := json.Marshal(pd)
+	if err != nil {
+		return "failed", err
+	}
+	return string(str), nil
+}
+
+func GetLeadersOrdered(strength string, limit string) (string, error) {
+	strengthInt, err := strconv.Atoi(strength)
+	if err != nil {
+		return "cannot convert " + strength + " into integer", err
+	}
+
+	limitInt, err := strconv.Atoi(limit)
+	if err != nil {
+		return "cannot convert " + limit + " into integer", err
+	}
+
+	pd := database.GetLeaderOrdered(strengthInt, limitInt)
 	str, err := json.Marshal(pd)
 	if err != nil {
 		return "failed", err

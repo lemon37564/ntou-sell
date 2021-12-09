@@ -49,8 +49,17 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		cleanExpiredKeys()
 		authKeys[hex.EncodeToString(hashed[:])] = time.Now()
 		authLock.Unlock()
+	case "getRaw":
+		leaders, err := backend.GetLeadersRaw()
+		if err != nil {
+			http.Error(w, "error", http.StatusInternalServerError)
+		} else {
+			fmt.Fprint(w, leaders)
+		}
 	case "get":
-		leaders, err := backend.GetLeaders()
+		strength := args.Get("strength")
+		amount := args.Get("amount")
+		leaders, err := backend.GetLeadersOrdered(strength, amount)
 		if err != nil {
 			http.Error(w, "error", http.StatusInternalServerError)
 		} else {

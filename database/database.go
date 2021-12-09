@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 	"os"
 	"time"
@@ -50,9 +51,40 @@ func init() {
 	TestInsert()
 }
 
-func DirectAccess(query string) error {
-	_, err := db.Exec(query)
-	return err
+func DirectAccess(query string) (string, error) {
+	rows, err := db.Query(query)
+	if err != nil {
+		return "", err
+	}
+	cols, err := rows.Columns()
+	if err != nil {
+		return "", err
+	}
+	// we"ll want to end up with a list of name->value maps, a la JSON
+	// surely we know how many rows we got but can"t find it now
+	allgeneric := make([]map[string]interface{}, 0)
+	// we"ll need to pass an interface to sql.Row.Scan
+	colvals := make([]interface{}, len(cols))
+	for rows.Next() {
+		colassoc := make(map[string]interface{}, len(cols))
+		// values we"ll be passing will be pointers, themselves to interfaces
+		for i := range colvals {
+			colvals[i] = new(interface{})
+		}
+		if err := rows.Scan(colvals...); err != nil {
+			return "", err
+		}
+		for i, col := range cols {
+			colassoc[col] = *colvals[i].(*interface{})
+		}
+		allgeneric = append(allgeneric, colassoc)
+	}
+	rows.Close()
+	j, err := json.Marshal(allgeneric)
+	if err != nil {
+		return "", err
+	}
+	return string(j), nil
 }
 
 // RemoveAll : *FATAL* this command will remove whole database

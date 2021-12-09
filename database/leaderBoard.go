@@ -25,23 +25,29 @@ type LeaderBoard struct {
 }
 
 var (
-	leadAdd *sql.Stmt
-	leadGet *sql.Stmt
+	leadAdd        *sql.Stmt
+	leadGetRaw     *sql.Stmt
+	leadGetOrdered *sql.Stmt
 )
 
 func leaderBoardPrepare(db *sql.DB) {
 	var err error
 
 	const (
-		add = "INSERT INTO leaderboard VALUES($1,$2,$3,$4,$5);"
-		get = "SELECT * FROM leaderboard;"
+		add        = "INSERT INTO leaderboard VALUES($1,$2,$3,$4,$5);"
+		getRaw     = "SELECT * FROM leaderboard;"
+		getOrdered = "SELECT player_name, self_point, enemy_point, game_date FROM leaderboard WHERE strength=$1 ORDER BY (self_point/(self_point+enemy_point)) DESC LIMIT $2;"
 	)
 
 	if leadAdd, err = db.Prepare(add); err != nil {
 		panic(err)
 	}
 
-	if leadGet, err = db.Prepare(get); err != nil {
+	if leadGetRaw, err = db.Prepare(getRaw); err != nil {
+		panic(err)
+	}
+
+	if leadGetOrdered, err = db.Prepare(getOrdered); err != nil {
 		panic(err)
 	}
 }
@@ -56,7 +62,7 @@ func AddLeader(name string, selfPoint int, enemyPoint int, str int, date time.Ti
 	return err
 }
 
-func GetLeader() (all []LeaderBoard) {
+func GetLeaderRaw() (all []LeaderBoard) {
 	var (
 		rows       *sql.Rows
 		err        error
@@ -68,7 +74,7 @@ func GetLeader() (all []LeaderBoard) {
 	)
 	all = make([]LeaderBoard, 0)
 
-	rows, err = leadGet.Query()
+	rows, err = leadGetRaw.Query()
 
 	if err != nil {
 		log.Println(err)
@@ -77,6 +83,37 @@ func GetLeader() (all []LeaderBoard) {
 
 	for rows.Next() {
 		err = rows.Scan(&name, &selfPoint, &enemyPoint, &strength, &date)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+
+		all = append(all, LeaderBoard{Name: name, SelfPoint: selfPoint, EnemyPoint: enemyPoint, Strength: strength, GameDate: date})
+	}
+	rows.Close()
+
+	return
+}
+
+func GetLeaderOrdered(strength int, limit int) (all []LeaderBoard) {
+	var (
+		rows       *sql.Rows
+		err        error
+		name       string
+		selfPoint  int
+		enemyPoint int
+		date       time.Time
+	)
+	all = make([]LeaderBoard, 0)
+
+	rows, err = leadGetOrdered.Query(strength, limit)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	for rows.Next() {
+		err = rows.Scan(&name, &selfPoint, &enemyPoint, &date)
 		if err != nil {
 			log.Println(err)
 			return

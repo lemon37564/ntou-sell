@@ -31,11 +31,11 @@ func adminDB(w http.ResponseWriter, r *http.Request) {
 			password := r.FormValue("admin-password")
 
 			if sha512Hash(password) == "yqCijvyNB0TPJR45gSryOk2kgh3nYDCfSQovcZcnJ-36yFudgjCBLY4Rb-26Jyexd9F5vV9Ws93D1pd-cs-c7g==" {
-				err := database.DirectAccess(query)
+				res, err := database.DirectAccess(query)
 				if err != nil {
 					http.Error(w, err.Error(), http.StatusBadRequest)
 				} else {
-					fmt.Fprint(w, "ok")
+					fmt.Fprint(w, res)
 				}
 			} else {
 				http.Error(w, "failed", http.StatusUnauthorized)
