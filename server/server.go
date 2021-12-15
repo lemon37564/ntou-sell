@@ -29,7 +29,6 @@ func Serve() {
 	r.HandleFunc("/backend/product/{key}", fetchProduct)
 	r.HandleFunc("/backend/user/{key}", fetchUser)
 	r.HandleFunc("/backend/message/{key}", fetchMessage)
-	r.HandleFunc("/backend/ai/{key}", ai_move)
 	r.HandleFunc("/backend/leaderboard/{key}", fetchLeaderBoard)
 	r.HandleFunc("/backend/db/{key}", adminDB)
 

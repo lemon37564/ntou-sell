@@ -41,10 +41,14 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		rand.Read(key)
 		keyStr := base64.URLEncoding.EncodeToString(key)
 
+		selfPoint := args.Get("self")
+		enemyPoint := args.Get("enemy")
+		strength := args.Get("str")
+
 		fmt.Fprint(w, keyStr)
 
 		const secret = "wp1101-final-0076D053-00771053"
-		hashed := sha256.Sum256([]byte(keyStr + secret))
+		hashed := sha256.Sum256([]byte(keyStr + secret + ";" + selfPoint + ";" + enemyPoint + ";" + strength))
 		authLock.Lock()
 		cleanExpiredKeys()
 		authKeys[hex.EncodeToString(hashed[:])] = time.Now()
