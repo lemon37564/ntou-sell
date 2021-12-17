@@ -116,7 +116,7 @@ func GetLeaderOrdered(strength int, limit int) (all []LeaderBoard) {
 		date       time.Time
 	)
 
-	if !needUpdate[strength] || time.Since(lastUpdate) < TIMEOUT {
+	if !needUpdate[strength] && time.Since(lastUpdate) < TIMEOUT {
 		return cache[strength]
 	}
 
