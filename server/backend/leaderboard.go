@@ -1,14 +1,11 @@
 package backend
 
 import (
+	"encoding/json"
 	"se/database"
 	"strconv"
 	"time"
-
-	jsoniter "github.com/json-iterator/go"
 )
-
-var jsonIter = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func AddLeader(name string, selfPoint string, enemyPoint string, str string) (string, error) {
 	selfPointInt, err := strconv.Atoi(selfPoint)
@@ -36,7 +33,7 @@ func AddLeader(name string, selfPoint string, enemyPoint string, str string) (st
 
 func GetLeadersRaw() (string, error) {
 	pd := database.GetLeaderRaw()
-	str, err := jsonIter.Marshal(pd)
+	str, err := json.Marshal(pd)
 	if err != nil {
 		return "failed", err
 	}
@@ -55,7 +52,7 @@ func GetLeadersOrdered(strength string, limit string) (string, error) {
 	}
 
 	pd := database.GetLeaderOrdered(strengthInt, limitInt)
-	str, err := jsonIter.Marshal(pd)
+	str, err := json.Marshal(pd)
 	if err != nil {
 		return "failed", err
 	}
