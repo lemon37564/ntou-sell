@@ -24,10 +24,16 @@ type LeaderBoard struct {
 	GameDate   time.Time `json:"game_date"`
 }
 
+const TIMEOUT = time.Second * 5
+
 var (
 	leadAdd        *sql.Stmt
 	leadGetRaw     *sql.Stmt
 	leadGetOrdered *sql.Stmt
+
+	cache      [3][]LeaderBoard // [easy, medium, hard]
+	lastUpdate time.Time
+	needUpdate [3]bool = [3]bool{true, true, true}
 )
 
 func leaderBoardPrepare(db *sql.DB) {
@@ -62,6 +68,7 @@ func AddLeader(name string, selfPoint int, enemyPoint int, str int, date time.Ti
 		log.Println(err)
 		return err
 	}
+	needUpdate[str] = true
 
 	return err
 }
@@ -108,6 +115,11 @@ func GetLeaderOrdered(strength int, limit int) (all []LeaderBoard) {
 		enemyPoint int
 		date       time.Time
 	)
+
+	if !needUpdate[strength] || time.Since(lastUpdate) < TIMEOUT {
+		return cache[strength]
+	}
+
 	all = make([]LeaderBoard, 0)
 
 	rows, err = leadGetOrdered.Query(strength, limit)
@@ -126,6 +138,10 @@ func GetLeaderOrdered(strength int, limit int) (all []LeaderBoard) {
 		all = append(all, LeaderBoard{Name: name, SelfPoint: selfPoint, EnemyPoint: enemyPoint, Strength: strength, GameDate: date})
 	}
 	rows.Close()
+
+	lastUpdate = time.Now()
+	cache[strength] = all
+	needUpdate[strength] = false
 
 	return
 }
