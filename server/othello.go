@@ -100,13 +100,13 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 
 		authLock.Lock()
 		cleanExpiredKeys()
-		_, exist := authKeys[verification]
+		t, exist := authKeys[verification]
 		if exist {
 			delete(authKeys, verification)
 		}
 		authLock.Unlock()
 
-		if !exist {
+		if !exist || time.Since(t) > 5 * time.Second {
 			log.Println("verification not accepted, score disposed")
 			http.Error(w, "verfication failed", http.StatusNotAcceptable)
 			return
