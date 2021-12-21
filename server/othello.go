@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"net/http"
 	"se/server/backend"
 	"strconv"
@@ -47,7 +48,7 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Fprint(w, keyStr)
 
-		const secret = "wp1101-final-0076D053-00771053"
+		secret := os.Getenv("SECRET_SALT_KEY")
 		hashed := sha256.Sum256([]byte(keyStr + secret + ";" + selfPoint + ";" + enemyPoint + ";" + strength))
 		authLock.Lock()
 		cleanExpiredKeys()
