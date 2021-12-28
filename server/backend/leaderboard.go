@@ -2,6 +2,7 @@ package backend
 
 import (
 	"encoding/json"
+	"errors"
 	"se/database"
 	"strconv"
 	"time"
@@ -21,6 +22,13 @@ func AddLeader(name string, selfPoint string, enemyPoint string, str string) (st
 	strengthInt, err := strconv.Atoi(str)
 	if err != nil {
 		return "cannot conver " + str + " into integer", err
+	}
+
+	// if cheat
+	sum := selfPointInt + enemyPointInt
+	// it is impossible that someone < 0 or sum > 64 or sum < 10
+	if selfPointInt < 0 || enemyPointInt < 0 || selfPointInt > 64 || enemyPointInt > 64 || sum > 64 || sum < 10 {
+		return "failed", errors.New("not accepted")
 	}
 
 	err = database.AddLeader(name, selfPointInt, enemyPointInt, strengthInt, time.Now())
@@ -49,6 +57,10 @@ func GetLeadersOrdered(strength string, limit string) (string, error) {
 	limitInt, err := strconv.Atoi(limit)
 	if err != nil {
 		return "cannot convert " + limit + " into integer", err
+	}
+
+	if limitInt > 100 {
+		limitInt = 100
 	}
 
 	pd := database.GetLeaderOrdered(strengthInt, limitInt)
