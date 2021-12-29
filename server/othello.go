@@ -74,8 +74,8 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 			log.Printf("query spent: %v\n", time.Since(t))
 		}
 	case "add":
-		if r.Header.Get("referer") != "https://lemon37564.github.io/wp1101-final" {
-			log.Println("referer:", r.Header.Get("referer"))
+		if r.Header.Get("referer") != "https://lemon37564.github.io/" {
+			log.Println("referer not accepted:", r.Header.Get("referer"))
 			http.Error(w, "error", http.StatusForbidden)
 			return
 		}
