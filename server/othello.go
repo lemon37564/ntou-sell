@@ -8,8 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 	"net/http"
+	"os"
 	"se/server/backend"
 	"strconv"
 	"strings"
@@ -74,6 +74,12 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 			log.Printf("query spent: %v\n", time.Since(t))
 		}
 	case "add":
+		if r.Header.Get("referer") != "https://lemon37564.github.io/wp1101-final" {
+			log.Println("referer:", r.Header.Get("referer"))
+			http.Error(w, "error", http.StatusForbidden)
+			return
+		}
+
 		value := args.Get("v")
 		verification := args.Get("verification")
 
@@ -106,7 +112,7 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		}
 		authLock.Unlock()
 
-		if !exist || time.Since(t) > 5 * time.Second {
+		if !exist || time.Since(t) > 5*time.Second {
 			log.Println("verification not accepted, score disposed")
 			http.Error(w, "verfication failed", http.StatusNotAcceptable)
 			return
