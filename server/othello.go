@@ -5,7 +5,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -20,13 +19,6 @@ import (
 
 var authKeys = make(map[string]authData)
 var authLock sync.RWMutex
-
-type player struct {
-	Name       string `json:"name"`
-	SelfPoint  string `json:"self_point"`
-	EnemyPoint string `json:"enemy_point"`
-	Strength   string `json:"strength"`
-}
 
 type authData struct {
 	expiredTime time.Time
@@ -91,25 +83,15 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		value := args.Get("v")
+		name := args.Get("name")
 		verification := args.Get("verification")
 
-		// 123-45-31-90... -> ["123", "45", "31", "90", ...]
-		valueDecode, err := url.QueryUnescape(value)
+		nameDecode, err := url.QueryUnescape(name)
 		if err != nil {
-			log.Println("url decode failed")
-			log.Println("format not fit")
+			log.Println("query unescape failed")
 			http.Error(w, "format not fit", http.StatusBadRequest)
 			return
 		}
-
-		p := player{}
-		err = json.Unmarshal([]byte(valueDecode), &p)
-		if err != nil {
-			http.Error(w, "failed", http.StatusBadRequest)
-			return
-		}
-		log.Println(p)
 
 		var data authData
 		authLock.Lock()
@@ -122,17 +104,14 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		authLock.Unlock()
 
 		// if not exist or if didn't match the data(prevent packet sniffering)
-		if !exist ||
-			data.selfPoint != p.SelfPoint ||
-			data.enemyPoint != p.EnemyPoint ||
-			data.strength != p.Strength {
+		if !exist {
 			log.Println("verification not accepted, score disposed")
 			http.Error(w, "verfication failed", http.StatusNotAcceptable)
 			return
 		}
 		log.Println("verification accepted, score have been uploaded")
 
-		_, err = backend.AddLeader(p.Name, p.SelfPoint, p.EnemyPoint, p.Strength)
+		_, err = backend.AddLeader(nameDecode, data.selfPoint, data.enemyPoint, data.strength)
 		if err == nil {
 			w.WriteHeader(http.StatusOK)
 			fmt.Fprint(w, "ok")
