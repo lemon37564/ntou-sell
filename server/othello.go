@@ -19,7 +19,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var authKeys = make(map[string]time.Time)
+var authKeys = make(map[string]authData)
 var authLock sync.RWMutex
 
 type player struct {
@@ -27,6 +27,13 @@ type player struct {
 	SelfPoint  string `json:"self_point"`
 	EnemyPoint string `json:"enemy_point"`
 	Strength   string `json:"strength"`
+}
+
+type authData struct {
+	expiredTime time.Time
+	selfPoint   string
+	enemyPoint  string
+	strength    string
 }
 
 func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +59,12 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		hashed := sha256.Sum256([]byte(keyStr + secret + ";" + selfPoint + ";" + enemyPoint + ";" + strength))
 		authLock.Lock()
 		cleanExpiredKeys()
-		authKeys[hex.EncodeToString(hashed[:])] = time.Now()
+		authKeys[hex.EncodeToString(hashed[:])] = authData{
+			expiredTime: time.Now().Add(time.Second * 5),
+			selfPoint:   selfPoint,
+			enemyPoint:  enemyPoint,
+			strength:    strength,
+		}
 		authLock.Unlock()
 	case "getRaw":
 		leaders, err := backend.GetLeadersRaw()
@@ -104,15 +116,21 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		}
 		log.Println(p)
 
+		var data authData
 		authLock.Lock()
+		// if key timeout, delete
 		cleanExpiredKeys()
-		t, exist := authKeys[verification]
+		data, exist := authKeys[verification]
 		if exist {
 			delete(authKeys, verification)
 		}
 		authLock.Unlock()
 
-		if !exist || time.Since(t) > 5*time.Second {
+		// if not exist or if didn't match the data(prevent packet sniffering)
+		if !exist ||
+			data.selfPoint != p.SelfPoint ||
+			data.enemyPoint != p.EnemyPoint ||
+			data.strength != p.Strength {
 			log.Println("verification not accepted, score disposed")
 			http.Error(w, "verfication failed", http.StatusNotAcceptable)
 			return
@@ -132,8 +150,8 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func cleanExpiredKeys() {
-	for key, t := range authKeys {
-		if time.Since(t) > time.Second*5 {
+	for key, dat := range authKeys {
+		if time.Now().After(dat.expiredTime) {
 			delete(authKeys, key)
 		}
 	}
