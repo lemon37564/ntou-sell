@@ -9,10 +9,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"se/server/backend"
-	"strconv"
-	"strings"
 	"sync"
 	"time"
 
@@ -96,20 +95,16 @@ func fetchLeaderBoard(w http.ResponseWriter, r *http.Request) {
 		verification := args.Get("verification")
 
 		// 123-45-31-90... -> ["123", "45", "31", "90", ...]
-		valueArr := strings.Split(value, "-")
-		var byteArr []byte
-		for v := range valueArr {
-			vByte, err := strconv.Atoi(valueArr[v])
-			if err != nil {
-				http.Error(w, "failed", http.StatusBadRequest)
-				return
-			}
-			byteArr = append(byteArr, byte(vByte))
+		valueDecode, err := url.QueryUnescape(value)
+		if err != nil {
+			log.Println("url decode failed")
+			log.Println("format not fit")
+			http.Error(w, "format not fit", http.StatusBadRequest)
+			return
 		}
-		// [123, 45, 31, 90, ...]
 
 		p := player{}
-		err := json.Unmarshal(byteArr, &p)
+		err = json.Unmarshal([]byte(valueDecode), &p)
 		if err != nil {
 			http.Error(w, "failed", http.StatusBadRequest)
 			return
